@@ -8,7 +8,7 @@ const client = new Augno({
 });
 
 describe('resource addresses', () => {
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.customers.addresses.create('customer_id', {
       address_line_1: '123 Main St',
@@ -26,7 +26,7 @@ describe('resource addresses', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.customers.addresses.create('customer_id', {
       address_line_1: '123 Main St',
@@ -43,7 +43,7 @@ describe('resource addresses', () => {
     });
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('retrieve: only required params', async () => {
     const responsePromise = client.customers.addresses.retrieve('address_id', { customer_id: 'customer_id' });
     const rawResponse = await responsePromise.asResponse();
@@ -55,12 +55,12 @@ describe('resource addresses', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('retrieve: required and optional params', async () => {
     const response = await client.customers.addresses.retrieve('address_id', { customer_id: 'customer_id' });
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('update: only required params', async () => {
     const responsePromise = client.customers.addresses.update('address_id', { customer_id: 'customer_id' });
     const rawResponse = await responsePromise.asResponse();
@@ -72,7 +72,7 @@ describe('resource addresses', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('update: required and optional params', async () => {
     const response = await client.customers.addresses.update('address_id', {
       customer_id: 'customer_id',
@@ -90,7 +90,7 @@ describe('resource addresses', () => {
     });
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.customers.addresses.list('customer_id');
     const rawResponse = await responsePromise.asResponse();
@@ -102,7 +102,7 @@ describe('resource addresses', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('delete: only required params', async () => {
     const responsePromise = client.customers.addresses.delete('address_id', { customer_id: 'customer_id' });
     const rawResponse = await responsePromise.asResponse();
@@ -114,7 +114,7 @@ describe('resource addresses', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('delete: required and optional params', async () => {
     const response = await client.customers.addresses.delete('address_id', { customer_id: 'customer_id' });
   });
