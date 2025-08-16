@@ -724,8 +724,10 @@ export class Augno {
   customers: API.Customers = new API.Customers(this);
   health: API.Health = new API.Health(this);
 }
+
 Augno.Customers = Customers;
 Augno.Health = Health;
+
 export declare namespace Augno {
   export type RequestOptions = Opts.RequestOptions;
 
