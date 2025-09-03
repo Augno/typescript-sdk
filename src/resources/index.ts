@@ -6,4 +6,4 @@ export {
   type AuthRefreshTokenResponse,
   type AuthRefreshTokenParams,
 } from './auth/auth';
-export { Healthz, type HealthzCheckResponse, type HealthzCheckParams } from './healthz';
+export { Healthz, type HealthzCheckResponse } from './healthz';
