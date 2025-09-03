@@ -7,10 +7,10 @@ const client = new Augno({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource health', () => {
+describe('resource healthz', () => {
   // Prism tests are disabled
   test.skip('check', async () => {
-    const responsePromise = client.health.check();
+    const responsePromise = client.healthz.check({});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

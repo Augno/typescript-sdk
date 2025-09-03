@@ -2,12 +2,12 @@
   "name": "augno",
   "version": "0.0.1",
   "description": "The official TypeScript library for the Augno API",
-  "author": "Augno <>",
+  "author": "Augno <dev-platform@augno.com>",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "type": "commonjs",
   "repository": "github:stainless-sdks/augno-typescript",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "packageManager": "yarn@1.22.22",
   "files": [
     "**/*"

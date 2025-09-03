@@ -1,26 +1,25 @@
-# Customers
-
-## Addresses
+# Healthz
 
 Types:
 
-- <code><a href="./src/resources/customers/addresses.ts">Address</a></code>
-- <code><a href="./src/resources/customers/addresses.ts">GetCustomerAddress</a></code>
+- <code><a href="./src/resources/healthz.ts">HealthzCheckResponse</a></code>
 
 Methods:
 
-- <code title="post /customers/{customer_id}/addresses">client.customers.addresses.<a href="./src/resources/customers/addresses.ts">create</a>(customerID, { ...params }) -> Address</code>
-- <code title="get /customers/{customer_id}/addresses/{address_id}">client.customers.addresses.<a href="./src/resources/customers/addresses.ts">retrieve</a>(addressID, { ...params }) -> GetCustomerAddress</code>
-- <code title="put /customers/{customer_id}/addresses/{address_id}">client.customers.addresses.<a href="./src/resources/customers/addresses.ts">update</a>(addressID, { ...params }) -> Address</code>
-- <code title="get /customers/{customer_id}/addresses">client.customers.addresses.<a href="./src/resources/customers/addresses.ts">list</a>(customerID) -> GetCustomerAddress</code>
-- <code title="delete /customers/{customer_id}/addresses/{address_id}">client.customers.addresses.<a href="./src/resources/customers/addresses.ts">delete</a>(addressID, { ...params }) -> void</code>
+- <code title="get /healthz">client.healthz.<a href="./src/resources/healthz.ts">check</a>() -> HealthzCheckResponse</code>
 
-# Health
+# Auth
 
 Types:
 
-- <code><a href="./src/resources/health.ts">HealthCheckResponse</a></code>
+- <code><a href="./src/resources/auth/auth.ts">CreateAccessTokenResponse</a></code>
 
 Methods:
 
-- <code title="get /health">client.health.<a href="./src/resources/health.ts">check</a>() -> HealthCheckResponse</code>
+- <code title="post /v2/auth/access-tokens">client.auth.<a href="./src/resources/auth/auth.ts">refreshToken</a>({ ...params }) -> CreateAccessTokenResponse</code>
+
+## Actions
+
+Methods:
+
+- <code title="post /v2/auth/actions/login">client.auth.actions.<a href="./src/resources/auth/actions.ts">loginUser</a>({ ...params }) -> CreateAccessTokenResponse</code>
