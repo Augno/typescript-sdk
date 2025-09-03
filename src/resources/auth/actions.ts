@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as AuthAPI from './auth';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
@@ -11,16 +10,42 @@ export class Actions extends APIResource {
    *
    * @example
    * ```ts
-   * const createAccessTokenResponse =
-   *   await client.auth.actions.loginUser();
+   * const response = await client.auth.actions.loginUser();
    * ```
    */
-  loginUser(
-    body: ActionLoginUserParams,
-    options?: RequestOptions,
-  ): APIPromise<AuthAPI.CreateAccessTokenResponse> {
+  loginUser(body: ActionLoginUserParams, options?: RequestOptions): APIPromise<ActionLoginUserResponse> {
     return this._client.post('/v2/auth/actions/login', { body, ...options });
   }
+}
+
+/**
+ * Response schema for LoginResponse
+ */
+export interface ActionLoginUserResponse {
+  /**
+   * The account affiliations
+   */
+  account_affiliations: Array<unknown>;
+
+  /**
+   * The current account in use
+   */
+  current_account: unknown;
+
+  /**
+   * The access token for the user
+   */
+  access_token?: string;
+
+  /**
+   * The refresh token for the user
+   */
+  refresh_token?: unknown;
+
+  /**
+   * The user that was logged in
+   */
+  user?: unknown;
 }
 
 export interface ActionLoginUserParams {
@@ -30,5 +55,8 @@ export interface ActionLoginUserParams {
 }
 
 export declare namespace Actions {
-  export { type ActionLoginUserParams as ActionLoginUserParams };
+  export {
+    type ActionLoginUserResponse as ActionLoginUserResponse,
+    type ActionLoginUserParams as ActionLoginUserParams,
+  };
 }
