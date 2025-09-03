@@ -12,6 +12,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/auth/auth.ts">RefreshToken</a></code>
 - <code><a href="./src/resources/auth/auth.ts">AuthRefreshTokenResponse</a></code>
 
 Methods:
