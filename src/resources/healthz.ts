@@ -4,25 +4,24 @@ import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
-export class Health extends APIResource {
+export class Healthz extends APIResource {
   /**
-   * Returns the current health status, environment, and version information of the
-   * API service.
+   * Returns the current health status, environment, and version.
    *
    * @example
    * ```ts
-   * const response = await client.health.check();
+   * const response = await client.healthz.check();
    * ```
    */
-  check(options?: RequestOptions): APIPromise<HealthCheckResponse> {
-    return this._client.get('/health', options);
+  check(query: HealthzCheckParams, options?: RequestOptions): APIPromise<HealthzCheckResponse> {
+    return this._client.get('/healthz', options);
   }
 }
 
 /**
  * Represents a Healthcheck resource
  */
-export interface HealthCheckResponse {
+export interface HealthzCheckResponse {
   /**
    * Deployment environment (development, production)
    */
@@ -39,6 +38,8 @@ export interface HealthCheckResponse {
   version?: string;
 }
 
-export declare namespace Health {
-  export { type HealthCheckResponse as HealthCheckResponse };
+export interface HealthzCheckParams {}
+
+export declare namespace Healthz {
+  export { type HealthzCheckResponse as HealthzCheckResponse, type HealthzCheckParams as HealthzCheckParams };
 }

@@ -4,7 +4,7 @@
 
 This library provides convenient access to the Augno REST API from server-side TypeScript or JavaScript.
 
-The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [augno.com](https://augno.com). The full API of this library can be found in [api.md](api.md).
 
 It is generated with [Stainless](https://www.stainless.com/).
 
@@ -29,9 +29,9 @@ const client = new Augno({
   apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted
 });
 
-const getCustomerAddress = await client.customers.addresses.list('REPLACE_ME');
+const response = await client.healthz.check();
 
-console.log(getCustomerAddress.id);
+console.log(response.environment);
 ```
 
 ### Request & Response types
@@ -46,9 +46,7 @@ const client = new Augno({
   apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted
 });
 
-const getCustomerAddress: Augno.Customers.GetCustomerAddress = await client.customers.addresses.list(
-  'REPLACE_ME',
-);
+const response: Augno.HealthzCheckResponse = await client.healthz.check();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -61,7 +59,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const getCustomerAddress = await client.customers.addresses.list('REPLACE_ME').catch(async (err) => {
+const response = await client.healthz.check().catch(async (err) => {
   if (err instanceof Augno.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
@@ -101,7 +99,7 @@ const client = new Augno({
 });
 
 // Or, configure per-request:
-await client.customers.addresses.list('REPLACE_ME', {
+await client.healthz.check({
   maxRetries: 5,
 });
 ```
@@ -118,7 +116,7 @@ const client = new Augno({
 });
 
 // Override per-request:
-await client.customers.addresses.list('REPLACE_ME', {
+await client.healthz.check({
   timeout: 5 * 1000,
 });
 ```
@@ -141,15 +139,13 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Augno();
 
-const response = await client.customers.addresses.list('REPLACE_ME').asResponse();
+const response = await client.healthz.check().asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: getCustomerAddress, response: raw } = await client.customers.addresses
-  .list('REPLACE_ME')
-  .withResponse();
+const { data: response, response: raw } = await client.healthz.check().withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(getCustomerAddress.id);
+console.log(response.environment);
 ```
 
 ### Logging
@@ -229,7 +225,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.customers.addresses.list({
+client.healthz.check({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',

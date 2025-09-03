@@ -302,13 +302,13 @@ describe('instantiate client', () => {
     test('empty env variable', () => {
       process.env['AUGNO_BASE_URL'] = ''; // empty
       const client = new Augno({ apiKey: 'My API Key' });
-      expect(client.baseURL).toEqual('http://localhost:80');
+      expect(client.baseURL).toEqual('https://api.augno.com/');
     });
 
     test('blank env variable', () => {
       process.env['AUGNO_BASE_URL'] = '  '; // blank
       const client = new Augno({ apiKey: 'My API Key' });
-      expect(client.baseURL).toEqual('http://localhost:80');
+      expect(client.baseURL).toEqual('https://api.augno.com/');
     });
 
     test('in request options', () => {

@@ -16,8 +16,8 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Health, HealthCheckResponse } from './resources/health';
-import { Customers } from './resources/customers/customers';
+import { Healthz, HealthzCheckParams, HealthzCheckResponse } from './resources/healthz';
+import { Auth, AuthRefreshTokenParams, CreateAccessTokenResponse } from './resources/auth/auth';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -33,9 +33,9 @@ import { isEmptyObj } from './internal/utils/values';
 
 export interface ClientOptions {
   /**
-   * Defaults to process.env['AUGNO_API_KEY'].
+   * Bearer HTTP authentication. Allowed headers-- Authorization: Bearer <api_key>
    */
-  apiKey?: string | null | undefined;
+  apiKey?: string | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
@@ -110,7 +110,7 @@ export interface ClientOptions {
  * API Client for interfacing with the Augno API.
  */
 export class Augno {
-  apiKey: string | null;
+  apiKey: string;
 
   baseURL: string;
   maxRetries: number;
@@ -127,8 +127,8 @@ export class Augno {
   /**
    * API Client for interfacing with the Augno API.
    *
-   * @param {string | null | undefined} [opts.apiKey=process.env['AUGNO_API_KEY'] ?? null]
-   * @param {string} [opts.baseURL=process.env['AUGNO_BASE_URL'] ?? http://localhost:80] - Override the default base URL for the API.
+   * @param {string | undefined} [opts.apiKey=process.env['AUGNO_API_KEY'] ?? undefined]
+   * @param {string} [opts.baseURL=process.env['AUGNO_BASE_URL'] ?? https://api.augno.com/] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -138,13 +138,19 @@ export class Augno {
    */
   constructor({
     baseURL = readEnv('AUGNO_BASE_URL'),
-    apiKey = readEnv('AUGNO_API_KEY') ?? null,
+    apiKey = readEnv('AUGNO_API_KEY'),
     ...opts
   }: ClientOptions = {}) {
+    if (apiKey === undefined) {
+      throw new Errors.AugnoError(
+        "The AUGNO_API_KEY environment variable is missing or empty; either provide it, or instantiate the Augno client with an apiKey option, like new Augno({ apiKey: 'My API Key' }).",
+      );
+    }
+
     const options: ClientOptions = {
       apiKey,
       ...opts,
-      baseURL: baseURL || `http://localhost:80`,
+      baseURL: baseURL || `https://api.augno.com/`,
     };
 
     this.baseURL = options.baseURL!;
@@ -190,7 +196,7 @@ export class Augno {
    * Check whether the base URL is set to its default.
    */
   #baseURLOverridden(): boolean {
-    return this.baseURL !== 'http://localhost:80';
+    return this.baseURL !== 'https://api.augno.com/';
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
@@ -198,22 +204,10 @@ export class Augno {
   }
 
   protected validateHeaders({ values, nulls }: NullableHeaders) {
-    if (this.apiKey && values.get('authorization')) {
-      return;
-    }
-    if (nulls.has('authorization')) {
-      return;
-    }
-
-    throw new Error(
-      'Could not resolve authentication method. Expected the apiKey to be set. Or for the "Authorization" headers to be explicitly omitted',
-    );
+    return;
   }
 
   protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
-    if (this.apiKey == null) {
-      return undefined;
-    }
     return buildHeaders([{ Authorization: `Bearer ${this.apiKey}` }]);
   }
 
@@ -721,17 +715,25 @@ export class Augno {
 
   static toFile = Uploads.toFile;
 
-  customers: API.Customers = new API.Customers(this);
-  health: API.Health = new API.Health(this);
+  healthz: API.Healthz = new API.Healthz(this);
+  auth: API.Auth = new API.Auth(this);
 }
 
-Augno.Customers = Customers;
-Augno.Health = Health;
+Augno.Healthz = Healthz;
+Augno.Auth = Auth;
 
 export declare namespace Augno {
   export type RequestOptions = Opts.RequestOptions;
 
-  export { Customers as Customers };
+  export {
+    Healthz as Healthz,
+    type HealthzCheckResponse as HealthzCheckResponse,
+    type HealthzCheckParams as HealthzCheckParams,
+  };
 
-  export { Health as Health, type HealthCheckResponse as HealthCheckResponse };
+  export {
+    Auth as Auth,
+    type CreateAccessTokenResponse as CreateAccessTokenResponse,
+    type AuthRefreshTokenParams as AuthRefreshTokenParams,
+  };
 }
