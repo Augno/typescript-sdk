@@ -9,8 +9,8 @@ const client = new Augno({
 
 describe('resource actions', () => {
   // Prism tests are disabled
-  test.skip('loginUser', async () => {
-    const responsePromise = client.auth.actions.loginUser({});
+  test.skip('loginUser: only required params', async () => {
+    const responsePromise = client.auth.actions.loginUser({ password: '', username: '' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -18,5 +18,10 @@ describe('resource actions', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('loginUser: required and optional params', async () => {
+    const response = await client.auth.actions.loginUser({ password: '', username: '' });
   });
 });
