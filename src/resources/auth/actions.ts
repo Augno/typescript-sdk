@@ -24,6 +24,11 @@ export class Actions extends APIResource {
  */
 export interface ActionLoginUserResponse {
   /**
+   * The access token for the user
+   */
+  access_token: string;
+
+  /**
    * The account affiliations
    */
   account_affiliations: Array<ActionLoginUserResponse.AccountAffiliation>;
@@ -34,19 +39,14 @@ export interface ActionLoginUserResponse {
   current_account: ActionLoginUserResponse.CurrentAccount;
 
   /**
-   * The access token for the user
-   */
-  access_token?: string;
-
-  /**
    * The refresh token for the user
    */
-  refresh_token?: AuthAPI.RefreshToken;
+  refresh_token: AuthAPI.RefreshToken;
 
   /**
    * The user that was logged in
    */
-  user?: ActionLoginUserResponse.User;
+  user: ActionLoginUserResponse.User;
 }
 
 export namespace ActionLoginUserResponse {
