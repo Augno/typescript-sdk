@@ -34,7 +34,24 @@ export interface AuthRefreshTokenResponse {
   /**
    * A new refresh token
    */
-  refresh_token: unknown;
+  refresh_token: AuthRefreshTokenResponse.RefreshToken;
+}
+
+export namespace AuthRefreshTokenResponse {
+  /**
+   * A new refresh token
+   */
+  export interface RefreshToken {
+    /**
+     * The refresh token
+     */
+    token: string;
+
+    /**
+     * The refresh token expires at
+     */
+    expires_at: string;
+  }
 }
 
 export interface AuthRefreshTokenParams {
