@@ -11,7 +11,10 @@ export class Actions extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.auth.actions.loginUser();
+   * const response = await client.auth.actions.loginUser({
+   *   password: '',
+   *   username: '',
+   * });
    * ```
    */
   loginUser(body: ActionLoginUserParams, options?: RequestOptions): APIPromise<ActionLoginUserResponse> {
@@ -144,9 +147,9 @@ export namespace ActionLoginUserResponse {
 }
 
 export interface ActionLoginUserParams {
-  password?: string;
+  password: string;
 
-  username?: string;
+  username: string;
 }
 
 export declare namespace Actions {
