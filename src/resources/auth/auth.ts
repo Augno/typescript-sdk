@@ -23,6 +23,21 @@ export class Auth extends APIResource {
 }
 
 /**
+ * Represents a RefreshToken resource
+ */
+export interface RefreshToken {
+  /**
+   * The refresh token
+   */
+  token: string;
+
+  /**
+   * The refresh token expires at
+   */
+  expires_at: string;
+}
+
+/**
  * Response schema for CreateAccessTokenResponse
  */
 export interface AuthRefreshTokenResponse {
@@ -34,24 +49,7 @@ export interface AuthRefreshTokenResponse {
   /**
    * A new refresh token
    */
-  refresh_token: AuthRefreshTokenResponse.RefreshToken;
-}
-
-export namespace AuthRefreshTokenResponse {
-  /**
-   * A new refresh token
-   */
-  export interface RefreshToken {
-    /**
-     * The refresh token
-     */
-    token: string;
-
-    /**
-     * The refresh token expires at
-     */
-    expires_at: string;
-  }
+  refresh_token: RefreshToken;
 }
 
 export interface AuthRefreshTokenParams {
@@ -62,6 +60,7 @@ Auth.Actions = Actions;
 
 export declare namespace Auth {
   export {
+    type RefreshToken as RefreshToken,
     type AuthRefreshTokenResponse as AuthRefreshTokenResponse,
     type AuthRefreshTokenParams as AuthRefreshTokenParams,
   };

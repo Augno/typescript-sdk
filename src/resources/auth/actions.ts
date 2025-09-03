@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as AuthAPI from './auth';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
@@ -30,7 +31,7 @@ export interface ActionLoginUserResponse {
   /**
    * The current account in use
    */
-  current_account: unknown;
+  current_account: ActionLoginUserResponse.CurrentAccount;
 
   /**
    * The access token for the user
@@ -40,7 +41,7 @@ export interface ActionLoginUserResponse {
   /**
    * The refresh token for the user
    */
-  refresh_token?: ActionLoginUserResponse.RefreshToken;
+  refresh_token?: AuthAPI.RefreshToken;
 
   /**
    * The user that was logged in
@@ -87,18 +88,13 @@ export namespace ActionLoginUserResponse {
   }
 
   /**
-   * The refresh token for the user
+   * The current account in use
    */
-  export interface RefreshToken {
+  export interface CurrentAccount {
     /**
-     * The refresh token
+     * The ID of the current account
      */
-    token: string;
-
-    /**
-     * The refresh token expires at
-     */
-    expires_at: string;
+    id: string;
   }
 
   /**
