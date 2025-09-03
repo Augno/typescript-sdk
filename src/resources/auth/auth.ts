@@ -33,22 +33,22 @@ export interface CreateAccessTokenResponse {
   /**
    * The new access token
    */
-  access_token: string;
+  accessToken: string;
 
   /**
    * The account affiliations
    */
-  account_affiliations: Array<unknown>;
+  accountAffiliations: Array<unknown>;
 
   /**
    * The current account in use
    */
-  current_account: unknown;
+  currentAccount: unknown;
 
   /**
    * A new refresh token
    */
-  refresh_token: string;
+  refreshToken: string;
 
   /**
    * The user
