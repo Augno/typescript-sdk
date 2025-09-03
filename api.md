@@ -20,6 +20,10 @@ Methods:
 
 ## Actions
 
+Types:
+
+- <code><a href="./src/resources/auth/actions.ts">ActionLoginUserResponse</a></code>
+
 Methods:
 
-- <code title="post /v2/auth/actions/login">client.auth.actions.<a href="./src/resources/auth/actions.ts">loginUser</a>({ ...params }) -> CreateAccessTokenResponse</code>
+- <code title="post /v2/auth/actions/login">client.auth.actions.<a href="./src/resources/auth/actions.ts">loginUser</a>({ ...params }) -> ActionLoginUserResponse</code>

@@ -2,7 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as ActionsAPI from './actions';
-import { ActionLoginUserParams, Actions } from './actions';
+import { ActionLoginUserParams, ActionLoginUserResponse, Actions } from './actions';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
@@ -36,24 +36,9 @@ export interface CreateAccessTokenResponse {
   access_token: string;
 
   /**
-   * The account affiliations
-   */
-  account_affiliations: Array<unknown>;
-
-  /**
-   * The current account in use
-   */
-  current_account: unknown;
-
-  /**
    * A new refresh token
    */
-  refresh_token: string;
-
-  /**
-   * The user
-   */
-  user: unknown;
+  refresh_token: unknown;
 }
 
 export interface AuthRefreshTokenParams {
@@ -68,5 +53,9 @@ export declare namespace Auth {
     type AuthRefreshTokenParams as AuthRefreshTokenParams,
   };
 
-  export { Actions as Actions, type ActionLoginUserParams as ActionLoginUserParams };
+  export {
+    Actions as Actions,
+    type ActionLoginUserResponse as ActionLoginUserResponse,
+    type ActionLoginUserParams as ActionLoginUserParams,
+  };
 }
