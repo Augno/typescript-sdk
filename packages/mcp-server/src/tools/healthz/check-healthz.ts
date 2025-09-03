@@ -37,8 +37,8 @@ export const tool: Tool = {
 };
 
 export const handler = async (client: Augno, args: Record<string, unknown> | undefined) => {
-  const { jq_filter, ...body } = args as any;
-  return asTextContentResult(await maybeFilter(jq_filter, await client.healthz.check(body)));
+  const { jq_filter } = args as any;
+  return asTextContentResult(await maybeFilter(jq_filter, await client.healthz.check()));
 };
 
 export default { metadata, tool, handler };

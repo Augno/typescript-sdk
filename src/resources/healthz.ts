@@ -13,7 +13,7 @@ export class Healthz extends APIResource {
    * const response = await client.healthz.check();
    * ```
    */
-  check(query: HealthzCheckParams, options?: RequestOptions): APIPromise<HealthzCheckResponse> {
+  check(options?: RequestOptions): APIPromise<HealthzCheckResponse> {
     return this._client.get('/healthz', options);
   }
 }
@@ -38,8 +38,6 @@ export interface HealthzCheckResponse {
   version?: string;
 }
 
-export interface HealthzCheckParams {}
-
 export declare namespace Healthz {
-  export { type HealthzCheckResponse as HealthzCheckResponse, type HealthzCheckParams as HealthzCheckParams };
+  export { type HealthzCheckResponse as HealthzCheckResponse };
 }

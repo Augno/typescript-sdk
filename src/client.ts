@@ -16,7 +16,7 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Healthz, HealthzCheckParams, HealthzCheckResponse } from './resources/healthz';
+import { Healthz, HealthzCheckResponse } from './resources/healthz';
 import { Auth, AuthRefreshTokenParams, AuthRefreshTokenResponse, RefreshToken } from './resources/auth/auth';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -725,11 +725,7 @@ Augno.Auth = Auth;
 export declare namespace Augno {
   export type RequestOptions = Opts.RequestOptions;
 
-  export {
-    Healthz as Healthz,
-    type HealthzCheckResponse as HealthzCheckResponse,
-    type HealthzCheckParams as HealthzCheckParams,
-  };
+  export { Healthz as Healthz, type HealthzCheckResponse as HealthzCheckResponse };
 
   export {
     Auth as Auth,
