@@ -129,7 +129,7 @@ export namespace ActionLoginUserResponse {
     /**
      * The image URL of the user
      */
-    image_url?: string;
+    image_url?: string | null;
 
     /**
      * The name of the user
