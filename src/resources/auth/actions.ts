@@ -102,42 +102,44 @@ export namespace ActionLoginUserResponse {
    */
   export interface User {
     /**
-     * The ID of the user
+     * The ID of the user - required field, always present, never null
      */
     id: string;
 
     /**
-     * The created at timestamp of the user
+     * The created at timestamp of the user - required field, always present, never
+     * null
      */
     created_at: string;
 
     /**
-     * The updated at timestamp of the user
+     * The updated at timestamp of the user - required field, always present, never
+     * null
      */
     updated_at: string;
 
     /**
-     * The email of the user
+     * The email of the user - optional field, can be omitted from JSON
      */
     email?: string;
 
     /**
-     * The email verified status of the user
+     * The email verified status of the user - optional field, can be omitted from JSON
      */
     email_verified?: string;
 
     /**
-     * The image URL of the user
+     * The image URL of the user - optional nullable field, can be omitted or be null
      */
     image_url?: string | null;
 
     /**
-     * The name of the user
+     * The name of the user - optional field, can be omitted from JSON
      */
     name?: string;
 
     /**
-     * The username of the user
+     * The username of the user - optional field, can be omitted from JSON
      */
     username?: string;
   }
