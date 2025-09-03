@@ -12,11 +12,11 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/auth/auth.ts">CreateAccessTokenResponse</a></code>
+- <code><a href="./src/resources/auth/auth.ts">AuthRefreshTokenResponse</a></code>
 
 Methods:
 
-- <code title="post /v2/auth/access-tokens">client.auth.<a href="./src/resources/auth/auth.ts">refreshToken</a>({ ...params }) -> CreateAccessTokenResponse</code>
+- <code title="post /v2/auth/access-tokens">client.auth.<a href="./src/resources/auth/auth.ts">refreshToken</a>({ ...params }) -> AuthRefreshTokenResponse</code>
 
 ## Actions
 

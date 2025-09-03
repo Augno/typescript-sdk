@@ -14,14 +14,10 @@ export class Auth extends APIResource {
    *
    * @example
    * ```ts
-   * const createAccessTokenResponse =
-   *   await client.auth.refreshToken();
+   * const response = await client.auth.refreshToken();
    * ```
    */
-  refreshToken(
-    body: AuthRefreshTokenParams,
-    options?: RequestOptions,
-  ): APIPromise<CreateAccessTokenResponse> {
+  refreshToken(body: AuthRefreshTokenParams, options?: RequestOptions): APIPromise<AuthRefreshTokenResponse> {
     return this._client.post('/v2/auth/access-tokens', { body, ...options });
   }
 }
@@ -29,7 +25,7 @@ export class Auth extends APIResource {
 /**
  * Response schema for CreateAccessTokenResponse
  */
-export interface CreateAccessTokenResponse {
+export interface AuthRefreshTokenResponse {
   /**
    * The new access token
    */
@@ -49,7 +45,7 @@ Auth.Actions = Actions;
 
 export declare namespace Auth {
   export {
-    type CreateAccessTokenResponse as CreateAccessTokenResponse,
+    type AuthRefreshTokenResponse as AuthRefreshTokenResponse,
     type AuthRefreshTokenParams as AuthRefreshTokenParams,
   };
 
