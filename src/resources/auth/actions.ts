@@ -115,34 +115,34 @@ export namespace ActionLoginUserResponse {
     created_at: string;
 
     /**
-     * The email of the user
-     */
-    email: string | null;
-
-    /**
-     * The email verified status of the user
-     */
-    email_verified: string | null;
-
-    /**
-     * The image URL of the user
-     */
-    image_url: string | null;
-
-    /**
-     * The name of the user
-     */
-    name: string | null;
-
-    /**
      * The updated at timestamp of the user
      */
     updated_at: string;
 
     /**
+     * The email of the user
+     */
+    email?: string;
+
+    /**
+     * The email verified status of the user
+     */
+    email_verified?: string;
+
+    /**
+     * The image URL of the user
+     */
+    image_url?: string | null;
+
+    /**
+     * The name of the user
+     */
+    name?: string;
+
+    /**
      * The username of the user
      */
-    username: string | null;
+    username?: string;
   }
 }
 
