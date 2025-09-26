@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "augno-mcp/*": ["dist/src/*"],
-      "augno-mcp": ["dist/src/index.ts"]
+      "augno-mcp/*": ["./dist/src/*"],
+      "augno-mcp": ["./dist/src/index.ts"]
     },
     "noEmit": false,
     "declaration": true,
