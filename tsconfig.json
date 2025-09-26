@@ -7,10 +7,9 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "baseUrl": "./",
     "paths": {
-      "augno/*": ["src/*"],
-      "augno": ["src/index.ts"]
+      "augno/*": ["./src/*"],
+      "augno": ["./src/index.ts"]
     },
     "noEmit": true,
 
