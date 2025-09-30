@@ -246,9 +246,10 @@ export function parseCLIOptions(): CLIOptions {
   }
 
   const shouldIncludeToolType = (toolType: 'dynamic' | 'all' | 'code') =>
-    explicitTools ? argv.tools?.includes(toolType) && !argv.noTools?.includes(toolType) : undefined;
+    argv.noTools?.includes(toolType) ? false
+    : argv.tools?.includes(toolType) ? true
+    : undefined;
 
-  const explicitTools = Boolean(argv.tools || argv.noTools);
   const includeDynamicTools = shouldIncludeToolType('dynamic');
   const includeAllTools = shouldIncludeToolType('all');
   const includeCodeTools = shouldIncludeToolType('code');
