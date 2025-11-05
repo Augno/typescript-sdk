@@ -21,6 +21,7 @@ import {
 } from './compat';
 import { dynamicTools } from './dynamic-tools';
 import { codeTool } from './code-tool';
+import docsSearchTool from './docs-search-tool';
 import { McpOptions } from './options';
 
 export { McpOptions } from './options';
@@ -164,7 +165,9 @@ export async function selectTools(endpoints: Endpoint[], options?: McpOptions): 
       includedTools = endpoints.slice();
     }
   }
-
+  if (options?.includeDocsTools ?? true) {
+    includedTools.push(docsSearchTool);
+  }
   const capabilities = { ...defaultClientCapabilities, ...options?.capabilities };
   return applyCompatibilityTransformations(includedTools, capabilities);
 }
