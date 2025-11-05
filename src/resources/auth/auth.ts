@@ -14,23 +14,36 @@ export class Auth extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.auth.refreshToken();
+   * const emptyResource = await client.auth.refreshToken();
    * ```
    */
   refreshToken(options?: RequestOptions): APIPromise<unknown> {
     return this._client.post('/v2/auth/access-tokens', options);
+  }
+
+  /**
+   * Revoke a refresh token.
+   *
+   * @example
+   * ```ts
+   * const emptyResource =
+   *   await client.auth.revokeRefreshToken();
+   * ```
+   */
+  revokeRefreshToken(options?: RequestOptions): APIPromise<unknown> {
+    return this._client.delete('/v2/auth/refresh-tokens', options);
   }
 }
 
 /**
  * Request schema for EmptyResource
  */
-export type AuthRefreshTokenResponse = unknown;
+export type EmptyResource = unknown;
 
 Auth.Actions = Actions;
 
 export declare namespace Auth {
-  export { type AuthRefreshTokenResponse as AuthRefreshTokenResponse };
+  export { type EmptyResource as EmptyResource };
 
   export {
     Actions as Actions,
