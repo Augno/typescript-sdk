@@ -17,53 +17,20 @@ export class Auth extends APIResource {
    * const response = await client.auth.refreshToken();
    * ```
    */
-  refreshToken(body: AuthRefreshTokenParams, options?: RequestOptions): APIPromise<AuthRefreshTokenResponse> {
-    return this._client.post('/v2/auth/access-tokens', { body, ...options });
+  refreshToken(options?: RequestOptions): APIPromise<unknown> {
+    return this._client.post('/v2/auth/access-tokens', options);
   }
 }
 
 /**
- * Represents a RefreshToken resource
+ * Request schema for EmptyResource
  */
-export interface RefreshToken {
-  /**
-   * The refresh token
-   */
-  token: string;
-
-  /**
-   * The refresh token expires at
-   */
-  expires_at: string;
-}
-
-/**
- * Response schema for CreateAccessTokenResponse
- */
-export interface AuthRefreshTokenResponse {
-  /**
-   * The new access token
-   */
-  access_token: string;
-
-  /**
-   * A new refresh token
-   */
-  refresh_token: RefreshToken;
-}
-
-export interface AuthRefreshTokenParams {
-  RefreshToken?: string;
-}
+export type AuthRefreshTokenResponse = unknown;
 
 Auth.Actions = Actions;
 
 export declare namespace Auth {
-  export {
-    type RefreshToken as RefreshToken,
-    type AuthRefreshTokenResponse as AuthRefreshTokenResponse,
-    type AuthRefreshTokenParams as AuthRefreshTokenParams,
-  };
+  export { type AuthRefreshTokenResponse as AuthRefreshTokenResponse };
 
   export {
     Actions as Actions,

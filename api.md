@@ -12,12 +12,11 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/auth/auth.ts">RefreshToken</a></code>
 - <code><a href="./src/resources/auth/auth.ts">AuthRefreshTokenResponse</a></code>
 
 Methods:
 
-- <code title="post /v2/auth/access-tokens">client.auth.<a href="./src/resources/auth/auth.ts">refreshToken</a>({ ...params }) -> AuthRefreshTokenResponse</code>
+- <code title="post /v2/auth/access-tokens">client.auth.<a href="./src/resources/auth/auth.ts">refreshToken</a>() -> unknown</code>
 
 ## Actions
 
