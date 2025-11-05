@@ -17,7 +17,7 @@ export class Auth extends APIResource {
    * const emptyResource = await client.auth.refreshToken();
    * ```
    */
-  refreshToken(options?: RequestOptions): APIPromise<unknown> {
+  refreshToken(options?: RequestOptions): APIPromise<EmptyResource> {
     return this._client.post('/v2/auth/access-tokens', options);
   }
 
@@ -30,7 +30,7 @@ export class Auth extends APIResource {
    *   await client.auth.revokeRefreshToken();
    * ```
    */
-  revokeRefreshToken(options?: RequestOptions): APIPromise<unknown> {
+  revokeRefreshToken(options?: RequestOptions): APIPromise<EmptyResource> {
     return this._client.delete('/v2/auth/refresh-tokens', options);
   }
 }
@@ -38,7 +38,7 @@ export class Auth extends APIResource {
 /**
  * Request schema for EmptyResource
  */
-export type EmptyResource = unknown;
+export interface EmptyResource {}
 
 Auth.Actions = Actions;
 
