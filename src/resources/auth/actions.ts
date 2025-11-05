@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as AuthAPI from './auth';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
@@ -12,8 +11,8 @@ export class Actions extends APIResource {
    * @example
    * ```ts
    * const response = await client.auth.actions.loginUser({
-   *   password: '',
-   *   username: '',
+   *   identifier: 'identifier',
+   *   password: 'password',
    * });
    * ```
    */
@@ -23,133 +22,60 @@ export class Actions extends APIResource {
 }
 
 /**
- * Response schema for LoginResponse
+ * Response schema for User
  */
 export interface ActionLoginUserResponse {
   /**
-   * The access token for the user
+   * The ID of the user
    */
-  access_token: string;
+  id: string;
 
   /**
-   * The account affiliations
+   * The created at timestamp of the user
    */
-  account_affiliations: Array<ActionLoginUserResponse.AccountAffiliation>;
+  created_at: string;
 
   /**
-   * The current account in use
+   * The email of the user
    */
-  current_account: ActionLoginUserResponse.CurrentAccount;
+  email: string | null;
 
   /**
-   * The refresh token for the user
+   * The email verified status of the user
    */
-  refresh_token: AuthAPI.RefreshToken;
+  email_verified: string | null;
 
   /**
-   * The user that was logged in
+   * The image URL of the user
    */
-  user: ActionLoginUserResponse.User;
-}
-
-export namespace ActionLoginUserResponse {
-  /**
-   * Represents a AccountAffiliation resource
-   */
-  export interface AccountAffiliation {
-    /**
-     * The ID of the account affiliation
-     */
-    id: string;
-
-    /**
-     * The name of the account affiliation
-     */
-    name: string;
-
-    /**
-     * Represents a AccountAffiliationRole resource
-     */
-    role: AccountAffiliation.Role;
-  }
-
-  export namespace AccountAffiliation {
-    /**
-     * Represents a AccountAffiliationRole resource
-     */
-    export interface Role {
-      /**
-       * The ID of the role
-       */
-      id: string;
-
-      /**
-       * The name of the role
-       */
-      name: string;
-    }
-  }
+  image_url: string | null;
 
   /**
-   * The current account in use
+   * The name of the user
    */
-  export interface CurrentAccount {
-    /**
-     * The ID of the current account
-     */
-    id: string;
-  }
+  name: string | null;
 
   /**
-   * The user that was logged in
+   * The updated at timestamp of the user
    */
-  export interface User {
-    /**
-     * The ID of the user
-     */
-    id: string;
+  updated_at: string;
 
-    /**
-     * The created at timestamp of the user
-     */
-    created_at: string;
-
-    /**
-     * The updated at timestamp of the user
-     */
-    updated_at: string;
-
-    /**
-     * The email of the user
-     */
-    email?: string;
-
-    /**
-     * The email verified status of the user
-     */
-    email_verified?: string;
-
-    /**
-     * The image URL of the user
-     */
-    image_url?: string | null;
-
-    /**
-     * The name of the user
-     */
-    name?: string;
-
-    /**
-     * The username of the user
-     */
-    username?: string;
-  }
+  /**
+   * The username of the user
+   */
+  username: string | null;
 }
 
 export interface ActionLoginUserParams {
-  password: string;
+  /**
+   * The username or email of the user
+   */
+  identifier: string;
 
-  username: string;
+  /**
+   * The password of the user
+   */
+  password: string;
 }
 
 export declare namespace Actions {

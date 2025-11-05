@@ -10,7 +10,7 @@ const client = new Augno({
 describe('resource auth', () => {
   // Prism tests are disabled
   test.skip('refreshToken', async () => {
-    const responsePromise = client.auth.refreshToken({});
+    const responsePromise = client.auth.refreshToken();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
