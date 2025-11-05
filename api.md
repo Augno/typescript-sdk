@@ -16,8 +16,8 @@ Types:
 
 Methods:
 
-- <code title="post /v2/auth/access-tokens">client.auth.<a href="./src/resources/auth/auth.ts">refreshToken</a>() -> unknown</code>
-- <code title="delete /v2/auth/refresh-tokens">client.auth.<a href="./src/resources/auth/auth.ts">revokeRefreshToken</a>() -> unknown</code>
+- <code title="post /v2/auth/access-tokens">client.auth.<a href="./src/resources/auth/auth.ts">refreshToken</a>() -> EmptyResource</code>
+- <code title="delete /v2/auth/refresh-tokens">client.auth.<a href="./src/resources/auth/auth.ts">revokeRefreshToken</a>() -> EmptyResource</code>
 
 ## Actions
 
