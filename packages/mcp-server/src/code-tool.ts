@@ -35,7 +35,10 @@ export async function codeTool() {
       headers: {
         ...(stainlessAPIKey && { Authorization: stainlessAPIKey }),
         'Content-Type': 'application/json',
-        client_envs: JSON.stringify({ AUGNO_API_KEY: readEnv('AUGNO_API_KEY') }),
+        client_envs: JSON.stringify({
+          AUGNO_API_KEY: readEnv('AUGNO_API_KEY'),
+          AUGNO_BASE_URL: readEnv('AUGNO_BASE_URL'),
+        }),
       },
       body: JSON.stringify({
         project_name: 'augno',
