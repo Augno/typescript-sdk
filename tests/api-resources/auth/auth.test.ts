@@ -21,8 +21,12 @@ describe('resource auth', () => {
   });
 
   // Prism tests are disabled
-  test.skip('registerUser', async () => {
-    const responsePromise = client.auth.registerUser();
+  test.skip('registerUser: only required params', async () => {
+    const responsePromise = client.auth.registerUser({
+      email: 'jdoe@augno.com',
+      name: 'John Doe',
+      password: 'super-secret-password',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -33,14 +37,12 @@ describe('resource auth', () => {
   });
 
   // Prism tests are disabled
-  test.skip('registerUser: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.auth.registerUser(
-        { email: 'jdoe@augno.com', name: 'John Doe', password: 'super-secret-password' },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
+  test.skip('registerUser: required and optional params', async () => {
+    const response = await client.auth.registerUser({
+      email: 'jdoe@augno.com',
+      name: 'John Doe',
+      password: 'super-secret-password',
+    });
   });
 
   // Some required params are not supported yet.
