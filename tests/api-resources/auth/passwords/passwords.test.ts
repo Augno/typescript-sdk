@@ -9,8 +9,11 @@ const client = new Augno({
 
 describe('resource passwords', () => {
   // Prism tests are disabled
-  test.skip('updatePassword', async () => {
-    const responsePromise = client.auth.passwords.updatePassword();
+  test.skip('updatePassword: only required params', async () => {
+    const responsePromise = client.auth.passwords.updatePassword({
+      new_password: 'new-super-secret-password',
+      old_password: 'super-secret-password',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,13 +24,10 @@ describe('resource passwords', () => {
   });
 
   // Prism tests are disabled
-  test.skip('updatePassword: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.auth.passwords.updatePassword(
-        { new_password: 'new-super-secret-password', old_password: 'super-secret-password' },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
+  test.skip('updatePassword: required and optional params', async () => {
+    const response = await client.auth.passwords.updatePassword({
+      new_password: 'new-super-secret-password',
+      old_password: 'super-secret-password',
+    });
   });
 });

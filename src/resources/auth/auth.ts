@@ -46,10 +46,7 @@ export class Auth extends APIResource {
    * });
    * ```
    */
-  registerUser(
-    body: AuthRegisterUserParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ActionsAPI.User> {
+  registerUser(body: AuthRegisterUserParams, options?: RequestOptions): APIPromise<ActionsAPI.User> {
     return this._client.post('/v1/auth/users', { body, ...options });
   }
 
@@ -77,17 +74,17 @@ export interface AuthRegisterUserParams {
   /**
    * The email address for the new user
    */
-  email?: string;
+  email: string;
 
   /**
    * The full name of the new user
    */
-  name?: string;
+  name: string;
 
   /**
    * The password for the new user
    */
-  password?: string;
+  password: string;
 }
 
 Auth.Actions = Actions;

@@ -31,7 +31,7 @@ export class Passwords extends APIResource {
    * ```
    */
   updatePassword(
-    body: PasswordUpdatePasswordParams | null | undefined = {},
+    body: PasswordUpdatePasswordParams,
     options?: RequestOptions,
   ): APIPromise<PasswordUpdatePasswordResponse> {
     return this._client.put('/v1/auth/passwords', { body, ...options });
@@ -44,12 +44,12 @@ export interface PasswordUpdatePasswordParams {
   /**
    * The new password to be set
    */
-  new_password?: string;
+  new_password: string;
 
   /**
    * The user's current password
    */
-  old_password?: string;
+  old_password: string;
 }
 
 Passwords.Actions = Actions;

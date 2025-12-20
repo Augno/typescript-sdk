@@ -9,8 +9,10 @@ const client = new Augno({
 
 describe('resource actions', () => {
   // Prism tests are disabled
-  test.skip('requestPasswordReset', async () => {
-    const responsePromise = client.auth.passwords.actions.requestPasswordReset();
+  test.skip('requestPasswordReset: only required params', async () => {
+    const responsePromise = client.auth.passwords.actions.requestPasswordReset({
+      identifier: 'jdoe@augno.com',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,19 +23,20 @@ describe('resource actions', () => {
   });
 
   // Prism tests are disabled
-  test.skip('requestPasswordReset: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.auth.passwords.actions.requestPasswordReset(
-        { account_slug: 'account_slug', identifier: 'jdoe@augno.com' },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
+  test.skip('requestPasswordReset: required and optional params', async () => {
+    const response = await client.auth.passwords.actions.requestPasswordReset({
+      identifier: 'jdoe@augno.com',
+      account_slug: 'account_slug',
+    });
   });
 
   // Prism tests are disabled
-  test.skip('resetPassword', async () => {
-    const responsePromise = client.auth.passwords.actions.resetPassword();
+  test.skip('resetPassword: only required params', async () => {
+    const responsePromise = client.auth.passwords.actions.resetPassword({
+      token:
+        'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2F1Z25vLmNvbSIsInN1YiI6InVzXzAxZ2Y3YTgyMDBlMXNyMjBwZzl3eDZkMmswIiwiZXhwIjoxNzU2ODIzMzI5LCJpYXQiOjE3NTY4MTk3Mjl9.2ZodhtiHDqIQnDjzrJZvqIdEbQbmkgbTaz4OXdbXCWNjzEsy2-5e78XQRu-aZ8MoZ2dusIVKQcN1Tm-arKR0_Q',
+      password: 'new-super-secret-password',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -44,17 +47,11 @@ describe('resource actions', () => {
   });
 
   // Prism tests are disabled
-  test.skip('resetPassword: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.auth.passwords.actions.resetPassword(
-        {
-          token:
-            'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2F1Z25vLmNvbSIsInN1YiI6InVzXzAxZ2Y3YTgyMDBlMXNyMjBwZzl3eDZkMmswIiwiZXhwIjoxNzU2ODIzMzI5LCJpYXQiOjE3NTY4MTk3Mjl9.2ZodhtiHDqIQnDjzrJZvqIdEbQbmkgbTaz4OXdbXCWNjzEsy2-5e78XQRu-aZ8MoZ2dusIVKQcN1Tm-arKR0_Q',
-          password: 'new-super-secret-password',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
+  test.skip('resetPassword: required and optional params', async () => {
+    const response = await client.auth.passwords.actions.resetPassword({
+      token:
+        'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2F1Z25vLmNvbSIsInN1YiI6InVzXzAxZ2Y3YTgyMDBlMXNyMjBwZzl3eDZkMmswIiwiZXhwIjoxNzU2ODIzMzI5LCJpYXQiOjE3NTY4MTk3Mjl9.2ZodhtiHDqIQnDjzrJZvqIdEbQbmkgbTaz4OXdbXCWNjzEsy2-5e78XQRu-aZ8MoZ2dusIVKQcN1Tm-arKR0_Q',
+      password: 'new-super-secret-password',
+    });
   });
 });

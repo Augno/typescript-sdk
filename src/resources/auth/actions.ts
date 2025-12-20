@@ -19,7 +19,7 @@ export class Actions extends APIResource {
    * });
    * ```
    */
-  loginUser(body: ActionLoginUserParams | null | undefined = {}, options?: RequestOptions): APIPromise<User> {
+  loginUser(body: ActionLoginUserParams, options?: RequestOptions): APIPromise<User> {
     return this._client.post('/v1/auth/actions/login', { body, ...options });
   }
 }
@@ -31,59 +31,59 @@ export interface User {
   /**
    * The ID of the user
    */
-  id?: string;
+  id: string;
 
   /**
    * The created at timestamp of the user
    */
-  created_at?: string;
+  created_at: string;
 
   /**
    * The email of the user
    */
-  email?: string;
+  email: string | null;
 
   /**
    * The email verified status of the user
    */
-  email_verified?: string;
+  email_verified: string | null;
 
   /**
    * The image URL of the user
    */
-  image_url?: string;
+  image_url: string | null;
 
   /**
    * The name of the user
    */
-  name?: string;
+  name: string | null;
 
   /**
    * The object type, always "user"
    */
-  object?: string;
+  object: string;
 
   /**
    * The updated at timestamp of the user
    */
-  updated_at?: string;
+  updated_at: string;
 
   /**
    * The username of the user
    */
-  username?: string;
+  username: string | null;
 }
 
 export interface ActionLoginUserParams {
   /**
    * The username or email for authentication
    */
-  identifier?: string;
+  identifier: string;
 
   /**
    * The password for authentication
    */
-  password?: string;
+  password: string;
 }
 
 export declare namespace Actions {

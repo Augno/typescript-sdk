@@ -20,7 +20,7 @@ export class Actions extends APIResource {
    * ```
    */
   requestPasswordReset(
-    body: ActionRequestPasswordResetParams | null | undefined = {},
+    body: ActionRequestPasswordResetParams,
     options?: RequestOptions,
   ): APIPromise<ActionRequestPasswordResetResponse> {
     return this._client.post('/v1/auth/passwords/actions/request-reset', { body, ...options });
@@ -43,7 +43,7 @@ export class Actions extends APIResource {
    * ```
    */
   resetPassword(
-    body: ActionResetPasswordParams | null | undefined = {},
+    body: ActionResetPasswordParams,
     options?: RequestOptions,
   ): APIPromise<ActionResetPasswordResponse> {
     return this._client.post('/v1/auth/passwords/actions/reset', { body, ...options });
@@ -56,26 +56,26 @@ export interface ActionResetPasswordResponse {}
 
 export interface ActionRequestPasswordResetParams {
   /**
-   * The account slug (optional)
-   */
-  account_slug?: string;
-
-  /**
    * The username or email of the account to reset
    */
-  identifier?: string;
+  identifier: string;
+
+  /**
+   * The account slug (optional)
+   */
+  account_slug?: string | null;
 }
 
 export interface ActionResetPasswordParams {
   /**
    * The password reset token
    */
-  token?: string;
+  token: string;
 
   /**
    * The new password of the user
    */
-  password?: string;
+  password: string;
 }
 
 export declare namespace Actions {
