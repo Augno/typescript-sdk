@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { Augno } from 'augno';
+import { AugnoClient } from 'augno';
 
-const { stringifyQuery } = Augno.prototype as any;
+const { stringifyQuery } = AugnoClient.prototype as any;
 
 describe(stringifyQuery, () => {
   for (const [input, expected] of [
