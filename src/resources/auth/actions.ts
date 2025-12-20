@@ -6,81 +6,86 @@ import { RequestOptions } from '../../internal/request-options';
 
 export class Actions extends APIResource {
   /**
-   * Login a user and get an access and refresh token.
+   * This endpoint is utilized to login a user. Once completed, the user object is
+   * returned. An access and refresh token are set in cookies. Learn more about
+   * authentication and authorization in our
+   * [documentation](https://docs.augno.com/guides/authentication).
    *
    * @example
    * ```ts
-   * const response = await client.auth.actions.loginUser({
-   *   identifier: 'identifier',
-   *   password: 'password',
+   * const user = await client.auth.actions.loginUser({
+   *   identifier: 'jdoe',
+   *   password: 'super-secret-password',
    * });
    * ```
    */
-  loginUser(body: ActionLoginUserParams, options?: RequestOptions): APIPromise<ActionLoginUserResponse> {
-    return this._client.post('/v2/auth/actions/login', { body, ...options });
+  loginUser(body: ActionLoginUserParams | null | undefined = {}, options?: RequestOptions): APIPromise<User> {
+    return this._client.post('/v1/auth/actions/login', { body, ...options });
   }
 }
 
 /**
- * Response schema for User
+ * A user in the Augno system
  */
-export interface ActionLoginUserResponse {
+export interface User {
   /**
    * The ID of the user
    */
-  id: string;
+  id?: string;
 
   /**
    * The created at timestamp of the user
    */
-  created_at: string;
+  created_at?: string;
 
   /**
    * The email of the user
    */
-  email: string | null;
+  email?: string;
 
   /**
    * The email verified status of the user
    */
-  email_verified: string | null;
+  email_verified?: string;
 
   /**
    * The image URL of the user
    */
-  image_url: string | null;
+  image_url?: string;
 
   /**
    * The name of the user
    */
-  name: string | null;
+  name?: string;
+
+  /**
+   * The object type, always "user"
+   */
+  object?: string;
 
   /**
    * The updated at timestamp of the user
    */
-  updated_at: string;
+  updated_at?: string;
 
   /**
    * The username of the user
    */
-  username: string | null;
+  username?: string;
 }
 
 export interface ActionLoginUserParams {
   /**
-   * The username or email of the user
+   * The username or email for authentication
    */
-  identifier: string;
+  identifier?: string;
 
   /**
-   * The password of the user
+   * The password for authentication
    */
-  password: string;
+  password?: string;
 }
 
 export declare namespace Actions {
-  export {
-    type ActionLoginUserResponse as ActionLoginUserResponse,
-    type ActionLoginUserParams as ActionLoginUserParams,
-  };
+  export { type User as User, type ActionLoginUserParams as ActionLoginUserParams };
 }

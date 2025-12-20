@@ -4,15 +4,18 @@
 
 This library provides convenient access to the Augno REST API from server-side TypeScript or JavaScript.
 
-The REST API documentation can be found on [augno.com](https://augno.com). The full API of this library can be found in [api.md](api.md).
+The full API of this library can be found in [api.md](api.md).
 
 It is generated with [Stainless](https://www.stainless.com/).
 
 ## Installation
 
 ```sh
-npm install augno
+npm install git+ssh://git@github.com:stainless-sdks/augno-typescript.git
 ```
+
+> [!NOTE]
+> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npm install augno`
 
 ## Usage
 
@@ -24,11 +27,10 @@ import Augno from 'augno';
 
 const client = new Augno({
   apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted
+  environment: 'environment_1', // defaults to 'production'
 });
 
-const response = await client.healthz.check();
-
-console.log(response.environment);
+const response = await client.auth.refreshToken();
 ```
 
 ### Request & Response types
@@ -41,9 +43,10 @@ import Augno from 'augno';
 
 const client = new Augno({
   apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted
+  environment: 'environment_1', // defaults to 'production'
 });
 
-const response: Augno.HealthzCheckResponse = await client.healthz.check();
+const response: Augno.AuthRefreshTokenResponse = await client.auth.refreshToken();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -56,7 +59,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const response = await client.healthz.check().catch(async (err) => {
+const response = await client.auth.refreshToken().catch(async (err) => {
   if (err instanceof Augno.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
@@ -96,7 +99,7 @@ const client = new Augno({
 });
 
 // Or, configure per-request:
-await client.healthz.check({
+await client.auth.refreshToken({
   maxRetries: 5,
 });
 ```
@@ -113,7 +116,7 @@ const client = new Augno({
 });
 
 // Override per-request:
-await client.healthz.check({
+await client.auth.refreshToken({
   timeout: 5 * 1000,
 });
 ```
@@ -136,13 +139,13 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Augno();
 
-const response = await client.healthz.check().asResponse();
+const response = await client.auth.refreshToken().asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: response, response: raw } = await client.healthz.check().withResponse();
+const { data: response, response: raw } = await client.auth.refreshToken().withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(response.environment);
+console.log(response);
 ```
 
 ### Logging
@@ -222,7 +225,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.healthz.check({
+client.auth.refreshToken({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
@@ -332,7 +335,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/Augno/node-sdk/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/augno-typescript/issues) with questions, bugs, or suggestions.
 
 ## Requirements
 
