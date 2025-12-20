@@ -9,9 +9,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stainless-sdks/augno-typescript.git"
+    "url": "git+https://github.com/Augno/node-sdk.git"
   },
-  "homepage": "https://github.com/stainless-sdks/augno-typescript/tree/main/packages/mcp-server#readme",
+  "homepage": "https://github.com/Augno/node-sdk/tree/main/packages/mcp-server#readme",
   "documentation": "https://augno.com",
   "server": {
     "type": "node",

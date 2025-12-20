@@ -8,10 +8,10 @@
   "type": "commonjs",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stainless-sdks/augno-typescript.git",
+    "url": "git+https://github.com/Augno/node-sdk.git",
     "directory": "packages/mcp-server"
   },
-  "homepage": "https://github.com/stainless-sdks/augno-typescript/tree/main/packages/mcp-server#readme",
+  "homepage": "https://github.com/Augno/node-sdk/tree/main/packages/mcp-server#readme",
   "license": "MIT",
   "packageManager": "pnpm@10.24.0",
   "private": false,
