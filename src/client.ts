@@ -59,7 +59,7 @@ export interface ClientOptions {
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
-   * Defaults to process.env['AUGNO_BASE_URL'].
+   * Defaults to process.env['AUGNO_CLIENT_BASE_URL'].
    */
   baseURL?: string | null | undefined;
 
@@ -113,7 +113,7 @@ export interface ClientOptions {
   /**
    * Set the log level.
    *
-   * Defaults to process.env['AUGNO_LOG'] or 'warn' if it isn't set.
+   * Defaults to process.env['AUGNO_CLIENT_LOG'] or 'warn' if it isn't set.
    */
   logLevel?: LogLevel | undefined;
 
@@ -126,9 +126,9 @@ export interface ClientOptions {
 }
 
 /**
- * API Client for interfacing with the Augno API.
+ * API Client for interfacing with the Augno Client API.
  */
-export class Augno {
+export class AugnoClient {
   apiKey: string | null;
 
   baseURL: string;
@@ -144,11 +144,11 @@ export class Augno {
   private _options: ClientOptions;
 
   /**
-   * API Client for interfacing with the Augno API.
+   * API Client for interfacing with the Augno Client API.
    *
    * @param {string | null | undefined} [opts.apiKey=process.env['AUGNO_API_KEY'] ?? null]
    * @param {Environment} [opts.environment=production] - Specifies the environment URL to use for the API.
-   * @param {string} [opts.baseURL=process.env['AUGNO_BASE_URL'] ?? https://api.augno.com] - Override the default base URL for the API.
+   * @param {string} [opts.baseURL=process.env['AUGNO_CLIENT_BASE_URL'] ?? https://api.augno.com] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -157,7 +157,7 @@ export class Augno {
    * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
    */
   constructor({
-    baseURL = readEnv('AUGNO_BASE_URL'),
+    baseURL = readEnv('AUGNO_CLIENT_BASE_URL'),
     apiKey = readEnv('AUGNO_API_KEY') ?? null,
     ...opts
   }: ClientOptions = {}) {
@@ -169,20 +169,20 @@ export class Augno {
     };
 
     if (baseURL && opts.environment) {
-      throw new Errors.AugnoError(
-        'Ambiguous URL; The `baseURL` option (or AUGNO_BASE_URL env var) and the `environment` option are given. If you want to use the environment you must pass baseURL: null',
+      throw new Errors.AugnoClientError(
+        'Ambiguous URL; The `baseURL` option (or AUGNO_CLIENT_BASE_URL env var) and the `environment` option are given. If you want to use the environment you must pass baseURL: null',
       );
     }
 
     this.baseURL = options.baseURL || environments[options.environment || 'production'];
-    this.timeout = options.timeout ?? Augno.DEFAULT_TIMEOUT /* 1 minute */;
+    this.timeout = options.timeout ?? AugnoClient.DEFAULT_TIMEOUT /* 1 minute */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
     this.logLevel = defaultLogLevel;
     this.logLevel =
       parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this) ??
-      parseLogLevel(readEnv('AUGNO_LOG'), "process.env['AUGNO_LOG']", this) ??
+      parseLogLevel(readEnv('AUGNO_CLIENT_LOG'), "process.env['AUGNO_CLIENT_LOG']", this) ??
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
     this.maxRetries = options.maxRetries ?? 2;
@@ -258,7 +258,7 @@ export class Augno {
         if (value === null) {
           return `${encodeURIComponent(key)}=`;
         }
-        throw new Errors.AugnoError(
+        throw new Errors.AugnoClientError(
           `Cannot stringify type ${typeof value}; Expected string, number, boolean, or null. If you need to pass nested query parameters, you can manually encode them, e.g. { query: { 'foo[key1]': value1, 'foo[key2]': value2 } }, and please open a GitHub issue requesting better support for your use case.`,
         );
       })
@@ -730,10 +730,10 @@ export class Augno {
     }
   }
 
-  static Augno = this;
+  static AugnoClient = this;
   static DEFAULT_TIMEOUT = 60000; // 1 minute
 
-  static AugnoError = Errors.AugnoError;
+  static AugnoClientError = Errors.AugnoClientError;
   static APIError = Errors.APIError;
   static APIConnectionError = Errors.APIConnectionError;
   static APIConnectionTimeoutError = Errors.APIConnectionTimeoutError;
@@ -752,9 +752,9 @@ export class Augno {
   auth: API.Auth = new API.Auth(this);
 }
 
-Augno.Auth = Auth;
+AugnoClient.Auth = Auth;
 
-export declare namespace Augno {
+export declare namespace AugnoClient {
   export type RequestOptions = Opts.RequestOptions;
 
   export {

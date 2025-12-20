@@ -1,8 +1,8 @@
-# Augno TypeScript API Library
+# Augno Client TypeScript API Library
 
 [![NPM version](<https://img.shields.io/npm/v/augno.svg?label=npm%20(stable)>)](https://npmjs.org/package/augno) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/augno)
 
-This library provides convenient access to the Augno REST API from server-side TypeScript or JavaScript.
+This library provides convenient access to the Augno Client REST API from server-side TypeScript or JavaScript.
 
 The REST API documentation can be found on [www.docs.augno.com](https://www.docs.augno.com). The full API of this library can be found in [api.md](api.md).
 
@@ -23,9 +23,9 @@ The full API of this library can be found in [api.md](api.md).
 
 <!-- prettier-ignore -->
 ```js
-import Augno from 'augno';
+import AugnoClient from 'augno';
 
-const client = new Augno({
+const client = new AugnoClient({
   apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted
   environment: 'environment_1', // defaults to 'production'
 });
@@ -39,14 +39,14 @@ This library includes TypeScript definitions for all request params and response
 
 <!-- prettier-ignore -->
 ```ts
-import Augno from 'augno';
+import AugnoClient from 'augno';
 
-const client = new Augno({
+const client = new AugnoClient({
   apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted
   environment: 'environment_1', // defaults to 'production'
 });
 
-const response: Augno.AuthRefreshTokenResponse = await client.auth.refreshToken();
+const response: AugnoClient.AuthRefreshTokenResponse = await client.auth.refreshToken();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -60,7 +60,7 @@ a subclass of `APIError` will be thrown:
 <!-- prettier-ignore -->
 ```ts
 const response = await client.auth.refreshToken().catch(async (err) => {
-  if (err instanceof Augno.APIError) {
+  if (err instanceof AugnoClient.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
     console.log(err.headers); // {server: 'nginx', ...}
@@ -94,7 +94,7 @@ You can use the `maxRetries` option to configure or disable this:
 <!-- prettier-ignore -->
 ```js
 // Configure the default for all requests:
-const client = new Augno({
+const client = new AugnoClient({
   maxRetries: 0, // default is 2
 });
 
@@ -111,7 +111,7 @@ Requests time out after 1 minute by default. You can configure this with a `time
 <!-- prettier-ignore -->
 ```ts
 // Configure the default for all requests:
-const client = new Augno({
+const client = new AugnoClient({
   timeout: 20 * 1000, // 20 seconds (default is 1 minute)
 });
 
@@ -137,7 +137,7 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 
 <!-- prettier-ignore -->
 ```ts
-const client = new Augno();
+const client = new AugnoClient();
 
 const response = await client.auth.refreshToken().asResponse();
 console.log(response.headers.get('X-My-Header'));
@@ -158,13 +158,13 @@ console.log(response);
 
 The log level can be configured in two ways:
 
-1. Via the `AUGNO_LOG` environment variable
+1. Via the `AUGNO_CLIENT_LOG` environment variable
 2. Using the `logLevel` client option (overrides the environment variable if set)
 
 ```ts
-import Augno from 'augno';
+import AugnoClient from 'augno';
 
-const client = new Augno({
+const client = new AugnoClient({
   logLevel: 'debug', // Show all log messages
 });
 ```
@@ -190,13 +190,13 @@ When providing a custom logger, the `logLevel` option still controls which messa
 below the configured level will not be sent to your logger.
 
 ```ts
-import Augno from 'augno';
+import AugnoClient from 'augno';
 import pino from 'pino';
 
 const logger = pino();
 
-const client = new Augno({
-  logger: logger.child({ name: 'Augno' }),
+const client = new AugnoClient({
+  logger: logger.child({ name: 'AugnoClient' }),
   logLevel: 'debug', // Send all messages to pino, allowing it to filter
 });
 ```
@@ -259,10 +259,10 @@ globalThis.fetch = fetch;
 Or pass it to the client:
 
 ```ts
-import Augno from 'augno';
+import AugnoClient from 'augno';
 import fetch from 'my-fetch';
 
-const client = new Augno({ fetch });
+const client = new AugnoClient({ fetch });
 ```
 
 ### Fetch options
@@ -270,9 +270,9 @@ const client = new Augno({ fetch });
 If you want to set custom `fetch` options without overriding the `fetch` function, you can provide a `fetchOptions` object when instantiating the client or making a request. (Request-specific options override client options.)
 
 ```ts
-import Augno from 'augno';
+import AugnoClient from 'augno';
 
-const client = new Augno({
+const client = new AugnoClient({
   fetchOptions: {
     // `RequestInit` options
   },
@@ -287,11 +287,11 @@ options to requests:
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/node.svg" align="top" width="18" height="21"> **Node** <sup>[[docs](https://github.com/nodejs/undici/blob/main/docs/docs/api/ProxyAgent.md#example---proxyagent-with-fetch)]</sup>
 
 ```ts
-import Augno from 'augno';
+import AugnoClient from 'augno';
 import * as undici from 'undici';
 
 const proxyAgent = new undici.ProxyAgent('http://localhost:8888');
-const client = new Augno({
+const client = new AugnoClient({
   fetchOptions: {
     dispatcher: proxyAgent,
   },
@@ -301,9 +301,9 @@ const client = new Augno({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/bun.svg" align="top" width="18" height="21"> **Bun** <sup>[[docs](https://bun.sh/guides/http/proxy)]</sup>
 
 ```ts
-import Augno from 'augno';
+import AugnoClient from 'augno';
 
-const client = new Augno({
+const client = new AugnoClient({
   fetchOptions: {
     proxy: 'http://localhost:8888',
   },
@@ -313,10 +313,10 @@ const client = new Augno({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/deno.svg" align="top" width="18" height="21"> **Deno** <sup>[[docs](https://docs.deno.com/api/deno/~/Deno.createHttpClient)]</sup>
 
 ```ts
-import Augno from 'npm:augno';
+import AugnoClient from 'npm:augno';
 
 const httpClient = Deno.createHttpClient({ proxy: { url: 'http://localhost:8888' } });
-const client = new Augno({
+const client = new AugnoClient({
   fetchOptions: {
     client: httpClient,
   },
