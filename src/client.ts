@@ -16,8 +16,12 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Healthz, HealthzCheckResponse } from './resources/healthz';
-import { Auth, EmptyResource } from './resources/auth/auth';
+import {
+  Auth,
+  AuthRefreshTokenResponse,
+  AuthRegisterUserParams,
+  AuthRevokeRefreshTokenResponse,
+} from './resources/auth/auth';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -31,11 +35,26 @@ import {
 } from './internal/utils/log';
 import { isEmptyObj } from './internal/utils/values';
 
+const environments = {
+  production: 'https://api.augno.com',
+  environment_1: 'http://localhost:8080',
+};
+type Environment = keyof typeof environments;
+
 export interface ClientOptions {
   /**
-   * Bearer HTTP authentication. Allowed headers-- Authorization: Bearer <api_key>
+   * Defaults to process.env['AUGNO_API_KEY'].
    */
-  apiKey?: string | undefined;
+  apiKey?: string | null | undefined;
+
+  /**
+   * Specifies the environment to use for the API.
+   *
+   * Each environment maps to a different base URL:
+   * - `production` corresponds to `https://api.augno.com`
+   * - `environment_1` corresponds to `http://localhost:8080`
+   */
+  environment?: Environment | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
@@ -110,7 +129,7 @@ export interface ClientOptions {
  * API Client for interfacing with the Augno API.
  */
 export class Augno {
-  apiKey: string;
+  apiKey: string | null;
 
   baseURL: string;
   maxRetries: number;
@@ -127,8 +146,9 @@ export class Augno {
   /**
    * API Client for interfacing with the Augno API.
    *
-   * @param {string | undefined} [opts.apiKey=process.env['AUGNO_API_KEY'] ?? undefined]
-   * @param {string} [opts.baseURL=process.env['AUGNO_BASE_URL'] ?? https://api.augno.com/] - Override the default base URL for the API.
+   * @param {string | null | undefined} [opts.apiKey=process.env['AUGNO_API_KEY'] ?? null]
+   * @param {Environment} [opts.environment=production] - Specifies the environment URL to use for the API.
+   * @param {string} [opts.baseURL=process.env['AUGNO_BASE_URL'] ?? https://api.augno.com] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -138,22 +158,23 @@ export class Augno {
    */
   constructor({
     baseURL = readEnv('AUGNO_BASE_URL'),
-    apiKey = readEnv('AUGNO_API_KEY'),
+    apiKey = readEnv('AUGNO_API_KEY') ?? null,
     ...opts
   }: ClientOptions = {}) {
-    if (apiKey === undefined) {
-      throw new Errors.AugnoError(
-        "The AUGNO_API_KEY environment variable is missing or empty; either provide it, or instantiate the Augno client with an apiKey option, like new Augno({ apiKey: 'My API Key' }).",
-      );
-    }
-
     const options: ClientOptions = {
       apiKey,
       ...opts,
-      baseURL: baseURL || `https://api.augno.com/`,
+      baseURL,
+      environment: opts.environment ?? 'production',
     };
 
-    this.baseURL = options.baseURL!;
+    if (baseURL && opts.environment) {
+      throw new Errors.AugnoError(
+        'Ambiguous URL; The `baseURL` option (or AUGNO_BASE_URL env var) and the `environment` option are given. If you want to use the environment you must pass baseURL: null',
+      );
+    }
+
+    this.baseURL = options.baseURL || environments[options.environment || 'production'];
     this.timeout = options.timeout ?? Augno.DEFAULT_TIMEOUT /* 1 minute */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
@@ -179,7 +200,8 @@ export class Augno {
   withOptions(options: Partial<ClientOptions>): this {
     const client = new (this.constructor as any as new (props: ClientOptions) => typeof this)({
       ...this._options,
-      baseURL: this.baseURL,
+      environment: options.environment ? options.environment : undefined,
+      baseURL: options.environment ? undefined : this.baseURL,
       maxRetries: this.maxRetries,
       timeout: this.timeout,
       logger: this.logger,
@@ -196,7 +218,7 @@ export class Augno {
    * Check whether the base URL is set to its default.
    */
   #baseURLOverridden(): boolean {
-    return this.baseURL !== 'https://api.augno.com/';
+    return this.baseURL !== environments[this._options.environment || 'production'];
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
@@ -204,10 +226,22 @@ export class Augno {
   }
 
   protected validateHeaders({ values, nulls }: NullableHeaders) {
-    return;
+    if (this.apiKey && values.get('authorization')) {
+      return;
+    }
+    if (nulls.has('authorization')) {
+      return;
+    }
+
+    throw new Error(
+      'Could not resolve authentication method. Expected the apiKey to be set. Or for the "Authorization" headers to be explicitly omitted',
+    );
   }
 
   protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
+    if (this.apiKey == null) {
+      return undefined;
+    }
     return buildHeaders([{ Authorization: `Bearer ${this.apiKey}` }]);
   }
 
@@ -715,17 +749,18 @@ export class Augno {
 
   static toFile = Uploads.toFile;
 
-  healthz: API.Healthz = new API.Healthz(this);
   auth: API.Auth = new API.Auth(this);
 }
 
-Augno.Healthz = Healthz;
 Augno.Auth = Auth;
 
 export declare namespace Augno {
   export type RequestOptions = Opts.RequestOptions;
 
-  export { Healthz as Healthz, type HealthzCheckResponse as HealthzCheckResponse };
-
-  export { Auth as Auth, type EmptyResource as EmptyResource };
+  export {
+    Auth as Auth,
+    type AuthRefreshTokenResponse as AuthRefreshTokenResponse,
+    type AuthRevokeRefreshTokenResponse as AuthRevokeRefreshTokenResponse,
+    type AuthRegisterUserParams as AuthRegisterUserParams,
+  };
 }

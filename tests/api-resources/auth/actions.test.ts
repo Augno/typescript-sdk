@@ -9,8 +9,8 @@ const client = new Augno({
 
 describe('resource actions', () => {
   // Prism tests are disabled
-  test.skip('loginUser: only required params', async () => {
-    const responsePromise = client.auth.actions.loginUser({ identifier: 'identifier', password: 'password' });
+  test.skip('loginUser', async () => {
+    const responsePromise = client.auth.actions.loginUser();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,7 +21,13 @@ describe('resource actions', () => {
   });
 
   // Prism tests are disabled
-  test.skip('loginUser: required and optional params', async () => {
-    const response = await client.auth.actions.loginUser({ identifier: 'identifier', password: 'password' });
+  test.skip('loginUser: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.auth.actions.loginUser(
+        { identifier: 'jdoe', password: 'super-secret-password' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Augno.NotFoundError);
   });
 });
