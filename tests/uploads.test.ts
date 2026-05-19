@@ -1,7 +1,6 @@
 import fs from 'fs';
 import type { ResponseLike } from 'augno/internal/to-file';
 import { toFile } from 'augno/core/uploads';
-import { File } from 'node:buffer';
 
 class MyClass {
   name: string = 'foo';

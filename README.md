@@ -8,6 +8,15 @@ The REST API documentation can be found on [www.docs.augno.com](https://www.docs
 
 It is generated with [Stainless](https://www.stainless.com/).
 
+## MCP Server
+
+Use the Augno Client MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.
+
+[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=augno-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImF1Z25vLW1jcCJdLCJlbnYiOnsiQVVHTk9fQVBJX0tFWSI6Ik15IEFQSSBLZXkifX0)
+[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22augno-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22augno-mcp%22%5D%2C%22env%22%3A%7B%22AUGNO_API_KEY%22%3A%22My%20API%20Key%22%7D%7D)
+
+> Note: You may need to set environment variables in your MCP client.
+
 ## Installation
 
 ```sh
@@ -30,7 +39,9 @@ const client = new AugnoClient({
   environment: 'environment_1', // defaults to 'production'
 });
 
-const response = await client.auth.refreshToken();
+const response = await client.ai.listToolGroups();
+
+console.log(response.data);
 ```
 
 ### Request & Response types
@@ -46,7 +57,7 @@ const client = new AugnoClient({
   environment: 'environment_1', // defaults to 'production'
 });
 
-const response: AugnoClient.AuthRefreshTokenResponse = await client.auth.refreshToken();
+const response: AugnoClient.AIListToolGroupsResponse = await client.ai.listToolGroups();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -59,7 +70,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const response = await client.auth.refreshToken().catch(async (err) => {
+const response = await client.ai.listToolGroups().catch(async (err) => {
   if (err instanceof AugnoClient.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
@@ -99,7 +110,7 @@ const client = new AugnoClient({
 });
 
 // Or, configure per-request:
-await client.auth.refreshToken({
+await client.ai.listToolGroups({
   maxRetries: 5,
 });
 ```
@@ -116,7 +127,7 @@ const client = new AugnoClient({
 });
 
 // Override per-request:
-await client.auth.refreshToken({
+await client.ai.listToolGroups({
   timeout: 5 * 1000,
 });
 ```
@@ -124,6 +135,37 @@ await client.auth.refreshToken({
 On timeout, an `APIConnectionTimeoutError` is thrown.
 
 Note that requests which time out will be [retried twice by default](#retries).
+
+## Auto-pagination
+
+List methods in the AugnoClient API are paginated.
+You can use the `for await … of` syntax to iterate through items across all pages:
+
+```ts
+async function fetchAllAIListUsageResponses(params) {
+  const allAIListUsageResponses = [];
+  // Automatically fetches more pages as needed.
+  for await (const aiListUsageResponse of client.ai.listUsage()) {
+    allAIListUsageResponses.push(aiListUsageResponse);
+  }
+  return allAIListUsageResponses;
+}
+```
+
+Alternatively, you can request a single page at a time:
+
+```ts
+let page = await client.ai.listUsage();
+for (const aiListUsageResponse of page.data) {
+  console.log(aiListUsageResponse);
+}
+
+// Convenience methods are provided for manually paginating:
+while (page.hasNextPage()) {
+  page = await page.getNextPage();
+  // ...
+}
+```
 
 ## Advanced Usage
 
@@ -139,13 +181,13 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new AugnoClient();
 
-const response = await client.auth.refreshToken().asResponse();
+const response = await client.ai.listToolGroups().asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: response, response: raw } = await client.auth.refreshToken().withResponse();
+const { data: response, response: raw } = await client.ai.listToolGroups().withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(response);
+console.log(response.data);
 ```
 
 ### Logging
@@ -225,7 +267,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.auth.refreshToken({
+client.ai.listToolGroups({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
