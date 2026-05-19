@@ -69,6 +69,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.ai.listToolGroups();\n\nconsole.log(response.data);",
       },
+      python: {
+        method: 'ai.list_tool_groups',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.ai.list_tool_groups()\nprint(response.data)',
+      },
       go: {
         method: 'client.AI.ListToolGroups',
         example:
@@ -99,6 +104,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.ai.listTools();\n\nconsole.log(response.data);",
       },
+      python: {
+        method: 'ai.list_tools',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.ai.list_tools()\nprint(response.data)',
+      },
       go: {
         method: 'client.AI.ListTools',
         example:
@@ -127,6 +137,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.ai.listUsage',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const aiListUsageResponse of client.ai.listUsage()) {\n  console.log(aiListUsageResponse.id);\n}",
+      },
+      python: {
+        method: 'ai.list_usage',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\npage = client.ai.list_usage()\npage = page.data[0]\nprint(page.id)',
       },
       go: {
         method: 'client.AI.ListUsage',
@@ -161,6 +176,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.ai.agents.list',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agents = await client.ai.agents.list();\n\nconsole.log(agents.data);",
+      },
+      python: {
+        method: 'ai.agents.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagents = client.ai.agents.list()\nprint(agents.data)',
       },
       go: {
         method: 'client.AI.Agents.List',
@@ -201,6 +221,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentDefinition = await client.ai.agents.create({\n  category_code: 'inventory',\n  config: {\n    system_prompt:\n      'You are an order processing agent. Parse incoming emails and create draft orders.',\n    model: 'claude-sonnet-4',\n    provider: 'anthropic',\n    temperature: 0.2,\n    trigger_config: {\n      cron_schedule: null,\n      timezone: null,\n      event_filters: ['email.received'],\n    },\n  },\n  description: 'Monitors inventory levels and creates restock alerts.',\n  name: 'Inventory Monitor',\n  role_id: 'rl_01gf7a8200er3ar3pkfrb6kk29',\n  slug: 'inventory_monitor',\n  tools: [\n    {\n      tool_id: 'tdef_01k0b1seed0searchproduct0',\n      sort_order: 1,\n      require_review: true,\n    },\n  ],\n  trigger_type: 'event',\n});\n\nconsole.log(agentDefinition.id);",
       },
+      python: {
+        method: 'ai.agents.create',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_definition = client.ai.agents.create(\n    category_code="inventory",\n    config={\n        "system_prompt": "You are an order processing agent. Parse incoming emails and create draft orders.",\n        "model": "claude-sonnet-4",\n        "provider": "anthropic",\n        "temperature": 0.2,\n        "trigger_config": {\n            "cron_schedule": None,\n            "timezone": None,\n            "event_filters": ["email.received"],\n        },\n    },\n    description="Monitors inventory levels and creates restock alerts.",\n    name="Inventory Monitor",\n    role_id="rl_01gf7a8200er3ar3pkfrb6kk29",\n    slug="inventory_monitor",\n    tools=[{\n        "tool_id": "tdef_01k0b1seed0searchproduct0",\n        "sort_order": 1,\n        "require_review": True,\n    }],\n    trigger_type="event",\n)\nprint(agent_definition.id)',
+      },
       go: {
         method: 'client.AI.Agents.New',
         example:
@@ -229,6 +254,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.ai.agents.delete',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agent = await client.ai.agents.delete('id');\n\nconsole.log(agent);",
+      },
+      python: {
+        method: 'ai.agents.delete',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent = client.ai.agents.delete(\n    "id",\n)\nprint(agent)',
       },
       go: {
         method: 'client.AI.Agents.Delete',
@@ -259,6 +289,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.ai.agents.retrieve',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentDefinition = await client.ai.agents.retrieve('id');\n\nconsole.log(agentDefinition.id);",
+      },
+      python: {
+        method: 'ai.agents.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_definition = client.ai.agents.retrieve(\n    id="id",\n)\nprint(agent_definition.id)',
       },
       go: {
         method: 'client.AI.Agents.Get',
@@ -301,6 +336,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentDefinition = await client.ai.agents.update('id', {\n  category_code: 'inventory',\n  config: {\n    system_prompt:\n      'You are an order processing agent. Parse incoming emails and create draft orders.',\n    model: 'claude-sonnet-4',\n    provider: 'anthropic',\n    temperature: 0.2,\n    trigger_config: {\n      cron_schedule: null,\n      timezone: null,\n      event_filters: ['email.received'],\n    },\n  },\n  description: 'Monitors inventory levels and creates restock alerts.',\n  name: 'Inventory Monitor',\n  role_id: 'rl_01gf7a8200er3ar3pkfrb6kk29',\n  slug: 'inventory_monitor',\n  tools: [\n    {\n      config_json: 'config_json',\n      require_review: true,\n      sort_order: 1,\n      tool_id: 'tdef_01k0b1seed0searchproduct0',\n    },\n  ],\n  trigger_type: 'event',\n});\n\nconsole.log(agentDefinition.id);",
       },
+      python: {
+        method: 'ai.agents.update',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_definition = client.ai.agents.update(\n    id="id",\n    category_code="inventory",\n    config={\n        "system_prompt": "You are an order processing agent. Parse incoming emails and create draft orders.",\n        "model": "claude-sonnet-4",\n        "provider": "anthropic",\n        "temperature": 0.2,\n        "trigger_config": {\n            "cron_schedule": None,\n            "timezone": None,\n            "event_filters": ["email.received"],\n        },\n    },\n    description="Monitors inventory levels and creates restock alerts.",\n    name="Inventory Monitor",\n    role_id="rl_01gf7a8200er3ar3pkfrb6kk29",\n    slug="inventory_monitor",\n    tools=[{\n        "config_json": "config_json",\n        "require_review": True,\n        "sort_order": 1,\n        "tool_id": "tdef_01k0b1seed0searchproduct0",\n    }],\n    trigger_type="event",\n)\nprint(agent_definition.id)',
+      },
       go: {
         method: 'client.AI.Agents.Update',
         example:
@@ -334,6 +374,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.ai.agents.updateStatus',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentDefinition = await client.ai.agents.updateStatus('id', { status_code: 'active' });\n\nconsole.log(agentDefinition.id);",
+      },
+      python: {
+        method: 'ai.agents.update_status',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_definition = client.ai.agents.update_status(\n    id="id",\n    status_code="active",\n)\nprint(agent_definition.id)',
       },
       go: {
         method: 'client.AI.Agents.UpdateStatus',
@@ -371,6 +416,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const agentAlert of client.ai.alerts.list()) {\n  console.log(agentAlert.id);\n}",
       },
+      python: {
+        method: 'ai.alerts.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\npage = client.ai.alerts.list()\npage = page.data[0]\nprint(page.id)',
+      },
       go: {
         method: 'client.AI.Alerts.List',
         example:
@@ -399,6 +449,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.ai.alerts.retrieve',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentAlert = await client.ai.alerts.retrieve('id');\n\nconsole.log(agentAlert.id);",
+      },
+      python: {
+        method: 'ai.alerts.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_alert = client.ai.alerts.retrieve(\n    id="id",\n)\nprint(agent_alert.id)',
       },
       go: {
         method: 'client.AI.Alerts.Get',
@@ -430,6 +485,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentAlert = await client.ai.alerts.actions.acknowledge('id');\n\nconsole.log(agentAlert.id);",
       },
+      python: {
+        method: 'ai.alerts.actions.acknowledge',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_alert = client.ai.alerts.actions.acknowledge(\n    id="id",\n)\nprint(agent_alert.id)',
+      },
       go: {
         method: 'client.AI.Alerts.Actions.Acknowledge',
         example:
@@ -459,6 +519,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.ai.memories.list',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const agentMemory of client.ai.memories.list()) {\n  console.log(agentMemory.id);\n}",
+      },
+      python: {
+        method: 'ai.memories.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\npage = client.ai.memories.list()\npage = page.data[0]\nprint(page.id)',
       },
       go: {
         method: 'client.AI.Memories.List',
@@ -498,6 +563,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentMemory = await client.ai.memories.create({\n  category: 'preference',\n  content: 'Customer prefers express shipping on all orders.',\n  importance: 0.8,\n  metadata: null,\n});\n\nconsole.log(agentMemory.id);",
       },
+      python: {
+        method: 'ai.memories.create',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_memory = client.ai.memories.create(\n    category="preference",\n    content="Customer prefers express shipping on all orders.",\n    importance=0.8,\n    metadata=None,\n)\nprint(agent_memory.id)',
+      },
       go: {
         method: 'client.AI.Memories.New',
         example:
@@ -526,6 +596,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.ai.memories.delete',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst memory = await client.ai.memories.delete('id');\n\nconsole.log(memory);",
+      },
+      python: {
+        method: 'ai.memories.delete',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nmemory = client.ai.memories.delete(\n    "id",\n)\nprint(memory)',
       },
       go: {
         method: 'client.AI.Memories.Delete',
@@ -556,6 +631,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.ai.memories.retrieve',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentMemory = await client.ai.memories.retrieve('id');\n\nconsole.log(agentMemory.id);",
+      },
+      python: {
+        method: 'ai.memories.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_memory = client.ai.memories.retrieve(\n    "id",\n)\nprint(agent_memory.id)',
       },
       go: {
         method: 'client.AI.Memories.Get',
@@ -596,6 +676,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentMemory = await client.ai.memories.update('id', {\n  category: 'category',\n  content: 'Customer prefers next-day shipping on all orders.',\n  importance: 0.9,\n  metadata: [{}],\n});\n\nconsole.log(agentMemory.id);",
       },
+      python: {
+        method: 'ai.memories.update',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_memory = client.ai.memories.update(\n    id="id",\n    category="category",\n    content="Customer prefers next-day shipping on all orders.",\n    importance=0.9,\n    metadata=[{}],\n)\nprint(agent_memory.id)',
+      },
       go: {
         method: 'client.AI.Memories.Update',
         example:
@@ -632,6 +717,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const agentRun of client.ai.runs.list()) {\n  console.log(agentRun.id);\n}",
       },
+      python: {
+        method: 'ai.runs.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\npage = client.ai.runs.list()\npage = page.data[0]\nprint(page.id)',
+      },
       go: {
         method: 'client.AI.Runs.List',
         example:
@@ -664,6 +754,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.ai.runs.trigger',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentRun = await client.ai.runs.trigger({\n  agent_definition_id: 'agdf_01jm4r6700f8nwq3v5hx2d9ktp',\n  input: 'Process the latest incoming orders.',\n});\n\nconsole.log(agentRun.id);",
+      },
+      python: {
+        method: 'ai.runs.trigger',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_run = client.ai.runs.trigger(\n    agent_definition_id="agdf_01jm4r6700f8nwq3v5hx2d9ktp",\n    input="Process the latest incoming orders.",\n)\nprint(agent_run.id)',
       },
       go: {
         method: 'client.AI.Runs.Trigger',
@@ -698,6 +793,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentRun = await client.ai.runs.retrieve('id');\n\nconsole.log(agentRun.id);",
       },
+      python: {
+        method: 'ai.runs.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_run = client.ai.runs.retrieve(\n    id="id",\n)\nprint(agent_run.id)',
+      },
       go: {
         method: 'client.AI.Runs.Get',
         example:
@@ -730,6 +830,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.ai.runs.actions.cancel',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentRun = await client.ai.runs.actions.cancel('id');\n\nconsole.log(agentRun.id);",
+      },
+      python: {
+        method: 'ai.runs.actions.cancel',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_run = client.ai.runs.actions.cancel(\n    id="id",\n)\nprint(agent_run.id)',
       },
       go: {
         method: 'client.AI.Runs.Actions.Cancel',
@@ -767,6 +872,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentRun = await client.ai.runs.actions.continue('id', {\n  allowed_tool_slugs: ['string'],\n  approved_tool_slugs: ['string'],\n  message: 'Yes, proceed with creating the order.',\n});\n\nconsole.log(agentRun.id);",
       },
+      python: {
+        method: 'ai.runs.actions.continue_',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_run = client.ai.runs.actions.continue_(\n    id="id",\n    allowed_tool_slugs=["string"],\n    approved_tool_slugs=["string"],\n    message="Yes, proceed with creating the order.",\n)\nprint(agent_run.id)',
+      },
       go: {
         method: 'client.AI.Runs.Actions.Continue',
         example:
@@ -797,6 +907,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.auth.apiKeys.list',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst apiKeys = await client.auth.apiKeys.list();\n\nconsole.log(apiKeys.data);",
+      },
+      python: {
+        method: 'auth.api_keys.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\napi_keys = client.auth.api_keys.list()\nprint(api_keys.data)',
       },
       go: {
         method: 'client.Auth.APIKeys.List',
@@ -834,6 +949,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst createdAPIKey = await client.auth.apiKeys.create({\n  name: 'Production API Key',\n  role_id: 'rl_01gf7a8200er3ar3pkfrb6kk29',\n});\n\nconsole.log(createdAPIKey.api_key_info);",
       },
+      python: {
+        method: 'auth.api_keys.create',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\ncreated_api_key = client.auth.api_keys.create(\n    name="Production API Key",\n    role_id="rl_01gf7a8200er3ar3pkfrb6kk29",\n)\nprint(created_api_key.api_key_info)',
+      },
       go: {
         method: 'client.Auth.APIKeys.New',
         example:
@@ -864,6 +984,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.auth.apiKeys.revoke('id');\n\nconsole.log(response);",
       },
+      python: {
+        method: 'auth.api_keys.revoke',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.auth.api_keys.revoke(\n    "id",\n)\nprint(response)',
+      },
       go: {
         method: 'client.Auth.APIKeys.Revoke',
         example:
@@ -893,6 +1018,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.auth.apiKeys.retrieve',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst apiKey = await client.auth.apiKeys.retrieve('id');\n\nconsole.log(apiKey.id);",
+      },
+      python: {
+        method: 'auth.api_keys.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\napi_key = client.auth.api_keys.retrieve(\n    id="id",\n)\nprint(api_key.id)',
       },
       go: {
         method: 'client.Auth.APIKeys.Get',
@@ -925,6 +1055,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst createdAPIKey = await client.auth.apiKeys.actions.rotate('id', {\n  expires_at: '2026-12-31T23:59:59Z',\n});\n\nconsole.log(createdAPIKey.api_key_info);",
       },
+      python: {
+        method: 'auth.api_keys.actions.rotate',
+        example:
+          'import os\nfrom datetime import datetime\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\ncreated_api_key = client.auth.api_keys.actions.rotate(\n    id="id",\n    expires_at=datetime.fromisoformat("2026-12-31T23:59:59"),\n)\nprint(created_api_key.api_key_info)',
+      },
       go: {
         method: 'client.Auth.APIKeys.Actions.Rotate',
         example:
@@ -954,6 +1089,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.listAdjustmentTypes',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.listAdjustmentTypes();\n\nconsole.log(response.data);",
+      },
+      python: {
+        method: 'core.list_adjustment_types',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.list_adjustment_types()\nprint(response.data)',
       },
       go: {
         method: 'client.Core.ListAdjustmentTypes',
@@ -985,6 +1125,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.accountGroups.list',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountGroups = await client.core.accountGroups.list();\n\nconsole.log(accountGroups.data);",
+      },
+      python: {
+        method: 'core.account_groups.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_groups = client.core.account_groups.list()\nprint(account_groups.data)',
       },
       go: {
         method: 'client.Core.AccountGroups.List',
@@ -1022,6 +1167,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountGroup = await client.core.accountGroups.create({\n  commission_status: 'commission_applied',\n  freight_status: 'billed_freight',\n  name: 'Wholesale Customers',\n  type: 'pricing_group',\n});\n\nconsole.log(accountGroup.id);",
       },
+      python: {
+        method: 'core.account_groups.create',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_group = client.core.account_groups.create(\n    commission_status="commission_applied",\n    freight_status="billed_freight",\n    name="Wholesale Customers",\n    type="pricing_group",\n)\nprint(account_group.id)',
+      },
       go: {
         method: 'client.Core.AccountGroups.New',
         example:
@@ -1050,6 +1200,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.accountGroups.delete',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountGroup = await client.core.accountGroups.delete('id');\n\nconsole.log(accountGroup);",
+      },
+      python: {
+        method: 'core.account_groups.delete',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_group = client.core.account_groups.delete(\n    "id",\n)\nprint(account_group)',
       },
       go: {
         method: 'client.Core.AccountGroups.Delete',
@@ -1080,6 +1235,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.accountGroups.retrieve',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountGroup = await client.core.accountGroups.retrieve('id');\n\nconsole.log(accountGroup.id);",
+      },
+      python: {
+        method: 'core.account_groups.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_group = client.core.account_groups.retrieve(\n    "id",\n)\nprint(account_group.id)',
       },
       go: {
         method: 'client.Core.AccountGroups.Get',
@@ -1118,6 +1278,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountGroup = await client.core.accountGroups.update('id', {\n  name: 'Updated Wholesale Customers',\n});\n\nconsole.log(accountGroup.id);",
       },
+      python: {
+        method: 'core.account_groups.update',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_group = client.core.account_groups.update(\n    id="id",\n    name="Updated Wholesale Customers",\n)\nprint(account_group.id)',
+      },
       go: {
         method: 'client.Core.AccountGroups.Update',
         example:
@@ -1148,6 +1313,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.accountPrices.list',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountPrices = await client.core.accountPrices.list();\n\nconsole.log(accountPrices.data);",
+      },
+      python: {
+        method: 'core.account_prices.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_prices = client.core.account_prices.list()\nprint(account_prices.data)',
       },
       go: {
         method: 'client.Core.AccountPrices.List',
@@ -1189,6 +1359,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountPrice = await client.core.accountPrices.create({\n  attribute_ids: ['at_01jm4r6700f8nwq3v5hx2d9ktp'],\n  category_ids: ['ic_01jm4r6700f8nwq3v5hx2d9ktp'],\n  product_line_id: 'pl_01jm4r6700f8nwq3v5hx2d9ktp',\n  rate_denominator_unit_id: 'un_01jm4r6700f8nwq3v5hx2d9ktp',\n  rate_numerator_unit_id: 'un_01jm4r6700f8nwq3v5hx2d9ktp',\n  rate_value: '25.500000000000000000000000000000',\n  recipient_account_id: 'ac_01gf7a8200eaj8fke1xvw4h50x',\n});\n\nconsole.log(accountPrice.id);",
       },
+      python: {
+        method: 'core.account_prices.create',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_price = client.core.account_prices.create(\n    attribute_ids=["at_01jm4r6700f8nwq3v5hx2d9ktp"],\n    category_ids=["ic_01jm4r6700f8nwq3v5hx2d9ktp"],\n    product_line_id="pl_01jm4r6700f8nwq3v5hx2d9ktp",\n    rate_denominator_unit_id="un_01jm4r6700f8nwq3v5hx2d9ktp",\n    rate_numerator_unit_id="un_01jm4r6700f8nwq3v5hx2d9ktp",\n    rate_value="25.500000000000000000000000000000",\n    recipient_account_id="ac_01gf7a8200eaj8fke1xvw4h50x",\n)\nprint(account_price.id)',
+      },
       go: {
         method: 'client.Core.AccountPrices.New',
         example:
@@ -1218,6 +1393,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.accountPrices.delete',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountPrice = await client.core.accountPrices.delete('id');\n\nconsole.log(accountPrice);",
+      },
+      python: {
+        method: 'core.account_prices.delete',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_price = client.core.account_prices.delete(\n    "id",\n)\nprint(account_price)',
       },
       go: {
         method: 'client.Core.AccountPrices.Delete',
@@ -1249,6 +1429,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.accountPrices.retrieve',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountPrice = await client.core.accountPrices.retrieve('id');\n\nconsole.log(accountPrice.id);",
+      },
+      python: {
+        method: 'core.account_prices.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_price = client.core.account_prices.retrieve(\n    id="id",\n)\nprint(account_price.id)',
       },
       go: {
         method: 'client.Core.AccountPrices.Get',
@@ -1291,6 +1476,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountPrice = await client.core.accountPrices.update('id', {\n  rate_value: '30.000000000000000000000000000000',\n});\n\nconsole.log(accountPrice.id);",
       },
+      python: {
+        method: 'core.account_prices.update',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_price = client.core.account_prices.update(\n    id="id",\n    rate_value="30.000000000000000000000000000000",\n)\nprint(account_price.id)',
+      },
       go: {
         method: 'client.Core.AccountPrices.Update',
         example:
@@ -1321,6 +1511,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountStatuses = await client.core.accountStatuses.list();\n\nconsole.log(accountStatuses.data);",
       },
+      python: {
+        method: 'core.account_statuses.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_statuses = client.core.account_statuses.list()\nprint(account_statuses.data)',
+      },
       go: {
         method: 'client.Core.AccountStatuses.List',
         example:
@@ -1350,6 +1545,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.accountStatuses.retrieve',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountStatus = await client.core.accountStatuses.retrieve('id');\n\nconsole.log(accountStatus.id);",
+      },
+      python: {
+        method: 'core.account_statuses.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_status = client.core.account_statuses.retrieve(\n    "id",\n)\nprint(account_status.id)',
       },
       go: {
         method: 'client.Core.AccountStatuses.Get',
@@ -1384,6 +1584,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.accountUsers.list',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountUsers = await client.core.accountUsers.list();\n\nconsole.log(accountUsers.data);",
+      },
+      python: {
+        method: 'core.account_users.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_users = client.core.account_users.list()\nprint(account_users.data)',
       },
       go: {
         method: 'client.Core.AccountUsers.List',
@@ -1426,6 +1631,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountUser = await client.core.accountUsers.create({\n  custom_email: 'custom_email',\n  name: 'name',\n  password: 'password',\n  receives_invoice_notifications: true,\n  receives_order_acknowledgements: true,\n  receives_purchase_order_submission_notifications: true,\n  username: 'username',\n});\n\nconsole.log(accountUser.id);",
       },
+      python: {
+        method: 'core.account_users.create',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_user = client.core.account_users.create(\n    custom_email="custom_email",\n    name="name",\n    password="password",\n    receives_invoice_notifications=True,\n    receives_order_acknowledgements=True,\n    receives_purchase_order_submission_notifications=True,\n    username="username",\n)\nprint(account_user.id)',
+      },
       go: {
         method: 'client.Core.AccountUsers.New',
         example:
@@ -1454,6 +1664,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.accountUsers.delete',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountUser = await client.core.accountUsers.delete('id');\n\nconsole.log(accountUser);",
+      },
+      python: {
+        method: 'core.account_users.delete',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_user = client.core.account_users.delete(\n    "id",\n)\nprint(account_user)',
       },
       go: {
         method: 'client.Core.AccountUsers.Delete',
@@ -1484,6 +1699,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.accountUsers.retrieve',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountUser = await client.core.accountUsers.retrieve('id');\n\nconsole.log(accountUser.id);",
+      },
+      python: {
+        method: 'core.account_users.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_user = client.core.account_users.retrieve(\n    id="id",\n)\nprint(account_user.id)',
       },
       go: {
         method: 'client.Core.AccountUsers.Get',
@@ -1523,6 +1743,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountUser = await client.core.accountUsers.update('id');\n\nconsole.log(accountUser.id);",
       },
+      python: {
+        method: 'core.account_users.update',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_user = client.core.account_users.update(\n    id="id",\n)\nprint(account_user.id)',
+      },
       go: {
         method: 'client.Core.AccountUsers.Update',
         example:
@@ -1551,6 +1776,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.accountUsers.lock',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.accountUsers.lock('id');\n\nconsole.log(response);",
+      },
+      python: {
+        method: 'core.account_users.lock',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.account_users.lock(\n    "id",\n)\nprint(response)',
       },
       go: {
         method: 'client.Core.AccountUsers.Lock',
@@ -1583,6 +1813,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountUser = await client.core.accountUsers.updateNotificationPreferences('id', {\n  preferences: [{ enabled: true, notification_type_code: 'notification_type_code' }],\n});\n\nconsole.log(accountUser.id);",
       },
+      python: {
+        method: 'core.account_users.update_notification_preferences',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_user = client.core.account_users.update_notification_preferences(\n    id="id",\n    preferences=[{\n        "enabled": True,\n        "notification_type_code": "notification_type_code",\n    }],\n)\nprint(account_user.id)',
+      },
       go: {
         method: 'client.Core.AccountUsers.UpdateNotificationPreferences',
         example:
@@ -1612,6 +1847,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.accountUsers.updatePassword',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.accountUsers.updatePassword('id', {\n  new_password: 'new_password',\n  requester_password: 'requester_password',\n});\n\nconsole.log(response);",
+      },
+      python: {
+        method: 'core.account_users.update_password',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.account_users.update_password(\n    id="id",\n    new_password="new_password",\n    requester_password="requester_password",\n)\nprint(response)',
       },
       go: {
         method: 'client.Core.AccountUsers.UpdatePassword',
@@ -1643,6 +1883,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.accountUsers.restore('id');\n\nconsole.log(response);",
       },
+      python: {
+        method: 'core.account_users.restore',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.account_users.restore(\n    "id",\n)\nprint(response)',
+      },
       go: {
         method: 'client.Core.AccountUsers.Restore',
         example:
@@ -1672,6 +1917,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.accountUsers.unlock',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.accountUsers.unlock('id');\n\nconsole.log(response);",
+      },
+      python: {
+        method: 'core.account_users.unlock',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.account_users.unlock(\n    "id",\n)\nprint(response)',
       },
       go: {
         method: 'client.Core.AccountUsers.Unlock',
@@ -1703,6 +1953,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.accountUsers.salesTargets.list',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst salesTargets = await client.core.accountUsers.salesTargets.list('id');\n\nconsole.log(salesTargets.data);",
+      },
+      python: {
+        method: 'core.account_users.sales_targets.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nsales_targets = client.core.account_users.sales_targets.list(\n    id="id",\n)\nprint(sales_targets.data)',
       },
       go: {
         method: 'client.Core.AccountUsers.SalesTargets.List',
@@ -1739,6 +1994,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.accountUsers.salesTargets.create',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst salesTarget = await client.core.accountUsers.salesTargets.create('id', {\n  amount_unit_id: 'amount_unit_id',\n  amount_value: 'amount_value',\n  end_date: '2019-12-27T18:11:19.117Z',\n  start_date: '2019-12-27T18:11:19.117Z',\n});\n\nconsole.log(salesTarget.id);",
+      },
+      python: {
+        method: 'core.account_users.sales_targets.create',
+        example:
+          'import os\nfrom datetime import datetime\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nsales_target = client.core.account_users.sales_targets.create(\n    id="id",\n    amount_unit_id="amount_unit_id",\n    amount_value="amount_value",\n    end_date=datetime.fromisoformat("2019-12-27T18:11:19.117"),\n    start_date=datetime.fromisoformat("2019-12-27T18:11:19.117"),\n)\nprint(sales_target.id)',
       },
       go: {
         method: 'client.Core.AccountUsers.SalesTargets.New',
@@ -1778,6 +2038,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst salesTarget = await client.core.accountUsers.salesTargets.upsert('target_id', {\n  id: 'id',\n  amount_unit_id: 'amount_unit_id',\n  amount_value: 'amount_value',\n  end_date: '2019-12-27T18:11:19.117Z',\n  start_date: '2019-12-27T18:11:19.117Z',\n});\n\nconsole.log(salesTarget.id);",
       },
+      python: {
+        method: 'core.account_users.sales_targets.upsert',
+        example:
+          'import os\nfrom datetime import datetime\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nsales_target = client.core.account_users.sales_targets.upsert(\n    target_id="target_id",\n    id="id",\n    amount_unit_id="amount_unit_id",\n    amount_value="amount_value",\n    end_date=datetime.fromisoformat("2019-12-27T18:11:19.117"),\n    start_date=datetime.fromisoformat("2019-12-27T18:11:19.117"),\n)\nprint(sales_target.id)',
+      },
       go: {
         method: 'client.Core.AccountUsers.SalesTargets.Upsert',
         example:
@@ -1809,6 +2074,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.accounts.retrieveBySlug('slug');\n\nconsole.log(response.id);",
       },
+      python: {
+        method: 'core.accounts.retrieve_by_slug',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.accounts.retrieve_by_slug(\n    "slug",\n)\nprint(response.id)',
+      },
       go: {
         method: 'client.Core.Accounts.GetBySlug',
         example:
@@ -1839,6 +2109,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.accounts.retrieve',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst account = await client.core.accounts.retrieve('id');\n\nconsole.log(account.id);",
+      },
+      python: {
+        method: 'core.accounts.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount = client.core.accounts.retrieve(\n    id="id",\n)\nprint(account.id)',
       },
       go: {
         method: 'client.Core.Accounts.Get',
@@ -1883,6 +2158,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst account = await client.core.accounts.update('id', { name: 'Acme Inc.' });\n\nconsole.log(account.id);",
       },
+      python: {
+        method: 'core.accounts.update',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount = client.core.accounts.update(\n    id="id",\n    name="Acme Inc.",\n)\nprint(account.id)',
+      },
       go: {
         method: 'client.Core.Accounts.Update',
         example:
@@ -1912,6 +2192,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.accounts.getLogoURL',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.accounts.getLogoURL('id');\n\nconsole.log(response.url);",
+      },
+      python: {
+        method: 'core.accounts.get_logo_url',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.accounts.get_logo_url(\n    "id",\n)\nprint(response.url)',
       },
       go: {
         method: 'client.Core.Accounts.GetLogoURL',
@@ -1943,6 +2228,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.accounts.uploadPhoto('id');\n\nconsole.log(response.success);",
       },
+      python: {
+        method: 'core.accounts.upload_photo',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.accounts.upload_photo(\n    "id",\n)\nprint(response.success)',
+      },
       go: {
         method: 'client.Core.Accounts.UploadPhoto',
         example:
@@ -1973,6 +2263,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.accounts.addresses.list',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst addresses = await client.core.accounts.addresses.list('account_id');\n\nconsole.log(addresses.data);",
+      },
+      python: {
+        method: 'core.accounts.addresses.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naddresses = client.core.accounts.addresses.list(\n    "account_id",\n)\nprint(addresses.data)',
       },
       go: {
         method: 'client.Core.Accounts.Addresses.List',
@@ -2016,6 +2311,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst address = await client.core.accounts.addresses.create('account_id', {\n  country: 'US',\n  is_drop_ship: false,\n  name: 'Headquarters',\n  locality: 'Springfield',\n  postal_code: '62701',\n  state: 'IL',\n  street_line_1: '123 Main St',\n});\n\nconsole.log(address.id);",
       },
+      python: {
+        method: 'core.accounts.addresses.create',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naddress = client.core.accounts.addresses.create(\n    account_id="account_id",\n    country="US",\n    is_drop_ship=False,\n    name="Headquarters",\n    locality="Springfield",\n    postal_code="62701",\n    state="IL",\n    street_line_1="123 Main St",\n)\nprint(address.id)',
+      },
       go: {
         method: 'client.Core.Accounts.Addresses.New',
         example:
@@ -2045,6 +2345,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.accounts.addresses.delete',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst address = await client.core.accounts.addresses.delete('id', { account_id: 'account_id' });\n\nconsole.log(address);",
+      },
+      python: {
+        method: 'core.accounts.addresses.delete',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naddress = client.core.accounts.addresses.delete(\n    id="id",\n    account_id="account_id",\n)\nprint(address)',
       },
       go: {
         method: 'client.Core.Accounts.Addresses.Delete',
@@ -2076,6 +2381,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.accounts.addresses.retrieve',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst address = await client.core.accounts.addresses.retrieve('id', { account_id: 'account_id' });\n\nconsole.log(address.id);",
+      },
+      python: {
+        method: 'core.accounts.addresses.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naddress = client.core.accounts.addresses.retrieve(\n    id="id",\n    account_id="account_id",\n)\nprint(address.id)',
       },
       go: {
         method: 'client.Core.Accounts.Addresses.Get',
@@ -2121,6 +2431,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst address = await client.core.accounts.addresses.update('id', {\n  account_id: 'account_id',\n  name: 'Warehouse',\n});\n\nconsole.log(address.id);",
       },
+      python: {
+        method: 'core.accounts.addresses.update',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naddress = client.core.accounts.addresses.update(\n    id="id",\n    account_id="account_id",\n    name="Warehouse",\n)\nprint(address.id)',
+      },
       go: {
         method: 'client.Core.Accounts.Addresses.Update',
         example:
@@ -2152,6 +2467,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.addresses.autocomplete({ input: 'input' });\n\nconsole.log(response.data);",
       },
+      python: {
+        method: 'core.addresses.autocomplete',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.addresses.autocomplete(\n    input="input",\n)\nprint(response.data)',
+      },
       go: {
         method: 'client.Core.Addresses.Autocomplete',
         example:
@@ -2182,6 +2502,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.addresses.getDetails',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.addresses.getDetails('id');\n\nconsole.log(response.address);",
+      },
+      python: {
+        method: 'core.addresses.get_details',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.addresses.get_details(\n    id="id",\n)\nprint(response.address)',
       },
       go: {
         method: 'client.Core.Addresses.GetDetails',
@@ -2221,6 +2546,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.addresses.validate({\n  address_line_1: '123 Main St',\n  city: 'Springfield',\n  country: 'US',\n  postal_code: '62701',\n  state: 'IL',\n});\n\nconsole.log(response.is_valid);",
       },
+      python: {
+        method: 'core.addresses.validate',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.addresses.validate(\n    address_line_1="123 Main St",\n    city="Springfield",\n    country="US",\n    postal_code="62701",\n    state="IL",\n)\nprint(response.is_valid)',
+      },
       go: {
         method: 'client.Core.Addresses.Validate',
         example:
@@ -2251,6 +2581,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.carriers.list',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst carriers = await client.core.carriers.list();\n\nconsole.log(carriers.data);",
+      },
+      python: {
+        method: 'core.carriers.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\ncarriers = client.core.carriers.list()\nprint(carriers.data)',
       },
       go: {
         method: 'client.Core.Carriers.List',
@@ -2283,6 +2618,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst carrier = await client.core.carriers.create({\n  account_number: null,\n  code: 'fedex',\n  is_portal_enabled: true,\n  name: 'FedEx',\n});\n\nconsole.log(carrier.id);",
       },
+      python: {
+        method: 'core.carriers.create',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\ncarrier = client.core.carriers.create(\n    account_number=None,\n    code="fedex",\n    is_portal_enabled=True,\n    name="FedEx",\n)\nprint(carrier.id)',
+      },
       go: {
         method: 'client.Core.Carriers.New',
         example:
@@ -2312,6 +2652,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.carriers.delete',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst carrier = await client.core.carriers.delete('id');\n\nconsole.log(carrier);",
+      },
+      python: {
+        method: 'core.carriers.delete',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\ncarrier = client.core.carriers.delete(\n    "id",\n)\nprint(carrier)',
       },
       go: {
         method: 'client.Core.Carriers.Delete',
@@ -2343,6 +2688,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst carrier = await client.core.carriers.retrieve('id');\n\nconsole.log(carrier.id);",
       },
+      python: {
+        method: 'core.carriers.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\ncarrier = client.core.carriers.retrieve(\n    id="id",\n)\nprint(carrier.id)',
+      },
       go: {
         method: 'client.Core.Carriers.Get',
         example:
@@ -2372,6 +2722,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.carriers.update',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst carrier = await client.core.carriers.update('id', {\n  is_portal_enabled: null,\n  name: 'FedEx Express',\n});\n\nconsole.log(carrier.id);",
+      },
+      python: {
+        method: 'core.carriers.update',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\ncarrier = client.core.carriers.update(\n    id="id",\n    is_portal_enabled=None,\n    name="FedEx Express",\n)\nprint(carrier.id)',
       },
       go: {
         method: 'client.Core.Carriers.Update',
@@ -2403,6 +2758,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.carriers.getOAuthStatus('id');\n\nconsole.log(response.status);",
       },
+      python: {
+        method: 'core.carriers.get_oauth_status',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.carriers.get_oauth_status(\n    "id",\n)\nprint(response.status)',
+      },
       go: {
         method: 'client.Core.Carriers.GetOAuthStatus',
         example:
@@ -2433,6 +2793,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.carriers.options.list',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst options = await client.core.carriers.options.list('carrier_id');\n\nconsole.log(options.data);",
+      },
+      python: {
+        method: 'core.carriers.options.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\noptions = client.core.carriers.options.list(\n    "carrier_id",\n)\nprint(options.data)',
       },
       go: {
         method: 'client.Core.Carriers.Options.List',
@@ -2471,6 +2836,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst carrierOption = await client.core.carriers.options.create('carrier_id', {\n  code: 'ground',\n  is_default: false,\n  is_portal_enabled: true,\n  name: 'Ground Shipping',\n  service_level_token: null,\n});\n\nconsole.log(carrierOption.id);",
       },
+      python: {
+        method: 'core.carriers.options.create',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\ncarrier_option = client.core.carriers.options.create(\n    carrier_id="carrier_id",\n    code="ground",\n    is_default=False,\n    is_portal_enabled=True,\n    name="Ground Shipping",\n    service_level_token=None,\n)\nprint(carrier_option.id)',
+      },
       go: {
         method: 'client.Core.Carriers.Options.New',
         example:
@@ -2501,6 +2871,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst option = await client.core.carriers.options.delete('id', { carrier_id: 'carrier_id' });\n\nconsole.log(option);",
       },
+      python: {
+        method: 'core.carriers.options.delete',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\noption = client.core.carriers.options.delete(\n    id="id",\n    carrier_id="carrier_id",\n)\nprint(option)',
+      },
       go: {
         method: 'client.Core.Carriers.Options.Delete',
         example:
@@ -2530,6 +2905,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.carriers.options.retrieve',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst carrierOption = await client.core.carriers.options.retrieve('id', {\n  carrier_id: 'carrier_id',\n});\n\nconsole.log(carrierOption.id);",
+      },
+      python: {
+        method: 'core.carriers.options.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\ncarrier_option = client.core.carriers.options.retrieve(\n    id="id",\n    carrier_id="carrier_id",\n)\nprint(carrier_option.id)',
       },
       go: {
         method: 'client.Core.Carriers.Options.Get',
@@ -2568,6 +2948,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst carrierOption = await client.core.carriers.options.update('id', {\n  carrier_id: 'carrier_id',\n  code: null,\n  is_default: null,\n  is_portal_enabled: null,\n  name: 'Express Shipping',\n});\n\nconsole.log(carrierOption.id);",
       },
+      python: {
+        method: 'core.carriers.options.update',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\ncarrier_option = client.core.carriers.options.update(\n    id="id",\n    carrier_id="carrier_id",\n    code=None,\n    is_default=None,\n    is_portal_enabled=None,\n    name="Express Shipping",\n)\nprint(carrier_option.id)',
+      },
       go: {
         method: 'client.Core.Carriers.Options.Update',
         example:
@@ -2597,6 +2982,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.carriers.actions.initiateOAuth',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.carriers.actions.initiateOAuth('id', {\n  redirect_uri: 'https://app.example.com/carriers/oauth/callback',\n  state: null,\n});\n\nconsole.log(response.oauth_url);",
+      },
+      python: {
+        method: 'core.carriers.actions.initiate_oauth',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.carriers.actions.initiate_oauth(\n    id="id",\n    redirect_uri="https://app.example.com/carriers/oauth/callback",\n    state=None,\n)\nprint(response.oauth_url)',
       },
       go: {
         method: 'client.Core.Carriers.Actions.InitiateOAuth',
@@ -2629,6 +3019,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst carrier = await client.core.carriers.actions.syncOptions('id');\n\nconsole.log(carrier.id);",
       },
+      python: {
+        method: 'core.carriers.actions.sync_options',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\ncarrier = client.core.carriers.actions.sync_options(\n    "id",\n)\nprint(carrier.id)',
+      },
       go: {
         method: 'client.Core.Carriers.Actions.SyncOptions',
         example:
@@ -2659,6 +3054,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst childAccounts = await client.core.childAccounts.list();\n\nconsole.log(childAccounts.data);",
       },
+      python: {
+        method: 'core.child_accounts.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nchild_accounts = client.core.child_accounts.list()\nprint(child_accounts.data)',
+      },
       go: {
         method: 'client.Core.ChildAccounts.List',
         example:
@@ -2688,6 +3088,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.childAccounts.remove',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst childAccount = await client.core.childAccounts.remove('child_account_id');\n\nconsole.log(childAccount);",
+      },
+      python: {
+        method: 'core.child_accounts.remove',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nchild_account = client.core.child_accounts.remove(\n    "child_account_id",\n)\nprint(child_account)',
       },
       go: {
         method: 'client.Core.ChildAccounts.Remove',
@@ -2720,6 +3125,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst childAccount = await client.core.childAccounts.add('child_account_id');\n\nconsole.log(childAccount.id);",
       },
+      python: {
+        method: 'core.child_accounts.add',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nchild_account = client.core.child_accounts.add(\n    "child_account_id",\n)\nprint(child_account.id)',
+      },
       go: {
         method: 'client.Core.ChildAccounts.Add',
         example:
@@ -2749,6 +3159,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.integrations.list',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst integrations = await client.core.integrations.list();\n\nconsole.log(integrations.data);",
+      },
+      python: {
+        method: 'core.integrations.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nintegrations = client.core.integrations.list()\nprint(integrations.data)',
       },
       go: {
         method: 'client.Core.Integrations.List',
@@ -2781,6 +3196,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import AugnoClient from \'augno\';\n\nconst client = new AugnoClient({\n  apiKey: process.env[\'AUGNO_API_KEY\'], // This is the default and can be omitted\n});\n\nconst accountIntegration = await client.core.integrations.create({\n  credentials:\n    \'{"privateKey":"sk_test_...","publishableKey":"pk_test_...","webhookSecret":"whsec_..."}\',\n  integration_code: \'stripe\',\n  name: \'My Stripe Integration\',\n});\n\nconsole.log(accountIntegration.id);',
       },
+      python: {
+        method: 'core.integrations.create',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_integration = client.core.integrations.create(\n    credentials="{\\"privateKey\\":\\"sk_test_...\\",\\"publishableKey\\":\\"pk_test_...\\",\\"webhookSecret\\":\\"whsec_...\\"}",\n    integration_code="stripe",\n    name="My Stripe Integration",\n)\nprint(account_integration.id)',
+      },
       go: {
         method: 'client.Core.Integrations.New',
         example:
@@ -2810,6 +3230,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.integrations.delete',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountIntegration = await client.core.integrations.delete('id');\n\nconsole.log(accountIntegration.id);",
+      },
+      python: {
+        method: 'core.integrations.delete',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_integration = client.core.integrations.delete(\n    "id",\n)\nprint(account_integration.id)',
       },
       go: {
         method: 'client.Core.Integrations.Delete',
@@ -2842,6 +3267,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountIntegration = await client.core.integrations.update('id', {\n  name: 'Updated Stripe Integration',\n});\n\nconsole.log(accountIntegration.id);",
       },
+      python: {
+        method: 'core.integrations.update',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_integration = client.core.integrations.update(\n    id="id",\n    name="Updated Stripe Integration",\n)\nprint(account_integration.id)',
+      },
       go: {
         method: 'client.Core.Integrations.Update',
         example:
@@ -2871,6 +3301,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.integrations.stripe.getPublishableKey();\n\nconsole.log(response.publishable_key);",
       },
+      python: {
+        method: 'core.integrations.stripe.get_publishable_key',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.integrations.stripe.get_publishable_key()\nprint(response.publishable_key)',
+      },
       go: {
         method: 'client.Core.Integrations.Stripe.GetPublishableKey',
         example:
@@ -2899,6 +3334,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.integrations.stripe.getStatus',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.integrations.stripe.getStatus();\n\nconsole.log(response.has_stripe_integration);",
+      },
+      python: {
+        method: 'core.integrations.stripe.get_status',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.integrations.stripe.get_status()\nprint(response.has_stripe_integration)',
       },
       go: {
         method: 'client.Core.Integrations.Stripe.GetStatus',
@@ -2941,6 +3381,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst items = await client.core.items.list();\n\nconsole.log(items.data);",
       },
+      python: {
+        method: 'core.items.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nitems = client.core.items.list()\nprint(items.data)',
+      },
       go: {
         method: 'client.Core.Items.List',
         example:
@@ -2969,6 +3414,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.items.retrieve',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst item = await client.core.items.retrieve('id');\n\nconsole.log(item.id);",
+      },
+      python: {
+        method: 'core.items.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nitem = client.core.items.retrieve(\n    id="id",\n)\nprint(item.id)',
       },
       go: {
         method: 'client.Core.Items.Get',
@@ -3001,6 +3451,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.items.getCosts('id');\n\nconsole.log(response.direct_labor_cost);",
       },
+      python: {
+        method: 'core.items.get_costs',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.items.get_costs(\n    "id",\n)\nprint(response.direct_labor_cost)',
+      },
       go: {
         method: 'client.Core.Items.GetCosts',
         example:
@@ -3032,6 +3487,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.items.getInventory('id');\n\nconsole.log(response.available_to_promise);",
       },
+      python: {
+        method: 'core.items.get_inventory',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.items.get_inventory(\n    "id",\n)\nprint(response.available_to_promise)',
+      },
       go: {
         method: 'client.Core.Items.GetInventory',
         example:
@@ -3062,6 +3522,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.items.getTrends('id', { trend_type: 'trend_type' });\n\nconsole.log(response.object);",
       },
+      python: {
+        method: 'core.items.get_trends',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.items.get_trends(\n    id="id",\n    trend_type="trend_type",\n)\nprint(response.object)',
+      },
       go: {
         method: 'client.Core.Items.GetTrends',
         example:
@@ -3090,6 +3555,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.items.actions.export',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.items.actions.export();\n\nconsole.log(response.count);",
+      },
+      python: {
+        method: 'core.items.actions.export',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.items.actions.export()\nprint(response.count)',
       },
       go: {
         method: 'client.Core.Items.Actions.Export',
@@ -3121,6 +3591,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst paymentTerms = await client.core.paymentTerms.list();\n\nconsole.log(paymentTerms.data);",
       },
+      python: {
+        method: 'core.payment_terms.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\npayment_terms = client.core.payment_terms.list()\nprint(payment_terms.data)',
+      },
       go: {
         method: 'client.Core.PaymentTerms.List',
         example:
@@ -3151,6 +3626,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst paymentTerm = await client.core.paymentTerms.create({ name: 'Net 30' });\n\nconsole.log(paymentTerm.id);",
       },
+      python: {
+        method: 'core.payment_terms.create',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\npayment_term = client.core.payment_terms.create(\n    name="Net 30",\n)\nprint(payment_term.id)',
+      },
       go: {
         method: 'client.Core.PaymentTerms.New',
         example:
@@ -3180,6 +3660,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.paymentTerms.delete',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst paymentTerm = await client.core.paymentTerms.delete('id');\n\nconsole.log(paymentTerm);",
+      },
+      python: {
+        method: 'core.payment_terms.delete',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\npayment_term = client.core.payment_terms.delete(\n    "id",\n)\nprint(payment_term)',
       },
       go: {
         method: 'client.Core.PaymentTerms.Delete',
@@ -3212,6 +3697,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst paymentTerm = await client.core.paymentTerms.retrieve('id');\n\nconsole.log(paymentTerm.id);",
       },
+      python: {
+        method: 'core.payment_terms.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\npayment_term = client.core.payment_terms.retrieve(\n    "id",\n)\nprint(payment_term.id)',
+      },
       go: {
         method: 'client.Core.PaymentTerms.Get',
         example:
@@ -3243,6 +3733,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst paymentTerm = await client.core.paymentTerms.update('id', { name: 'Net 60' });\n\nconsole.log(paymentTerm.id);",
       },
+      python: {
+        method: 'core.payment_terms.update',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\npayment_term = client.core.payment_terms.update(\n    id="id",\n    name="Net 60",\n)\nprint(payment_term.id)',
+      },
       go: {
         method: 'client.Core.PaymentTerms.Update',
         example:
@@ -3272,6 +3767,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.productLineAccess.accountGroups.list',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountGroups = await client.core.productLineAccess.accountGroups.list();\n\nconsole.log(accountGroups.data);",
+      },
+      python: {
+        method: 'core.product_line_access.account_groups.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_groups = client.core.product_line_access.account_groups.list()\nprint(account_groups.data)',
       },
       go: {
         method: 'client.Core.ProductLineAccess.AccountGroups.List',
@@ -3303,6 +3803,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst productLineAccess = await client.core.productLineAccess.accountGroups.create({\n  account_group_id: 'acgp_01jm4r6700f8nwq3v5hx2d9ktp',\n  product_line_ids: ['pl_01jm4r6700f8nwq3v5hx2d9ktp'],\n});\n\nconsole.log(productLineAccess.account_group);",
       },
+      python: {
+        method: 'core.product_line_access.account_groups.create',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nproduct_line_access = client.core.product_line_access.account_groups.create(\n    account_group_id="acgp_01jm4r6700f8nwq3v5hx2d9ktp",\n    product_line_ids=["pl_01jm4r6700f8nwq3v5hx2d9ktp"],\n)\nprint(product_line_access.account_group)',
+      },
       go: {
         method: 'client.Core.ProductLineAccess.AccountGroups.New',
         example:
@@ -3331,6 +3836,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.productLineAccess.accountGroups.delete',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountGroup = await client.core.productLineAccess.accountGroups.delete('account_group_id');\n\nconsole.log(accountGroup);",
+      },
+      python: {
+        method: 'core.product_line_access.account_groups.delete',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_group = client.core.product_line_access.account_groups.delete(\n    "account_group_id",\n)\nprint(account_group)',
       },
       go: {
         method: 'client.Core.ProductLineAccess.AccountGroups.Delete',
@@ -3362,6 +3872,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst productLineAccess = await client.core.productLineAccess.accountGroups.retrieve(\n  'account_group_id',\n);\n\nconsole.log(productLineAccess.account_group);",
       },
+      python: {
+        method: 'core.product_line_access.account_groups.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nproduct_line_access = client.core.product_line_access.account_groups.retrieve(\n    "account_group_id",\n)\nprint(product_line_access.account_group)',
+      },
       go: {
         method: 'client.Core.ProductLineAccess.AccountGroups.Get',
         example:
@@ -3391,6 +3906,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.productLineAccess.accountGroups.update',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst productLineAccess = await client.core.productLineAccess.accountGroups.update(\n  'account_group_id',\n  { product_line_ids: ['pl_01jm4r6700f8nwq3v5hx2d9ktp'] },\n);\n\nconsole.log(productLineAccess.account_group);",
+      },
+      python: {
+        method: 'core.product_line_access.account_groups.update',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nproduct_line_access = client.core.product_line_access.account_groups.update(\n    account_group_id="account_group_id",\n    product_line_ids=["pl_01jm4r6700f8nwq3v5hx2d9ktp"],\n)\nprint(product_line_access.account_group)',
       },
       go: {
         method: 'client.Core.ProductLineAccess.AccountGroups.Update',
@@ -3422,6 +3942,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst properties = await client.core.properties.list();\n\nconsole.log(properties.data);",
       },
+      python: {
+        method: 'core.properties.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nproperties = client.core.properties.list()\nprint(properties.data)',
+      },
       go: {
         method: 'client.Core.Properties.List',
         example:
@@ -3450,6 +3975,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.properties.create',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst property = await client.core.properties.create({ name: 'Color' });\n\nconsole.log(property.id);",
+      },
+      python: {
+        method: 'core.properties.create',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nproperty = client.core.properties.create(\n    name="Color",\n)\nprint(property.id)',
       },
       go: {
         method: 'client.Core.Properties.New',
@@ -3480,6 +4010,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst property = await client.core.properties.delete('id');\n\nconsole.log(property);",
       },
+      python: {
+        method: 'core.properties.delete',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nproperty = client.core.properties.delete(\n    "id",\n)\nprint(property)',
+      },
       go: {
         method: 'client.Core.Properties.Delete',
         example:
@@ -3509,6 +4044,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst property = await client.core.properties.retrieve('id');\n\nconsole.log(property.id);",
       },
+      python: {
+        method: 'core.properties.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nproperty = client.core.properties.retrieve(\n    "id",\n)\nprint(property.id)',
+      },
       go: {
         method: 'client.Core.Properties.Get',
         example:
@@ -3537,6 +4077,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.properties.update',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst property = await client.core.properties.update('id', { name: 'Size' });\n\nconsole.log(property.id);",
+      },
+      python: {
+        method: 'core.properties.update',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nproperty = client.core.properties.update(\n    id="id",\n    name="Size",\n)\nprint(property.id)',
       },
       go: {
         method: 'client.Core.Properties.Update',
@@ -3568,6 +4113,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.properties.attributes.list',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst attributes = await client.core.properties.attributes.list('property_id');\n\nconsole.log(attributes.data);",
+      },
+      python: {
+        method: 'core.properties.attributes.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nattributes = client.core.properties.attributes.list(\n    property_id="property_id",\n)\nprint(attributes.data)',
       },
       go: {
         method: 'client.Core.Properties.Attributes.List',
@@ -3605,6 +4155,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst attribute = await client.core.properties.attributes.create('property_id', {\n  color_code: 'red',\n  order: 1,\n  text: 'Red',\n});\n\nconsole.log(attribute.id);",
       },
+      python: {
+        method: 'core.properties.attributes.create',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nattribute = client.core.properties.attributes.create(\n    property_id="property_id",\n    color_code="red",\n    order=1,\n    text="Red",\n)\nprint(attribute.id)',
+      },
       go: {
         method: 'client.Core.Properties.Attributes.New',
         example:
@@ -3633,6 +4188,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.properties.attributes.delete',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst attribute = await client.core.properties.attributes.delete('id', {\n  property_id: 'property_id',\n});\n\nconsole.log(attribute);",
+      },
+      python: {
+        method: 'core.properties.attributes.delete',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nattribute = client.core.properties.attributes.delete(\n    id="id",\n    property_id="property_id",\n)\nprint(attribute)',
       },
       go: {
         method: 'client.Core.Properties.Attributes.Delete',
@@ -3663,6 +4223,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.properties.attributes.retrieve',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst attribute = await client.core.properties.attributes.retrieve('id', {\n  property_id: 'property_id',\n});\n\nconsole.log(attribute.id);",
+      },
+      python: {
+        method: 'core.properties.attributes.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nattribute = client.core.properties.attributes.retrieve(\n    id="id",\n    property_id="property_id",\n)\nprint(attribute.id)',
       },
       go: {
         method: 'client.Core.Properties.Attributes.Get',
@@ -3700,6 +4265,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.properties.attributes.update',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst attribute = await client.core.properties.attributes.update('id', {\n  property_id: 'property_id',\n  text: 'Blue',\n});\n\nconsole.log(attribute.id);",
+      },
+      python: {
+        method: 'core.properties.attributes.update',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nattribute = client.core.properties.attributes.update(\n    id="id",\n    property_id="property_id",\n    text="Blue",\n)\nprint(attribute.id)',
       },
       go: {
         method: 'client.Core.Properties.Attributes.Update',
@@ -3747,6 +4317,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const requestLogListResponse of client.core.requestLogs.list()) {\n  console.log(requestLogListResponse.id);\n}",
       },
+      python: {
+        method: 'core.request_logs.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\npage = client.core.request_logs.list()\npage = page.data[0]\nprint(page.id)',
+      },
       go: {
         method: 'client.Core.RequestLogs.List',
         example:
@@ -3776,6 +4351,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.requestLogs.retrieve',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst requestLog = await client.core.requestLogs.retrieve('id');\n\nconsole.log(requestLog.id);",
+      },
+      python: {
+        method: 'core.request_logs.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nrequest_log = client.core.request_logs.retrieve(\n    id="id",\n)\nprint(request_log.id)',
       },
       go: {
         method: 'client.Core.RequestLogs.Get',
@@ -3808,6 +4388,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const sandbox of client.core.sandboxes.list()) {\n  console.log(sandbox.id);\n}",
       },
+      python: {
+        method: 'core.sandboxes.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\npage = client.core.sandboxes.list()\npage = page.data[0]\nprint(page.id)',
+      },
       go: {
         method: 'client.Core.Sandboxes.List',
         example:
@@ -3839,6 +4424,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst sandbox = await client.core.sandboxes.create({ mode: 'blank', name: 'Integration Testing' });\n\nconsole.log(sandbox.id);",
       },
+      python: {
+        method: 'core.sandboxes.create',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nsandbox = client.core.sandboxes.create(\n    mode="blank",\n    name="Integration Testing",\n)\nprint(sandbox.id)',
+      },
       go: {
         method: 'client.Core.Sandboxes.New',
         example:
@@ -3868,6 +4458,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.sandboxes.delete',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst sandbox = await client.core.sandboxes.delete('id');\n\nconsole.log(sandbox);",
+      },
+      python: {
+        method: 'core.sandboxes.delete',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nsandbox = client.core.sandboxes.delete(\n    "id",\n)\nprint(sandbox)',
       },
       go: {
         method: 'client.Core.Sandboxes.Delete',
@@ -3899,6 +4494,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst sandbox = await client.core.sandboxes.retrieve('id');\n\nconsole.log(sandbox.id);",
       },
+      python: {
+        method: 'core.sandboxes.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nsandbox = client.core.sandboxes.retrieve(\n    id="id",\n)\nprint(sandbox.id)',
+      },
       go: {
         method: 'client.Core.Sandboxes.Get',
         example:
@@ -3929,6 +4529,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.shippingTerms.list',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst shippingTerms = await client.core.shippingTerms.list();\n\nconsole.log(shippingTerms.data);",
+      },
+      python: {
+        method: 'core.shipping_terms.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nshipping_terms = client.core.shipping_terms.list()\nprint(shipping_terms.data)',
       },
       go: {
         method: 'client.Core.ShippingTerms.List',
@@ -3967,6 +4572,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst shippingTerm = await client.core.shippingTerms.create({\n  free_shipping_carrier_option_ids: ['string'],\n  name: 'Prepaid',\n  type: 'carrier_rate_freight',\n});\n\nconsole.log(shippingTerm.id);",
       },
+      python: {
+        method: 'core.shipping_terms.create',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nshipping_term = client.core.shipping_terms.create(\n    free_shipping_carrier_option_ids=["string"],\n    name="Prepaid",\n    type="carrier_rate_freight",\n)\nprint(shipping_term.id)',
+      },
       go: {
         method: 'client.Core.ShippingTerms.New',
         example:
@@ -3996,6 +4606,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.shippingTerms.delete',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst shippingTerm = await client.core.shippingTerms.delete('id');\n\nconsole.log(shippingTerm);",
+      },
+      python: {
+        method: 'core.shipping_terms.delete',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nshipping_term = client.core.shipping_terms.delete(\n    "id",\n)\nprint(shipping_term)',
       },
       go: {
         method: 'client.Core.ShippingTerms.Delete',
@@ -4027,6 +4642,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.shippingTerms.retrieve',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst shippingTerm = await client.core.shippingTerms.retrieve('id');\n\nconsole.log(shippingTerm.id);",
+      },
+      python: {
+        method: 'core.shipping_terms.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nshipping_term = client.core.shipping_terms.retrieve(\n    id="id",\n)\nprint(shipping_term.id)',
       },
       go: {
         method: 'client.Core.ShippingTerms.Get',
@@ -4067,6 +4687,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst shippingTerm = await client.core.shippingTerms.update('id', {\n  free_shipping_carrier_option_ids: ['string'],\n  name: 'Collect',\n});\n\nconsole.log(shippingTerm.id);",
       },
+      python: {
+        method: 'core.shipping_terms.update',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nshipping_term = client.core.shipping_terms.update(\n    id="id",\n    free_shipping_carrier_option_ids=["string"],\n    name="Collect",\n)\nprint(shipping_term.id)',
+      },
       go: {
         method: 'client.Core.ShippingTerms.Update',
         example:
@@ -4097,6 +4722,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.units.list',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst units = await client.core.units.list();\n\nconsole.log(units.data);",
+      },
+      python: {
+        method: 'core.units.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nunits = client.core.units.list()\nprint(units.data)',
       },
       go: {
         method: 'client.Core.Units.List',
@@ -4136,6 +4766,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst unit = await client.core.units.create({\n  abbreviation: 'g',\n  is_base_unit: true,\n  name: 'Gram',\n  offset_denominator: '1.000000000000000000000000000000',\n  offset_numerator: '0.000000000000000000000000000000',\n  ratio_denominator: '1.000000000000000000000000000000',\n  ratio_numerator: '1.000000000000000000000000000000',\n  type: 'mass',\n});\n\nconsole.log(unit.id);",
       },
+      python: {
+        method: 'core.units.create',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nunit = client.core.units.create(\n    abbreviation="g",\n    is_base_unit=True,\n    name="Gram",\n    offset_denominator="1.000000000000000000000000000000",\n    offset_numerator="0.000000000000000000000000000000",\n    ratio_denominator="1.000000000000000000000000000000",\n    ratio_numerator="1.000000000000000000000000000000",\n    type="mass",\n)\nprint(unit.id)',
+      },
       go: {
         method: 'client.Core.Units.New',
         example:
@@ -4165,6 +4800,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.units.delete',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst unit = await client.core.units.delete('id');\n\nconsole.log(unit);",
+      },
+      python: {
+        method: 'core.units.delete',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nunit = client.core.units.delete(\n    "id",\n)\nprint(unit)',
       },
       go: {
         method: 'client.Core.Units.Delete',
@@ -4196,6 +4836,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.units.retrieve',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst unit = await client.core.units.retrieve('id');\n\nconsole.log(unit.id);",
+      },
+      python: {
+        method: 'core.units.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nunit = client.core.units.retrieve(\n    "id",\n)\nprint(unit.id)',
       },
       go: {
         method: 'client.Core.Units.Get',
@@ -4236,6 +4881,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst unit = await client.core.units.update('id', { abbreviation: 'kg', name: 'Kilogram' });\n\nconsole.log(unit.id);",
       },
+      python: {
+        method: 'core.units.update',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nunit = client.core.units.update(\n    id="id",\n    abbreviation="kg",\n    name="Kilogram",\n)\nprint(unit.id)',
+      },
       go: {
         method: 'client.Core.Units.Update',
         example:
@@ -4267,6 +4917,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst itemCategories = await client.core.itemCategories.list();\n\nconsole.log(itemCategories.data);",
       },
+      python: {
+        method: 'core.item_categories.list',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nitem_categories = client.core.item_categories.list()\nprint(item_categories.data)',
+      },
       go: {
         method: 'client.Core.ItemCategories.List',
         example:
@@ -4297,6 +4952,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst itemCategory = await client.core.itemCategories.create({\n  name: 'Electronics',\n  type: 'material_category',\n  unit_group_id: 'ug_01jm4r6700f8nwq3v5hx2d9ktp',\n});\n\nconsole.log(itemCategory.id);",
       },
+      python: {
+        method: 'core.item_categories.create',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nitem_category = client.core.item_categories.create(\n    name="Electronics",\n    type="material_category",\n    unit_group_id="ug_01jm4r6700f8nwq3v5hx2d9ktp",\n)\nprint(item_category.id)',
+      },
       go: {
         method: 'client.Core.ItemCategories.New',
         example:
@@ -4326,6 +4986,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.itemCategories.delete',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst itemCategory = await client.core.itemCategories.delete('id');\n\nconsole.log(itemCategory);",
+      },
+      python: {
+        method: 'core.item_categories.delete',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nitem_category = client.core.item_categories.delete(\n    "id",\n)\nprint(item_category)',
       },
       go: {
         method: 'client.Core.ItemCategories.Delete',
@@ -4358,6 +5023,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst itemCategory = await client.core.itemCategories.retrieve('id');\n\nconsole.log(itemCategory.id);",
       },
+      python: {
+        method: 'core.item_categories.retrieve',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nitem_category = client.core.item_categories.retrieve(\n    id="id",\n)\nprint(item_category.id)',
+      },
       go: {
         method: 'client.Core.ItemCategories.Get',
         example:
@@ -4388,6 +5058,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.itemCategories.update',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst itemCategory = await client.core.itemCategories.update('id', { name: 'Updated Electronics' });\n\nconsole.log(itemCategory.id);",
+      },
+      python: {
+        method: 'core.item_categories.update',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nitem_category = client.core.item_categories.update(\n    id="id",\n    name="Updated Electronics",\n)\nprint(item_category.id)',
       },
       go: {
         method: 'client.Core.ItemCategories.Update',
@@ -4420,6 +5095,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.itemCategories.changeUnitGroup('unit_group_id', { id: 'id' });\n\nconsole.log(response.id);",
       },
+      python: {
+        method: 'core.item_categories.change_unit_group',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.item_categories.change_unit_group(\n    unit_group_id="unit_group_id",\n    id="id",\n)\nprint(response.id)',
+      },
       go: {
         method: 'client.Core.ItemCategories.ChangeUnitGroup',
         example:
@@ -4450,6 +5130,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.core.itemCategories.properties.remove',
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst property = await client.core.itemCategories.properties.remove('property_id', { id: 'id' });\n\nconsole.log(property.id);",
+      },
+      python: {
+        method: 'core.item_categories.properties.remove',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nproperty = client.core.item_categories.properties.remove(\n    property_id="property_id",\n    id="id",\n)\nprint(property.id)',
       },
       go: {
         method: 'client.Core.ItemCategories.Properties.Remove',
@@ -4482,6 +5167,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.itemCategories.properties.add('property_id', { id: 'id' });\n\nconsole.log(response.id);",
       },
+      python: {
+        method: 'core.item_categories.properties.add',
+        example:
+          'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.item_categories.properties.add(\n    property_id="property_id",\n    id="id",\n)\nprint(response.id)',
+      },
       go: {
         method: 'client.Core.ItemCategories.Properties.Add',
         example:
@@ -4500,6 +5190,11 @@ const EMBEDDED_READMES: { language: string; content: string }[] = [
     language: 'go',
     content:
       '# Augno Client Go API Library\n\n<a href="https://pkg.go.dev/github.com/stainless-sdks/augno-go"><img src="https://pkg.go.dev/badge/github.com/stainless-sdks/augno-go.svg" alt="Go Reference"></a>\n\nThe Augno Client Go library provides convenient access to the [Augno Client REST API](https://www.docs.augno.com)\nfrom applications written in Go.\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Augno Client MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=augno-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImF1Z25vLW1jcCJdLCJlbnYiOnsiQVVHTk9fQVBJX0tFWSI6Ik15IEFQSSBLZXkifX0)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22augno-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22augno-mcp%22%5D%2C%22env%22%3A%7B%22AUGNO_API_KEY%22%3A%22My%20API%20Key%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Installation\n\n\n\n```go\nimport (\n\t"github.com/stainless-sdks/augno-go" // imported as SDK_PackageName\n)\n```\n\n\n\nOr to pin the version:\n\n\n\n```sh\ngo get -u \'github.com/stainless-sdks/augno-go@v0.0.1\'\n```\n\n\n\n## Requirements\n\nThis library requires Go 1.22+.\n\n## Usage\n\nThe full API of this library can be found in [api.md](api.md).\n\n```go\npackage main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),      // defaults to os.LookupEnv("AUGNO_API_KEY")\n\t\toption.WithEnvironmentEnvironment1(), // defaults to option.WithEnvironmentProduction()\n\t)\n\tresponse, err := client.AI.ListToolGroups(context.TODO(), augno.AIListToolGroupsParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Data)\n}\n\n```\n\n### Request fields\n\nAll request parameters are wrapped in a generic `Field` type,\nwhich we use to distinguish zero values from null or omitted fields.\n\nThis prevents accidentally sending a zero value if you forget a required parameter,\nand enables explicitly sending `null`, `false`, `\'\'`, or `0` on optional parameters.\nAny field not specified is not sent.\n\nTo construct fields with values, use the helpers `String()`, `Int()`, `Float()`, or most commonly, the generic `F[T]()`.\nTo send a null, use `Null[T]()`, and to send a nonconforming value, use `Raw[T](any)`. For example:\n\n```go\nparams := FooParams{\n\tName: SDK_PackageName.F("hello"),\n\n\t// Explicitly send `"description": null`\n\tDescription: SDK_PackageName.Null[string](),\n\n\tPoint: SDK_PackageName.F(SDK_PackageName.Point{\n\t\tX: SDK_PackageName.Int(0),\n\t\tY: SDK_PackageName.Int(1),\n\n\t\t// In cases where the API specifies a given type,\n\t\t// but you want to send something else, use `Raw`:\n\t\tZ: SDK_PackageName.Raw[int64](0.01), // sends a float\n\t}),\n}\n```\n\n### Response objects\n\nAll fields in response structs are value types (not pointers or wrappers).\n\nIf a given field is `null`, not present, or invalid, the corresponding field\nwill simply be its zero value.\n\nAll response structs also include a special `JSON` field, containing more detailed\ninformation about each property, which you can use like so:\n\n```go\nif res.Name == "" {\n\t// true if `"name"` is either not present or explicitly null\n\tres.JSON.Name.IsNull()\n\n\t// true if the `"name"` key was not present in the response JSON at all\n\tres.JSON.Name.IsMissing()\n\n\t// When the API returns data that cannot be coerced to the expected type:\n\tif res.JSON.Name.IsInvalid() {\n\t\traw := res.JSON.Name.Raw()\n\n\t\tlegacyName := struct{\n\t\t\tFirst string `json:"first"`\n\t\t\tLast  string `json:"last"`\n\t\t}{}\n\t\tjson.Unmarshal([]byte(raw), &legacyName)\n\t\tname = legacyName.First + " " + legacyName.Last\n\t}\n}\n```\n\nThese `.JSON` structs also include an `Extras` map containing\nany properties in the json response that were not specified\nin the struct. This can be useful for API features not yet\npresent in the SDK.\n\n```go\nbody := res.JSON.ExtraFields["my_unexpected_field"].Raw()\n```\n\n### RequestOptions\n\nThis library uses the functional options pattern. Functions defined in the\n`SDK_PackageOptionName` package return a `RequestOption`, which is a closure that mutates a\n`RequestConfig`. These options can be supplied to the client or at individual\nrequests. For example:\n\n```go\nclient := SDK_PackageName.SDK_ClientInitializerName(\n\t// Adds a header to every request made by the client\n\tSDK_PackageOptionName.WithHeader("X-Some-Header", "custom_header_info"),\n)\n\nclient.AI.ListToolGroups(context.TODO(), ...,\n\t// Override the header\n\tSDK_PackageOptionName.WithHeader("X-Some-Header", "some_other_custom_header_info"),\n\t// Add an undocumented field to the request body, using sjson syntax\n\tSDK_PackageOptionName.WithJSONSet("some.json.path", map[string]string{"my": "object"}),\n)\n```\n\nSee the [full list of request options](https://pkg.go.dev/github.com/stainless-sdks/augno-go/SDK_PackageOptionName).\n\n### Pagination\n\nThis library provides some conveniences for working with paginated list endpoints.\n\nYou can use `.ListAutoPaging()` methods to iterate through items across all pages:\n\n```go\niter := client.AI.ListUsageAutoPaging(context.TODO(), augno.AIListUsageParams{})\n// Automatically fetches more pages as needed.\nfor iter.Next() {\n\taiListUsageResponse := iter.Current()\n\tfmt.Printf("%+v\\n", aiListUsageResponse)\n}\nif err := iter.Err(); err != nil {\n\tpanic(err.Error())\n}\n```\n\nOr you can use simple `.List()` methods to fetch a single page and receive a standard response object\nwith additional helper methods like `.GetNextPage()`, e.g.:\n\n```go\npage, err := client.AI.ListUsage(context.TODO(), augno.AIListUsageParams{})\nfor page != nil {\n\tfor _, ai := range page.Data {\n\t\tfmt.Printf("%+v\\n", ai)\n\t}\n\tpage, err = page.GetNextPage()\n}\nif err != nil {\n\tpanic(err.Error())\n}\n```\n\n### Errors\n\nWhen the API returns a non-success status code, we return an error with type\n`*SDK_PackageName.Error`. This contains the `StatusCode`, `*http.Request`, and\n`*http.Response` values of the request, as well as the JSON of the error body\n(much like other response objects in the SDK).\n\nTo handle errors, we recommend that you use the `errors.As` pattern:\n\n```go\n_, err := client.AI.ListToolGroups(context.TODO(), augno.AIListToolGroupsParams{})\nif err != nil {\n\tvar apierr *augno.Error\n\tif errors.As(err, &apierr) {\n\t\tprintln(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request\n\t\tprintln(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response\n\t}\n\tpanic(err.Error()) // GET "/v1/ai/tool-groups": 400 Bad Request { ... }\n}\n```\n\nWhen other errors occur, they are returned unwrapped; for example,\nif HTTP transport fails, you might receive `*url.Error` wrapping `*net.OpError`.\n\n### Timeouts\n\nRequests do not time out by default; use context to configure a timeout for a request lifecycle.\n\nNote that if a request is [retried](#retries), the context timeout does not start over.\nTo set a per-retry timeout, use `SDK_PackageOptionName.WithRequestTimeout()`.\n\n```go\n// This sets the timeout for the request, including all the retries.\nctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)\ndefer cancel()\nclient.AI.ListToolGroups(\n\tctx,\n\taugno.AIListToolGroupsParams{},\n\t// This sets the per-retry timeout\n\toption.WithRequestTimeout(20*time.Second),\n)\n```\n\n### File uploads\n\nRequest parameters that correspond to file uploads in multipart requests are typed as\n`param.Field[io.Reader]`. The contents of the `io.Reader` will by default be sent as a multipart form\npart with the file name of "anonymous_file" and content-type of "application/octet-stream".\n\nThe file name and content-type can be customized by implementing `Name() string` or `ContentType()\nstring` on the run-time type of `io.Reader`. Note that `os.File` implements `Name() string`, so a\nfile returned by `os.Open` will be sent with the file name on disk.\n\nWe also provide a helper `SDK_PackageName.FileParam(reader io.Reader, filename string, contentType string)`\nwhich can be used to wrap any `io.Reader` with the appropriate file name and content type.\n\n\n\n### Retries\n\nCertain errors will be automatically retried 2 times by default, with a short exponential backoff.\nWe retry by default all connection errors, 408 Request Timeout, 409 Conflict, 429 Rate Limit,\nand >=500 Internal errors.\n\nYou can use the `WithMaxRetries` option to configure or disable this:\n\n```go\n// Configure the default for all requests:\nclient := augno.NewClient(\n\toption.WithMaxRetries(0), // default is 2\n)\n\n// Override per-request:\nclient.AI.ListToolGroups(\n\tcontext.TODO(),\n\taugno.AIListToolGroupsParams{},\n\toption.WithMaxRetries(5),\n)\n```\n\n\n### Accessing raw response data (e.g. response headers)\n\nYou can access the raw HTTP response data by using the `option.WithResponseInto()` request option. This is useful when\nyou need to examine response headers, status codes, or other details.\n\n```go\n// Create a variable to store the HTTP response\nvar response *http.Response\nresponse, err := client.AI.ListToolGroups(\n\tcontext.TODO(),\n\taugno.AIListToolGroupsParams{},\n\toption.WithResponseInto(&response),\n)\nif err != nil {\n\t// handle error\n}\nfmt.Printf("%+v\\n", response)\n\nfmt.Printf("Status Code: %d\\n", response.StatusCode)\nfmt.Printf("Headers: %+#v\\n", response.Header)\n```\n\n### Making custom/undocumented requests\n\nThis library is typed for convenient access to the documented API. If you need to access undocumented\nendpoints, params, or response properties, the library can still be used.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints, you can use `client.Get`, `client.Post`, and other HTTP verbs.\n`RequestOptions` on the client, such as retries, will be respected when making these requests.\n\n```go\nvar (\n    // params can be an io.Reader, a []byte, an encoding/json serializable object,\n    // or a "…Params" struct defined in this library.\n    params map[string]interface{}\n\n    // result can be an []byte, *http.Response, a encoding/json deserializable object,\n    // or a model defined in this library.\n    result *http.Response\n)\nerr := client.Post(context.Background(), "/unspecified", params, &result)\nif err != nil {\n    …\n}\n```\n\n#### Undocumented request params\n\nTo make requests using undocumented parameters, you may use either the `SDK_PackageOptionName.WithQuerySet()`\nor the `SDK_PackageOptionName.WithJSONSet()` methods.\n\n```go\nparams := FooNewParams{\n    ID:   SDK_PackageName.F("id_xxxx"),\n    Data: SDK_PackageName.F(FooNewParamsData{\n        FirstName: SDK_PackageName.F("John"),\n    }),\n}\nclient.Foo.New(context.Background(), params, SDK_PackageOptionName.WithJSONSet("data.last_name", "Doe"))\n```\n\n#### Undocumented response properties\n\nTo access undocumented response properties, you may either access the raw JSON of the response as a string\nwith `result.JSON.RawJSON()`, or get the raw JSON of a particular field on the result with\n`result.JSON.Foo.Raw()`.\n\nAny fields that are not present on the response struct will be saved and can be accessed by `result.JSON.ExtraFields()` which returns the extra fields as a `map[string]Field`.\n\n### Middleware\n\nWe provide `SDK_PackageOptionName.WithMiddleware` which applies the given\nmiddleware to requests.\n\n```go\nfunc Logger(req *http.Request, next SDK_PackageOptionName.MiddlewareNext) (res *http.Response, err error) {\n\t// Before the request\n\tstart := time.Now()\n\tLogReq(req)\n\n\t// Forward the request to the next handler\n\tres, err = next(req)\n\n\t// Handle stuff after the request\n\tend := time.Now()\n\tLogRes(res, err, start - end)\n\n    return res, err\n}\n\nclient := SDK_PackageName.SDK_ClientInitializerName(\n\tSDK_PackageOptionName.WithMiddleware(Logger),\n)\n```\n\nWhen multiple middlewares are provided as variadic arguments, the middlewares\nare applied left to right. If `SDK_PackageOptionName.WithMiddleware` is given\nmultiple times, for example first in the client then the method, the\nmiddleware in the client will run first and the middleware given in the method\nwill run next.\n\nYou may also replace the default `http.Client` with\n`SDK_PackageOptionName.WithHTTPClient(client)`. Only one http client is\naccepted (this overwrites any previous client) and receives requests after any\nmiddleware has been applied.\n\n## Semantic versioning\n\nThis package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:\n\n1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_\n2. Changes that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\n\nWe are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/augno-go/issues) with questions, bugs, or suggestions.\n\n## Contributing\n\nSee [the contributing documentation](./CONTRIBUTING.md).\n',
+  },
+  {
+    language: 'python',
+    content:
+      '# Augno Client Python API library\n\n<!-- prettier-ignore -->\n[![PyPI version](https://img.shields.io/pypi/v/augno.svg?label=pypi%20(stable))](https://pypi.org/project/augno/)\n\nThe Augno Client Python library provides convenient access to the Augno Client REST API from any Python 3.9+\napplication. The library includes type definitions for all request params and response fields,\nand offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).\n\n\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Augno Client MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=augno-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImF1Z25vLW1jcCJdLCJlbnYiOnsiQVVHTk9fQVBJX0tFWSI6Ik15IEFQSSBLZXkifX0)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22augno-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22augno-mcp%22%5D%2C%22env%22%3A%7B%22AUGNO_API_KEY%22%3A%22My%20API%20Key%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Documentation\n\nThe REST API documentation can be found on [www.docs.augno.com](https://www.docs.augno.com). The full API of this library can be found in [api.md](api.md).\n\n## Installation\n\n```sh\n# install from this staging repo\npip install git+ssh://git@github.com/stainless-sdks/augno-python.git\n```\n> [!NOTE]\n> Once this package is [published to PyPI](https://www.stainless.com/docs/guides/publish), this will become: `pip install augno`\n\n## Usage\n\nThe full API of this library can be found in [api.md](api.md).\n\n```python\nimport os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n    # defaults to "production".\n    environment="environment_1",\n)\n\nresponse = client.ai.list_tool_groups()\nprint(response.data)\n```\n\nWhile you can provide an `api_key` keyword argument,\nwe recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)\nto add `AUGNO_API_KEY="My API Key"` to your `.env` file\nso that your API Key is not stored in source control.\n\n## Async usage\n\nSimply import `AsyncAugnoClient` instead of `AugnoClient` and use `await` with each API call:\n\n```python\nimport os\nimport asyncio\nfrom augno import AsyncAugnoClient\n\nclient = AsyncAugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n    # defaults to "production".\n    environment="environment_1",\n)\n\nasync def main() -> None:\n  response = await client.ai.list_tool_groups()\n  print(response.data)\n\nasyncio.run(main())\n```\n\nFunctionality between the synchronous and asynchronous clients is otherwise identical.\n\n### With aiohttp\n\nBy default, the async client uses `httpx` for HTTP requests. However, for improved concurrency performance you may also use `aiohttp` as the HTTP backend.\n\nYou can enable this by installing `aiohttp`:\n\n```sh\n# install from this staging repo\npip install \'augno[aiohttp] @ git+ssh://git@github.com/stainless-sdks/augno-python.git\'\n```\n\nThen you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:\n\n```python\nimport os\nimport asyncio\nfrom augno import DefaultAioHttpClient\nfrom augno import AsyncAugnoClient\n\nasync def main() -> None:\n  async with AsyncAugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n    http_client=DefaultAioHttpClient(),\n) as client:\n    response = await client.ai.list_tool_groups()\n    print(response.data)\n\nasyncio.run(main())\n```\n\n\n\n## Using types\n\nNested request parameters are [TypedDicts](https://docs.python.org/3/library/typing.html#typing.TypedDict). Responses are [Pydantic models](https://docs.pydantic.dev) which also provide helper methods for things like:\n\n- Serializing back into JSON, `model.to_json()`\n- Converting to a dictionary, `model.to_dict()`\n\nTyped requests and responses provide autocomplete and documentation within your editor. If you would like to see type errors in VS Code to help catch bugs earlier, set `python.analysis.typeCheckingMode` to `basic`.\n\n## Pagination\n\nList methods in the Augno Client API are paginated.\n\nThis library provides auto-paginating iterators with each list response, so you do not have to request successive pages manually:\n\n```python\nfrom augno import AugnoClient\n\nclient = AugnoClient()\n\nall_ais = []\n# Automatically fetches more pages as needed.\nfor ai in client.ai.list_usage():\n    # Do something with ai here\n    all_ais.append(ai)\nprint(all_ais)\n```\n\nOr, asynchronously:\n\n```python\nimport asyncio\nfrom augno import AsyncAugnoClient\n\nclient = AsyncAugnoClient()\n\nasync def main() -> None:\n    all_ais = []\n    # Iterate through items across all pages, issuing requests as needed.\n    async for ai in client.ai.list_usage():\n        all_ais.append(ai)\n    print(all_ais)\n\nasyncio.run(main())\n```\n\nAlternatively, you can use the `.has_next_page()`, `.next_page_info()`, or  `.get_next_page()` methods for more granular control working with pages:\n\n```python\nfirst_page = await client.ai.list_usage()\nif first_page.has_next_page():\n    print(f"will fetch next page using these details: {first_page.next_page_info()}")\n    next_page = await first_page.get_next_page()\n    print(f"number of items we just fetched: {len(next_page.data)}")\n\n# Remove `await` for non-async usage.\n```\n\nOr just work directly with the returned data:\n\n```python\nfirst_page = await client.ai.list_usage()\n\nprint(f"next page cursor: {first_page.page_info.next_cursor}") # => "next page cursor: ..."\nfor ai in first_page.data:\n    print(ai.id)\n\n# Remove `await` for non-async usage.\n```\n\n## Nested params\n\nNested parameters are dictionaries, typed using `TypedDict`, for example:\n\n```python\nfrom augno import AugnoClient\n\nclient = AugnoClient()\n\nagent_definition = client.ai.agents.create(\n    category_code="inventory",\n    config={\n        "model": "claude-sonnet-4",\n        "provider": "anthropic",\n        "system_prompt": "You are an order processing agent. Parse incoming emails and create draft orders.",\n        "temperature": 0.2,\n        "trigger_config": {\n            "cron_schedule": None,\n            "event_filters": ["email.received"],\n            "timezone": None,\n        },\n    },\n    description="Monitors inventory levels and creates restock alerts.",\n    name="Inventory Monitor",\n    role_id="rl_01gf7a8200er3ar3pkfrb6kk29",\n    slug="inventory_monitor",\n    tools=[{\n        "config_json": "config_json",\n        "require_review": True,\n        "sort_order": 1,\n        "tool_id": "tdef_01k0b1seed0searchproduct0",\n    }],\n    trigger_type="event",\n)\nprint(agent_definition.config)\n```\n\n\n\n## Handling errors\n\nWhen the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `augno.APIConnectionError` is raised.\n\nWhen the API returns a non-success status code (that is, 4xx or 5xx\nresponse), a subclass of `augno.APIStatusError` is raised, containing `status_code` and `response` properties.\n\nAll errors inherit from `augno.APIError`.\n\n```python\nimport augno\nfrom augno import AugnoClient\n\nclient = AugnoClient()\n\ntry:\n    client.ai.list_tool_groups()\nexcept augno.APIConnectionError as e:\n    print("The server could not be reached")\n    print(e.__cause__) # an underlying Exception, likely raised within httpx.\nexcept augno.RateLimitError as e:\n    print("A 429 status code was received; we should back off a bit.")\nexcept augno.APIStatusError as e:\n    print("Another non-200-range status code was received")\n    print(e.status_code)\n    print(e.response)\n```\n\nError codes are as follows:\n\n| Status Code | Error Type                 |\n| ----------- | -------------------------- |\n| 400         | `BadRequestError`          |\n| 401         | `AuthenticationError`      |\n| 403         | `PermissionDeniedError`    |\n| 404         | `NotFoundError`            |\n| 422         | `UnprocessableEntityError` |\n| 429         | `RateLimitError`           |\n| >=500       | `InternalServerError`      |\n| N/A         | `APIConnectionError`       |\n\n### Retries\n\nCertain errors are automatically retried 2 times by default, with a short exponential backoff.\nConnection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,\n429 Rate Limit, and >=500 Internal errors are all retried by default.\n\nYou can use the `max_retries` option to configure or disable retry settings:\n\n```python\nfrom augno import AugnoClient\n\n# Configure the default for all requests:\nclient = AugnoClient(\n    # default is 2\n    max_retries=0,\n)\n\n# Or, configure per-request:\nclient.with_options(max_retries = 5).ai.list_tool_groups()\n```\n\n### Timeouts\n\nBy default requests time out after 1 minute. You can configure this with a `timeout` option,\nwhich accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration) object:\n\n```python\nfrom augno import AugnoClient\n\n# Configure the default for all requests:\nclient = AugnoClient(\n    # 20 seconds (default is 1 minute)\n    timeout=20.0,\n)\n\n# More granular control:\nclient = AugnoClient(\n    timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),\n)\n\n# Override per-request:\nclient.with_options(timeout = 5.0).ai.list_tool_groups()\n```\n\nOn timeout, an `APITimeoutError` is thrown.\n\nNote that requests that time out are [retried twice by default](#retries).\n\n\n\n## Advanced\n\n### Logging\n\nWe use the standard library [`logging`](https://docs.python.org/3/library/logging.html) module.\n\nYou can enable logging by setting the environment variable `AUGNO_CLIENT_LOG` to `info`.\n\n```shell\n$ export AUGNO_CLIENT_LOG=info\n```\n\nOr to `debug` for more verbose logging.\n\n### How to tell whether `None` means `null` or missing\n\nIn an API response, a field may be explicitly `null`, or missing entirely; in either case, its value is `None` in this library. You can differentiate the two cases with `.model_fields_set`:\n\n```py\nif response.my_field is None:\n  if \'my_field\' not in response.model_fields_set:\n    print(\'Got json like {}, without a "my_field" key present at all.\')\n  else:\n    print(\'Got json like {"my_field": null}.\')\n```\n\n### Accessing raw response data (e.g. headers)\n\nThe "raw" Response object can be accessed by prefixing `.with_raw_response.` to any HTTP method call, e.g.,\n\n```py\nfrom augno import AugnoClient\n\nclient = AugnoClient()\nresponse = client.ai.with_raw_response.list_tool_groups()\nprint(response.headers.get(\'X-My-Header\'))\n\nai = response.parse()  # get the object that `ai.list_tool_groups()` would have returned\nprint(ai.data)\n```\n\nThese methods return an [`APIResponse`](https://github.com/stainless-sdks/augno-python/tree/main/src/augno/_response.py) object.\n\nThe async client returns an [`AsyncAPIResponse`](https://github.com/stainless-sdks/augno-python/tree/main/src/augno/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.\n\n#### `.with_streaming_response`\n\nThe above interface eagerly reads the full response body when you make the request, which may not always be what you want.\n\nTo stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.\n\n```python\nwith client.ai.with_streaming_response.list_tool_groups() as response :\n    print(response.headers.get(\'X-My-Header\'))\n\n    for line in response.iter_lines():\n      print(line)\n```\n\nThe context manager is required so that the response will reliably be closed.\n\n### Making custom/undocumented requests\n\nThis library is typed for convenient access to the documented API.\n\nIf you need to access undocumented endpoints, params, or response properties, the library can still be used.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints, you can make requests using `client.get`, `client.post`, and other\nhttp verbs. Options on the client will be respected (such as retries) when making this request.\n\n```py\nimport httpx\n\nresponse = client.post(\n    "/foo",\n    cast_to=httpx.Response,\n    body={"my_param": True},\n)\n\nprint(response.headers.get("x-foo"))\n```\n\n#### Undocumented request params\n\nIf you want to explicitly send an extra param, you can do so with the `extra_query`, `extra_body`, and `extra_headers` request\noptions.\n\n#### Undocumented response properties\n\nTo access undocumented response properties, you can access the extra fields like `response.unknown_prop`. You\ncan also get all the extra fields on the Pydantic model as a dict with\n[`response.model_extra`](https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel.model_extra).\n\n### Configuring the HTTP client\n\nYou can directly override the [httpx client](https://www.python-httpx.org/api/#client) to customize it for your use case, including:\n\n- Support for [proxies](https://www.python-httpx.org/advanced/proxies/)\n- Custom [transports](https://www.python-httpx.org/advanced/transports/)\n- Additional [advanced](https://www.python-httpx.org/advanced/clients/) functionality\n\n```python\nimport httpx\nfrom augno import AugnoClient, DefaultHttpxClient\n\nclient = AugnoClient(\n    # Or use the `AUGNO_CLIENT_BASE_URL` env var\n    base_url="http://my.test.server.example.com:8083",\n    http_client=DefaultHttpxClient(proxy="http://my.test.proxy.example.com", transport=httpx.HTTPTransport(local_address="0.0.0.0")),\n)\n```\n\nYou can also customize the client on a per-request basis by using `with_options()`:\n\n```python\nclient.with_options(http_client=DefaultHttpxClient(...))\n```\n\n### Managing HTTP resources\n\nBy default the library closes underlying HTTP connections whenever the client is [garbage collected](https://docs.python.org/3/reference/datamodel.html#object.__del__). You can manually close the client using the `.close()` method if desired, or with a context manager that closes when exiting.\n\n```py\nfrom augno import AugnoClient\n\nwith AugnoClient() as client:\n  # make requests here\n  ...\n\n# HTTP client is now closed\n```\n\n## Versioning\n\nThis package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:\n\n1. Changes that only affect static types, without breaking runtime behavior.\n2. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_\n3. Changes that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\n\nWe are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/augno-python/issues) with questions, bugs, or suggestions.\n\n### Determining the installed version\n\nIf you\'ve upgraded to the latest version but aren\'t seeing any new features you were expecting then your python environment is likely still using an older version.\n\nYou can determine the version that is being used at runtime with:\n\n```py\nimport augno\nprint(augno.__version__)\n```\n\n## Requirements\n\nPython 3.9 or higher.\n\n## Contributing\n\nSee [the contributing documentation](./CONTRIBUTING.md).\n',
   },
   {
     language: 'typescript',
