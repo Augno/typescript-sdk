@@ -1,0 +1,4784 @@
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+import MiniSearch from 'minisearch';
+import * as fs from 'node:fs/promises';
+import * as path from 'node:path';
+import { getLogger } from './logger';
+
+type PerLanguageData = {
+  method?: string;
+  example?: string;
+};
+
+type MethodEntry = {
+  name: string;
+  endpoint: string;
+  httpMethod: string;
+  summary: string;
+  description: string;
+  stainlessPath: string;
+  qualified: string;
+  params?: string[];
+  response?: string;
+  markdown?: string;
+  perLanguage?: Record<string, PerLanguageData>;
+};
+
+type ProseChunk = {
+  content: string;
+  tag: string;
+  sectionContext?: string;
+  source?: string;
+};
+
+type MiniSearchDocument = {
+  id: string;
+  kind: 'http_method' | 'prose';
+  name?: string;
+  endpoint?: string;
+  summary?: string;
+  description?: string;
+  qualified?: string;
+  stainlessPath?: string;
+  content?: string;
+  sectionContext?: string;
+  _original: Record<string, unknown>;
+};
+
+type SearchResult = {
+  results: (string | Record<string, unknown>)[];
+};
+
+const EMBEDDED_METHODS: MethodEntry[] = [
+  {
+    name: 'list_tool_groups',
+    endpoint: '/v1/ai/tool-groups',
+    httpMethod: 'get',
+    summary: 'List Tool Groups',
+    description: 'Returns all tool groups used to organize available platform tools.',
+    stainlessPath: '(resource) ai > (method) list_tool_groups',
+    qualified: 'client.ai.listToolGroups',
+    params: ["include?: 'tools'[];"],
+    response:
+      "{ data: { id: string; description: string; icon: string; name: string; object: 'tool_group'; slug: string; sort_order: number; tools: available_tool[]; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list_tool_groups\n\n`client.ai.listToolGroups(include?: 'tools'[]): { data: tool_group[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/ai/tool-groups`\n\nReturns all tool groups used to organize available platform tools.\n\n### Parameters\n\n- `include?: 'tools'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ data: { id: string; description: string; icon: string; name: string; object: 'tool_group'; slug: string; sort_order: number; tools: available_tool[]; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of ToolGroup resources\n\n  - `data: { id: string; description: string; icon: string; name: string; object: 'tool_group'; slug: string; sort_order: number; tools: { id: string; category: string; config_schema: object[]; description: string; display_name: string; group: tool_group; object: 'available_tool'; required_permissions: string[]; }[]; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.ai.listToolGroups();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.ai.listToolGroups',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.ai.listToolGroups();\n\nconsole.log(response.data);",
+      },
+      go: {
+        method: 'client.AI.ListToolGroups',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.AI.ListToolGroups(context.TODO(), augno.AIListToolGroupsParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Data)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/ai/tool-groups \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list_tools',
+    endpoint: '/v1/ai/tools',
+    httpMethod: 'get',
+    summary: 'List Tools',
+    description: 'Returns all available platform tools that can be assigned to agents.',
+    stainlessPath: '(resource) ai > (method) list_tools',
+    qualified: 'client.ai.listTools',
+    params: ["include?: 'group'[];"],
+    response:
+      "{ data: { id: string; category: string; config_schema: object[]; description: string; display_name: string; group: tool_group; object: 'available_tool'; required_permissions: string[]; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list_tools\n\n`client.ai.listTools(include?: 'group'[]): { data: available_tool[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/ai/tools`\n\nReturns all available platform tools that can be assigned to agents.\n\n### Parameters\n\n- `include?: 'group'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ data: { id: string; category: string; config_schema: object[]; description: string; display_name: string; group: tool_group; object: 'available_tool'; required_permissions: string[]; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of AvailableTool resources\n\n  - `data: { id: string; category: string; config_schema: object[]; description: string; display_name: string; group: { id: string; description: string; icon: string; name: string; object: 'tool_group'; slug: string; sort_order: number; tools: available_tool[]; }; object: 'available_tool'; required_permissions: string[]; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.ai.listTools();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.ai.listTools',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.ai.listTools();\n\nconsole.log(response.data);",
+      },
+      go: {
+        method: 'client.AI.ListTools',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.AI.ListTools(context.TODO(), augno.AIListToolsParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Data)\n}\n',
+      },
+      http: {
+        example: 'curl https://api.augno.com/v1/ai/tools \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list_usage',
+    endpoint: '/v1/ai/usage',
+    httpMethod: 'get',
+    summary: 'List Agent Usage',
+    description: 'Returns a paginated list of daily agent token usage records for the current account.',
+    stainlessPath: '(resource) ai > (method) list_usage',
+    qualified: 'client.ai.listUsage',
+    params: ['cursor?: string;', 'days?: number;', 'limit?: number;'],
+    response:
+      "{ id: string; created_at: string; date: string; input_tokens: number; object: 'agent_token_usage'; output_tokens: number; run_count: number; total_cost: number; updated_at: string; }",
+    markdown:
+      "## list_usage\n\n`client.ai.listUsage(cursor?: string, days?: number, limit?: number): { id: string; created_at: string; date: string; input_tokens: number; object: 'agent_token_usage'; output_tokens: number; run_count: number; total_cost: number; updated_at: string; }`\n\n**get** `/v1/ai/usage`\n\nReturns a paginated list of daily agent token usage records for the current account.\n\n### Parameters\n\n- `cursor?: string`\n  Pagination cursor from a previous response.\n\n- `days?: number`\n  Number of days of usage history to return. Defaults to 30.\n\n- `limit?: number`\n  Maximum number of records to return per page. Defaults to 100.\n\n### Returns\n\n- `{ id: string; created_at: string; date: string; input_tokens: number; object: 'agent_token_usage'; output_tokens: number; run_count: number; total_cost: number; updated_at: string; }`\n  AgentTokenUsage represents a daily token usage record for an account.\n\n  - `id: string`\n  - `created_at: string`\n  - `date: string`\n  - `input_tokens: number`\n  - `object: 'agent_token_usage'`\n  - `output_tokens: number`\n  - `run_count: number`\n  - `total_cost: number`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\n// Automatically fetches more pages as needed.\nfor await (const aiListUsageResponse of client.ai.listUsage()) {\n  console.log(aiListUsageResponse);\n}\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.ai.listUsage',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const aiListUsageResponse of client.ai.listUsage()) {\n  console.log(aiListUsageResponse.id);\n}",
+      },
+      go: {
+        method: 'client.AI.ListUsage',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.AI.ListUsage(context.TODO(), augno.AIListUsageParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      http: {
+        example: 'curl https://api.augno.com/v1/ai/usage \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/ai/agents',
+    httpMethod: 'get',
+    summary: 'List Agents',
+    description: 'Returns all system and custom agent definitions for the current account.',
+    stainlessPath: '(resource) ai.agents > (method) list',
+    qualified: 'client.ai.agents.list',
+    params: [
+      'definition_type?: string[];',
+      "include?: 'config' | 'tools' | 'role' | 'role.permissions'[];",
+      "status?: 'active' | 'inactive'[];",
+      'trigger_type?: string[];',
+    ],
+    response:
+      "{ data: { id: string; category_code: string; config: agent_definition_config; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: light_role; slug: string; status: 'active' | 'inactive'; tools: object[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list\n\n`client.ai.agents.list(definition_type?: string[], include?: 'config' | 'tools' | 'role' | 'role.permissions'[], status?: 'active' | 'inactive'[], trigger_type?: string[]): { data: agent_definition[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/ai/agents`\n\nReturns all system and custom agent definitions for the current account.\n\n### Parameters\n\n- `definition_type?: string[]`\n  Filter by definition type (e.g. \"system\", \"custom\").\n\n- `include?: 'config' | 'tools' | 'role' | 'role.permissions'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n- `status?: 'active' | 'inactive'[]`\n  Filter by account-level status. Defaults to \"active\".\n\n- `trigger_type?: string[]`\n  Filter by trigger type (e.g. \"manual\", \"scheduled\", \"event\").\n\n### Returns\n\n- `{ data: { id: string; category_code: string; config: agent_definition_config; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: light_role; slug: string; status: 'active' | 'inactive'; tools: object[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of AgentDefinition resources\n\n  - `data: { id: string; category_code: string; config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: object; }; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; slug: string; status: 'active' | 'inactive'; tools: { id: string; config: object[]; object: 'agent_definition_tool'; require_review: boolean; sort_order: number; tool: object; }[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst agents = await client.ai.agents.list();\n\nconsole.log(agents);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.ai.agents.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agents = await client.ai.agents.list();\n\nconsole.log(agents.data);",
+      },
+      go: {
+        method: 'client.AI.Agents.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagents, err := client.AI.Agents.List(context.TODO(), augno.AIAgentListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agents.Data)\n}\n',
+      },
+      http: {
+        example: 'curl https://api.augno.com/v1/ai/agents \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/ai/agents',
+    httpMethod: 'post',
+    summary: 'Create Agent',
+    description: 'Creates a new custom agent definition with optional tool configuration.',
+    stainlessPath: '(resource) ai.agents > (method) create',
+    qualified: 'client.ai.agents.create',
+    params: [
+      'category_code: string;',
+      'config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: { cron_schedule: string; event_filters: string[]; timezone: string; }; };',
+      'description: string;',
+      'name: string;',
+      'role_id: string;',
+      'slug: string;',
+      'tools: { config_json: string; require_review: boolean; sort_order: number; tool_id: string; }[];',
+      "trigger_type: 'scheduled' | 'manual' | 'event';",
+      "include?: 'config' | 'tools' | 'role' | 'role.permissions'[];",
+    ],
+    response:
+      "{ id: string; category_code: string; config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: object; }; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; slug: string; status: 'active' | 'inactive'; tools: { id: string; config: object[]; object: 'agent_definition_tool'; require_review: boolean; sort_order: number; tool: object; }[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }",
+    markdown:
+      "## create\n\n`client.ai.agents.create(category_code: string, config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: object; }, description: string, name: string, role_id: string, slug: string, tools: { config_json: string; require_review: boolean; sort_order: number; tool_id: string; }[], trigger_type: 'scheduled' | 'manual' | 'event', include?: 'config' | 'tools' | 'role' | 'role.permissions'[]): { id: string; category_code: string; config: agent_definition_config; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: light_role; slug: string; status: 'active' | 'inactive'; tools: object[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }`\n\n**post** `/v1/ai/agents`\n\nCreates a new custom agent definition with optional tool configuration.\n\n### Parameters\n\n- `category_code: string`\n  The category code that classifies this agent (e.g. \"order_processing\").\n\n- `config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: { cron_schedule: string; event_filters: string[]; timezone: string; }; }`\n  AgentDefinitionConfig holds agent-level configuration that controls LLM behavior.\nThis is separate from tool-level config (AgentDefinitionTool.Config) which\nconfigures individual tools attached to the agent.\n  - `model: string`\n    The LLM model identifier (e.g. \"claude-sonnet-4\").\n  - `provider: string`\n    The LLM provider name (e.g. \"anthropic\", \"openai\"). Inferred from model if omitted.\n  - `system_prompt: string`\n    The system prompt / instructions given to the agent.\n  - `temperature: number`\n    LLM sampling temperature between 0 and 1.\n  - `trigger_config: { cron_schedule: string; event_filters: string[]; timezone: string; }`\n    TriggerConfig holds trigger-type-specific settings.\nFor \"scheduled\": CronSchedule is populated.\nFor \"event\": EventFilters is populated.\nFor \"manual\": all fields are empty.\n\n- `description: string`\n  A human-readable description of what the agent does.\n\n- `name: string`\n  The display name of the agent.\n\n- `role_id: string`\n  The ID of the role that defines this agent's permissions.\n\n- `slug: string`\n  A unique URL-friendly identifier for the agent.\n\n- `tools: { config_json: string; require_review: boolean; sort_order: number; tool_id: string; }[]`\n  The tools to attach to this agent.\n\n- `trigger_type: 'scheduled' | 'manual' | 'event'`\n  How this agent is triggered: \"manual\", \"scheduled\", or \"event\".\n\n- `include?: 'config' | 'tools' | 'role' | 'role.permissions'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; category_code: string; config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: object; }; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; slug: string; status: 'active' | 'inactive'; tools: { id: string; config: object[]; object: 'agent_definition_tool'; require_review: boolean; sort_order: number; tool: object; }[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }`\n  AgentDefinition represents an agent definition.\n\n  - `id: string`\n  - `category_code: string`\n  - `config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: { cron_schedule: string; event_filters: string[]; timezone: string; }; }`\n  - `created_at: string`\n  - `definition_type: 'system' | 'custom'`\n  - `description: string`\n  - `is_editable: boolean`\n  - `name: string`\n  - `object: 'agent_definition'`\n  - `role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }`\n  - `slug: string`\n  - `status: 'active' | 'inactive'`\n  - `tools: { id: string; config: object[]; object: 'agent_definition_tool'; require_review: boolean; sort_order: number; tool: { id: string; category: string; config_schema: object[]; description: string; display_name: string; group: object; object: 'available_tool'; required_permissions: string[]; }; }[]`\n  - `trigger_type: 'scheduled' | 'manual' | 'event'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst agentDefinition = await client.ai.agents.create({\n  category_code: 'inventory',\n  config: {\n  model: 'claude-sonnet-4',\n  provider: 'anthropic',\n  system_prompt: 'You are an order processing agent. Parse incoming emails and create draft orders.',\n  temperature: 0.2,\n  trigger_config: {\n  cron_schedule: null,\n  event_filters: ['email.received'],\n  timezone: null,\n},\n},\n  description: 'Monitors inventory levels and creates restock alerts.',\n  name: 'Inventory Monitor',\n  role_id: 'rl_01gf7a8200er3ar3pkfrb6kk29',\n  slug: 'inventory_monitor',\n  tools: [{\n  config_json: 'config_json',\n  require_review: true,\n  sort_order: 1,\n  tool_id: 'tdef_01k0b1seed0searchproduct0',\n}],\n  trigger_type: 'event',\n});\n\nconsole.log(agentDefinition);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.ai.agents.create',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentDefinition = await client.ai.agents.create({\n  category_code: 'inventory',\n  config: {\n    system_prompt:\n      'You are an order processing agent. Parse incoming emails and create draft orders.',\n    model: 'claude-sonnet-4',\n    provider: 'anthropic',\n    temperature: 0.2,\n    trigger_config: {\n      cron_schedule: null,\n      timezone: null,\n      event_filters: ['email.received'],\n    },\n  },\n  description: 'Monitors inventory levels and creates restock alerts.',\n  name: 'Inventory Monitor',\n  role_id: 'rl_01gf7a8200er3ar3pkfrb6kk29',\n  slug: 'inventory_monitor',\n  tools: [\n    {\n      tool_id: 'tdef_01k0b1seed0searchproduct0',\n      sort_order: 1,\n      require_review: true,\n    },\n  ],\n  trigger_type: 'event',\n});\n\nconsole.log(agentDefinition.id);",
+      },
+      go: {
+        method: 'client.AI.Agents.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n\t"github.com/stainless-sdks/augno-go/packages/param"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentDefinition, err := client.AI.Agents.New(context.TODO(), augno.AIAgentNewParams{\n\t\tCategoryCode: "inventory",\n\t\tConfig: augno.AgentDefinitionConfigParam{\n\t\t\tSystemPrompt: augno.String("You are an order processing agent. Parse incoming emails and create draft orders."),\n\t\t\tModel:        augno.String("claude-sonnet-4"),\n\t\t\tProvider:     augno.String("anthropic"),\n\t\t\tTemperature:  augno.Float(0.2),\n\t\t\tTriggerConfig: augno.AgentDefinitionConfigTriggerConfigParam{\n\t\t\t\tCronSchedule: param.Null[string](),\n\t\t\t\tTimezone:     param.Null[string](),\n\t\t\t\tEventFilters: []string{"email.received"},\n\t\t\t},\n\t\t},\n\t\tDescription: "Monitors inventory levels and creates restock alerts.",\n\t\tName:        "Inventory Monitor",\n\t\tRoleID:      "rl_01gf7a8200er3ar3pkfrb6kk29",\n\t\tSlug:        "inventory_monitor",\n\t\tTools: []augno.ToolInputParam{{\n\t\t\tToolID:        "tdef_01k0b1seed0searchproduct0",\n\t\t\tSortOrder:     1,\n\t\t\tRequireReview: true,\n\t\t}},\n\t\tTriggerType: augno.AIAgentNewParamsTriggerTypeEvent,\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentDefinition.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/ai/agents \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "category_code": "inventory",\n          "config": {\n            "model": "claude-sonnet-4",\n            "provider": "anthropic",\n            "system_prompt": "You are an order processing agent. Parse incoming emails and create draft orders.",\n            "temperature": 0.2,\n            "trigger_config": {\n              "cron_schedule": null,\n              "event_filters": [\n                "email.received"\n              ],\n              "timezone": null\n            }\n          },\n          "description": "Monitors inventory levels and creates restock alerts.",\n          "name": "Inventory Monitor",\n          "role_id": "rl_01gf7a8200er3ar3pkfrb6kk29",\n          "slug": "inventory_monitor",\n          "tools": [\n            {\n              "config_json": "config_json",\n              "require_review": true,\n              "sort_order": 1,\n              "tool_id": "tdef_01k0b1seed0searchproduct0"\n            }\n          ],\n          "trigger_type": "event"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/v1/ai/agents/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete Agent',
+    description: 'Soft-deletes a custom agent definition. System agents cannot be deleted.',
+    stainlessPath: '(resource) ai.agents > (method) delete',
+    qualified: 'client.ai.agents.delete',
+    params: ['id: string;'],
+    response: '{  }',
+    markdown:
+      "## delete\n\n`client.ai.agents.delete(id: string): {  }`\n\n**delete** `/v1/ai/agents/{id}`\n\nSoft-deletes a custom agent definition. System agents cannot be deleted.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{  }`\n\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst agent = await client.ai.agents.delete('id');\n\nconsole.log(agent);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.ai.agents.delete',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agent = await client.ai.agents.delete('id');\n\nconsole.log(agent);",
+      },
+      go: {
+        method: 'client.AI.Agents.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagent, err := client.AI.Agents.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agent)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/ai/agents/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/ai/agents/{id}',
+    httpMethod: 'get',
+    summary: 'Get Agent',
+    description: 'Returns a single agent definition with its tool configuration.',
+    stainlessPath: '(resource) ai.agents > (method) retrieve',
+    qualified: 'client.ai.agents.retrieve',
+    params: ['id: string;', "include?: 'config' | 'tools' | 'role' | 'role.permissions'[];"],
+    response:
+      "{ id: string; category_code: string; config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: object; }; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; slug: string; status: 'active' | 'inactive'; tools: { id: string; config: object[]; object: 'agent_definition_tool'; require_review: boolean; sort_order: number; tool: object; }[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }",
+    markdown:
+      "## retrieve\n\n`client.ai.agents.retrieve(id: string, include?: 'config' | 'tools' | 'role' | 'role.permissions'[]): { id: string; category_code: string; config: agent_definition_config; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: light_role; slug: string; status: 'active' | 'inactive'; tools: object[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }`\n\n**get** `/v1/ai/agents/{id}`\n\nReturns a single agent definition with its tool configuration.\n\n### Parameters\n\n- `id: string`\n\n- `include?: 'config' | 'tools' | 'role' | 'role.permissions'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; category_code: string; config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: object; }; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; slug: string; status: 'active' | 'inactive'; tools: { id: string; config: object[]; object: 'agent_definition_tool'; require_review: boolean; sort_order: number; tool: object; }[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }`\n  AgentDefinition represents an agent definition.\n\n  - `id: string`\n  - `category_code: string`\n  - `config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: { cron_schedule: string; event_filters: string[]; timezone: string; }; }`\n  - `created_at: string`\n  - `definition_type: 'system' | 'custom'`\n  - `description: string`\n  - `is_editable: boolean`\n  - `name: string`\n  - `object: 'agent_definition'`\n  - `role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }`\n  - `slug: string`\n  - `status: 'active' | 'inactive'`\n  - `tools: { id: string; config: object[]; object: 'agent_definition_tool'; require_review: boolean; sort_order: number; tool: { id: string; category: string; config_schema: object[]; description: string; display_name: string; group: object; object: 'available_tool'; required_permissions: string[]; }; }[]`\n  - `trigger_type: 'scheduled' | 'manual' | 'event'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst agentDefinition = await client.ai.agents.retrieve('id');\n\nconsole.log(agentDefinition);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.ai.agents.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentDefinition = await client.ai.agents.retrieve('id');\n\nconsole.log(agentDefinition.id);",
+      },
+      go: {
+        method: 'client.AI.Agents.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentDefinition, err := client.AI.Agents.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.AIAgentGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentDefinition.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/ai/agents/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/v1/ai/agents/{id}',
+    httpMethod: 'put',
+    summary: 'Update Agent',
+    description: 'Updates a custom agent definition. System agents cannot be modified.',
+    stainlessPath: '(resource) ai.agents > (method) update',
+    qualified: 'client.ai.agents.update',
+    params: [
+      'id: string;',
+      'category_code: string;',
+      'config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: { cron_schedule: string; event_filters: string[]; timezone: string; }; };',
+      'description: string;',
+      'name: string;',
+      'role_id: string;',
+      'slug: string;',
+      'tools: { config_json: string; require_review: boolean; sort_order: number; tool_id: string; }[];',
+      "trigger_type: 'scheduled' | 'manual' | 'event';",
+      "include?: 'config' | 'tools' | 'role' | 'role.permissions'[];",
+    ],
+    response:
+      "{ id: string; category_code: string; config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: object; }; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; slug: string; status: 'active' | 'inactive'; tools: { id: string; config: object[]; object: 'agent_definition_tool'; require_review: boolean; sort_order: number; tool: object; }[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }",
+    markdown:
+      "## update\n\n`client.ai.agents.update(id: string, category_code: string, config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: object; }, description: string, name: string, role_id: string, slug: string, tools: { config_json: string; require_review: boolean; sort_order: number; tool_id: string; }[], trigger_type: 'scheduled' | 'manual' | 'event', include?: 'config' | 'tools' | 'role' | 'role.permissions'[]): { id: string; category_code: string; config: agent_definition_config; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: light_role; slug: string; status: 'active' | 'inactive'; tools: object[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }`\n\n**put** `/v1/ai/agents/{id}`\n\nUpdates a custom agent definition. System agents cannot be modified.\n\n### Parameters\n\n- `id: string`\n\n- `category_code: string`\n  The category code that classifies this agent (e.g. \"order_processing\").\n\n- `config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: { cron_schedule: string; event_filters: string[]; timezone: string; }; }`\n  AgentDefinitionConfig holds agent-level configuration that controls LLM behavior.\nThis is separate from tool-level config (AgentDefinitionTool.Config) which\nconfigures individual tools attached to the agent.\n  - `model: string`\n    The LLM model identifier (e.g. \"claude-sonnet-4\").\n  - `provider: string`\n    The LLM provider name (e.g. \"anthropic\", \"openai\"). Inferred from model if omitted.\n  - `system_prompt: string`\n    The system prompt / instructions given to the agent.\n  - `temperature: number`\n    LLM sampling temperature between 0 and 1.\n  - `trigger_config: { cron_schedule: string; event_filters: string[]; timezone: string; }`\n    TriggerConfig holds trigger-type-specific settings.\nFor \"scheduled\": CronSchedule is populated.\nFor \"event\": EventFilters is populated.\nFor \"manual\": all fields are empty.\n\n- `description: string`\n  A human-readable description of what the agent does.\n\n- `name: string`\n  The display name of the agent.\n\n- `role_id: string`\n  The ID of the role that defines this agent's permissions.\n\n- `slug: string`\n  A unique URL-friendly identifier for the agent.\n\n- `tools: { config_json: string; require_review: boolean; sort_order: number; tool_id: string; }[]`\n  The tools to attach to this agent. Replaces the existing tool set.\n\n- `trigger_type: 'scheduled' | 'manual' | 'event'`\n  How this agent is triggered: \"manual\", \"scheduled\", or \"event\".\n\n- `include?: 'config' | 'tools' | 'role' | 'role.permissions'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; category_code: string; config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: object; }; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; slug: string; status: 'active' | 'inactive'; tools: { id: string; config: object[]; object: 'agent_definition_tool'; require_review: boolean; sort_order: number; tool: object; }[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }`\n  AgentDefinition represents an agent definition.\n\n  - `id: string`\n  - `category_code: string`\n  - `config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: { cron_schedule: string; event_filters: string[]; timezone: string; }; }`\n  - `created_at: string`\n  - `definition_type: 'system' | 'custom'`\n  - `description: string`\n  - `is_editable: boolean`\n  - `name: string`\n  - `object: 'agent_definition'`\n  - `role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }`\n  - `slug: string`\n  - `status: 'active' | 'inactive'`\n  - `tools: { id: string; config: object[]; object: 'agent_definition_tool'; require_review: boolean; sort_order: number; tool: { id: string; category: string; config_schema: object[]; description: string; display_name: string; group: object; object: 'available_tool'; required_permissions: string[]; }; }[]`\n  - `trigger_type: 'scheduled' | 'manual' | 'event'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst agentDefinition = await client.ai.agents.update('id', {\n  category_code: 'inventory',\n  config: {\n  model: 'claude-sonnet-4',\n  provider: 'anthropic',\n  system_prompt: 'You are an order processing agent. Parse incoming emails and create draft orders.',\n  temperature: 0.2,\n  trigger_config: {\n  cron_schedule: null,\n  event_filters: ['email.received'],\n  timezone: null,\n},\n},\n  description: 'Monitors inventory levels and creates restock alerts.',\n  name: 'Inventory Monitor',\n  role_id: 'rl_01gf7a8200er3ar3pkfrb6kk29',\n  slug: 'inventory_monitor',\n  tools: [{\n  config_json: 'config_json',\n  require_review: true,\n  sort_order: 1,\n  tool_id: 'tdef_01k0b1seed0searchproduct0',\n}],\n  trigger_type: 'event',\n});\n\nconsole.log(agentDefinition);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.ai.agents.update',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentDefinition = await client.ai.agents.update('id', {\n  category_code: 'inventory',\n  config: {\n    system_prompt:\n      'You are an order processing agent. Parse incoming emails and create draft orders.',\n    model: 'claude-sonnet-4',\n    provider: 'anthropic',\n    temperature: 0.2,\n    trigger_config: {\n      cron_schedule: null,\n      timezone: null,\n      event_filters: ['email.received'],\n    },\n  },\n  description: 'Monitors inventory levels and creates restock alerts.',\n  name: 'Inventory Monitor',\n  role_id: 'rl_01gf7a8200er3ar3pkfrb6kk29',\n  slug: 'inventory_monitor',\n  tools: [\n    {\n      config_json: 'config_json',\n      require_review: true,\n      sort_order: 1,\n      tool_id: 'tdef_01k0b1seed0searchproduct0',\n    },\n  ],\n  trigger_type: 'event',\n});\n\nconsole.log(agentDefinition.id);",
+      },
+      go: {
+        method: 'client.AI.Agents.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n\t"github.com/stainless-sdks/augno-go/packages/param"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentDefinition, err := client.AI.Agents.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.AIAgentUpdateParams{\n\t\t\tCategoryCode: "inventory",\n\t\t\tConfig: augno.AgentDefinitionConfigParam{\n\t\t\t\tSystemPrompt: augno.String("You are an order processing agent. Parse incoming emails and create draft orders."),\n\t\t\t\tModel:        augno.String("claude-sonnet-4"),\n\t\t\t\tProvider:     augno.String("anthropic"),\n\t\t\t\tTemperature:  augno.Float(0.2),\n\t\t\t\tTriggerConfig: augno.AgentDefinitionConfigTriggerConfigParam{\n\t\t\t\t\tCronSchedule: param.Null[string](),\n\t\t\t\t\tTimezone:     param.Null[string](),\n\t\t\t\t\tEventFilters: []string{"email.received"},\n\t\t\t\t},\n\t\t\t},\n\t\t\tDescription: "Monitors inventory levels and creates restock alerts.",\n\t\t\tName:        "Inventory Monitor",\n\t\t\tRoleID:      "rl_01gf7a8200er3ar3pkfrb6kk29",\n\t\t\tSlug:        "inventory_monitor",\n\t\t\tTools: []augno.ToolInputParam{{\n\t\t\t\tConfigJson:    "config_json",\n\t\t\t\tRequireReview: true,\n\t\t\t\tSortOrder:     1,\n\t\t\t\tToolID:        "tdef_01k0b1seed0searchproduct0",\n\t\t\t}},\n\t\t\tTriggerType: augno.AIAgentUpdateParamsTriggerTypeEvent,\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentDefinition.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/ai/agents/$ID \\\n    -X PUT \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "category_code": "inventory",\n          "config": {\n            "model": "claude-sonnet-4",\n            "provider": "anthropic",\n            "system_prompt": "You are an order processing agent. Parse incoming emails and create draft orders.",\n            "temperature": 0.2,\n            "trigger_config": {\n              "cron_schedule": null,\n              "event_filters": [\n                "email.received"\n              ],\n              "timezone": null\n            }\n          },\n          "description": "Monitors inventory levels and creates restock alerts.",\n          "name": "Inventory Monitor",\n          "role_id": "rl_01gf7a8200er3ar3pkfrb6kk29",\n          "slug": "inventory_monitor",\n          "tools": [\n            {\n              "config_json": "config_json",\n              "require_review": true,\n              "sort_order": 1,\n              "tool_id": "tdef_01k0b1seed0searchproduct0"\n            }\n          ],\n          "trigger_type": "event"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'update_status',
+    endpoint: '/v1/ai/agents/{id}/status',
+    httpMethod: 'put',
+    summary: 'Update Agent Status',
+    description: 'Upserts the per-account status for an agent definition.',
+    stainlessPath: '(resource) ai.agents > (method) update_status',
+    qualified: 'client.ai.agents.updateStatus',
+    params: [
+      'id: string;',
+      'status_code: string;',
+      "include?: 'config' | 'tools' | 'role' | 'role.permissions'[];",
+    ],
+    response:
+      "{ id: string; category_code: string; config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: object; }; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; slug: string; status: 'active' | 'inactive'; tools: { id: string; config: object[]; object: 'agent_definition_tool'; require_review: boolean; sort_order: number; tool: object; }[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }",
+    markdown:
+      "## update_status\n\n`client.ai.agents.updateStatus(id: string, status_code: string, include?: 'config' | 'tools' | 'role' | 'role.permissions'[]): { id: string; category_code: string; config: agent_definition_config; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: light_role; slug: string; status: 'active' | 'inactive'; tools: object[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }`\n\n**put** `/v1/ai/agents/{id}/status`\n\nUpserts the per-account status for an agent definition.\n\n### Parameters\n\n- `id: string`\n\n- `status_code: string`\n  The new account-level status code: \"active\" or \"inactive\".\n\n- `include?: 'config' | 'tools' | 'role' | 'role.permissions'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; category_code: string; config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: object; }; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; slug: string; status: 'active' | 'inactive'; tools: { id: string; config: object[]; object: 'agent_definition_tool'; require_review: boolean; sort_order: number; tool: object; }[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }`\n  AgentDefinition represents an agent definition.\n\n  - `id: string`\n  - `category_code: string`\n  - `config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: { cron_schedule: string; event_filters: string[]; timezone: string; }; }`\n  - `created_at: string`\n  - `definition_type: 'system' | 'custom'`\n  - `description: string`\n  - `is_editable: boolean`\n  - `name: string`\n  - `object: 'agent_definition'`\n  - `role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }`\n  - `slug: string`\n  - `status: 'active' | 'inactive'`\n  - `tools: { id: string; config: object[]; object: 'agent_definition_tool'; require_review: boolean; sort_order: number; tool: { id: string; category: string; config_schema: object[]; description: string; display_name: string; group: object; object: 'available_tool'; required_permissions: string[]; }; }[]`\n  - `trigger_type: 'scheduled' | 'manual' | 'event'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst agentDefinition = await client.ai.agents.updateStatus('id', { status_code: 'active' });\n\nconsole.log(agentDefinition);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.ai.agents.updateStatus',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentDefinition = await client.ai.agents.updateStatus('id', { status_code: 'active' });\n\nconsole.log(agentDefinition.id);",
+      },
+      go: {
+        method: 'client.AI.Agents.UpdateStatus',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentDefinition, err := client.AI.Agents.UpdateStatus(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.AIAgentUpdateStatusParams{\n\t\t\tStatusCode: "active",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentDefinition.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/ai/agents/$ID/status \\\n    -X PUT \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "status_code": "active"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/ai/alerts',
+    httpMethod: 'get',
+    summary: 'List Agent Alerts',
+    description: 'Returns a paginated list of agent alerts for the current account.',
+    stainlessPath: '(resource) ai.alerts > (method) list',
+    qualified: 'client.ai.alerts.list',
+    params: [
+      'cursor?: string;',
+      "include?: 'run' | 'action'[];",
+      'limit?: number;',
+      "severity?: 'info' | 'warning' | 'urgent' | 'critical';",
+      "status?: 'open' | 'acknowledged';",
+    ],
+    response:
+      "{ id: string; acknowledged_at: string; acknowledged_by: { id: string; name: string; object: 'user|api_key|agent'; }; action: { id: string; created_at: string; description: string; entity: entity; error_message: string; executed_at: string; input: object[]; label: string; object: 'agent_action'; output: object[]; requires_review: boolean; reviewed_at: string; reviewed_by: light_actor; run: object; status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed'; tool_slug: string; updated_at: string; }; created_at: string; message: string; metadata: object[]; object: 'agent_alert'; run: { id: string; actions: agent_action[]; completed_at: string; created_at: string; definition: agent_definition; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: object[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: light_actor; updated_at: string; }; severity: 'info' | 'warning' | 'urgent' | 'critical'; status: 'open' | 'acknowledged'; title: string; updated_at: string; }",
+    markdown:
+      "## list\n\n`client.ai.alerts.list(cursor?: string, include?: 'run' | 'action'[], limit?: number, severity?: 'info' | 'warning' | 'urgent' | 'critical', status?: 'open' | 'acknowledged'): { id: string; acknowledged_at: string; acknowledged_by: light_actor; action: agent_action; created_at: string; message: string; metadata: object[]; object: 'agent_alert'; run: agent_run; severity: 'info' | 'warning' | 'urgent' | 'critical'; status: 'open' | 'acknowledged'; title: string; updated_at: string; }`\n\n**get** `/v1/ai/alerts`\n\nReturns a paginated list of agent alerts for the current account.\n\n### Parameters\n\n- `cursor?: string`\n  Pagination cursor from a previous response.\n\n- `include?: 'run' | 'action'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n- `limit?: number`\n  Maximum number of records to return per page. Defaults to 100.\n\n- `severity?: 'info' | 'warning' | 'urgent' | 'critical'`\n  Filter by severity.\n\n- `status?: 'open' | 'acknowledged'`\n  Filter by alert status.\n\n### Returns\n\n- `{ id: string; acknowledged_at: string; acknowledged_by: { id: string; name: string; object: 'user|api_key|agent'; }; action: { id: string; created_at: string; description: string; entity: entity; error_message: string; executed_at: string; input: object[]; label: string; object: 'agent_action'; output: object[]; requires_review: boolean; reviewed_at: string; reviewed_by: light_actor; run: object; status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed'; tool_slug: string; updated_at: string; }; created_at: string; message: string; metadata: object[]; object: 'agent_alert'; run: { id: string; actions: agent_action[]; completed_at: string; created_at: string; definition: agent_definition; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: object[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: light_actor; updated_at: string; }; severity: 'info' | 'warning' | 'urgent' | 'critical'; status: 'open' | 'acknowledged'; title: string; updated_at: string; }`\n  AgentAlert represents an alert generated by an agent.\n\n  - `id: string`\n  - `acknowledged_at: string`\n  - `acknowledged_by: { id: string; name: string; object: 'user|api_key|agent'; }`\n  - `action: { id: string; created_at: string; description: string; entity: { id: string; object: string; }; error_message: string; executed_at: string; input: object[]; label: string; object: 'agent_action'; output: object[]; requires_review: boolean; reviewed_at: string; reviewed_by: { id: string; name: string; object: 'user|api_key|agent'; }; run: { id: string; object: 'agent_run'; }; status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed'; tool_slug: string; updated_at: string; }`\n  - `created_at: string`\n  - `message: string`\n  - `metadata: object[]`\n  - `object: 'agent_alert'`\n  - `run: { id: string; actions: { id: string; created_at: string; description: string; entity: entity; error_message: string; executed_at: string; input: object[]; label: string; object: 'agent_action'; output: object[]; requires_review: boolean; reviewed_at: string; reviewed_by: light_actor; run: object; status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed'; tool_slug: string; updated_at: string; }[]; completed_at: string; created_at: string; definition: { id: string; category_code: string; config: agent_definition_config; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: light_role; slug: string; status: 'active' | 'inactive'; tools: object[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: { id: string; actor: object; content: string; created_at: string; duration_ms: number; metadata: object[]; object: 'agent_run_step'; sequence: number; step_type: string; title: string; }[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: { id: string; name: string; object: 'user|api_key|agent'; }; updated_at: string; }`\n  - `severity: 'info' | 'warning' | 'urgent' | 'critical'`\n  - `status: 'open' | 'acknowledged'`\n  - `title: string`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\n// Automatically fetches more pages as needed.\nfor await (const agentAlert of client.ai.alerts.list()) {\n  console.log(agentAlert);\n}\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.ai.alerts.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const agentAlert of client.ai.alerts.list()) {\n  console.log(agentAlert.id);\n}",
+      },
+      go: {
+        method: 'client.AI.Alerts.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.AI.Alerts.List(context.TODO(), augno.AIAlertListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      http: {
+        example: 'curl https://api.augno.com/v1/ai/alerts \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/ai/alerts/{id}',
+    httpMethod: 'get',
+    summary: 'Get Agent Alert',
+    description: 'Returns a single agent alert by ID.',
+    stainlessPath: '(resource) ai.alerts > (method) retrieve',
+    qualified: 'client.ai.alerts.retrieve',
+    params: ['id: string;', "include?: 'run' | 'action'[];"],
+    response:
+      "{ id: string; acknowledged_at: string; acknowledged_by: { id: string; name: string; object: 'user|api_key|agent'; }; action: { id: string; created_at: string; description: string; entity: entity; error_message: string; executed_at: string; input: object[]; label: string; object: 'agent_action'; output: object[]; requires_review: boolean; reviewed_at: string; reviewed_by: light_actor; run: object; status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed'; tool_slug: string; updated_at: string; }; created_at: string; message: string; metadata: object[]; object: 'agent_alert'; run: { id: string; actions: agent_action[]; completed_at: string; created_at: string; definition: agent_definition; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: object[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: light_actor; updated_at: string; }; severity: 'info' | 'warning' | 'urgent' | 'critical'; status: 'open' | 'acknowledged'; title: string; updated_at: string; }",
+    markdown:
+      "## retrieve\n\n`client.ai.alerts.retrieve(id: string, include?: 'run' | 'action'[]): { id: string; acknowledged_at: string; acknowledged_by: light_actor; action: agent_action; created_at: string; message: string; metadata: object[]; object: 'agent_alert'; run: agent_run; severity: 'info' | 'warning' | 'urgent' | 'critical'; status: 'open' | 'acknowledged'; title: string; updated_at: string; }`\n\n**get** `/v1/ai/alerts/{id}`\n\nReturns a single agent alert by ID.\n\n### Parameters\n\n- `id: string`\n\n- `include?: 'run' | 'action'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; acknowledged_at: string; acknowledged_by: { id: string; name: string; object: 'user|api_key|agent'; }; action: { id: string; created_at: string; description: string; entity: entity; error_message: string; executed_at: string; input: object[]; label: string; object: 'agent_action'; output: object[]; requires_review: boolean; reviewed_at: string; reviewed_by: light_actor; run: object; status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed'; tool_slug: string; updated_at: string; }; created_at: string; message: string; metadata: object[]; object: 'agent_alert'; run: { id: string; actions: agent_action[]; completed_at: string; created_at: string; definition: agent_definition; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: object[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: light_actor; updated_at: string; }; severity: 'info' | 'warning' | 'urgent' | 'critical'; status: 'open' | 'acknowledged'; title: string; updated_at: string; }`\n  AgentAlert represents an alert generated by an agent.\n\n  - `id: string`\n  - `acknowledged_at: string`\n  - `acknowledged_by: { id: string; name: string; object: 'user|api_key|agent'; }`\n  - `action: { id: string; created_at: string; description: string; entity: { id: string; object: string; }; error_message: string; executed_at: string; input: object[]; label: string; object: 'agent_action'; output: object[]; requires_review: boolean; reviewed_at: string; reviewed_by: { id: string; name: string; object: 'user|api_key|agent'; }; run: { id: string; object: 'agent_run'; }; status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed'; tool_slug: string; updated_at: string; }`\n  - `created_at: string`\n  - `message: string`\n  - `metadata: object[]`\n  - `object: 'agent_alert'`\n  - `run: { id: string; actions: { id: string; created_at: string; description: string; entity: entity; error_message: string; executed_at: string; input: object[]; label: string; object: 'agent_action'; output: object[]; requires_review: boolean; reviewed_at: string; reviewed_by: light_actor; run: object; status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed'; tool_slug: string; updated_at: string; }[]; completed_at: string; created_at: string; definition: { id: string; category_code: string; config: agent_definition_config; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: light_role; slug: string; status: 'active' | 'inactive'; tools: object[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: { id: string; actor: object; content: string; created_at: string; duration_ms: number; metadata: object[]; object: 'agent_run_step'; sequence: number; step_type: string; title: string; }[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: { id: string; name: string; object: 'user|api_key|agent'; }; updated_at: string; }`\n  - `severity: 'info' | 'warning' | 'urgent' | 'critical'`\n  - `status: 'open' | 'acknowledged'`\n  - `title: string`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst agentAlert = await client.ai.alerts.retrieve('id');\n\nconsole.log(agentAlert);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.ai.alerts.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentAlert = await client.ai.alerts.retrieve('id');\n\nconsole.log(agentAlert.id);",
+      },
+      go: {
+        method: 'client.AI.Alerts.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentAlert, err := client.AI.Alerts.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.AIAlertGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentAlert.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/ai/alerts/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'acknowledge',
+    endpoint: '/v1/ai/alerts/{id}/actions/acknowledge',
+    httpMethod: 'post',
+    summary: 'Acknowledge Agent Alert',
+    description: 'Marks an agent alert as acknowledged.',
+    stainlessPath: '(resource) ai.alerts.actions > (method) acknowledge',
+    qualified: 'client.ai.alerts.actions.acknowledge',
+    params: ['id: string;', "include?: 'run' | 'action'[];"],
+    response:
+      "{ id: string; acknowledged_at: string; acknowledged_by: { id: string; name: string; object: 'user|api_key|agent'; }; action: { id: string; created_at: string; description: string; entity: entity; error_message: string; executed_at: string; input: object[]; label: string; object: 'agent_action'; output: object[]; requires_review: boolean; reviewed_at: string; reviewed_by: light_actor; run: object; status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed'; tool_slug: string; updated_at: string; }; created_at: string; message: string; metadata: object[]; object: 'agent_alert'; run: { id: string; actions: agent_action[]; completed_at: string; created_at: string; definition: agent_definition; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: object[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: light_actor; updated_at: string; }; severity: 'info' | 'warning' | 'urgent' | 'critical'; status: 'open' | 'acknowledged'; title: string; updated_at: string; }",
+    markdown:
+      "## acknowledge\n\n`client.ai.alerts.actions.acknowledge(id: string, include?: 'run' | 'action'[]): { id: string; acknowledged_at: string; acknowledged_by: light_actor; action: agent_action; created_at: string; message: string; metadata: object[]; object: 'agent_alert'; run: agent_run; severity: 'info' | 'warning' | 'urgent' | 'critical'; status: 'open' | 'acknowledged'; title: string; updated_at: string; }`\n\n**post** `/v1/ai/alerts/{id}/actions/acknowledge`\n\nMarks an agent alert as acknowledged.\n\n### Parameters\n\n- `id: string`\n\n- `include?: 'run' | 'action'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; acknowledged_at: string; acknowledged_by: { id: string; name: string; object: 'user|api_key|agent'; }; action: { id: string; created_at: string; description: string; entity: entity; error_message: string; executed_at: string; input: object[]; label: string; object: 'agent_action'; output: object[]; requires_review: boolean; reviewed_at: string; reviewed_by: light_actor; run: object; status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed'; tool_slug: string; updated_at: string; }; created_at: string; message: string; metadata: object[]; object: 'agent_alert'; run: { id: string; actions: agent_action[]; completed_at: string; created_at: string; definition: agent_definition; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: object[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: light_actor; updated_at: string; }; severity: 'info' | 'warning' | 'urgent' | 'critical'; status: 'open' | 'acknowledged'; title: string; updated_at: string; }`\n  AgentAlert represents an alert generated by an agent.\n\n  - `id: string`\n  - `acknowledged_at: string`\n  - `acknowledged_by: { id: string; name: string; object: 'user|api_key|agent'; }`\n  - `action: { id: string; created_at: string; description: string; entity: { id: string; object: string; }; error_message: string; executed_at: string; input: object[]; label: string; object: 'agent_action'; output: object[]; requires_review: boolean; reviewed_at: string; reviewed_by: { id: string; name: string; object: 'user|api_key|agent'; }; run: { id: string; object: 'agent_run'; }; status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed'; tool_slug: string; updated_at: string; }`\n  - `created_at: string`\n  - `message: string`\n  - `metadata: object[]`\n  - `object: 'agent_alert'`\n  - `run: { id: string; actions: { id: string; created_at: string; description: string; entity: entity; error_message: string; executed_at: string; input: object[]; label: string; object: 'agent_action'; output: object[]; requires_review: boolean; reviewed_at: string; reviewed_by: light_actor; run: object; status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed'; tool_slug: string; updated_at: string; }[]; completed_at: string; created_at: string; definition: { id: string; category_code: string; config: agent_definition_config; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: light_role; slug: string; status: 'active' | 'inactive'; tools: object[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: { id: string; actor: object; content: string; created_at: string; duration_ms: number; metadata: object[]; object: 'agent_run_step'; sequence: number; step_type: string; title: string; }[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: { id: string; name: string; object: 'user|api_key|agent'; }; updated_at: string; }`\n  - `severity: 'info' | 'warning' | 'urgent' | 'critical'`\n  - `status: 'open' | 'acknowledged'`\n  - `title: string`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst agentAlert = await client.ai.alerts.actions.acknowledge('id');\n\nconsole.log(agentAlert);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.ai.alerts.actions.acknowledge',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentAlert = await client.ai.alerts.actions.acknowledge('id');\n\nconsole.log(agentAlert.id);",
+      },
+      go: {
+        method: 'client.AI.Alerts.Actions.Acknowledge',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentAlert, err := client.AI.Alerts.Actions.Acknowledge(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.AIAlertActionAcknowledgeParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentAlert.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/ai/alerts/$ID/actions/acknowledge \\\n    -X POST \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/ai/memories',
+    httpMethod: 'get',
+    summary: 'List Agent Memories',
+    description: 'Returns a paginated list of agent memories for the current account.',
+    stainlessPath: '(resource) ai.memories > (method) list',
+    qualified: 'client.ai.memories.list',
+    params: ['category?: string;', 'cursor?: string;', 'entity_type?: string;', 'limit?: number;'],
+    response:
+      "{ id: string; category: string; content: string; created_at: string; entity: { id: string; object: string; }; expires_at: string; importance: number; metadata: object[]; object: 'agent_memory'; updated_at: string; }",
+    markdown:
+      '## list\n\n`client.ai.memories.list(category?: string, cursor?: string, entity_type?: string, limit?: number): { id: string; category: string; content: string; created_at: string; entity: entity; expires_at: string; importance: number; metadata: object[]; object: \'agent_memory\'; updated_at: string; }`\n\n**get** `/v1/ai/memories`\n\nReturns a paginated list of agent memories for the current account.\n\n### Parameters\n\n- `category?: string`\n  Filter by memory category (e.g. "preference", "fact").\n\n- `cursor?: string`\n  Pagination cursor from a previous response.\n\n- `entity_type?: string`\n  Filter by entity type (e.g. "customer", "product").\n\n- `limit?: number`\n  Maximum number of records to return per page. Defaults to 100.\n\n### Returns\n\n- `{ id: string; category: string; content: string; created_at: string; entity: { id: string; object: string; }; expires_at: string; importance: number; metadata: object[]; object: \'agent_memory\'; updated_at: string; }`\n  AgentMemory represents a piece of agent memory stored for contextual recall.\n\n  - `id: string`\n  - `category: string`\n  - `content: string`\n  - `created_at: string`\n  - `entity: { id: string; object: string; }`\n  - `expires_at: string`\n  - `importance: number`\n  - `metadata: object[]`\n  - `object: \'agent_memory\'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from \'augno\';\n\nconst client = new AugnoClient();\n\n// Automatically fetches more pages as needed.\nfor await (const agentMemory of client.ai.memories.list()) {\n  console.log(agentMemory);\n}\n```',
+    perLanguage: {
+      typescript: {
+        method: 'client.ai.memories.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const agentMemory of client.ai.memories.list()) {\n  console.log(agentMemory.id);\n}",
+      },
+      go: {
+        method: 'client.AI.Memories.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.AI.Memories.List(context.TODO(), augno.AIMemoryListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/ai/memories \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/ai/memories',
+    httpMethod: 'post',
+    summary: 'Create Agent Memory',
+    description: 'Creates a new agent memory for the current account.',
+    stainlessPath: '(resource) ai.memories > (method) create',
+    qualified: 'client.ai.memories.create',
+    params: [
+      'category: string;',
+      'content: string;',
+      'importance: number;',
+      'metadata: object[];',
+      'entity_id?: string;',
+      'entity_type?: string;',
+      'expires_at?: string;',
+    ],
+    response:
+      "{ id: string; category: string; content: string; created_at: string; entity: { id: string; object: string; }; expires_at: string; importance: number; metadata: object[]; object: 'agent_memory'; updated_at: string; }",
+    markdown:
+      "## create\n\n`client.ai.memories.create(category: string, content: string, importance: number, metadata: object[], entity_id?: string, entity_type?: string, expires_at?: string): { id: string; category: string; content: string; created_at: string; entity: entity; expires_at: string; importance: number; metadata: object[]; object: 'agent_memory'; updated_at: string; }`\n\n**post** `/v1/ai/memories`\n\nCreates a new agent memory for the current account.\n\n### Parameters\n\n- `category: string`\n  The memory category (e.g. \"preference\", \"fact\", \"instruction\").\n\n- `content: string`\n  The text content of the memory.\n\n- `importance: number`\n  A numeric importance score between 0 and 1.\n\n- `metadata: object[]`\n  Optional JSON metadata associated with this memory.\n\n- `entity_id?: string`\n  The ID of the entity this memory is scoped to.\n\n- `entity_type?: string`\n  The type of entity this memory is scoped to (e.g. \"customer\", \"product\").\n\n- `expires_at?: string`\n  An ISO 8601 timestamp after which this memory expires.\n\n### Returns\n\n- `{ id: string; category: string; content: string; created_at: string; entity: { id: string; object: string; }; expires_at: string; importance: number; metadata: object[]; object: 'agent_memory'; updated_at: string; }`\n  AgentMemory represents a piece of agent memory stored for contextual recall.\n\n  - `id: string`\n  - `category: string`\n  - `content: string`\n  - `created_at: string`\n  - `entity: { id: string; object: string; }`\n  - `expires_at: string`\n  - `importance: number`\n  - `metadata: object[]`\n  - `object: 'agent_memory'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst agentMemory = await client.ai.memories.create({\n  category: 'preference',\n  content: 'Customer prefers express shipping on all orders.',\n  importance: 0.8,\n  metadata: [{}],\n});\n\nconsole.log(agentMemory);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.ai.memories.create',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentMemory = await client.ai.memories.create({\n  category: 'preference',\n  content: 'Customer prefers express shipping on all orders.',\n  importance: 0.8,\n  metadata: null,\n});\n\nconsole.log(agentMemory.id);",
+      },
+      go: {
+        method: 'client.AI.Memories.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentMemory, err := client.AI.Memories.New(context.TODO(), augno.AIMemoryNewParams{\n\t\tCategory:   "preference",\n\t\tContent:    "Customer prefers express shipping on all orders.",\n\t\tImportance: 0.8,\n\t\tMetadata:   nil,\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentMemory.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/ai/memories \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "category": "preference",\n          "content": "Customer prefers express shipping on all orders.",\n          "importance": 0.8,\n          "metadata": [\n            {}\n          ]\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/v1/ai/memories/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete Agent Memory',
+    description: 'Deletes an agent memory.',
+    stainlessPath: '(resource) ai.memories > (method) delete',
+    qualified: 'client.ai.memories.delete',
+    params: ['id: string;'],
+    response: '{  }',
+    markdown:
+      "## delete\n\n`client.ai.memories.delete(id: string): {  }`\n\n**delete** `/v1/ai/memories/{id}`\n\nDeletes an agent memory.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{  }`\n\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst memory = await client.ai.memories.delete('id');\n\nconsole.log(memory);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.ai.memories.delete',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst memory = await client.ai.memories.delete('id');\n\nconsole.log(memory);",
+      },
+      go: {
+        method: 'client.AI.Memories.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tmemory, err := client.AI.Memories.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", memory)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/ai/memories/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/ai/memories/{id}',
+    httpMethod: 'get',
+    summary: 'Get Agent Memory',
+    description: 'Returns a single agent memory by ID.',
+    stainlessPath: '(resource) ai.memories > (method) retrieve',
+    qualified: 'client.ai.memories.retrieve',
+    params: ['id: string;'],
+    response:
+      "{ id: string; category: string; content: string; created_at: string; entity: { id: string; object: string; }; expires_at: string; importance: number; metadata: object[]; object: 'agent_memory'; updated_at: string; }",
+    markdown:
+      "## retrieve\n\n`client.ai.memories.retrieve(id: string): { id: string; category: string; content: string; created_at: string; entity: entity; expires_at: string; importance: number; metadata: object[]; object: 'agent_memory'; updated_at: string; }`\n\n**get** `/v1/ai/memories/{id}`\n\nReturns a single agent memory by ID.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; category: string; content: string; created_at: string; entity: { id: string; object: string; }; expires_at: string; importance: number; metadata: object[]; object: 'agent_memory'; updated_at: string; }`\n  AgentMemory represents a piece of agent memory stored for contextual recall.\n\n  - `id: string`\n  - `category: string`\n  - `content: string`\n  - `created_at: string`\n  - `entity: { id: string; object: string; }`\n  - `expires_at: string`\n  - `importance: number`\n  - `metadata: object[]`\n  - `object: 'agent_memory'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst agentMemory = await client.ai.memories.retrieve('id');\n\nconsole.log(agentMemory);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.ai.memories.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentMemory = await client.ai.memories.retrieve('id');\n\nconsole.log(agentMemory.id);",
+      },
+      go: {
+        method: 'client.AI.Memories.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentMemory, err := client.AI.Memories.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentMemory.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/ai/memories/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/v1/ai/memories/{id}',
+    httpMethod: 'patch',
+    summary: 'Update Agent Memory',
+    description: 'Updates an existing agent memory.',
+    stainlessPath: '(resource) ai.memories > (method) update',
+    qualified: 'client.ai.memories.update',
+    params: [
+      'id: string;',
+      'category: string;',
+      'content: string;',
+      'importance: number;',
+      'metadata: object[];',
+      'entity_id?: string;',
+      'entity_type?: string;',
+      'expires_at?: string;',
+    ],
+    response:
+      "{ id: string; category: string; content: string; created_at: string; entity: { id: string; object: string; }; expires_at: string; importance: number; metadata: object[]; object: 'agent_memory'; updated_at: string; }",
+    markdown:
+      "## update\n\n`client.ai.memories.update(id: string, category: string, content: string, importance: number, metadata: object[], entity_id?: string, entity_type?: string, expires_at?: string): { id: string; category: string; content: string; created_at: string; entity: entity; expires_at: string; importance: number; metadata: object[]; object: 'agent_memory'; updated_at: string; }`\n\n**patch** `/v1/ai/memories/{id}`\n\nUpdates an existing agent memory.\n\n### Parameters\n\n- `id: string`\n\n- `category: string`\n  The memory category (e.g. \"preference\", \"fact\", \"instruction\").\n\n- `content: string`\n  The text content of the memory.\n\n- `importance: number`\n  A numeric importance score between 0 and 1.\n\n- `metadata: object[]`\n  Optional JSON metadata associated with this memory.\n\n- `entity_id?: string`\n  The ID of the entity this memory is scoped to.\n\n- `entity_type?: string`\n  The type of entity this memory is scoped to (e.g. \"customer\", \"product\").\n\n- `expires_at?: string`\n  An ISO 8601 timestamp after which this memory expires.\n\n### Returns\n\n- `{ id: string; category: string; content: string; created_at: string; entity: { id: string; object: string; }; expires_at: string; importance: number; metadata: object[]; object: 'agent_memory'; updated_at: string; }`\n  AgentMemory represents a piece of agent memory stored for contextual recall.\n\n  - `id: string`\n  - `category: string`\n  - `content: string`\n  - `created_at: string`\n  - `entity: { id: string; object: string; }`\n  - `expires_at: string`\n  - `importance: number`\n  - `metadata: object[]`\n  - `object: 'agent_memory'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst agentMemory = await client.ai.memories.update('id', {\n  category: 'category',\n  content: 'Customer prefers next-day shipping on all orders.',\n  importance: 0.9,\n  metadata: [{}],\n});\n\nconsole.log(agentMemory);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.ai.memories.update',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentMemory = await client.ai.memories.update('id', {\n  category: 'category',\n  content: 'Customer prefers next-day shipping on all orders.',\n  importance: 0.9,\n  metadata: [{}],\n});\n\nconsole.log(agentMemory.id);",
+      },
+      go: {
+        method: 'client.AI.Memories.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentMemory, err := client.AI.Memories.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.AIMemoryUpdateParams{\n\t\t\tCategory:   "category",\n\t\t\tContent:    "Customer prefers next-day shipping on all orders.",\n\t\t\tImportance: 0.9,\n\t\t\tMetadata:   []any{map[string]any{}},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentMemory.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/ai/memories/$ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "category": "category",\n          "content": "Customer prefers next-day shipping on all orders.",\n          "importance": 0.9,\n          "metadata": [\n            {}\n          ]\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/ai/runs',
+    httpMethod: 'get',
+    summary: 'List Runs',
+    description: 'Returns a paginated list of agent runs for the current account.',
+    stainlessPath: '(resource) ai.runs > (method) list',
+    qualified: 'client.ai.runs.list',
+    params: [
+      'agent_definition_id?: string;',
+      'cursor?: string;',
+      "include?: 'definition' | 'actions' | 'definition.config' | 'definition.tools' | 'definition.role'[];",
+      'limit?: number;',
+      'status_code?: string;',
+    ],
+    response:
+      "{ id: string; actions: object[]; completed_at: string; created_at: string; definition: object; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: { id: string; actor: light_actor; content: string; created_at: string; duration_ms: number; metadata: object[]; object: 'agent_run_step'; sequence: number; step_type: string; title: string; }[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: object; updated_at: string; }",
+    markdown:
+      "## list\n\n`client.ai.runs.list(agent_definition_id?: string, cursor?: string, include?: 'definition' | 'actions' | 'definition.config' | 'definition.tools' | 'definition.role'[], limit?: number, status_code?: string): { id: string; actions: agent_action[]; completed_at: string; created_at: string; definition: agent_definition; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: object[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: light_actor; updated_at: string; }`\n\n**get** `/v1/ai/runs`\n\nReturns a paginated list of agent runs for the current account.\n\n### Parameters\n\n- `agent_definition_id?: string`\n  Filter by agent definition ID.\n\n- `cursor?: string`\n  Pagination cursor from a previous response.\n\n- `include?: 'definition' | 'actions' | 'definition.config' | 'definition.tools' | 'definition.role'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n- `limit?: number`\n  Maximum number of records to return per page. Defaults to 100.\n\n- `status_code?: string`\n  Filter by run status code (e.g. \"running\", \"completed\", \"failed\").\n\n### Returns\n\n- `{ id: string; actions: { id: string; created_at: string; description: string; entity: entity; error_message: string; executed_at: string; input: object[]; label: string; object: 'agent_action'; output: object[]; requires_review: boolean; reviewed_at: string; reviewed_by: light_actor; run: object; status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed'; tool_slug: string; updated_at: string; }[]; completed_at: string; created_at: string; definition: { id: string; category_code: string; config: agent_definition_config; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: light_role; slug: string; status: 'active' | 'inactive'; tools: object[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: { id: string; actor: object; content: string; created_at: string; duration_ms: number; metadata: object[]; object: 'agent_run_step'; sequence: number; step_type: string; title: string; }[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: { id: string; name: string; object: 'user|api_key|agent'; }; updated_at: string; }`\n  AgentRun represents an execution instance of an agent.\n\n  - `id: string`\n  - `actions: { id: string; created_at: string; description: string; entity: { id: string; object: string; }; error_message: string; executed_at: string; input: object[]; label: string; object: 'agent_action'; output: object[]; requires_review: boolean; reviewed_at: string; reviewed_by: { id: string; name: string; object: 'user|api_key|agent'; }; run: { id: string; object: 'agent_run'; }; status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed'; tool_slug: string; updated_at: string; }[]`\n  - `completed_at: string`\n  - `created_at: string`\n  - `definition: { id: string; category_code: string; config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: object; }; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; slug: string; status: 'active' | 'inactive'; tools: { id: string; config: object[]; object: 'agent_definition_tool'; require_review: boolean; sort_order: number; tool: object; }[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }`\n  - `duration_ms: number`\n  - `error_message: string`\n  - `input: object[]`\n  - `object: 'agent_run'`\n  - `output: object[]`\n  - `started_at: string`\n  - `status: string`\n  - `steps: { id: string; actor: { id: string; name: string; object: 'user|api_key|agent'; }; content: string; created_at: string; duration_ms: number; metadata: object[]; object: 'agent_run_step'; sequence: number; step_type: string; title: string; }[]`\n  - `total_input_tokens: number`\n  - `total_output_tokens: number`\n  - `trigger_type: string`\n  - `triggered_by: { id: string; name: string; object: 'user|api_key|agent'; }`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\n// Automatically fetches more pages as needed.\nfor await (const agentRun of client.ai.runs.list()) {\n  console.log(agentRun);\n}\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.ai.runs.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const agentRun of client.ai.runs.list()) {\n  console.log(agentRun.id);\n}",
+      },
+      go: {
+        method: 'client.AI.Runs.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.AI.Runs.List(context.TODO(), augno.AIRunListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      http: {
+        example: 'curl https://api.augno.com/v1/ai/runs \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'trigger',
+    endpoint: '/v1/ai/runs',
+    httpMethod: 'post',
+    summary: 'Trigger Run',
+    description: 'Triggers a new agent run for the specified agent definition.',
+    stainlessPath: '(resource) ai.runs > (method) trigger',
+    qualified: 'client.ai.runs.trigger',
+    params: [
+      'agent_definition_id: string;',
+      'input: string;',
+      "include?: 'actions' | 'definition' | 'definition.config' | 'definition.tools' | 'definition.role'[];",
+    ],
+    response:
+      "{ id: string; actions: object[]; completed_at: string; created_at: string; definition: object; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: { id: string; actor: light_actor; content: string; created_at: string; duration_ms: number; metadata: object[]; object: 'agent_run_step'; sequence: number; step_type: string; title: string; }[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: object; updated_at: string; }",
+    markdown:
+      "## trigger\n\n`client.ai.runs.trigger(agent_definition_id: string, input: string, include?: 'actions' | 'definition' | 'definition.config' | 'definition.tools' | 'definition.role'[]): { id: string; actions: agent_action[]; completed_at: string; created_at: string; definition: agent_definition; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: object[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: light_actor; updated_at: string; }`\n\n**post** `/v1/ai/runs`\n\nTriggers a new agent run for the specified agent definition.\n\n### Parameters\n\n- `agent_definition_id: string`\n  The ID of the agent definition to run.\n\n- `input: string`\n  Optional input text to provide to the agent at the start of the run.\n\n- `include?: 'actions' | 'definition' | 'definition.config' | 'definition.tools' | 'definition.role'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; actions: { id: string; created_at: string; description: string; entity: entity; error_message: string; executed_at: string; input: object[]; label: string; object: 'agent_action'; output: object[]; requires_review: boolean; reviewed_at: string; reviewed_by: light_actor; run: object; status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed'; tool_slug: string; updated_at: string; }[]; completed_at: string; created_at: string; definition: { id: string; category_code: string; config: agent_definition_config; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: light_role; slug: string; status: 'active' | 'inactive'; tools: object[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: { id: string; actor: object; content: string; created_at: string; duration_ms: number; metadata: object[]; object: 'agent_run_step'; sequence: number; step_type: string; title: string; }[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: { id: string; name: string; object: 'user|api_key|agent'; }; updated_at: string; }`\n  AgentRun represents an execution instance of an agent.\n\n  - `id: string`\n  - `actions: { id: string; created_at: string; description: string; entity: { id: string; object: string; }; error_message: string; executed_at: string; input: object[]; label: string; object: 'agent_action'; output: object[]; requires_review: boolean; reviewed_at: string; reviewed_by: { id: string; name: string; object: 'user|api_key|agent'; }; run: { id: string; object: 'agent_run'; }; status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed'; tool_slug: string; updated_at: string; }[]`\n  - `completed_at: string`\n  - `created_at: string`\n  - `definition: { id: string; category_code: string; config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: object; }; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; slug: string; status: 'active' | 'inactive'; tools: { id: string; config: object[]; object: 'agent_definition_tool'; require_review: boolean; sort_order: number; tool: object; }[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }`\n  - `duration_ms: number`\n  - `error_message: string`\n  - `input: object[]`\n  - `object: 'agent_run'`\n  - `output: object[]`\n  - `started_at: string`\n  - `status: string`\n  - `steps: { id: string; actor: { id: string; name: string; object: 'user|api_key|agent'; }; content: string; created_at: string; duration_ms: number; metadata: object[]; object: 'agent_run_step'; sequence: number; step_type: string; title: string; }[]`\n  - `total_input_tokens: number`\n  - `total_output_tokens: number`\n  - `trigger_type: string`\n  - `triggered_by: { id: string; name: string; object: 'user|api_key|agent'; }`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst agentRun = await client.ai.runs.trigger({ agent_definition_id: 'agdf_01jm4r6700f8nwq3v5hx2d9ktp', input: 'Process the latest incoming orders.' });\n\nconsole.log(agentRun);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.ai.runs.trigger',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentRun = await client.ai.runs.trigger({\n  agent_definition_id: 'agdf_01jm4r6700f8nwq3v5hx2d9ktp',\n  input: 'Process the latest incoming orders.',\n});\n\nconsole.log(agentRun.id);",
+      },
+      go: {
+        method: 'client.AI.Runs.Trigger',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentRun, err := client.AI.Runs.Trigger(context.TODO(), augno.AIRunTriggerParams{\n\t\tAgentDefinitionID: "agdf_01jm4r6700f8nwq3v5hx2d9ktp",\n\t\tInput:             "Process the latest incoming orders.",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentRun.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/ai/runs \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "agent_definition_id": "agdf_01jm4r6700f8nwq3v5hx2d9ktp",\n          "input": "Process the latest incoming orders."\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/ai/runs/{id}',
+    httpMethod: 'get',
+    summary: 'Get Run',
+    description: 'Returns a single agent run with optional actions and definition.',
+    stainlessPath: '(resource) ai.runs > (method) retrieve',
+    qualified: 'client.ai.runs.retrieve',
+    params: [
+      'id: string;',
+      "include?: 'actions' | 'definition' | 'steps' | 'definition.config' | 'definition.tools' | 'definition.role'[];",
+    ],
+    response:
+      "{ id: string; actions: object[]; completed_at: string; created_at: string; definition: object; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: { id: string; actor: light_actor; content: string; created_at: string; duration_ms: number; metadata: object[]; object: 'agent_run_step'; sequence: number; step_type: string; title: string; }[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: object; updated_at: string; }",
+    markdown:
+      "## retrieve\n\n`client.ai.runs.retrieve(id: string, include?: 'actions' | 'definition' | 'steps' | 'definition.config' | 'definition.tools' | 'definition.role'[]): { id: string; actions: agent_action[]; completed_at: string; created_at: string; definition: agent_definition; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: object[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: light_actor; updated_at: string; }`\n\n**get** `/v1/ai/runs/{id}`\n\nReturns a single agent run with optional actions and definition.\n\n### Parameters\n\n- `id: string`\n\n- `include?: 'actions' | 'definition' | 'steps' | 'definition.config' | 'definition.tools' | 'definition.role'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; actions: { id: string; created_at: string; description: string; entity: entity; error_message: string; executed_at: string; input: object[]; label: string; object: 'agent_action'; output: object[]; requires_review: boolean; reviewed_at: string; reviewed_by: light_actor; run: object; status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed'; tool_slug: string; updated_at: string; }[]; completed_at: string; created_at: string; definition: { id: string; category_code: string; config: agent_definition_config; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: light_role; slug: string; status: 'active' | 'inactive'; tools: object[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: { id: string; actor: object; content: string; created_at: string; duration_ms: number; metadata: object[]; object: 'agent_run_step'; sequence: number; step_type: string; title: string; }[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: { id: string; name: string; object: 'user|api_key|agent'; }; updated_at: string; }`\n  AgentRun represents an execution instance of an agent.\n\n  - `id: string`\n  - `actions: { id: string; created_at: string; description: string; entity: { id: string; object: string; }; error_message: string; executed_at: string; input: object[]; label: string; object: 'agent_action'; output: object[]; requires_review: boolean; reviewed_at: string; reviewed_by: { id: string; name: string; object: 'user|api_key|agent'; }; run: { id: string; object: 'agent_run'; }; status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed'; tool_slug: string; updated_at: string; }[]`\n  - `completed_at: string`\n  - `created_at: string`\n  - `definition: { id: string; category_code: string; config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: object; }; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; slug: string; status: 'active' | 'inactive'; tools: { id: string; config: object[]; object: 'agent_definition_tool'; require_review: boolean; sort_order: number; tool: object; }[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }`\n  - `duration_ms: number`\n  - `error_message: string`\n  - `input: object[]`\n  - `object: 'agent_run'`\n  - `output: object[]`\n  - `started_at: string`\n  - `status: string`\n  - `steps: { id: string; actor: { id: string; name: string; object: 'user|api_key|agent'; }; content: string; created_at: string; duration_ms: number; metadata: object[]; object: 'agent_run_step'; sequence: number; step_type: string; title: string; }[]`\n  - `total_input_tokens: number`\n  - `total_output_tokens: number`\n  - `trigger_type: string`\n  - `triggered_by: { id: string; name: string; object: 'user|api_key|agent'; }`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst agentRun = await client.ai.runs.retrieve('id');\n\nconsole.log(agentRun);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.ai.runs.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentRun = await client.ai.runs.retrieve('id');\n\nconsole.log(agentRun.id);",
+      },
+      go: {
+        method: 'client.AI.Runs.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentRun, err := client.AI.Runs.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.AIRunGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentRun.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/ai/runs/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'cancel',
+    endpoint: '/v1/ai/runs/{id}/actions/cancel',
+    httpMethod: 'post',
+    summary: 'Cancel Run',
+    description: 'Cancels a running or pending agent run.',
+    stainlessPath: '(resource) ai.runs.actions > (method) cancel',
+    qualified: 'client.ai.runs.actions.cancel',
+    params: [
+      'id: string;',
+      "include?: 'actions' | 'definition' | 'definition.config' | 'definition.tools' | 'definition.role'[];",
+    ],
+    response:
+      "{ id: string; actions: object[]; completed_at: string; created_at: string; definition: object; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: { id: string; actor: light_actor; content: string; created_at: string; duration_ms: number; metadata: object[]; object: 'agent_run_step'; sequence: number; step_type: string; title: string; }[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: object; updated_at: string; }",
+    markdown:
+      "## cancel\n\n`client.ai.runs.actions.cancel(id: string, include?: 'actions' | 'definition' | 'definition.config' | 'definition.tools' | 'definition.role'[]): { id: string; actions: agent_action[]; completed_at: string; created_at: string; definition: agent_definition; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: object[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: light_actor; updated_at: string; }`\n\n**post** `/v1/ai/runs/{id}/actions/cancel`\n\nCancels a running or pending agent run.\n\n### Parameters\n\n- `id: string`\n\n- `include?: 'actions' | 'definition' | 'definition.config' | 'definition.tools' | 'definition.role'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; actions: { id: string; created_at: string; description: string; entity: entity; error_message: string; executed_at: string; input: object[]; label: string; object: 'agent_action'; output: object[]; requires_review: boolean; reviewed_at: string; reviewed_by: light_actor; run: object; status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed'; tool_slug: string; updated_at: string; }[]; completed_at: string; created_at: string; definition: { id: string; category_code: string; config: agent_definition_config; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: light_role; slug: string; status: 'active' | 'inactive'; tools: object[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: { id: string; actor: object; content: string; created_at: string; duration_ms: number; metadata: object[]; object: 'agent_run_step'; sequence: number; step_type: string; title: string; }[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: { id: string; name: string; object: 'user|api_key|agent'; }; updated_at: string; }`\n  AgentRun represents an execution instance of an agent.\n\n  - `id: string`\n  - `actions: { id: string; created_at: string; description: string; entity: { id: string; object: string; }; error_message: string; executed_at: string; input: object[]; label: string; object: 'agent_action'; output: object[]; requires_review: boolean; reviewed_at: string; reviewed_by: { id: string; name: string; object: 'user|api_key|agent'; }; run: { id: string; object: 'agent_run'; }; status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed'; tool_slug: string; updated_at: string; }[]`\n  - `completed_at: string`\n  - `created_at: string`\n  - `definition: { id: string; category_code: string; config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: object; }; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; slug: string; status: 'active' | 'inactive'; tools: { id: string; config: object[]; object: 'agent_definition_tool'; require_review: boolean; sort_order: number; tool: object; }[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }`\n  - `duration_ms: number`\n  - `error_message: string`\n  - `input: object[]`\n  - `object: 'agent_run'`\n  - `output: object[]`\n  - `started_at: string`\n  - `status: string`\n  - `steps: { id: string; actor: { id: string; name: string; object: 'user|api_key|agent'; }; content: string; created_at: string; duration_ms: number; metadata: object[]; object: 'agent_run_step'; sequence: number; step_type: string; title: string; }[]`\n  - `total_input_tokens: number`\n  - `total_output_tokens: number`\n  - `trigger_type: string`\n  - `triggered_by: { id: string; name: string; object: 'user|api_key|agent'; }`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst agentRun = await client.ai.runs.actions.cancel('id');\n\nconsole.log(agentRun);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.ai.runs.actions.cancel',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentRun = await client.ai.runs.actions.cancel('id');\n\nconsole.log(agentRun.id);",
+      },
+      go: {
+        method: 'client.AI.Runs.Actions.Cancel',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentRun, err := client.AI.Runs.Actions.Cancel(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.AIRunActionCancelParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentRun.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/ai/runs/$ID/actions/cancel \\\n    -X POST \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'continue',
+    endpoint: '/v1/ai/runs/{id}/actions/continue',
+    httpMethod: 'post',
+    summary: 'Continue Run',
+    description: 'Continues an agent run that is awaiting input with a new user message.',
+    stainlessPath: '(resource) ai.runs.actions > (method) continue',
+    qualified: 'client.ai.runs.actions.continue',
+    params: [
+      'id: string;',
+      'allowed_tool_slugs: string[];',
+      'approved_tool_slugs: string[];',
+      'message: string;',
+      "include?: 'actions' | 'definition' | 'definition.config' | 'definition.tools' | 'definition.role'[];",
+    ],
+    response:
+      "{ id: string; actions: object[]; completed_at: string; created_at: string; definition: object; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: { id: string; actor: light_actor; content: string; created_at: string; duration_ms: number; metadata: object[]; object: 'agent_run_step'; sequence: number; step_type: string; title: string; }[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: object; updated_at: string; }",
+    markdown:
+      "## continue\n\n`client.ai.runs.actions.continue(id: string, allowed_tool_slugs: string[], approved_tool_slugs: string[], message: string, include?: 'actions' | 'definition' | 'definition.config' | 'definition.tools' | 'definition.role'[]): { id: string; actions: agent_action[]; completed_at: string; created_at: string; definition: agent_definition; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: object[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: light_actor; updated_at: string; }`\n\n**post** `/v1/ai/runs/{id}/actions/continue`\n\nContinues an agent run that is awaiting input with a new user message.\n\n### Parameters\n\n- `id: string`\n\n- `allowed_tool_slugs: string[]`\n  Optional list of tool slugs to allow for the rest of the run without further approval.\n\n- `approved_tool_slugs: string[]`\n  Optional list of tool slugs to approve individually. If empty, all pending tools are approved.\n\n- `message: string`\n  The user message to send to the agent.\n\n- `include?: 'actions' | 'definition' | 'definition.config' | 'definition.tools' | 'definition.role'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; actions: { id: string; created_at: string; description: string; entity: entity; error_message: string; executed_at: string; input: object[]; label: string; object: 'agent_action'; output: object[]; requires_review: boolean; reviewed_at: string; reviewed_by: light_actor; run: object; status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed'; tool_slug: string; updated_at: string; }[]; completed_at: string; created_at: string; definition: { id: string; category_code: string; config: agent_definition_config; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: light_role; slug: string; status: 'active' | 'inactive'; tools: object[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }; duration_ms: number; error_message: string; input: object[]; object: 'agent_run'; output: object[]; started_at: string; status: string; steps: { id: string; actor: object; content: string; created_at: string; duration_ms: number; metadata: object[]; object: 'agent_run_step'; sequence: number; step_type: string; title: string; }[]; total_input_tokens: number; total_output_tokens: number; trigger_type: string; triggered_by: { id: string; name: string; object: 'user|api_key|agent'; }; updated_at: string; }`\n  AgentRun represents an execution instance of an agent.\n\n  - `id: string`\n  - `actions: { id: string; created_at: string; description: string; entity: { id: string; object: string; }; error_message: string; executed_at: string; input: object[]; label: string; object: 'agent_action'; output: object[]; requires_review: boolean; reviewed_at: string; reviewed_by: { id: string; name: string; object: 'user|api_key|agent'; }; run: { id: string; object: 'agent_run'; }; status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed'; tool_slug: string; updated_at: string; }[]`\n  - `completed_at: string`\n  - `created_at: string`\n  - `definition: { id: string; category_code: string; config: { model: string; provider: string; system_prompt: string; temperature: number; trigger_config: object; }; created_at: string; definition_type: 'system' | 'custom'; description: string; is_editable: boolean; name: string; object: 'agent_definition'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; slug: string; status: 'active' | 'inactive'; tools: { id: string; config: object[]; object: 'agent_definition_tool'; require_review: boolean; sort_order: number; tool: object; }[]; trigger_type: 'scheduled' | 'manual' | 'event'; updated_at: string; }`\n  - `duration_ms: number`\n  - `error_message: string`\n  - `input: object[]`\n  - `object: 'agent_run'`\n  - `output: object[]`\n  - `started_at: string`\n  - `status: string`\n  - `steps: { id: string; actor: { id: string; name: string; object: 'user|api_key|agent'; }; content: string; created_at: string; duration_ms: number; metadata: object[]; object: 'agent_run_step'; sequence: number; step_type: string; title: string; }[]`\n  - `total_input_tokens: number`\n  - `total_output_tokens: number`\n  - `trigger_type: string`\n  - `triggered_by: { id: string; name: string; object: 'user|api_key|agent'; }`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst agentRun = await client.ai.runs.actions.continue('id', {\n  allowed_tool_slugs: ['string'],\n  approved_tool_slugs: ['string'],\n  message: 'Yes, proceed with creating the order.',\n});\n\nconsole.log(agentRun);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.ai.runs.actions.continue',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst agentRun = await client.ai.runs.actions.continue('id', {\n  allowed_tool_slugs: ['string'],\n  approved_tool_slugs: ['string'],\n  message: 'Yes, proceed with creating the order.',\n});\n\nconsole.log(agentRun.id);",
+      },
+      go: {
+        method: 'client.AI.Runs.Actions.Continue',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentRun, err := client.AI.Runs.Actions.Continue(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.AIRunActionContinueParams{\n\t\t\tAllowedToolSlugs:  []string{"string"},\n\t\t\tApprovedToolSlugs: []string{"string"},\n\t\t\tMessage:           "Yes, proceed with creating the order.",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentRun.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/ai/runs/$ID/actions/continue \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "allowed_tool_slugs": [\n            "string"\n          ],\n          "approved_tool_slugs": [\n            "string"\n          ],\n          "message": "Yes, proceed with creating the order."\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/auth/api-keys',
+    httpMethod: 'get',
+    summary: 'List API Keys',
+    description:
+      'This endpoint returns a paginated list of API keys for the target account.\nSupports cursor-based pagination and optional search filtering by name.',
+    stainlessPath: '(resource) auth.api_keys > (method) list',
+    qualified: 'client.auth.apiKeys.list',
+    params: ["include?: 'role' | 'role.permissions'[];", "status?: 'active' | 'expired' | 'revoked'[];"],
+    response:
+      "{ data: { id: string; created_at: string; expires_at: string; last_used_at: string; name: string; object: 'api_key'; redacted_value: string; revoked_at: string; role: light_role; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list\n\n`client.auth.apiKeys.list(include?: 'role' | 'role.permissions'[], status?: 'active' | 'expired' | 'revoked'[]): { data: api_key[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/auth/api-keys`\n\nThis endpoint returns a paginated list of API keys for the target account.\nSupports cursor-based pagination and optional search filtering by name.\n\n### Parameters\n\n- `include?: 'role' | 'role.permissions'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n- `status?: 'active' | 'expired' | 'revoked'[]`\n  Filter API keys by status.\n\n### Returns\n\n- `{ data: { id: string; created_at: string; expires_at: string; last_used_at: string; name: string; object: 'api_key'; redacted_value: string; revoked_at: string; role: light_role; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of APIKey resources\n\n  - `data: { id: string; created_at: string; expires_at: string; last_used_at: string; name: string; object: 'api_key'; redacted_value: string; revoked_at: string; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; updated_at: string; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst apiKeys = await client.auth.apiKeys.list();\n\nconsole.log(apiKeys);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.auth.apiKeys.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst apiKeys = await client.auth.apiKeys.list();\n\nconsole.log(apiKeys.data);",
+      },
+      go: {
+        method: 'client.Auth.APIKeys.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKeys, err := client.Auth.APIKeys.List(context.TODO(), augno.AuthAPIKeyListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKeys.Data)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/auth/api-keys \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/auth/api-keys',
+    httpMethod: 'post',
+    summary: 'Create API Key',
+    description:
+      'This endpoint is used to create an API key. Once completed, the API key object is\nreturned, and the API key secret is returned. The secret is only returned once at creation, and is not retrievable after creation.',
+    stainlessPath: '(resource) auth.api_keys > (method) create',
+    qualified: 'client.auth.apiKeys.create',
+    params: [
+      'name: string;',
+      'role_id: string;',
+      "include?: 'role' | 'role.permissions'[];",
+      'expires_at?: string;',
+    ],
+    response:
+      "{ api_key_info: { id: string; created_at: string; expires_at: string; last_used_at: string; name: string; object: 'api_key'; redacted_value: string; revoked_at: string; role: light_role; updated_at: string; }; api_key_secret: string; }",
+    markdown:
+      "## create\n\n`client.auth.apiKeys.create(name: string, role_id: string, include?: 'role' | 'role.permissions'[], expires_at?: string): { api_key_info: api_key; api_key_secret: string; }`\n\n**post** `/v1/auth/api-keys`\n\nThis endpoint is used to create an API key. Once completed, the API key object is\nreturned, and the API key secret is returned. The secret is only returned once at creation, and is not retrievable after creation.\n\n### Parameters\n\n- `name: string`\n  The name for the API key.\n\n- `role_id: string`\n  The role ID for the API key.\n\n- `include?: 'role' | 'role.permissions'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n- `expires_at?: string`\n  Optional expiration time for the API key.\n\n### Returns\n\n- `{ api_key_info: { id: string; created_at: string; expires_at: string; last_used_at: string; name: string; object: 'api_key'; redacted_value: string; revoked_at: string; role: light_role; updated_at: string; }; api_key_secret: string; }`\n  CreatedAPIKey represents a newly created API key with the full secret value.\n\n  - `api_key_info: { id: string; created_at: string; expires_at: string; last_used_at: string; name: string; object: 'api_key'; redacted_value: string; revoked_at: string; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; updated_at: string; }`\n  - `api_key_secret: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst createdAPIKey = await client.auth.apiKeys.create({ name: 'Production API Key', role_id: 'rl_01gf7a8200er3ar3pkfrb6kk29' });\n\nconsole.log(createdAPIKey);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.auth.apiKeys.create',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst createdAPIKey = await client.auth.apiKeys.create({\n  name: 'Production API Key',\n  role_id: 'rl_01gf7a8200er3ar3pkfrb6kk29',\n});\n\nconsole.log(createdAPIKey.api_key_info);",
+      },
+      go: {
+        method: 'client.Auth.APIKeys.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcreatedAPIKey, err := client.Auth.APIKeys.New(context.TODO(), augno.AuthAPIKeyNewParams{\n\t\tName:   "Production API Key",\n\t\tRoleID: "rl_01gf7a8200er3ar3pkfrb6kk29",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", createdAPIKey.APIKeyInfo)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/auth/api-keys \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "name": "Production API Key",\n          "role_id": "rl_01gf7a8200er3ar3pkfrb6kk29"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'revoke',
+    endpoint: '/v1/auth/api-keys/{id}',
+    httpMethod: 'delete',
+    summary: 'Revoke API Key',
+    description:
+      'This endpoint revokes an API key so it can no longer be used to \nauthenticate requests. The API key will be marked as revoked and will no longer be usable.',
+    stainlessPath: '(resource) auth.api_keys > (method) revoke',
+    qualified: 'client.auth.apiKeys.revoke',
+    params: ['id: string;'],
+    response: '{  }',
+    markdown:
+      "## revoke\n\n`client.auth.apiKeys.revoke(id: string): {  }`\n\n**delete** `/v1/auth/api-keys/{id}`\n\nThis endpoint revokes an API key so it can no longer be used to \nauthenticate requests. The API key will be marked as revoked and will no longer be usable.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{  }`\n\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.auth.apiKeys.revoke('id');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.auth.apiKeys.revoke',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.auth.apiKeys.revoke('id');\n\nconsole.log(response);",
+      },
+      go: {
+        method: 'client.Auth.APIKeys.Revoke',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Auth.APIKeys.Revoke(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/auth/api-keys/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/auth/api-keys/{id}',
+    httpMethod: 'get',
+    summary: 'Get API Key',
+    description: "This endpoint returns a single API key's metadata by its ID.",
+    stainlessPath: '(resource) auth.api_keys > (method) retrieve',
+    qualified: 'client.auth.apiKeys.retrieve',
+    params: ['id: string;', "include?: 'role' | 'role.permissions'[];"],
+    response:
+      "{ id: string; created_at: string; expires_at: string; last_used_at: string; name: string; object: 'api_key'; redacted_value: string; revoked_at: string; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; updated_at: string; }",
+    markdown:
+      "## retrieve\n\n`client.auth.apiKeys.retrieve(id: string, include?: 'role' | 'role.permissions'[]): { id: string; created_at: string; expires_at: string; last_used_at: string; name: string; object: 'api_key'; redacted_value: string; revoked_at: string; role: light_role; updated_at: string; }`\n\n**get** `/v1/auth/api-keys/{id}`\n\nThis endpoint returns a single API key's metadata by its ID.\n\n### Parameters\n\n- `id: string`\n\n- `include?: 'role' | 'role.permissions'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; created_at: string; expires_at: string; last_used_at: string; name: string; object: 'api_key'; redacted_value: string; revoked_at: string; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; updated_at: string; }`\n  APIKey represents an API key for authenticating API requests.\n\n  - `id: string`\n  - `created_at: string`\n  - `expires_at: string`\n  - `last_used_at: string`\n  - `name: string`\n  - `object: 'api_key'`\n  - `redacted_value: string`\n  - `revoked_at: string`\n  - `role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst apiKey = await client.auth.apiKeys.retrieve('id');\n\nconsole.log(apiKey);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.auth.apiKeys.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst apiKey = await client.auth.apiKeys.retrieve('id');\n\nconsole.log(apiKey.id);",
+      },
+      go: {
+        method: 'client.Auth.APIKeys.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.Auth.APIKeys.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.AuthAPIKeyGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/auth/api-keys/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'rotate',
+    endpoint: '/v1/auth/api-keys/{id}/actions/rotate',
+    httpMethod: 'post',
+    summary: 'Rotate API Key',
+    description:
+      "This endpoint rotates an API key by revoking the existing key and creating a new\nreplacement with the same name, role, and owner. The new key inherits the old key's expiration unless an explicit expires_at override is provided.\nThe new API key secret is returned once and is not retrievable after creation.",
+    stainlessPath: '(resource) auth.api_keys.actions > (method) rotate',
+    qualified: 'client.auth.apiKeys.actions.rotate',
+    params: ['id: string;', "include?: 'role' | 'role.permissions'[];", 'expires_at?: string;'],
+    response:
+      "{ api_key_info: { id: string; created_at: string; expires_at: string; last_used_at: string; name: string; object: 'api_key'; redacted_value: string; revoked_at: string; role: light_role; updated_at: string; }; api_key_secret: string; }",
+    markdown:
+      "## rotate\n\n`client.auth.apiKeys.actions.rotate(id: string, include?: 'role' | 'role.permissions'[], expires_at?: string): { api_key_info: api_key; api_key_secret: string; }`\n\n**post** `/v1/auth/api-keys/{id}/actions/rotate`\n\nThis endpoint rotates an API key by revoking the existing key and creating a new\nreplacement with the same name, role, and owner. The new key inherits the old key's expiration unless an explicit expires_at override is provided.\nThe new API key secret is returned once and is not retrievable after creation.\n\n### Parameters\n\n- `id: string`\n\n- `include?: 'role' | 'role.permissions'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n- `expires_at?: string`\n  Optional expiration time override for the new API key.\n\n### Returns\n\n- `{ api_key_info: { id: string; created_at: string; expires_at: string; last_used_at: string; name: string; object: 'api_key'; redacted_value: string; revoked_at: string; role: light_role; updated_at: string; }; api_key_secret: string; }`\n  CreatedAPIKey represents a newly created API key with the full secret value.\n\n  - `api_key_info: { id: string; created_at: string; expires_at: string; last_used_at: string; name: string; object: 'api_key'; redacted_value: string; revoked_at: string; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; updated_at: string; }`\n  - `api_key_secret: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst createdAPIKey = await client.auth.apiKeys.actions.rotate('id');\n\nconsole.log(createdAPIKey);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.auth.apiKeys.actions.rotate',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst createdAPIKey = await client.auth.apiKeys.actions.rotate('id', {\n  expires_at: '2026-12-31T23:59:59Z',\n});\n\nconsole.log(createdAPIKey.api_key_info);",
+      },
+      go: {
+        method: 'client.Auth.APIKeys.Actions.Rotate',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\t"time"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcreatedAPIKey, err := client.Auth.APIKeys.Actions.Rotate(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.AuthAPIKeyActionRotateParams{\n\t\t\tExpiresAt: augno.Time(time.Now()),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", createdAPIKey.APIKeyInfo)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/auth/api-keys/$ID/actions/rotate \\\n    -X POST \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list_adjustment_types',
+    endpoint: '/v1/core/adjustment-types',
+    httpMethod: 'get',
+    summary: 'List Adjustment Types',
+    description:
+      'This endpoint returns a paginated list of adjustment types.\nSupports cursor-based pagination and search by name.',
+    stainlessPath: '(resource) core > (method) list_adjustment_types',
+    qualified: 'client.core.listAdjustmentTypes',
+    response:
+      "{ data: { id: string; code: string; created_at: string; name: string; object: 'adjustment_type'; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list_adjustment_types\n\n`client.core.listAdjustmentTypes(): { data: object[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/core/adjustment-types`\n\nThis endpoint returns a paginated list of adjustment types.\nSupports cursor-based pagination and search by name.\n\n### Returns\n\n- `{ data: { id: string; code: string; created_at: string; name: string; object: 'adjustment_type'; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of AdjustmentType resources\n\n  - `data: { id: string; code: string; created_at: string; name: string; object: 'adjustment_type'; updated_at: string; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.core.listAdjustmentTypes();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.listAdjustmentTypes',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.listAdjustmentTypes();\n\nconsole.log(response.data);",
+      },
+      go: {
+        method: 'client.Core.ListAdjustmentTypes',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.ListAdjustmentTypes(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Data)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/adjustment-types \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/core/account-groups',
+    httpMethod: 'get',
+    summary: 'List Account Groups',
+    description:
+      'This endpoint returns a paginated list of account groups for the target account.\nSupports cursor-based pagination, filtering by type, and search by name or description.',
+    stainlessPath: '(resource) core.account_groups > (method) list',
+    qualified: 'client.core.accountGroups.list',
+    params: ["type?: 'pricing_group' | 'type_group';"],
+    response:
+      "{ data: { id: string; commission_status: 'commission_applied' | 'commission_exempt'; created_at: string; description: string; freight_status: 'free_freight' | 'billed_freight'; name: string; object: 'account_group'; type: 'pricing_group' | 'type_group'; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list\n\n`client.core.accountGroups.list(type?: 'pricing_group' | 'type_group'): { data: account_group[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/core/account-groups`\n\nThis endpoint returns a paginated list of account groups for the target account.\nSupports cursor-based pagination, filtering by type, and search by name or description.\n\n### Parameters\n\n- `type?: 'pricing_group' | 'type_group'`\n  Filter by account group type code.\n\n### Returns\n\n- `{ data: { id: string; commission_status: 'commission_applied' | 'commission_exempt'; created_at: string; description: string; freight_status: 'free_freight' | 'billed_freight'; name: string; object: 'account_group'; type: 'pricing_group' | 'type_group'; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of AccountGroup resources\n\n  - `data: { id: string; commission_status: 'commission_applied' | 'commission_exempt'; created_at: string; description: string; freight_status: 'free_freight' | 'billed_freight'; name: string; object: 'account_group'; type: 'pricing_group' | 'type_group'; updated_at: string; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountGroups = await client.core.accountGroups.list();\n\nconsole.log(accountGroups);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountGroups.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountGroups = await client.core.accountGroups.list();\n\nconsole.log(accountGroups.data);",
+      },
+      go: {
+        method: 'client.Core.AccountGroups.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountGroups, err := client.Core.AccountGroups.List(context.TODO(), augno.CoreAccountGroupListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountGroups.Data)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-groups \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/core/account-groups',
+    httpMethod: 'post',
+    summary: 'Create Account Group',
+    description: 'This endpoint creates a new account group.',
+    stainlessPath: '(resource) core.account_groups > (method) create',
+    qualified: 'client.core.accountGroups.create',
+    params: [
+      "commission_status: 'commission_applied' | 'commission_exempt';",
+      "freight_status: 'free_freight' | 'billed_freight';",
+      'name: string;',
+      "type: 'pricing_group' | 'type_group';",
+      'description?: string;',
+    ],
+    response:
+      "{ id: string; commission_status: 'commission_applied' | 'commission_exempt'; created_at: string; description: string; freight_status: 'free_freight' | 'billed_freight'; name: string; object: 'account_group'; type: 'pricing_group' | 'type_group'; updated_at: string; }",
+    markdown:
+      "## create\n\n`client.core.accountGroups.create(commission_status: 'commission_applied' | 'commission_exempt', freight_status: 'free_freight' | 'billed_freight', name: string, type: 'pricing_group' | 'type_group', description?: string): { id: string; commission_status: 'commission_applied' | 'commission_exempt'; created_at: string; description: string; freight_status: 'free_freight' | 'billed_freight'; name: string; object: 'account_group'; type: 'pricing_group' | 'type_group'; updated_at: string; }`\n\n**post** `/v1/core/account-groups`\n\nThis endpoint creates a new account group.\n\n### Parameters\n\n- `commission_status: 'commission_applied' | 'commission_exempt'`\n  The commission status code.\n\n- `freight_status: 'free_freight' | 'billed_freight'`\n  The freight status code.\n\n- `name: string`\n  The display name of the account group.\n\n- `type: 'pricing_group' | 'type_group'`\n  The account group type code.\n\n- `description?: string`\n  An optional description of the account group.\n\n### Returns\n\n- `{ id: string; commission_status: 'commission_applied' | 'commission_exempt'; created_at: string; description: string; freight_status: 'free_freight' | 'billed_freight'; name: string; object: 'account_group'; type: 'pricing_group' | 'type_group'; updated_at: string; }`\n  AccountGroup represents an account group used for organizing customer accounts.\n\n  - `id: string`\n  - `commission_status: 'commission_applied' | 'commission_exempt'`\n  - `created_at: string`\n  - `description: string`\n  - `freight_status: 'free_freight' | 'billed_freight'`\n  - `name: string`\n  - `object: 'account_group'`\n  - `type: 'pricing_group' | 'type_group'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountGroup = await client.core.accountGroups.create({\n  commission_status: 'commission_applied',\n  freight_status: 'billed_freight',\n  name: 'Wholesale Customers',\n  type: 'pricing_group',\n});\n\nconsole.log(accountGroup);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountGroups.create',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountGroup = await client.core.accountGroups.create({\n  commission_status: 'commission_applied',\n  freight_status: 'billed_freight',\n  name: 'Wholesale Customers',\n  type: 'pricing_group',\n});\n\nconsole.log(accountGroup.id);",
+      },
+      go: {
+        method: 'client.Core.AccountGroups.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountGroup, err := client.Core.AccountGroups.New(context.TODO(), augno.CoreAccountGroupNewParams{\n\t\tCommissionStatus: augno.CoreAccountGroupNewParamsCommissionStatusCommissionApplied,\n\t\tFreightStatus:    augno.CoreAccountGroupNewParamsFreightStatusBilledFreight,\n\t\tName:             "Wholesale Customers",\n\t\tType:             augno.CoreAccountGroupNewParamsTypePricingGroup,\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountGroup.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-groups \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "commission_status": "commission_applied",\n          "freight_status": "billed_freight",\n          "name": "Wholesale Customers",\n          "type": "pricing_group"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/v1/core/account-groups/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete Account Group',
+    description: 'This endpoint deletes an account group.',
+    stainlessPath: '(resource) core.account_groups > (method) delete',
+    qualified: 'client.core.accountGroups.delete',
+    params: ['id: string;'],
+    response: '{  }',
+    markdown:
+      "## delete\n\n`client.core.accountGroups.delete(id: string): {  }`\n\n**delete** `/v1/core/account-groups/{id}`\n\nThis endpoint deletes an account group.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{  }`\n\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountGroup = await client.core.accountGroups.delete('id');\n\nconsole.log(accountGroup);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountGroups.delete',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountGroup = await client.core.accountGroups.delete('id');\n\nconsole.log(accountGroup);",
+      },
+      go: {
+        method: 'client.Core.AccountGroups.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountGroup, err := client.Core.AccountGroups.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountGroup)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-groups/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/core/account-groups/{id}',
+    httpMethod: 'get',
+    summary: 'Get Account Group',
+    description: 'This endpoint returns a single account group by its ID.',
+    stainlessPath: '(resource) core.account_groups > (method) retrieve',
+    qualified: 'client.core.accountGroups.retrieve',
+    params: ['id: string;'],
+    response:
+      "{ id: string; commission_status: 'commission_applied' | 'commission_exempt'; created_at: string; description: string; freight_status: 'free_freight' | 'billed_freight'; name: string; object: 'account_group'; type: 'pricing_group' | 'type_group'; updated_at: string; }",
+    markdown:
+      "## retrieve\n\n`client.core.accountGroups.retrieve(id: string): { id: string; commission_status: 'commission_applied' | 'commission_exempt'; created_at: string; description: string; freight_status: 'free_freight' | 'billed_freight'; name: string; object: 'account_group'; type: 'pricing_group' | 'type_group'; updated_at: string; }`\n\n**get** `/v1/core/account-groups/{id}`\n\nThis endpoint returns a single account group by its ID.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; commission_status: 'commission_applied' | 'commission_exempt'; created_at: string; description: string; freight_status: 'free_freight' | 'billed_freight'; name: string; object: 'account_group'; type: 'pricing_group' | 'type_group'; updated_at: string; }`\n  AccountGroup represents an account group used for organizing customer accounts.\n\n  - `id: string`\n  - `commission_status: 'commission_applied' | 'commission_exempt'`\n  - `created_at: string`\n  - `description: string`\n  - `freight_status: 'free_freight' | 'billed_freight'`\n  - `name: string`\n  - `object: 'account_group'`\n  - `type: 'pricing_group' | 'type_group'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountGroup = await client.core.accountGroups.retrieve('id');\n\nconsole.log(accountGroup);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountGroups.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountGroup = await client.core.accountGroups.retrieve('id');\n\nconsole.log(accountGroup.id);",
+      },
+      go: {
+        method: 'client.Core.AccountGroups.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountGroup, err := client.Core.AccountGroups.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountGroup.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-groups/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/v1/core/account-groups/{id}',
+    httpMethod: 'patch',
+    summary: 'Update Account Group',
+    description:
+      'This endpoint partially updates an account group.\nOnly provided fields are updated; absent fields retain their current values.',
+    stainlessPath: '(resource) core.account_groups > (method) update',
+    qualified: 'client.core.accountGroups.update',
+    params: [
+      'id: string;',
+      "commission_status?: 'commission_applied' | 'commission_exempt';",
+      'description?: string;',
+      "freight_status?: 'free_freight' | 'billed_freight';",
+      'name?: string;',
+    ],
+    response:
+      "{ id: string; commission_status: 'commission_applied' | 'commission_exempt'; created_at: string; description: string; freight_status: 'free_freight' | 'billed_freight'; name: string; object: 'account_group'; type: 'pricing_group' | 'type_group'; updated_at: string; }",
+    markdown:
+      "## update\n\n`client.core.accountGroups.update(id: string, commission_status?: 'commission_applied' | 'commission_exempt', description?: string, freight_status?: 'free_freight' | 'billed_freight', name?: string): { id: string; commission_status: 'commission_applied' | 'commission_exempt'; created_at: string; description: string; freight_status: 'free_freight' | 'billed_freight'; name: string; object: 'account_group'; type: 'pricing_group' | 'type_group'; updated_at: string; }`\n\n**patch** `/v1/core/account-groups/{id}`\n\nThis endpoint partially updates an account group.\nOnly provided fields are updated; absent fields retain their current values.\n\n### Parameters\n\n- `id: string`\n\n- `commission_status?: 'commission_applied' | 'commission_exempt'`\n  The commission status code.\n\n- `description?: string`\n  An optional description of the account group.\n\n- `freight_status?: 'free_freight' | 'billed_freight'`\n  The freight status code.\n\n- `name?: string`\n  The display name of the account group.\n\n### Returns\n\n- `{ id: string; commission_status: 'commission_applied' | 'commission_exempt'; created_at: string; description: string; freight_status: 'free_freight' | 'billed_freight'; name: string; object: 'account_group'; type: 'pricing_group' | 'type_group'; updated_at: string; }`\n  AccountGroup represents an account group used for organizing customer accounts.\n\n  - `id: string`\n  - `commission_status: 'commission_applied' | 'commission_exempt'`\n  - `created_at: string`\n  - `description: string`\n  - `freight_status: 'free_freight' | 'billed_freight'`\n  - `name: string`\n  - `object: 'account_group'`\n  - `type: 'pricing_group' | 'type_group'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountGroup = await client.core.accountGroups.update('id');\n\nconsole.log(accountGroup);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountGroups.update',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountGroup = await client.core.accountGroups.update('id', {\n  name: 'Updated Wholesale Customers',\n});\n\nconsole.log(accountGroup.id);",
+      },
+      go: {
+        method: 'client.Core.AccountGroups.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountGroup, err := client.Core.AccountGroups.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountGroupUpdateParams{\n\t\t\tName: augno.String("Updated Wholesale Customers"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountGroup.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-groups/$ID \\\n    -X PATCH \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/core/account-prices',
+    httpMethod: 'get',
+    summary: 'List Account Prices',
+    description:
+      'This endpoint returns a paginated list of account prices for the target account.\nSupports cursor-based pagination, search by recipient account name or external number, and filtering by recipient account ID.',
+    stainlessPath: '(resource) core.account_prices > (method) list',
+    qualified: 'client.core.accountPrices.list',
+    params: ['recipient_account_id?: string;'],
+    response:
+      "{ data: { id: string; attributes: light_attribute[]; categories: light_item_category[]; created_at: string; object: 'account_price'; product_line: light_product_line; rate: object; recipient_account: light_account; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list\n\n`client.core.accountPrices.list(recipient_account_id?: string): { data: account_price[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/core/account-prices`\n\nThis endpoint returns a paginated list of account prices for the target account.\nSupports cursor-based pagination, search by recipient account name or external number, and filtering by recipient account ID.\n\n### Parameters\n\n- `recipient_account_id?: string`\n  Filter by recipient account ID.\n\n### Returns\n\n- `{ data: { id: string; attributes: light_attribute[]; categories: light_item_category[]; created_at: string; object: 'account_price'; product_line: light_product_line; rate: object; recipient_account: light_account; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of AccountPrice resources\n\n  - `data: { id: string; attributes: { id: string; object: 'attribute'; text: string; }[]; categories: { id: string; name: string; object: 'item_category'; }[]; created_at: string; object: 'account_price'; product_line: { id: string; name: string; object: 'product_line'; }; rate: { id: string; denominator_unit: object; numerator_unit: object; object: 'rate'; value: string; }; recipient_account: { id: string; name: string; object: 'account'; }; updated_at: string; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountPrices = await client.core.accountPrices.list();\n\nconsole.log(accountPrices);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountPrices.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountPrices = await client.core.accountPrices.list();\n\nconsole.log(accountPrices.data);",
+      },
+      go: {
+        method: 'client.Core.AccountPrices.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountPrices, err := client.Core.AccountPrices.List(context.TODO(), augno.CoreAccountPriceListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountPrices.Data)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-prices \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/core/account-prices',
+    httpMethod: 'post',
+    summary: 'Create Account Price',
+    description:
+      'This endpoint creates a new account price for a recipient (customer) account.\nThe price includes a rate value with numerator and denominator units, and can optionally be constrained to specific item categories and attributes.',
+    stainlessPath: '(resource) core.account_prices > (method) create',
+    qualified: 'client.core.accountPrices.create',
+    params: [
+      'attribute_ids: string[];',
+      'category_ids: string[];',
+      'product_line_id: string;',
+      'rate_denominator_unit_id: string;',
+      'rate_numerator_unit_id: string;',
+      'rate_value: string;',
+      'recipient_account_id: string;',
+      "include?: 'recipient_account' | 'product_line'[];",
+    ],
+    response:
+      "{ id: string; attributes: { id: string; object: 'attribute'; text: string; }[]; categories: { id: string; name: string; object: 'item_category'; }[]; created_at: string; object: 'account_price'; product_line: { id: string; name: string; object: 'product_line'; }; rate: { id: string; denominator_unit: object; numerator_unit: object; object: 'rate'; value: string; }; recipient_account: { id: string; name: string; object: 'account'; }; updated_at: string; }",
+    markdown:
+      "## create\n\n`client.core.accountPrices.create(attribute_ids: string[], category_ids: string[], product_line_id: string, rate_denominator_unit_id: string, rate_numerator_unit_id: string, rate_value: string, recipient_account_id: string, include?: 'recipient_account' | 'product_line'[]): { id: string; attributes: light_attribute[]; categories: light_item_category[]; created_at: string; object: 'account_price'; product_line: light_product_line; rate: object; recipient_account: light_account; updated_at: string; }`\n\n**post** `/v1/core/account-prices`\n\nThis endpoint creates a new account price for a recipient (customer) account.\nThe price includes a rate value with numerator and denominator units, and can optionally be constrained to specific item categories and attributes.\n\n### Parameters\n\n- `attribute_ids: string[]`\n  The IDs of attributes to constrain this price to.\n\n- `category_ids: string[]`\n  The IDs of item categories to constrain this price to.\n\n- `product_line_id: string`\n  The ID of the product line this price applies to.\n\n- `rate_denominator_unit_id: string`\n  The ID of the denominator unit for the rate.\n\n- `rate_numerator_unit_id: string`\n  The ID of the numerator unit for the rate.\n\n- `rate_value: string`\n  The rate value as a decimal string.\n\n- `recipient_account_id: string`\n  The ID of the recipient (customer) account.\n\n- `include?: 'recipient_account' | 'product_line'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; attributes: { id: string; object: 'attribute'; text: string; }[]; categories: { id: string; name: string; object: 'item_category'; }[]; created_at: string; object: 'account_price'; product_line: { id: string; name: string; object: 'product_line'; }; rate: { id: string; denominator_unit: object; numerator_unit: object; object: 'rate'; value: string; }; recipient_account: { id: string; name: string; object: 'account'; }; updated_at: string; }`\n  AccountPrice represents a customer-specific price for a product line.\n\n  - `id: string`\n  - `attributes: { id: string; object: 'attribute'; text: string; }[]`\n  - `categories: { id: string; name: string; object: 'item_category'; }[]`\n  - `created_at: string`\n  - `object: 'account_price'`\n  - `product_line: { id: string; name: string; object: 'product_line'; }`\n  - `rate: { id: string; denominator_unit: { id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }; numerator_unit: { id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }; object: 'rate'; value: string; }`\n  - `recipient_account: { id: string; name: string; object: 'account'; }`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountPrice = await client.core.accountPrices.create({\n  attribute_ids: ['at_01jm4r6700f8nwq3v5hx2d9ktp'],\n  category_ids: ['ic_01jm4r6700f8nwq3v5hx2d9ktp'],\n  product_line_id: 'pl_01jm4r6700f8nwq3v5hx2d9ktp',\n  rate_denominator_unit_id: 'un_01jm4r6700f8nwq3v5hx2d9ktp',\n  rate_numerator_unit_id: 'un_01jm4r6700f8nwq3v5hx2d9ktp',\n  rate_value: '25.500000000000000000000000000000',\n  recipient_account_id: 'ac_01gf7a8200eaj8fke1xvw4h50x',\n});\n\nconsole.log(accountPrice);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountPrices.create',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountPrice = await client.core.accountPrices.create({\n  attribute_ids: ['at_01jm4r6700f8nwq3v5hx2d9ktp'],\n  category_ids: ['ic_01jm4r6700f8nwq3v5hx2d9ktp'],\n  product_line_id: 'pl_01jm4r6700f8nwq3v5hx2d9ktp',\n  rate_denominator_unit_id: 'un_01jm4r6700f8nwq3v5hx2d9ktp',\n  rate_numerator_unit_id: 'un_01jm4r6700f8nwq3v5hx2d9ktp',\n  rate_value: '25.500000000000000000000000000000',\n  recipient_account_id: 'ac_01gf7a8200eaj8fke1xvw4h50x',\n});\n\nconsole.log(accountPrice.id);",
+      },
+      go: {
+        method: 'client.Core.AccountPrices.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountPrice, err := client.Core.AccountPrices.New(context.TODO(), augno.CoreAccountPriceNewParams{\n\t\tAttributeIDs:          []string{"at_01jm4r6700f8nwq3v5hx2d9ktp"},\n\t\tCategoryIDs:           []string{"ic_01jm4r6700f8nwq3v5hx2d9ktp"},\n\t\tProductLineID:         "pl_01jm4r6700f8nwq3v5hx2d9ktp",\n\t\tRateDenominatorUnitID: "un_01jm4r6700f8nwq3v5hx2d9ktp",\n\t\tRateNumeratorUnitID:   "un_01jm4r6700f8nwq3v5hx2d9ktp",\n\t\tRateValue:             "25.500000000000000000000000000000",\n\t\tRecipientAccountID:    "ac_01gf7a8200eaj8fke1xvw4h50x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountPrice.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-prices \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "attribute_ids": [\n            "at_01jm4r6700f8nwq3v5hx2d9ktp"\n          ],\n          "category_ids": [\n            "ic_01jm4r6700f8nwq3v5hx2d9ktp"\n          ],\n          "product_line_id": "pl_01jm4r6700f8nwq3v5hx2d9ktp",\n          "rate_denominator_unit_id": "un_01jm4r6700f8nwq3v5hx2d9ktp",\n          "rate_numerator_unit_id": "un_01jm4r6700f8nwq3v5hx2d9ktp",\n          "rate_value": "25.500000000000000000000000000000",\n          "recipient_account_id": "ac_01gf7a8200eaj8fke1xvw4h50x"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/v1/core/account-prices/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete Account Price',
+    description:
+      'This endpoint deletes an account price.\nAssociated category constraints, attribute constraints, and the rate record are also removed.',
+    stainlessPath: '(resource) core.account_prices > (method) delete',
+    qualified: 'client.core.accountPrices.delete',
+    params: ['id: string;'],
+    response: '{  }',
+    markdown:
+      "## delete\n\n`client.core.accountPrices.delete(id: string): {  }`\n\n**delete** `/v1/core/account-prices/{id}`\n\nThis endpoint deletes an account price.\nAssociated category constraints, attribute constraints, and the rate record are also removed.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{  }`\n\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountPrice = await client.core.accountPrices.delete('id');\n\nconsole.log(accountPrice);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountPrices.delete',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountPrice = await client.core.accountPrices.delete('id');\n\nconsole.log(accountPrice);",
+      },
+      go: {
+        method: 'client.Core.AccountPrices.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountPrice, err := client.Core.AccountPrices.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountPrice)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-prices/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/core/account-prices/{id}',
+    httpMethod: 'get',
+    summary: 'Get Account Price',
+    description:
+      'This endpoint returns a single account price by its ID.\nThe account price must belong to the requesting account.',
+    stainlessPath: '(resource) core.account_prices > (method) retrieve',
+    qualified: 'client.core.accountPrices.retrieve',
+    params: ['id: string;', "include?: 'recipient_account' | 'product_line'[];"],
+    response:
+      "{ id: string; attributes: { id: string; object: 'attribute'; text: string; }[]; categories: { id: string; name: string; object: 'item_category'; }[]; created_at: string; object: 'account_price'; product_line: { id: string; name: string; object: 'product_line'; }; rate: { id: string; denominator_unit: object; numerator_unit: object; object: 'rate'; value: string; }; recipient_account: { id: string; name: string; object: 'account'; }; updated_at: string; }",
+    markdown:
+      "## retrieve\n\n`client.core.accountPrices.retrieve(id: string, include?: 'recipient_account' | 'product_line'[]): { id: string; attributes: light_attribute[]; categories: light_item_category[]; created_at: string; object: 'account_price'; product_line: light_product_line; rate: object; recipient_account: light_account; updated_at: string; }`\n\n**get** `/v1/core/account-prices/{id}`\n\nThis endpoint returns a single account price by its ID.\nThe account price must belong to the requesting account.\n\n### Parameters\n\n- `id: string`\n\n- `include?: 'recipient_account' | 'product_line'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; attributes: { id: string; object: 'attribute'; text: string; }[]; categories: { id: string; name: string; object: 'item_category'; }[]; created_at: string; object: 'account_price'; product_line: { id: string; name: string; object: 'product_line'; }; rate: { id: string; denominator_unit: object; numerator_unit: object; object: 'rate'; value: string; }; recipient_account: { id: string; name: string; object: 'account'; }; updated_at: string; }`\n  AccountPrice represents a customer-specific price for a product line.\n\n  - `id: string`\n  - `attributes: { id: string; object: 'attribute'; text: string; }[]`\n  - `categories: { id: string; name: string; object: 'item_category'; }[]`\n  - `created_at: string`\n  - `object: 'account_price'`\n  - `product_line: { id: string; name: string; object: 'product_line'; }`\n  - `rate: { id: string; denominator_unit: { id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }; numerator_unit: { id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }; object: 'rate'; value: string; }`\n  - `recipient_account: { id: string; name: string; object: 'account'; }`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountPrice = await client.core.accountPrices.retrieve('id');\n\nconsole.log(accountPrice);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountPrices.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountPrice = await client.core.accountPrices.retrieve('id');\n\nconsole.log(accountPrice.id);",
+      },
+      go: {
+        method: 'client.Core.AccountPrices.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountPrice, err := client.Core.AccountPrices.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountPriceGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountPrice.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-prices/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/v1/core/account-prices/{id}',
+    httpMethod: 'patch',
+    summary: 'Update Account Price',
+    description:
+      'This endpoint partially updates an account price.\nOnly provided fields are updated; absent fields retain their current values.\nIf category_ids or attribute_ids are provided, they replace the existing set entirely.',
+    stainlessPath: '(resource) core.account_prices > (method) update',
+    qualified: 'client.core.accountPrices.update',
+    params: [
+      'id: string;',
+      "include?: 'recipient_account' | 'product_line'[];",
+      'attribute_ids?: string[];',
+      'category_ids?: string[];',
+      'product_line_id?: string;',
+      'rate_denominator_unit_id?: string;',
+      'rate_numerator_unit_id?: string;',
+      'rate_value?: string;',
+      'recipient_account_id?: string;',
+    ],
+    response:
+      "{ id: string; attributes: { id: string; object: 'attribute'; text: string; }[]; categories: { id: string; name: string; object: 'item_category'; }[]; created_at: string; object: 'account_price'; product_line: { id: string; name: string; object: 'product_line'; }; rate: { id: string; denominator_unit: object; numerator_unit: object; object: 'rate'; value: string; }; recipient_account: { id: string; name: string; object: 'account'; }; updated_at: string; }",
+    markdown:
+      "## update\n\n`client.core.accountPrices.update(id: string, include?: 'recipient_account' | 'product_line'[], attribute_ids?: string[], category_ids?: string[], product_line_id?: string, rate_denominator_unit_id?: string, rate_numerator_unit_id?: string, rate_value?: string, recipient_account_id?: string): { id: string; attributes: light_attribute[]; categories: light_item_category[]; created_at: string; object: 'account_price'; product_line: light_product_line; rate: object; recipient_account: light_account; updated_at: string; }`\n\n**patch** `/v1/core/account-prices/{id}`\n\nThis endpoint partially updates an account price.\nOnly provided fields are updated; absent fields retain their current values.\nIf category_ids or attribute_ids are provided, they replace the existing set entirely.\n\n### Parameters\n\n- `id: string`\n\n- `include?: 'recipient_account' | 'product_line'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n- `attribute_ids?: string[]`\n  The IDs of attributes to constrain this price to. Replaces existing attributes.\n\n- `category_ids?: string[]`\n  The IDs of item categories to constrain this price to. Replaces existing categories.\n\n- `product_line_id?: string`\n  The ID of the product line this price applies to.\n\n- `rate_denominator_unit_id?: string`\n  The ID of the denominator unit for the rate.\n\n- `rate_numerator_unit_id?: string`\n  The ID of the numerator unit for the rate.\n\n- `rate_value?: string`\n  The rate value as a decimal string.\n\n- `recipient_account_id?: string`\n  The ID of the recipient (customer) account.\n\n### Returns\n\n- `{ id: string; attributes: { id: string; object: 'attribute'; text: string; }[]; categories: { id: string; name: string; object: 'item_category'; }[]; created_at: string; object: 'account_price'; product_line: { id: string; name: string; object: 'product_line'; }; rate: { id: string; denominator_unit: object; numerator_unit: object; object: 'rate'; value: string; }; recipient_account: { id: string; name: string; object: 'account'; }; updated_at: string; }`\n  AccountPrice represents a customer-specific price for a product line.\n\n  - `id: string`\n  - `attributes: { id: string; object: 'attribute'; text: string; }[]`\n  - `categories: { id: string; name: string; object: 'item_category'; }[]`\n  - `created_at: string`\n  - `object: 'account_price'`\n  - `product_line: { id: string; name: string; object: 'product_line'; }`\n  - `rate: { id: string; denominator_unit: { id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }; numerator_unit: { id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }; object: 'rate'; value: string; }`\n  - `recipient_account: { id: string; name: string; object: 'account'; }`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountPrice = await client.core.accountPrices.update('id');\n\nconsole.log(accountPrice);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountPrices.update',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountPrice = await client.core.accountPrices.update('id', {\n  rate_value: '30.000000000000000000000000000000',\n});\n\nconsole.log(accountPrice.id);",
+      },
+      go: {
+        method: 'client.Core.AccountPrices.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountPrice, err := client.Core.AccountPrices.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountPriceUpdateParams{\n\t\t\tRateValue: augno.String("30.000000000000000000000000000000"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountPrice.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-prices/$ID \\\n    -X PATCH \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/core/account-statuses',
+    httpMethod: 'get',
+    summary: 'List Account Statuses',
+    description:
+      'This endpoint returns a paginated list of account statuses.\nAccount statuses are global lookup values used when setting account relationship statuses.',
+    stainlessPath: '(resource) core.account_statuses > (method) list',
+    qualified: 'client.core.accountStatuses.list',
+    response:
+      "{ data: { id: string; code: 'normal' | 'preferred' | 'hold_shipment' | 'hold_all'; created_at: string; name: string; object: 'account_status'; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list\n\n`client.core.accountStatuses.list(): { data: account_status[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/core/account-statuses`\n\nThis endpoint returns a paginated list of account statuses.\nAccount statuses are global lookup values used when setting account relationship statuses.\n\n### Returns\n\n- `{ data: { id: string; code: 'normal' | 'preferred' | 'hold_shipment' | 'hold_all'; created_at: string; name: string; object: 'account_status'; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of AccountStatus resources\n\n  - `data: { id: string; code: 'normal' | 'preferred' | 'hold_shipment' | 'hold_all'; created_at: string; name: string; object: 'account_status'; updated_at: string; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountStatuses = await client.core.accountStatuses.list();\n\nconsole.log(accountStatuses);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountStatuses.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountStatuses = await client.core.accountStatuses.list();\n\nconsole.log(accountStatuses.data);",
+      },
+      go: {
+        method: 'client.Core.AccountStatuses.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountStatuses, err := client.Core.AccountStatuses.List(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountStatuses.Data)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-statuses \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/core/account-statuses/{id}',
+    httpMethod: 'get',
+    summary: 'Get Account Status',
+    description: 'This endpoint returns a single account status by its ID.',
+    stainlessPath: '(resource) core.account_statuses > (method) retrieve',
+    qualified: 'client.core.accountStatuses.retrieve',
+    params: ['id: string;'],
+    response:
+      "{ id: string; code: 'normal' | 'preferred' | 'hold_shipment' | 'hold_all'; created_at: string; name: string; object: 'account_status'; updated_at: string; }",
+    markdown:
+      "## retrieve\n\n`client.core.accountStatuses.retrieve(id: string): { id: string; code: 'normal' | 'preferred' | 'hold_shipment' | 'hold_all'; created_at: string; name: string; object: 'account_status'; updated_at: string; }`\n\n**get** `/v1/core/account-statuses/{id}`\n\nThis endpoint returns a single account status by its ID.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; code: 'normal' | 'preferred' | 'hold_shipment' | 'hold_all'; created_at: string; name: string; object: 'account_status'; updated_at: string; }`\n  AccountStatus represents an account status lookup value.\n\n  - `id: string`\n  - `code: 'normal' | 'preferred' | 'hold_shipment' | 'hold_all'`\n  - `created_at: string`\n  - `name: string`\n  - `object: 'account_status'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountStatus = await client.core.accountStatuses.retrieve('id');\n\nconsole.log(accountStatus);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountStatuses.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountStatus = await client.core.accountStatuses.retrieve('id');\n\nconsole.log(accountStatus.id);",
+      },
+      go: {
+        method: 'client.Core.AccountStatuses.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountStatus, err := client.Core.AccountStatuses.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountStatus.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-statuses/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/core/account-users',
+    httpMethod: 'get',
+    summary: 'List Account Users',
+    description:
+      'This endpoint returns a paginated list of account users for the target account.\nSupports cursor-based pagination, filtering by role type, and search by name, email, or username.',
+    stainlessPath: '(resource) core.account_users > (method) list',
+    qualified: 'client.core.accountUsers.list',
+    params: [
+      'include_removed?: boolean;',
+      "role_type?: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent';",
+    ],
+    response:
+      "{ data: { id: string; created_at: string; department: object; email: string; image_url: string; is_verified: boolean; last_used_at: string; name: string; object: 'account_user'; role: light_role; status: 'active' | 'disabled' | 'removed'; updated_at: string; username: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list\n\n`client.core.accountUsers.list(include_removed?: boolean, role_type?: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'): { data: account_user[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/core/account-users`\n\nThis endpoint returns a paginated list of account users for the target account.\nSupports cursor-based pagination, filtering by role type, and search by name, email, or username.\n\n### Parameters\n\n- `include_removed?: boolean`\n  Whether to include removed account users in the results.\n\n- `role_type?: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'`\n  Filter by role type code.\n\n### Returns\n\n- `{ data: { id: string; created_at: string; department: object; email: string; image_url: string; is_verified: boolean; last_used_at: string; name: string; object: 'account_user'; role: light_role; status: 'active' | 'disabled' | 'removed'; updated_at: string; username: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of AccountUser resources\n\n  - `data: { id: string; created_at: string; department: { id: string; name: string; object: 'department'; }; email: string; image_url: string; is_verified: boolean; last_used_at: string; name: string; object: 'account_user'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; status: 'active' | 'disabled' | 'removed'; updated_at: string; username: string; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountUsers = await client.core.accountUsers.list();\n\nconsole.log(accountUsers);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountUsers.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountUsers = await client.core.accountUsers.list();\n\nconsole.log(accountUsers.data);",
+      },
+      go: {
+        method: 'client.Core.AccountUsers.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountUsers, err := client.Core.AccountUsers.List(context.TODO(), augno.CoreAccountUserListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountUsers.Data)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-users \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/core/account-users',
+    httpMethod: 'post',
+    summary: 'Create Account User',
+    description: 'This endpoint creates a new account user and invites them to the account.',
+    stainlessPath: '(resource) core.account_users > (method) create',
+    qualified: 'client.core.accountUsers.create',
+    params: [
+      'custom_email: string;',
+      'name: string;',
+      'password: string;',
+      'receives_invoice_notifications: boolean;',
+      'receives_order_acknowledgements: boolean;',
+      'receives_purchase_order_submission_notifications: boolean;',
+      'username: string;',
+      'department_id?: string;',
+      'is_sales_rep?: boolean;',
+      'role_id?: string;',
+    ],
+    response:
+      "{ id: string; created_at: string; department: { id: string; name: string; object: 'department'; }; email: string; image_url: string; is_verified: boolean; last_used_at: string; name: string; object: 'account_user'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; status: 'active' | 'disabled' | 'removed'; updated_at: string; username: string; }",
+    markdown:
+      "## create\n\n`client.core.accountUsers.create(custom_email: string, name: string, password: string, receives_invoice_notifications: boolean, receives_order_acknowledgements: boolean, receives_purchase_order_submission_notifications: boolean, username: string, department_id?: string, is_sales_rep?: boolean, role_id?: string): { id: string; created_at: string; department: object; email: string; image_url: string; is_verified: boolean; last_used_at: string; name: string; object: 'account_user'; role: light_role; status: 'active' | 'disabled' | 'removed'; updated_at: string; username: string; }`\n\n**post** `/v1/core/account-users`\n\nThis endpoint creates a new account user and invites them to the account.\n\n### Parameters\n\n- `custom_email: string`\n  The user's email address.\n\n- `name: string`\n  The user's display name.\n\n- `password: string`\n  The user's password.\n\n- `receives_invoice_notifications: boolean`\n  Whether the user receives invoice notifications.\n\n- `receives_order_acknowledgements: boolean`\n  Whether the user receives order acknowledgement notifications.\n\n- `receives_purchase_order_submission_notifications: boolean`\n  Whether the user receives purchase order submission notifications.\n\n- `username: string`\n  The user's username.\n\n- `department_id?: string`\n  The ID of the department to assign. Expandable.\n\n- `is_sales_rep?: boolean`\n  Whether the user is a sales representative.\n\n- `role_id?: string`\n  The ID of the role to assign. Expandable.\n\n### Returns\n\n- `{ id: string; created_at: string; department: { id: string; name: string; object: 'department'; }; email: string; image_url: string; is_verified: boolean; last_used_at: string; name: string; object: 'account_user'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; status: 'active' | 'disabled' | 'removed'; updated_at: string; username: string; }`\n  AccountUser represents an account user with their profile, role, and department.\n\n  - `id: string`\n  - `created_at: string`\n  - `department: { id: string; name: string; object: 'department'; }`\n  - `email: string`\n  - `image_url: string`\n  - `is_verified: boolean`\n  - `last_used_at: string`\n  - `name: string`\n  - `object: 'account_user'`\n  - `role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }`\n  - `status: 'active' | 'disabled' | 'removed'`\n  - `updated_at: string`\n  - `username: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountUser = await client.core.accountUsers.create({\n  custom_email: 'custom_email',\n  name: 'name',\n  password: 'password',\n  receives_invoice_notifications: true,\n  receives_order_acknowledgements: true,\n  receives_purchase_order_submission_notifications: true,\n  username: 'username',\n});\n\nconsole.log(accountUser);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountUsers.create',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountUser = await client.core.accountUsers.create({\n  custom_email: 'custom_email',\n  name: 'name',\n  password: 'password',\n  receives_invoice_notifications: true,\n  receives_order_acknowledgements: true,\n  receives_purchase_order_submission_notifications: true,\n  username: 'username',\n});\n\nconsole.log(accountUser.id);",
+      },
+      go: {
+        method: 'client.Core.AccountUsers.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountUser, err := client.Core.AccountUsers.New(context.TODO(), augno.CoreAccountUserNewParams{\n\t\tCustomEmail:                   augno.String("custom_email"),\n\t\tName:                          augno.String("name"),\n\t\tPassword:                      augno.String("password"),\n\t\tReceivesInvoiceNotifications:  true,\n\t\tReceivesOrderAcknowledgements: true,\n\t\tReceivesPurchaseOrderSubmissionNotifications: true,\n\t\tUsername: augno.String("username"),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountUser.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-users \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "custom_email": "custom_email",\n          "name": "name",\n          "password": "password",\n          "receives_invoice_notifications": true,\n          "receives_order_acknowledgements": true,\n          "receives_purchase_order_submission_notifications": true,\n          "username": "username"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/v1/core/account-users/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete Account User',
+    description: 'This endpoint soft-deletes an account user, setting their status to removed.',
+    stainlessPath: '(resource) core.account_users > (method) delete',
+    qualified: 'client.core.accountUsers.delete',
+    params: ['id: string;'],
+    response: '{  }',
+    markdown:
+      "## delete\n\n`client.core.accountUsers.delete(id: string): {  }`\n\n**delete** `/v1/core/account-users/{id}`\n\nThis endpoint soft-deletes an account user, setting their status to removed.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{  }`\n\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountUser = await client.core.accountUsers.delete('id');\n\nconsole.log(accountUser);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountUsers.delete',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountUser = await client.core.accountUsers.delete('id');\n\nconsole.log(accountUser);",
+      },
+      go: {
+        method: 'client.Core.AccountUsers.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountUser, err := client.Core.AccountUsers.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountUser)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-users/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/core/account-users/{id}',
+    httpMethod: 'get',
+    summary: 'Get Account User',
+    description: 'This endpoint returns a single account user by their ID.',
+    stainlessPath: '(resource) core.account_users > (method) retrieve',
+    qualified: 'client.core.accountUsers.retrieve',
+    params: ['id: string;', "include?: 'role' | 'department'[];"],
+    response:
+      "{ id: string; created_at: string; department: { id: string; name: string; object: 'department'; }; email: string; image_url: string; is_verified: boolean; last_used_at: string; name: string; object: 'account_user'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; status: 'active' | 'disabled' | 'removed'; updated_at: string; username: string; }",
+    markdown:
+      "## retrieve\n\n`client.core.accountUsers.retrieve(id: string, include?: 'role' | 'department'[]): { id: string; created_at: string; department: object; email: string; image_url: string; is_verified: boolean; last_used_at: string; name: string; object: 'account_user'; role: light_role; status: 'active' | 'disabled' | 'removed'; updated_at: string; username: string; }`\n\n**get** `/v1/core/account-users/{id}`\n\nThis endpoint returns a single account user by their ID.\n\n### Parameters\n\n- `id: string`\n\n- `include?: 'role' | 'department'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; created_at: string; department: { id: string; name: string; object: 'department'; }; email: string; image_url: string; is_verified: boolean; last_used_at: string; name: string; object: 'account_user'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; status: 'active' | 'disabled' | 'removed'; updated_at: string; username: string; }`\n  AccountUser represents an account user with their profile, role, and department.\n\n  - `id: string`\n  - `created_at: string`\n  - `department: { id: string; name: string; object: 'department'; }`\n  - `email: string`\n  - `image_url: string`\n  - `is_verified: boolean`\n  - `last_used_at: string`\n  - `name: string`\n  - `object: 'account_user'`\n  - `role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }`\n  - `status: 'active' | 'disabled' | 'removed'`\n  - `updated_at: string`\n  - `username: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountUser = await client.core.accountUsers.retrieve('id');\n\nconsole.log(accountUser);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountUsers.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountUser = await client.core.accountUsers.retrieve('id');\n\nconsole.log(accountUser.id);",
+      },
+      go: {
+        method: 'client.Core.AccountUsers.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountUser, err := client.Core.AccountUsers.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountUserGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountUser.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-users/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/v1/core/account-users/{id}',
+    httpMethod: 'patch',
+    summary: 'Update Account User',
+    description:
+      'This endpoint partially updates an account user.\nOnly provided fields are updated; absent fields retain their current values.',
+    stainlessPath: '(resource) core.account_users > (method) update',
+    qualified: 'client.core.accountUsers.update',
+    params: [
+      'id: string;',
+      'custom_email?: string;',
+      'department_id?: string;',
+      'name?: string;',
+      'role_id?: string;',
+      'username?: string;',
+    ],
+    response:
+      "{ id: string; created_at: string; department: { id: string; name: string; object: 'department'; }; email: string; image_url: string; is_verified: boolean; last_used_at: string; name: string; object: 'account_user'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; status: 'active' | 'disabled' | 'removed'; updated_at: string; username: string; }",
+    markdown:
+      "## update\n\n`client.core.accountUsers.update(id: string, custom_email?: string, department_id?: string, name?: string, role_id?: string, username?: string): { id: string; created_at: string; department: object; email: string; image_url: string; is_verified: boolean; last_used_at: string; name: string; object: 'account_user'; role: light_role; status: 'active' | 'disabled' | 'removed'; updated_at: string; username: string; }`\n\n**patch** `/v1/core/account-users/{id}`\n\nThis endpoint partially updates an account user.\nOnly provided fields are updated; absent fields retain their current values.\n\n### Parameters\n\n- `id: string`\n\n- `custom_email?: string`\n  The user's email address.\n\n- `department_id?: string`\n  The ID of the department to assign.\n\n- `name?: string`\n  The user's display name.\n\n- `role_id?: string`\n  The ID of the role to assign.\n\n- `username?: string`\n  The user's username.\n\n### Returns\n\n- `{ id: string; created_at: string; department: { id: string; name: string; object: 'department'; }; email: string; image_url: string; is_verified: boolean; last_used_at: string; name: string; object: 'account_user'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; status: 'active' | 'disabled' | 'removed'; updated_at: string; username: string; }`\n  AccountUser represents an account user with their profile, role, and department.\n\n  - `id: string`\n  - `created_at: string`\n  - `department: { id: string; name: string; object: 'department'; }`\n  - `email: string`\n  - `image_url: string`\n  - `is_verified: boolean`\n  - `last_used_at: string`\n  - `name: string`\n  - `object: 'account_user'`\n  - `role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }`\n  - `status: 'active' | 'disabled' | 'removed'`\n  - `updated_at: string`\n  - `username: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountUser = await client.core.accountUsers.update('id');\n\nconsole.log(accountUser);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountUsers.update',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountUser = await client.core.accountUsers.update('id');\n\nconsole.log(accountUser.id);",
+      },
+      go: {
+        method: 'client.Core.AccountUsers.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountUser, err := client.Core.AccountUsers.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountUserUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountUser.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-users/$ID \\\n    -X PATCH \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'lock',
+    endpoint: '/v1/core/account-users/{id}/lock',
+    httpMethod: 'post',
+    summary: 'Lock Account User',
+    description: 'This endpoint locks an account user, preventing them from accessing the account.',
+    stainlessPath: '(resource) core.account_users > (method) lock',
+    qualified: 'client.core.accountUsers.lock',
+    params: ['id: string;'],
+    response: '{  }',
+    markdown:
+      "## lock\n\n`client.core.accountUsers.lock(id: string): {  }`\n\n**post** `/v1/core/account-users/{id}/lock`\n\nThis endpoint locks an account user, preventing them from accessing the account.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{  }`\n\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.core.accountUsers.lock('id');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountUsers.lock',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.accountUsers.lock('id');\n\nconsole.log(response);",
+      },
+      go: {
+        method: 'client.Core.AccountUsers.Lock',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.AccountUsers.Lock(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-users/$ID/lock \\\n    -X POST \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'update_notification_preferences',
+    endpoint: '/v1/core/account-users/{id}/notification-preferences',
+    httpMethod: 'put',
+    summary: 'Update Notification Preferences',
+    description:
+      'This endpoint updates notification preferences for an account user. Only valid for external (cross-account) targets.',
+    stainlessPath: '(resource) core.account_users > (method) update_notification_preferences',
+    qualified: 'client.core.accountUsers.updateNotificationPreferences',
+    params: ['id: string;', 'preferences: { enabled: boolean; notification_type_code: string; }[];'],
+    response:
+      "{ id: string; created_at: string; department: { id: string; name: string; object: 'department'; }; email: string; image_url: string; is_verified: boolean; last_used_at: string; name: string; object: 'account_user'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; status: 'active' | 'disabled' | 'removed'; updated_at: string; username: string; }",
+    markdown:
+      "## update_notification_preferences\n\n`client.core.accountUsers.updateNotificationPreferences(id: string, preferences: { enabled: boolean; notification_type_code: string; }[]): { id: string; created_at: string; department: object; email: string; image_url: string; is_verified: boolean; last_used_at: string; name: string; object: 'account_user'; role: light_role; status: 'active' | 'disabled' | 'removed'; updated_at: string; username: string; }`\n\n**put** `/v1/core/account-users/{id}/notification-preferences`\n\nThis endpoint updates notification preferences for an account user. Only valid for external (cross-account) targets.\n\n### Parameters\n\n- `id: string`\n\n- `preferences: { enabled: boolean; notification_type_code: string; }[]`\n  The notification preferences to update.\n\n### Returns\n\n- `{ id: string; created_at: string; department: { id: string; name: string; object: 'department'; }; email: string; image_url: string; is_verified: boolean; last_used_at: string; name: string; object: 'account_user'; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; status: 'active' | 'disabled' | 'removed'; updated_at: string; username: string; }`\n  AccountUser represents an account user with their profile, role, and department.\n\n  - `id: string`\n  - `created_at: string`\n  - `department: { id: string; name: string; object: 'department'; }`\n  - `email: string`\n  - `image_url: string`\n  - `is_verified: boolean`\n  - `last_used_at: string`\n  - `name: string`\n  - `object: 'account_user'`\n  - `role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }`\n  - `status: 'active' | 'disabled' | 'removed'`\n  - `updated_at: string`\n  - `username: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountUser = await client.core.accountUsers.updateNotificationPreferences('id', { preferences: [{ enabled: true, notification_type_code: 'notification_type_code' }] });\n\nconsole.log(accountUser);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountUsers.updateNotificationPreferences',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountUser = await client.core.accountUsers.updateNotificationPreferences('id', {\n  preferences: [{ enabled: true, notification_type_code: 'notification_type_code' }],\n});\n\nconsole.log(accountUser.id);",
+      },
+      go: {
+        method: 'client.Core.AccountUsers.UpdateNotificationPreferences',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountUser, err := client.Core.AccountUsers.UpdateNotificationPreferences(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountUserUpdateNotificationPreferencesParams{\n\t\t\tPreferences: []augno.CoreAccountUserUpdateNotificationPreferencesParamsPreference{{\n\t\t\t\tEnabled:              true,\n\t\t\t\tNotificationTypeCode: "notification_type_code",\n\t\t\t}},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountUser.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-users/$ID/notification-preferences \\\n    -X PUT \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "preferences": [\n            {\n              "enabled": true,\n              "notification_type_code": "notification_type_code"\n            }\n          ]\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'update_password',
+    endpoint: '/v1/core/account-users/{id}/password',
+    httpMethod: 'put',
+    summary: 'Update Account User Password',
+    description:
+      "This endpoint updates an account user's password. The requester must provide their own password for verification.",
+    stainlessPath: '(resource) core.account_users > (method) update_password',
+    qualified: 'client.core.accountUsers.updatePassword',
+    params: ['id: string;', 'new_password: string;', 'requester_password: string;'],
+    response: '{  }',
+    markdown:
+      "## update_password\n\n`client.core.accountUsers.updatePassword(id: string, new_password: string, requester_password: string): {  }`\n\n**put** `/v1/core/account-users/{id}/password`\n\nThis endpoint updates an account user's password. The requester must provide their own password for verification.\n\n### Parameters\n\n- `id: string`\n\n- `new_password: string`\n  The new password to set for the account user.\n\n- `requester_password: string`\n  The requester's current password for verification.\n\n### Returns\n\n- `{  }`\n\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.core.accountUsers.updatePassword('id', { new_password: 'new_password', requester_password: 'requester_password' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountUsers.updatePassword',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.accountUsers.updatePassword('id', {\n  new_password: 'new_password',\n  requester_password: 'requester_password',\n});\n\nconsole.log(response);",
+      },
+      go: {
+        method: 'client.Core.AccountUsers.UpdatePassword',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.AccountUsers.UpdatePassword(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountUserUpdatePasswordParams{\n\t\t\tNewPassword:       "new_password",\n\t\t\tRequesterPassword: "requester_password",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-users/$ID/password \\\n    -X PUT \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "new_password": "new_password",\n          "requester_password": "requester_password"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'restore',
+    endpoint: '/v1/core/account-users/{id}/restore',
+    httpMethod: 'post',
+    summary: 'Restore Account User',
+    description:
+      'This endpoint restores a previously removed account user, setting their status back to active.',
+    stainlessPath: '(resource) core.account_users > (method) restore',
+    qualified: 'client.core.accountUsers.restore',
+    params: ['id: string;'],
+    response: '{  }',
+    markdown:
+      "## restore\n\n`client.core.accountUsers.restore(id: string): {  }`\n\n**post** `/v1/core/account-users/{id}/restore`\n\nThis endpoint restores a previously removed account user, setting their status back to active.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{  }`\n\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.core.accountUsers.restore('id');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountUsers.restore',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.accountUsers.restore('id');\n\nconsole.log(response);",
+      },
+      go: {
+        method: 'client.Core.AccountUsers.Restore',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.AccountUsers.Restore(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-users/$ID/restore \\\n    -X POST \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'unlock',
+    endpoint: '/v1/core/account-users/{id}/unlock',
+    httpMethod: 'post',
+    summary: 'Unlock Account User',
+    description:
+      'This endpoint unlocks a previously locked account user, restoring their access to the account.',
+    stainlessPath: '(resource) core.account_users > (method) unlock',
+    qualified: 'client.core.accountUsers.unlock',
+    params: ['id: string;'],
+    response: '{  }',
+    markdown:
+      "## unlock\n\n`client.core.accountUsers.unlock(id: string): {  }`\n\n**post** `/v1/core/account-users/{id}/unlock`\n\nThis endpoint unlocks a previously locked account user, restoring their access to the account.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{  }`\n\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.core.accountUsers.unlock('id');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountUsers.unlock',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.accountUsers.unlock('id');\n\nconsole.log(response);",
+      },
+      go: {
+        method: 'client.Core.AccountUsers.Unlock',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.AccountUsers.Unlock(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-users/$ID/unlock \\\n    -X POST \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/core/account-users/{id}/sales-targets',
+    httpMethod: 'get',
+    summary: 'List Sales Targets',
+    description:
+      'This endpoint returns a paginated list of sales targets for a specific account user (sales rep).',
+    stainlessPath: '(resource) core.account_users.sales_targets > (method) list',
+    qualified: 'client.core.accountUsers.salesTargets.list',
+    params: ['id: string;', 'limit?: number;', 'offset?: number;'],
+    response:
+      "{ data: { id: string; amount: quantity; created_at: string; end_date: string; object: 'sales_target'; sales_rep: object; start_date: string; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list\n\n`client.core.accountUsers.salesTargets.list(id: string, limit?: number, offset?: number): { data: sales_target[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/core/account-users/{id}/sales-targets`\n\nThis endpoint returns a paginated list of sales targets for a specific account user (sales rep).\n\n### Parameters\n\n- `id: string`\n\n- `limit?: number`\n  Maximum number of results to return.\n\n- `offset?: number`\n  Number of results to skip.\n\n### Returns\n\n- `{ data: { id: string; amount: quantity; created_at: string; end_date: string; object: 'sales_target'; sales_rep: object; start_date: string; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of SalesTarget resources\n\n  - `data: { id: string; amount: { id: string; display_value: string; object: 'quantity'; unit: unit; value: string; }; created_at: string; end_date: string; object: 'sales_target'; sales_rep: { id: string; name: string; object: 'user'; }; start_date: string; updated_at: string; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst salesTargets = await client.core.accountUsers.salesTargets.list('id');\n\nconsole.log(salesTargets);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountUsers.salesTargets.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst salesTargets = await client.core.accountUsers.salesTargets.list('id');\n\nconsole.log(salesTargets.data);",
+      },
+      go: {
+        method: 'client.Core.AccountUsers.SalesTargets.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tsalesTargets, err := client.Core.AccountUsers.SalesTargets.List(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountUserSalesTargetListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", salesTargets.Data)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-users/$ID/sales-targets \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/core/account-users/{id}/sales-targets',
+    httpMethod: 'post',
+    summary: 'Create Sales Target',
+    description: 'This endpoint creates a new sales target for an account user (sales rep).',
+    stainlessPath: '(resource) core.account_users.sales_targets > (method) create',
+    qualified: 'client.core.accountUsers.salesTargets.create',
+    params: [
+      'id: string;',
+      'amount_unit_id: string;',
+      'amount_value: string;',
+      'end_date: string;',
+      'start_date: string;',
+    ],
+    response:
+      "{ id: string; amount: { id: string; display_value: string; object: 'quantity'; unit: unit; value: string; }; created_at: string; end_date: string; object: 'sales_target'; sales_rep: { id: string; name: string; object: 'user'; }; start_date: string; updated_at: string; }",
+    markdown:
+      "## create\n\n`client.core.accountUsers.salesTargets.create(id: string, amount_unit_id: string, amount_value: string, end_date: string, start_date: string): { id: string; amount: quantity; created_at: string; end_date: string; object: 'sales_target'; sales_rep: object; start_date: string; updated_at: string; }`\n\n**post** `/v1/core/account-users/{id}/sales-targets`\n\nThis endpoint creates a new sales target for an account user (sales rep).\n\n### Parameters\n\n- `id: string`\n\n- `amount_unit_id: string`\n  The unit ID for the target amount.\n\n- `amount_value: string`\n  The target amount value (decimal string).\n\n- `end_date: string`\n  The end date for the sales target.\n\n- `start_date: string`\n  The start date for the sales target.\n\n### Returns\n\n- `{ id: string; amount: { id: string; display_value: string; object: 'quantity'; unit: unit; value: string; }; created_at: string; end_date: string; object: 'sales_target'; sales_rep: { id: string; name: string; object: 'user'; }; start_date: string; updated_at: string; }`\n  SalesTarget represents a sales target for an account user.\n\n  - `id: string`\n  - `amount: { id: string; display_value: string; object: 'quantity'; unit: { id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }; value: string; }`\n  - `created_at: string`\n  - `end_date: string`\n  - `object: 'sales_target'`\n  - `sales_rep: { id: string; name: string; object: 'user'; }`\n  - `start_date: string`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst salesTarget = await client.core.accountUsers.salesTargets.create('id', {\n  amount_unit_id: 'amount_unit_id',\n  amount_value: 'amount_value',\n  end_date: '2019-12-27T18:11:19.117Z',\n  start_date: '2019-12-27T18:11:19.117Z',\n});\n\nconsole.log(salesTarget);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountUsers.salesTargets.create',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst salesTarget = await client.core.accountUsers.salesTargets.create('id', {\n  amount_unit_id: 'amount_unit_id',\n  amount_value: 'amount_value',\n  end_date: '2019-12-27T18:11:19.117Z',\n  start_date: '2019-12-27T18:11:19.117Z',\n});\n\nconsole.log(salesTarget.id);",
+      },
+      go: {
+        method: 'client.Core.AccountUsers.SalesTargets.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\t"time"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tsalesTarget, err := client.Core.AccountUsers.SalesTargets.New(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountUserSalesTargetNewParams{\n\t\t\tAmountUnitID: "amount_unit_id",\n\t\t\tAmountValue:  "amount_value",\n\t\t\tEndDate:      time.Now(),\n\t\t\tStartDate:    time.Now(),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", salesTarget.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-users/$ID/sales-targets \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "amount_unit_id": "amount_unit_id",\n          "amount_value": "amount_value",\n          "end_date": "2019-12-27T18:11:19.117Z",\n          "start_date": "2019-12-27T18:11:19.117Z"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'upsert',
+    endpoint: '/v1/core/account-users/{id}/sales-targets/{target_id}',
+    httpMethod: 'put',
+    summary: 'Upsert Sales Target',
+    description:
+      'This endpoint creates or updates a sales target by ID. If the target ID exists, it updates it; otherwise, it creates a new target with that ID.',
+    stainlessPath: '(resource) core.account_users.sales_targets > (method) upsert',
+    qualified: 'client.core.accountUsers.salesTargets.upsert',
+    params: [
+      'id: string;',
+      'target_id: string;',
+      'amount_unit_id: string;',
+      'amount_value: string;',
+      'end_date: string;',
+      'start_date: string;',
+    ],
+    response:
+      "{ id: string; amount: { id: string; display_value: string; object: 'quantity'; unit: unit; value: string; }; created_at: string; end_date: string; object: 'sales_target'; sales_rep: { id: string; name: string; object: 'user'; }; start_date: string; updated_at: string; }",
+    markdown:
+      "## upsert\n\n`client.core.accountUsers.salesTargets.upsert(id: string, target_id: string, amount_unit_id: string, amount_value: string, end_date: string, start_date: string): { id: string; amount: quantity; created_at: string; end_date: string; object: 'sales_target'; sales_rep: object; start_date: string; updated_at: string; }`\n\n**put** `/v1/core/account-users/{id}/sales-targets/{target_id}`\n\nThis endpoint creates or updates a sales target by ID. If the target ID exists, it updates it; otherwise, it creates a new target with that ID.\n\n### Parameters\n\n- `id: string`\n\n- `target_id: string`\n\n- `amount_unit_id: string`\n  The unit ID for the target amount.\n\n- `amount_value: string`\n  The target amount value (decimal string).\n\n- `end_date: string`\n  The end date for the sales target.\n\n- `start_date: string`\n  The start date for the sales target.\n\n### Returns\n\n- `{ id: string; amount: { id: string; display_value: string; object: 'quantity'; unit: unit; value: string; }; created_at: string; end_date: string; object: 'sales_target'; sales_rep: { id: string; name: string; object: 'user'; }; start_date: string; updated_at: string; }`\n  SalesTarget represents a sales target for an account user.\n\n  - `id: string`\n  - `amount: { id: string; display_value: string; object: 'quantity'; unit: { id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }; value: string; }`\n  - `created_at: string`\n  - `end_date: string`\n  - `object: 'sales_target'`\n  - `sales_rep: { id: string; name: string; object: 'user'; }`\n  - `start_date: string`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst salesTarget = await client.core.accountUsers.salesTargets.upsert('target_id', {\n  id: 'id',\n  amount_unit_id: 'amount_unit_id',\n  amount_value: 'amount_value',\n  end_date: '2019-12-27T18:11:19.117Z',\n  start_date: '2019-12-27T18:11:19.117Z',\n});\n\nconsole.log(salesTarget);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accountUsers.salesTargets.upsert',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst salesTarget = await client.core.accountUsers.salesTargets.upsert('target_id', {\n  id: 'id',\n  amount_unit_id: 'amount_unit_id',\n  amount_value: 'amount_value',\n  end_date: '2019-12-27T18:11:19.117Z',\n  start_date: '2019-12-27T18:11:19.117Z',\n});\n\nconsole.log(salesTarget.id);",
+      },
+      go: {
+        method: 'client.Core.AccountUsers.SalesTargets.Upsert',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\t"time"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tsalesTarget, err := client.Core.AccountUsers.SalesTargets.Upsert(\n\t\tcontext.TODO(),\n\t\t"target_id",\n\t\taugno.CoreAccountUserSalesTargetUpsertParams{\n\t\t\tID:           "id",\n\t\t\tAmountUnitID: "amount_unit_id",\n\t\t\tAmountValue:  "amount_value",\n\t\t\tEndDate:      time.Now(),\n\t\t\tStartDate:    time.Now(),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", salesTarget.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/account-users/$ID/sales-targets/$TARGET_ID \\\n    -X PUT \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "amount_unit_id": "amount_unit_id",\n          "amount_value": "amount_value",\n          "end_date": "2019-12-27T18:11:19.117Z",\n          "start_date": "2019-12-27T18:11:19.117Z"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'retrieve_by_slug',
+    endpoint: '/v1/core/accounts/slug/{slug}',
+    httpMethod: 'get',
+    summary: 'Get Account by Slug',
+    description:
+      'This endpoint returns a minimal public account by its portal slug. This endpoint is unauthenticated.',
+    stainlessPath: '(resource) core.accounts > (method) retrieve_by_slug',
+    qualified: 'client.core.accounts.retrieveBySlug',
+    params: ['slug: string;'],
+    response:
+      "{ id: string; default_billing_address_id: string; logo_url: string; name: string; object: 'public_account'; slug: string; support_email: string; }",
+    markdown:
+      "## retrieve_by_slug\n\n`client.core.accounts.retrieveBySlug(slug: string): { id: string; default_billing_address_id: string; logo_url: string; name: string; object: 'public_account'; slug: string; support_email: string; }`\n\n**get** `/v1/core/accounts/slug/{slug}`\n\nThis endpoint returns a minimal public account by its portal slug. This endpoint is unauthenticated.\n\n### Parameters\n\n- `slug: string`\n\n### Returns\n\n- `{ id: string; default_billing_address_id: string; logo_url: string; name: string; object: 'public_account'; slug: string; support_email: string; }`\n  PublicAccount is a minimal account representation for unauthenticated slug lookups.\n\n  - `id: string`\n  - `default_billing_address_id: string`\n  - `logo_url: string`\n  - `name: string`\n  - `object: 'public_account'`\n  - `slug: string`\n  - `support_email: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.core.accounts.retrieveBySlug('slug');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accounts.retrieveBySlug',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.accounts.retrieveBySlug('slug');\n\nconsole.log(response.id);",
+      },
+      go: {
+        method: 'client.Core.Accounts.GetBySlug',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Accounts.GetBySlug(context.TODO(), "slug")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/accounts/slug/$SLUG \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/core/accounts/{id}',
+    httpMethod: 'get',
+    summary: 'Get Account',
+    description:
+      'This endpoint returns a full account by its ID, including optional branding and portal sub-resources.',
+    stainlessPath: '(resource) core.accounts > (method) retrieve',
+    qualified: 'client.core.accounts.retrieve',
+    params: ['id: string;', "include?: 'branding' | 'portal'[];"],
+    response:
+      "{ id: string; branding: { id: string; created_at: string; facebook_handle: string; instagram_handle: string; linkedin_handle: string; logo_url: string; object: 'account_branding'; phone_number: string; support_email: string; twitter_handle: string; updated_at: string; website_url: string; }; created_at: string; default_billing_address_id: string; default_shipping_address_id: string; name: string; object: 'account'; portal: { id: string; created_at: string; object: 'account_portal'; slug: string; updated_at: string; }; updated_at: string; }",
+    markdown:
+      "## retrieve\n\n`client.core.accounts.retrieve(id: string, include?: 'branding' | 'portal'[]): { id: string; branding: object; created_at: string; default_billing_address_id: string; default_shipping_address_id: string; name: string; object: 'account'; portal: object; updated_at: string; }`\n\n**get** `/v1/core/accounts/{id}`\n\nThis endpoint returns a full account by its ID, including optional branding and portal sub-resources.\n\n### Parameters\n\n- `id: string`\n\n- `include?: 'branding' | 'portal'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; branding: { id: string; created_at: string; facebook_handle: string; instagram_handle: string; linkedin_handle: string; logo_url: string; object: 'account_branding'; phone_number: string; support_email: string; twitter_handle: string; updated_at: string; website_url: string; }; created_at: string; default_billing_address_id: string; default_shipping_address_id: string; name: string; object: 'account'; portal: { id: string; created_at: string; object: 'account_portal'; slug: string; updated_at: string; }; updated_at: string; }`\n  Account represents a full account with optional branding and portal sub-resources.\n\n  - `id: string`\n  - `branding: { id: string; created_at: string; facebook_handle: string; instagram_handle: string; linkedin_handle: string; logo_url: string; object: 'account_branding'; phone_number: string; support_email: string; twitter_handle: string; updated_at: string; website_url: string; }`\n  - `created_at: string`\n  - `default_billing_address_id: string`\n  - `default_shipping_address_id: string`\n  - `name: string`\n  - `object: 'account'`\n  - `portal: { id: string; created_at: string; object: 'account_portal'; slug: string; updated_at: string; }`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst account = await client.core.accounts.retrieve('id');\n\nconsole.log(account);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accounts.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst account = await client.core.accounts.retrieve('id');\n\nconsole.log(account.id);",
+      },
+      go: {
+        method: 'client.Core.Accounts.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccount, err := client.Core.Accounts.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", account.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/accounts/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/v1/core/accounts/{id}',
+    httpMethod: 'patch',
+    summary: 'Update Account',
+    description:
+      "This endpoint partially updates an account's name, branding fields, and/or portal slug.\nOnly provided fields are updated; absent fields retain their current values.",
+    stainlessPath: '(resource) core.accounts > (method) update',
+    qualified: 'client.core.accounts.update',
+    params: [
+      'id: string;',
+      "include?: 'branding' | 'portal'[];",
+      'facebook_handle?: string;',
+      'instagram_handle?: string;',
+      'linkedin_handle?: string;',
+      'name?: string;',
+      'phone_number?: string;',
+      'slug?: string;',
+      'support_email?: string;',
+      'twitter_handle?: string;',
+      'website_url?: string;',
+    ],
+    response:
+      "{ id: string; branding: { id: string; created_at: string; facebook_handle: string; instagram_handle: string; linkedin_handle: string; logo_url: string; object: 'account_branding'; phone_number: string; support_email: string; twitter_handle: string; updated_at: string; website_url: string; }; created_at: string; default_billing_address_id: string; default_shipping_address_id: string; name: string; object: 'account'; portal: { id: string; created_at: string; object: 'account_portal'; slug: string; updated_at: string; }; updated_at: string; }",
+    markdown:
+      "## update\n\n`client.core.accounts.update(id: string, include?: 'branding' | 'portal'[], facebook_handle?: string, instagram_handle?: string, linkedin_handle?: string, name?: string, phone_number?: string, slug?: string, support_email?: string, twitter_handle?: string, website_url?: string): { id: string; branding: object; created_at: string; default_billing_address_id: string; default_shipping_address_id: string; name: string; object: 'account'; portal: object; updated_at: string; }`\n\n**patch** `/v1/core/accounts/{id}`\n\nThis endpoint partially updates an account's name, branding fields, and/or portal slug.\nOnly provided fields are updated; absent fields retain their current values.\n\n### Parameters\n\n- `id: string`\n\n- `include?: 'branding' | 'portal'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n- `facebook_handle?: string`\n  The Facebook handle.\n\n- `instagram_handle?: string`\n  The Instagram handle.\n\n- `linkedin_handle?: string`\n  The LinkedIn handle.\n\n- `name?: string`\n  The display name of the account.\n\n- `phone_number?: string`\n  The support phone number.\n\n- `slug?: string`\n  The portal slug.\n\n- `support_email?: string`\n  The support email address.\n\n- `twitter_handle?: string`\n  The Twitter handle.\n\n- `website_url?: string`\n  The website URL.\n\n### Returns\n\n- `{ id: string; branding: { id: string; created_at: string; facebook_handle: string; instagram_handle: string; linkedin_handle: string; logo_url: string; object: 'account_branding'; phone_number: string; support_email: string; twitter_handle: string; updated_at: string; website_url: string; }; created_at: string; default_billing_address_id: string; default_shipping_address_id: string; name: string; object: 'account'; portal: { id: string; created_at: string; object: 'account_portal'; slug: string; updated_at: string; }; updated_at: string; }`\n  Account represents a full account with optional branding and portal sub-resources.\n\n  - `id: string`\n  - `branding: { id: string; created_at: string; facebook_handle: string; instagram_handle: string; linkedin_handle: string; logo_url: string; object: 'account_branding'; phone_number: string; support_email: string; twitter_handle: string; updated_at: string; website_url: string; }`\n  - `created_at: string`\n  - `default_billing_address_id: string`\n  - `default_shipping_address_id: string`\n  - `name: string`\n  - `object: 'account'`\n  - `portal: { id: string; created_at: string; object: 'account_portal'; slug: string; updated_at: string; }`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst account = await client.core.accounts.update('id');\n\nconsole.log(account);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accounts.update',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst account = await client.core.accounts.update('id', { name: 'Acme Inc.' });\n\nconsole.log(account.id);",
+      },
+      go: {
+        method: 'client.Core.Accounts.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccount, err := client.Core.Accounts.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountUpdateParams{\n\t\t\tName: augno.String("Acme Inc."),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", account.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/accounts/$ID \\\n    -X PATCH \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'get_logo_url',
+    endpoint: '/v1/core/accounts/{id}/logo',
+    httpMethod: 'get',
+    summary: 'Get Account Logo URL',
+    description:
+      "This endpoint returns a presigned URL for the account's logo image. The URL expires after one hour.",
+    stainlessPath: '(resource) core.accounts > (method) get_logo_url',
+    qualified: 'client.core.accounts.getLogoURL',
+    params: ['id: string;'],
+    response: '{ url: string; }',
+    markdown:
+      "## get_logo_url\n\n`client.core.accounts.getLogoURL(id: string): { url: string; }`\n\n**get** `/v1/core/accounts/{id}/logo`\n\nThis endpoint returns a presigned URL for the account's logo image. The URL expires after one hour.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ url: string; }`\n  AccountLogoURL holds a presigned URL for an account's logo.\n\n  - `url: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.core.accounts.getLogoURL('id');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accounts.getLogoURL',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.accounts.getLogoURL('id');\n\nconsole.log(response.url);",
+      },
+      go: {
+        method: 'client.Core.Accounts.GetLogoURL',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Accounts.GetLogoURL(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.URL)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/accounts/$ID/logo \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'upload_photo',
+    endpoint: '/v1/core/accounts/{id}/photo',
+    httpMethod: 'put',
+    summary: 'Upload Account Photo',
+    description:
+      'This endpoint uploads a logo image for an account. The image is sent as a raw binary body with the appropriate Content-Type header.',
+    stainlessPath: '(resource) core.accounts > (method) upload_photo',
+    qualified: 'client.core.accounts.uploadPhoto',
+    params: ['id: string;'],
+    response: '{ success: boolean; }',
+    markdown:
+      "## upload_photo\n\n`client.core.accounts.uploadPhoto(id: string): { success: boolean; }`\n\n**put** `/v1/core/accounts/{id}/photo`\n\nThis endpoint uploads a logo image for an account. The image is sent as a raw binary body with the appropriate Content-Type header.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ success: boolean; }`\n  AccountPhotoUploadResult is the response for a photo upload.\n\n  - `success: boolean`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.core.accounts.uploadPhoto('id');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accounts.uploadPhoto',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.accounts.uploadPhoto('id');\n\nconsole.log(response.success);",
+      },
+      go: {
+        method: 'client.Core.Accounts.UploadPhoto',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Accounts.UploadPhoto(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Success)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/accounts/$ID/photo \\\n    -X PUT \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/core/accounts/{account_id}/addresses',
+    httpMethod: 'get',
+    summary: 'List Addresses',
+    description:
+      'This endpoint returns a paginated list of addresses for the specified account.\nSupports cursor-based pagination and search by name, street, city, state, postal code, or country.',
+    stainlessPath: '(resource) core.accounts.addresses > (method) list',
+    qualified: 'client.core.accounts.addresses.list',
+    params: ['account_id: string;'],
+    response:
+      "{ data: { id: string; created_at: string; email: string; geolocation: object; is_drop_ship: boolean; name: string; object: 'address'; phone: string; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list\n\n`client.core.accounts.addresses.list(account_id: string): { data: address[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/core/accounts/{account_id}/addresses`\n\nThis endpoint returns a paginated list of addresses for the specified account.\nSupports cursor-based pagination and search by name, street, city, state, postal code, or country.\n\n### Parameters\n\n- `account_id: string`\n\n### Returns\n\n- `{ data: { id: string; created_at: string; email: string; geolocation: object; is_drop_ship: boolean; name: string; object: 'address'; phone: string; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of Address resources\n\n  - `data: { id: string; created_at: string; email: string; geolocation: { id: string; country: string; locality: string; object: 'geolocation'; postal_code: string; state: string; street_line_1: string; street_line_2: string; }; is_drop_ship: boolean; name: string; object: 'address'; phone: string; updated_at: string; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst addresses = await client.core.accounts.addresses.list('account_id');\n\nconsole.log(addresses);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accounts.addresses.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst addresses = await client.core.accounts.addresses.list('account_id');\n\nconsole.log(addresses.data);",
+      },
+      go: {
+        method: 'client.Core.Accounts.Addresses.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taddresses, err := client.Core.Accounts.Addresses.List(context.TODO(), "account_id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", addresses.Data)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/accounts/$ACCOUNT_ID/addresses \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/core/accounts/{account_id}/addresses',
+    httpMethod: 'post',
+    summary: 'Create Address',
+    description: 'This endpoint creates a new address for the specified account.',
+    stainlessPath: '(resource) core.accounts.addresses > (method) create',
+    qualified: 'client.core.accounts.addresses.create',
+    params: [
+      'account_id: string;',
+      'country: string;',
+      'is_drop_ship: boolean;',
+      'name: string;',
+      'email?: string;',
+      'locality?: string;',
+      'phone?: string;',
+      'postal_code?: string;',
+      'state?: string;',
+      'street_line_1?: string;',
+      'street_line_2?: string;',
+    ],
+    response:
+      "{ id: string; created_at: string; email: string; geolocation: { id: string; country: string; locality: string; object: 'geolocation'; postal_code: string; state: string; street_line_1: string; street_line_2: string; }; is_drop_ship: boolean; name: string; object: 'address'; phone: string; updated_at: string; }",
+    markdown:
+      "## create\n\n`client.core.accounts.addresses.create(account_id: string, country: string, is_drop_ship: boolean, name: string, email?: string, locality?: string, phone?: string, postal_code?: string, state?: string, street_line_1?: string, street_line_2?: string): { id: string; created_at: string; email: string; geolocation: object; is_drop_ship: boolean; name: string; object: 'address'; phone: string; updated_at: string; }`\n\n**post** `/v1/core/accounts/{account_id}/addresses`\n\nThis endpoint creates a new address for the specified account.\n\n### Parameters\n\n- `account_id: string`\n\n- `country: string`\n  The two-letter country code.\n\n- `is_drop_ship: boolean`\n  Whether this is a drop ship address.\n\n- `name: string`\n  The display name of the address.\n\n- `email?: string`\n  The email address associated with this address.\n\n- `locality?: string`\n  The city or locality.\n\n- `phone?: string`\n  The phone number associated with this address.\n\n- `postal_code?: string`\n  The postal or zip code.\n\n- `state?: string`\n  The state or administrative area.\n\n- `street_line_1?: string`\n  The first line of the street address.\n\n- `street_line_2?: string`\n  The second line of the street address.\n\n### Returns\n\n- `{ id: string; created_at: string; email: string; geolocation: { id: string; country: string; locality: string; object: 'geolocation'; postal_code: string; state: string; street_line_1: string; street_line_2: string; }; is_drop_ship: boolean; name: string; object: 'address'; phone: string; updated_at: string; }`\n  Address represents an address with its associated geolocation.\n\n  - `id: string`\n  - `created_at: string`\n  - `email: string`\n  - `geolocation: { id: string; country: string; locality: string; object: 'geolocation'; postal_code: string; state: string; street_line_1: string; street_line_2: string; }`\n  - `is_drop_ship: boolean`\n  - `name: string`\n  - `object: 'address'`\n  - `phone: string`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst address = await client.core.accounts.addresses.create('account_id', {\n  country: 'US',\n  is_drop_ship: false,\n  name: 'Headquarters',\n});\n\nconsole.log(address);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accounts.addresses.create',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst address = await client.core.accounts.addresses.create('account_id', {\n  country: 'US',\n  is_drop_ship: false,\n  name: 'Headquarters',\n  locality: 'Springfield',\n  postal_code: '62701',\n  state: 'IL',\n  street_line_1: '123 Main St',\n});\n\nconsole.log(address.id);",
+      },
+      go: {
+        method: 'client.Core.Accounts.Addresses.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taddress, err := client.Core.Accounts.Addresses.New(\n\t\tcontext.TODO(),\n\t\t"account_id",\n\t\taugno.CoreAccountAddressNewParams{\n\t\t\tCountry:     "US",\n\t\t\tIsDropShip:  false,\n\t\t\tName:        "Headquarters",\n\t\t\tLocality:    augno.String("Springfield"),\n\t\t\tPostalCode:  augno.String("62701"),\n\t\t\tState:       augno.String("IL"),\n\t\t\tStreetLine1: augno.String("123 Main St"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", address.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/accounts/$ACCOUNT_ID/addresses \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "country": "US",\n          "is_drop_ship": false,\n          "name": "Headquarters",\n          "locality": "Springfield",\n          "postal_code": "62701",\n          "state": "IL",\n          "street_line_1": "123 Main St"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/v1/core/accounts/{account_id}/addresses/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete Address',
+    description:
+      'This endpoint deletes an address from the specified account.\nAn address cannot be deleted if it is in use as a billing or shipping address on a sales order, invoice, shipment, or as a default address on an account.',
+    stainlessPath: '(resource) core.accounts.addresses > (method) delete',
+    qualified: 'client.core.accounts.addresses.delete',
+    params: ['account_id: string;', 'id: string;'],
+    response: '{  }',
+    markdown:
+      "## delete\n\n`client.core.accounts.addresses.delete(account_id: string, id: string): {  }`\n\n**delete** `/v1/core/accounts/{account_id}/addresses/{id}`\n\nThis endpoint deletes an address from the specified account.\nAn address cannot be deleted if it is in use as a billing or shipping address on a sales order, invoice, shipment, or as a default address on an account.\n\n### Parameters\n\n- `account_id: string`\n\n- `id: string`\n\n### Returns\n\n- `{  }`\n\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst address = await client.core.accounts.addresses.delete('id', { account_id: 'account_id' });\n\nconsole.log(address);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accounts.addresses.delete',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst address = await client.core.accounts.addresses.delete('id', { account_id: 'account_id' });\n\nconsole.log(address);",
+      },
+      go: {
+        method: 'client.Core.Accounts.Addresses.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taddress, err := client.Core.Accounts.Addresses.Delete(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountAddressDeleteParams{\n\t\t\tAccountID: "account_id",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", address)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/accounts/$ACCOUNT_ID/addresses/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/core/accounts/{account_id}/addresses/{id}',
+    httpMethod: 'get',
+    summary: 'Get Address',
+    description:
+      'This endpoint returns a single address by its ID.\nThe address must belong to the specified account.',
+    stainlessPath: '(resource) core.accounts.addresses > (method) retrieve',
+    qualified: 'client.core.accounts.addresses.retrieve',
+    params: ['account_id: string;', 'id: string;'],
+    response:
+      "{ id: string; created_at: string; email: string; geolocation: { id: string; country: string; locality: string; object: 'geolocation'; postal_code: string; state: string; street_line_1: string; street_line_2: string; }; is_drop_ship: boolean; name: string; object: 'address'; phone: string; updated_at: string; }",
+    markdown:
+      "## retrieve\n\n`client.core.accounts.addresses.retrieve(account_id: string, id: string): { id: string; created_at: string; email: string; geolocation: object; is_drop_ship: boolean; name: string; object: 'address'; phone: string; updated_at: string; }`\n\n**get** `/v1/core/accounts/{account_id}/addresses/{id}`\n\nThis endpoint returns a single address by its ID.\nThe address must belong to the specified account.\n\n### Parameters\n\n- `account_id: string`\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; created_at: string; email: string; geolocation: { id: string; country: string; locality: string; object: 'geolocation'; postal_code: string; state: string; street_line_1: string; street_line_2: string; }; is_drop_ship: boolean; name: string; object: 'address'; phone: string; updated_at: string; }`\n  Address represents an address with its associated geolocation.\n\n  - `id: string`\n  - `created_at: string`\n  - `email: string`\n  - `geolocation: { id: string; country: string; locality: string; object: 'geolocation'; postal_code: string; state: string; street_line_1: string; street_line_2: string; }`\n  - `is_drop_ship: boolean`\n  - `name: string`\n  - `object: 'address'`\n  - `phone: string`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst address = await client.core.accounts.addresses.retrieve('id', { account_id: 'account_id' });\n\nconsole.log(address);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accounts.addresses.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst address = await client.core.accounts.addresses.retrieve('id', { account_id: 'account_id' });\n\nconsole.log(address.id);",
+      },
+      go: {
+        method: 'client.Core.Accounts.Addresses.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taddress, err := client.Core.Accounts.Addresses.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountAddressGetParams{\n\t\t\tAccountID: "account_id",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", address.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/accounts/$ACCOUNT_ID/addresses/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/v1/core/accounts/{account_id}/addresses/{id}',
+    httpMethod: 'patch',
+    summary: 'Update Address',
+    description:
+      'This endpoint partially updates an address.\nOnly provided fields are updated; absent fields retain their current values.',
+    stainlessPath: '(resource) core.accounts.addresses > (method) update',
+    qualified: 'client.core.accounts.addresses.update',
+    params: [
+      'account_id: string;',
+      'id: string;',
+      'country?: string;',
+      'email?: string;',
+      'is_drop_ship?: boolean;',
+      'locality?: string;',
+      'name?: string;',
+      'phone?: string;',
+      'postal_code?: string;',
+      'state?: string;',
+      'street_line_1?: string;',
+      'street_line_2?: string;',
+    ],
+    response:
+      "{ id: string; created_at: string; email: string; geolocation: { id: string; country: string; locality: string; object: 'geolocation'; postal_code: string; state: string; street_line_1: string; street_line_2: string; }; is_drop_ship: boolean; name: string; object: 'address'; phone: string; updated_at: string; }",
+    markdown:
+      "## update\n\n`client.core.accounts.addresses.update(account_id: string, id: string, country?: string, email?: string, is_drop_ship?: boolean, locality?: string, name?: string, phone?: string, postal_code?: string, state?: string, street_line_1?: string, street_line_2?: string): { id: string; created_at: string; email: string; geolocation: object; is_drop_ship: boolean; name: string; object: 'address'; phone: string; updated_at: string; }`\n\n**patch** `/v1/core/accounts/{account_id}/addresses/{id}`\n\nThis endpoint partially updates an address.\nOnly provided fields are updated; absent fields retain their current values.\n\n### Parameters\n\n- `account_id: string`\n\n- `id: string`\n\n- `country?: string`\n  The two-letter country code.\n\n- `email?: string`\n  The email address associated with this address.\n\n- `is_drop_ship?: boolean`\n  Whether this is a drop ship address.\n\n- `locality?: string`\n  The city or locality.\n\n- `name?: string`\n  The display name of the address.\n\n- `phone?: string`\n  The phone number associated with this address.\n\n- `postal_code?: string`\n  The postal or zip code.\n\n- `state?: string`\n  The state or administrative area.\n\n- `street_line_1?: string`\n  The first line of the street address.\n\n- `street_line_2?: string`\n  The second line of the street address.\n\n### Returns\n\n- `{ id: string; created_at: string; email: string; geolocation: { id: string; country: string; locality: string; object: 'geolocation'; postal_code: string; state: string; street_line_1: string; street_line_2: string; }; is_drop_ship: boolean; name: string; object: 'address'; phone: string; updated_at: string; }`\n  Address represents an address with its associated geolocation.\n\n  - `id: string`\n  - `created_at: string`\n  - `email: string`\n  - `geolocation: { id: string; country: string; locality: string; object: 'geolocation'; postal_code: string; state: string; street_line_1: string; street_line_2: string; }`\n  - `is_drop_ship: boolean`\n  - `name: string`\n  - `object: 'address'`\n  - `phone: string`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst address = await client.core.accounts.addresses.update('id', { account_id: 'account_id' });\n\nconsole.log(address);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.accounts.addresses.update',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst address = await client.core.accounts.addresses.update('id', {\n  account_id: 'account_id',\n  name: 'Warehouse',\n});\n\nconsole.log(address.id);",
+      },
+      go: {
+        method: 'client.Core.Accounts.Addresses.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taddress, err := client.Core.Accounts.Addresses.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountAddressUpdateParams{\n\t\t\tAccountID: "account_id",\n\t\t\tName:      augno.String("Warehouse"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", address.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/accounts/$ACCOUNT_ID/addresses/$ID \\\n    -X PATCH \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'autocomplete',
+    endpoint: '/v1/core/addresses/autocomplete',
+    httpMethod: 'get',
+    summary: 'Autocomplete Address',
+    description:
+      'This endpoint returns address autocomplete suggestions based on the input text.\nUses the Google Places API for address lookups.',
+    stainlessPath: '(resource) core.addresses > (method) autocomplete',
+    qualified: 'client.core.addresses.autocomplete',
+    params: ['input: string;', 'session_token,omitempty?: string;'],
+    response:
+      "{ data: { id: string; description: string; main_text: string; secondary_text: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## autocomplete\n\n`client.core.addresses.autocomplete(input: string, session_token,omitempty?: string): { data: object[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/core/addresses/autocomplete`\n\nThis endpoint returns address autocomplete suggestions based on the input text.\nUses the Google Places API for address lookups.\n\n### Parameters\n\n- `input: string`\n  The text input for autocomplete.\n\n- `session_token,omitempty?: string`\n  An optional session token for grouping autocomplete requests.\n\n### Returns\n\n- `{ data: { id: string; description: string; main_text: string; secondary_text: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of AddressSuggestion resources\n\n  - `data: { id: string; description: string; main_text: string; secondary_text: string; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.core.addresses.autocomplete({ input: 'input' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.addresses.autocomplete',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.addresses.autocomplete({ input: 'input' });\n\nconsole.log(response.data);",
+      },
+      go: {
+        method: 'client.Core.Addresses.Autocomplete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Addresses.Autocomplete(context.TODO(), augno.CoreAddressAutocompleteParams{\n\t\tInput: "input",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Data)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/addresses/autocomplete \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'get_details',
+    endpoint: '/v1/core/addresses/details/{id}',
+    httpMethod: 'get',
+    summary: 'Get Address Details',
+    description:
+      'This endpoint returns parsed address components for a Google Places ID.\nTypically used after an autocomplete selection to get full address details.',
+    stainlessPath: '(resource) core.addresses > (method) get_details',
+    qualified: 'client.core.addresses.getDetails',
+    params: ['id: string;', 'session_token,omitempty?: string;'],
+    response:
+      '{ address: { address_line_1: string; address_line_2: string; city: string; country: string; country_code: string; postal_code: string; state: string; }; formatted_address: string; }',
+    markdown:
+      "## get_details\n\n`client.core.addresses.getDetails(id: string, session_token,omitempty?: string): { address: address_components; formatted_address: string; }`\n\n**get** `/v1/core/addresses/details/{id}`\n\nThis endpoint returns parsed address components for a Google Places ID.\nTypically used after an autocomplete selection to get full address details.\n\n### Parameters\n\n- `id: string`\n\n- `session_token,omitempty?: string`\n  An optional session token for grouping with a previous autocomplete request.\n\n### Returns\n\n- `{ address: { address_line_1: string; address_line_2: string; city: string; country: string; country_code: string; postal_code: string; state: string; }; formatted_address: string; }`\n  AddressDetailsResult represents the result of a place details lookup.\n\n  - `address: { address_line_1: string; address_line_2: string; city: string; country: string; country_code: string; postal_code: string; state: string; }`\n  - `formatted_address: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.core.addresses.getDetails('id');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.addresses.getDetails',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.addresses.getDetails('id');\n\nconsole.log(response.address);",
+      },
+      go: {
+        method: 'client.Core.Addresses.GetDetails',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Addresses.GetDetails(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAddressGetDetailsParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Address)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/addresses/details/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'validate',
+    endpoint: '/v1/core/addresses/validate',
+    httpMethod: 'post',
+    summary: 'Validate Address',
+    description:
+      'This endpoint validates an address using the Google Address Validation API.\nReturns whether the address is valid, a formatted version, and any validation messages.',
+    stainlessPath: '(resource) core.addresses > (method) validate',
+    qualified: 'client.core.addresses.validate',
+    params: [
+      'address_line_1: string;',
+      'city: string;',
+      'country: string;',
+      'postal_code: string;',
+      'state: string;',
+      'address_line_2?: string;',
+    ],
+    response:
+      '{ components: { address_line_1: string; address_line_2: string; city: string; country: string; country_code: string; postal_code: string; state: string; }; formatted_address: string; is_valid: boolean; validation_messages: string[]; }',
+    markdown:
+      "## validate\n\n`client.core.addresses.validate(address_line_1: string, city: string, country: string, postal_code: string, state: string, address_line_2?: string): { components: address_components; formatted_address: string; is_valid: boolean; validation_messages: string[]; }`\n\n**post** `/v1/core/addresses/validate`\n\nThis endpoint validates an address using the Google Address Validation API.\nReturns whether the address is valid, a formatted version, and any validation messages.\n\n### Parameters\n\n- `address_line_1: string`\n  The first line of the street address.\n\n- `city: string`\n  The city.\n\n- `country: string`\n  The country name or code.\n\n- `postal_code: string`\n  The postal or zip code.\n\n- `state: string`\n  The state or administrative area.\n\n- `address_line_2?: string`\n  The second line of the street address.\n\n### Returns\n\n- `{ components: { address_line_1: string; address_line_2: string; city: string; country: string; country_code: string; postal_code: string; state: string; }; formatted_address: string; is_valid: boolean; validation_messages: string[]; }`\n  ValidatedAddress represents the result of address validation.\n\n  - `components: { address_line_1: string; address_line_2: string; city: string; country: string; country_code: string; postal_code: string; state: string; }`\n  - `formatted_address: string`\n  - `is_valid: boolean`\n  - `validation_messages: string[]`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.core.addresses.validate({\n  address_line_1: '123 Main St',\n  city: 'Springfield',\n  country: 'US',\n  postal_code: '62701',\n  state: 'IL',\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.addresses.validate',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.addresses.validate({\n  address_line_1: '123 Main St',\n  city: 'Springfield',\n  country: 'US',\n  postal_code: '62701',\n  state: 'IL',\n});\n\nconsole.log(response.is_valid);",
+      },
+      go: {
+        method: 'client.Core.Addresses.Validate',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Addresses.Validate(context.TODO(), augno.CoreAddressValidateParams{\n\t\tAddressLine1: "123 Main St",\n\t\tCity:         "Springfield",\n\t\tCountry:      "US",\n\t\tPostalCode:   "62701",\n\t\tState:        "IL",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.IsValid)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/addresses/validate \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "address_line_1": "123 Main St",\n          "city": "Springfield",\n          "country": "US",\n          "postal_code": "62701",\n          "state": "IL"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/core/carriers',
+    httpMethod: 'get',
+    summary: 'List Carriers',
+    description:
+      'This endpoint returns a paginated list of carriers for the target account.\nSupports cursor-based pagination and search by name.',
+    stainlessPath: '(resource) core.carriers > (method) list',
+    qualified: 'client.core.carriers.list',
+    params: ["include?: 'options'[];"],
+    response:
+      "{ data: { id: string; account_number: string; code: string; created_at: string; deleted_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier'; options: carrier_option[]; shippo_carrier_account_id: string; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list\n\n`client.core.carriers.list(include?: 'options'[]): { data: carrier[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/core/carriers`\n\nThis endpoint returns a paginated list of carriers for the target account.\nSupports cursor-based pagination and search by name.\n\n### Parameters\n\n- `include?: 'options'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ data: { id: string; account_number: string; code: string; created_at: string; deleted_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier'; options: carrier_option[]; shippo_carrier_account_id: string; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of Carrier resources\n\n  - `data: { id: string; account_number: string; code: string; created_at: string; deleted_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier'; options: { id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }[]; shippo_carrier_account_id: string; updated_at: string; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst carriers = await client.core.carriers.list();\n\nconsole.log(carriers);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.carriers.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst carriers = await client.core.carriers.list();\n\nconsole.log(carriers.data);",
+      },
+      go: {
+        method: 'client.Core.Carriers.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcarriers, err := client.Core.Carriers.List(context.TODO(), augno.CoreCarrierListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", carriers.Data)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/carriers \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/core/carriers',
+    httpMethod: 'post',
+    summary: 'Create Carrier',
+    description:
+      'This endpoint creates a new carrier. If a Shippo-supported carrier code is provided, the carrier will be registered with Shippo and service levels will be auto-synced as options.',
+    stainlessPath: '(resource) core.carriers > (method) create',
+    qualified: 'client.core.carriers.create',
+    params: ['account_number: string;', 'code: string;', 'is_portal_enabled: boolean;', 'name: string;'],
+    response:
+      "{ id: string; account_number: string; code: string; created_at: string; deleted_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier'; options: { id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }[]; shippo_carrier_account_id: string; updated_at: string; }",
+    markdown:
+      "## create\n\n`client.core.carriers.create(account_number: string, code: string, is_portal_enabled: boolean, name: string): { id: string; account_number: string; code: string; created_at: string; deleted_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier'; options: carrier_option[]; shippo_carrier_account_id: string; updated_at: string; }`\n\n**post** `/v1/core/carriers`\n\nThis endpoint creates a new carrier. If a Shippo-supported carrier code is provided, the carrier will be registered with Shippo and service levels will be auto-synced as options.\n\n### Parameters\n\n- `account_number: string`\n  The carrier account number, required for UPS and USPS carriers.\n\n- `code: string`\n  The carrier code (e.g. \"fedex\", \"ups\", \"usps\"). If a Shippo-supported code is provided, the carrier will be integrated with Shippo.\n\n- `is_portal_enabled: boolean`\n  Whether this carrier is enabled for the customer portal.\n\n- `name: string`\n  The display name of the carrier.\n\n### Returns\n\n- `{ id: string; account_number: string; code: string; created_at: string; deleted_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier'; options: { id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }[]; shippo_carrier_account_id: string; updated_at: string; }`\n  Carrier represents a shipping carrier configured for the account.\n\n  - `id: string`\n  - `account_number: string`\n  - `code: string`\n  - `created_at: string`\n  - `deleted_at: string`\n  - `is_default: boolean`\n  - `is_portal_enabled: boolean`\n  - `name: string`\n  - `object: 'carrier'`\n  - `options: { id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }[]`\n  - `shippo_carrier_account_id: string`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst carrier = await client.core.carriers.create({\n  account_number: null,\n  code: 'fedex',\n  is_portal_enabled: true,\n  name: 'FedEx',\n});\n\nconsole.log(carrier);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.carriers.create',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst carrier = await client.core.carriers.create({\n  account_number: null,\n  code: 'fedex',\n  is_portal_enabled: true,\n  name: 'FedEx',\n});\n\nconsole.log(carrier.id);",
+      },
+      go: {
+        method: 'client.Core.Carriers.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n\t"github.com/stainless-sdks/augno-go/packages/param"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcarrier, err := client.Core.Carriers.New(context.TODO(), augno.CoreCarrierNewParams{\n\t\tAccountNumber:   param.Null[string](),\n\t\tCode:            augno.String("fedex"),\n\t\tIsPortalEnabled: true,\n\t\tName:            "FedEx",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", carrier.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/carriers \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "account_number": null,\n          "code": "fedex",\n          "is_portal_enabled": true,\n          "name": "FedEx"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/v1/core/carriers/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete Carrier',
+    description:
+      'This endpoint soft-deletes a carrier and cascades to remove all its options. If the carrier is managed by Shippo, the Shippo account is deactivated.',
+    stainlessPath: '(resource) core.carriers > (method) delete',
+    qualified: 'client.core.carriers.delete',
+    params: ['id: string;'],
+    response: '{  }',
+    markdown:
+      "## delete\n\n`client.core.carriers.delete(id: string): {  }`\n\n**delete** `/v1/core/carriers/{id}`\n\nThis endpoint soft-deletes a carrier and cascades to remove all its options. If the carrier is managed by Shippo, the Shippo account is deactivated.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{  }`\n\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst carrier = await client.core.carriers.delete('id');\n\nconsole.log(carrier);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.carriers.delete',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst carrier = await client.core.carriers.delete('id');\n\nconsole.log(carrier);",
+      },
+      go: {
+        method: 'client.Core.Carriers.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcarrier, err := client.Core.Carriers.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", carrier)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/carriers/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/core/carriers/{id}',
+    httpMethod: 'get',
+    summary: 'Get Carrier',
+    description: 'This endpoint returns a single carrier by its ID.',
+    stainlessPath: '(resource) core.carriers > (method) retrieve',
+    qualified: 'client.core.carriers.retrieve',
+    params: ['id: string;', "include?: 'options'[];"],
+    response:
+      "{ id: string; account_number: string; code: string; created_at: string; deleted_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier'; options: { id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }[]; shippo_carrier_account_id: string; updated_at: string; }",
+    markdown:
+      "## retrieve\n\n`client.core.carriers.retrieve(id: string, include?: 'options'[]): { id: string; account_number: string; code: string; created_at: string; deleted_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier'; options: carrier_option[]; shippo_carrier_account_id: string; updated_at: string; }`\n\n**get** `/v1/core/carriers/{id}`\n\nThis endpoint returns a single carrier by its ID.\n\n### Parameters\n\n- `id: string`\n\n- `include?: 'options'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; account_number: string; code: string; created_at: string; deleted_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier'; options: { id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }[]; shippo_carrier_account_id: string; updated_at: string; }`\n  Carrier represents a shipping carrier configured for the account.\n\n  - `id: string`\n  - `account_number: string`\n  - `code: string`\n  - `created_at: string`\n  - `deleted_at: string`\n  - `is_default: boolean`\n  - `is_portal_enabled: boolean`\n  - `name: string`\n  - `object: 'carrier'`\n  - `options: { id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }[]`\n  - `shippo_carrier_account_id: string`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst carrier = await client.core.carriers.retrieve('id');\n\nconsole.log(carrier);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.carriers.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst carrier = await client.core.carriers.retrieve('id');\n\nconsole.log(carrier.id);",
+      },
+      go: {
+        method: 'client.Core.Carriers.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcarrier, err := client.Core.Carriers.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreCarrierGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", carrier.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/carriers/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/v1/core/carriers/{id}',
+    httpMethod: 'patch',
+    summary: 'Update Carrier',
+    description: "This endpoint partially updates a carrier's name and portal visibility.",
+    stainlessPath: '(resource) core.carriers > (method) update',
+    qualified: 'client.core.carriers.update',
+    params: ['id: string;', 'is_portal_enabled: boolean;', 'name: string;'],
+    response:
+      "{ id: string; account_number: string; code: string; created_at: string; deleted_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier'; options: { id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }[]; shippo_carrier_account_id: string; updated_at: string; }",
+    markdown:
+      "## update\n\n`client.core.carriers.update(id: string, is_portal_enabled: boolean, name: string): { id: string; account_number: string; code: string; created_at: string; deleted_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier'; options: carrier_option[]; shippo_carrier_account_id: string; updated_at: string; }`\n\n**patch** `/v1/core/carriers/{id}`\n\nThis endpoint partially updates a carrier's name and portal visibility.\n\n### Parameters\n\n- `id: string`\n\n- `is_portal_enabled: boolean`\n  Whether this carrier is enabled for the customer portal.\n\n- `name: string`\n  The new display name for the carrier.\n\n### Returns\n\n- `{ id: string; account_number: string; code: string; created_at: string; deleted_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier'; options: { id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }[]; shippo_carrier_account_id: string; updated_at: string; }`\n  Carrier represents a shipping carrier configured for the account.\n\n  - `id: string`\n  - `account_number: string`\n  - `code: string`\n  - `created_at: string`\n  - `deleted_at: string`\n  - `is_default: boolean`\n  - `is_portal_enabled: boolean`\n  - `name: string`\n  - `object: 'carrier'`\n  - `options: { id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }[]`\n  - `shippo_carrier_account_id: string`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst carrier = await client.core.carriers.update('id', { is_portal_enabled: null, name: 'FedEx Express' });\n\nconsole.log(carrier);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.carriers.update',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst carrier = await client.core.carriers.update('id', {\n  is_portal_enabled: null,\n  name: 'FedEx Express',\n});\n\nconsole.log(carrier.id);",
+      },
+      go: {
+        method: 'client.Core.Carriers.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n\t"github.com/stainless-sdks/augno-go/packages/param"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcarrier, err := client.Core.Carriers.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreCarrierUpdateParams{\n\t\t\tIsPortalEnabled: param.Null[bool](),\n\t\t\tName:            augno.String("FedEx Express"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", carrier.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/carriers/$ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "is_portal_enabled": null,\n          "name": "FedEx Express"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'get_oauth_status',
+    endpoint: '/v1/core/carriers/{id}/oauth-status',
+    httpMethod: 'get',
+    summary: 'Get Carrier OAuth Status',
+    description:
+      'This endpoint returns the OAuth connection status for a carrier. Returns "connected" or "disconnected". Sandbox accounts always return "disconnected".',
+    stainlessPath: '(resource) core.carriers > (method) get_oauth_status',
+    qualified: 'client.core.carriers.getOAuthStatus',
+    params: ['id: string;'],
+    response: '{ status: string; }',
+    markdown:
+      '## get_oauth_status\n\n`client.core.carriers.getOAuthStatus(id: string): { status: string; }`\n\n**get** `/v1/core/carriers/{id}/oauth-status`\n\nThis endpoint returns the OAuth connection status for a carrier. Returns "connected" or "disconnected". Sandbox accounts always return "disconnected".\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ status: string; }`\n  OAuthStatusResponse represents the OAuth connection status for a carrier.\n\n  - `status: string`\n\n### Example\n\n```typescript\nimport AugnoClient from \'augno\';\n\nconst client = new AugnoClient();\n\nconst response = await client.core.carriers.getOAuthStatus(\'id\');\n\nconsole.log(response);\n```',
+    perLanguage: {
+      typescript: {
+        method: 'client.core.carriers.getOAuthStatus',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.carriers.getOAuthStatus('id');\n\nconsole.log(response.status);",
+      },
+      go: {
+        method: 'client.Core.Carriers.GetOAuthStatus',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Carriers.GetOAuthStatus(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Status)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/carriers/$ID/oauth-status \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/core/carriers/{carrier_id}/options',
+    httpMethod: 'get',
+    summary: 'List Carrier Options',
+    description:
+      'This endpoint returns a paginated list of carrier options (shipping service levels) for a carrier.',
+    stainlessPath: '(resource) core.carriers.options > (method) list',
+    qualified: 'client.core.carriers.options.list',
+    params: ['carrier_id: string;'],
+    response:
+      "{ data: { id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list\n\n`client.core.carriers.options.list(carrier_id: string): { data: carrier_option[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/core/carriers/{carrier_id}/options`\n\nThis endpoint returns a paginated list of carrier options (shipping service levels) for a carrier.\n\n### Parameters\n\n- `carrier_id: string`\n\n### Returns\n\n- `{ data: { id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of CarrierOption resources\n\n  - `data: { id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst options = await client.core.carriers.options.list('carrier_id');\n\nconsole.log(options);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.carriers.options.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst options = await client.core.carriers.options.list('carrier_id');\n\nconsole.log(options.data);",
+      },
+      go: {
+        method: 'client.Core.Carriers.Options.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\toptions, err := client.Core.Carriers.Options.List(context.TODO(), "carrier_id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", options.Data)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/carriers/$CARRIER_ID/options \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/core/carriers/{carrier_id}/options',
+    httpMethod: 'post',
+    summary: 'Create Carrier Option',
+    description: 'This endpoint creates a new carrier option (shipping service level) for a carrier.',
+    stainlessPath: '(resource) core.carriers.options > (method) create',
+    qualified: 'client.core.carriers.options.create',
+    params: [
+      'carrier_id: string;',
+      'code: string;',
+      'is_default: boolean;',
+      'is_portal_enabled: boolean;',
+      'name: string;',
+      'service_level_token: string;',
+    ],
+    response:
+      "{ id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }",
+    markdown:
+      "## create\n\n`client.core.carriers.options.create(carrier_id: string, code: string, is_default: boolean, is_portal_enabled: boolean, name: string, service_level_token: string): { id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }`\n\n**post** `/v1/core/carriers/{carrier_id}/options`\n\nThis endpoint creates a new carrier option (shipping service level) for a carrier.\n\n### Parameters\n\n- `carrier_id: string`\n\n- `code: string`\n  The carrier option code.\n\n- `is_default: boolean`\n  Whether this is a default (system-synced) option.\n\n- `is_portal_enabled: boolean`\n  Whether this option is enabled for the customer portal.\n\n- `name: string`\n  The display name of the carrier option.\n\n- `service_level_token: string`\n  The Shippo service level token, if this option maps to a Shippo service level.\n\n### Returns\n\n- `{ id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }`\n  CarrierOption represents a shipping service level for a carrier.\n\n  - `id: string`\n  - `code: string`\n  - `created_at: string`\n  - `is_default: boolean`\n  - `is_portal_enabled: boolean`\n  - `name: string`\n  - `object: 'carrier_option'`\n  - `service_level_token: string`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst carrierOption = await client.core.carriers.options.create('carrier_id', {\n  code: 'ground',\n  is_default: false,\n  is_portal_enabled: true,\n  name: 'Ground Shipping',\n  service_level_token: null,\n});\n\nconsole.log(carrierOption);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.carriers.options.create',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst carrierOption = await client.core.carriers.options.create('carrier_id', {\n  code: 'ground',\n  is_default: false,\n  is_portal_enabled: true,\n  name: 'Ground Shipping',\n  service_level_token: null,\n});\n\nconsole.log(carrierOption.id);",
+      },
+      go: {
+        method: 'client.Core.Carriers.Options.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n\t"github.com/stainless-sdks/augno-go/packages/param"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcarrierOption, err := client.Core.Carriers.Options.New(\n\t\tcontext.TODO(),\n\t\t"carrier_id",\n\t\taugno.CoreCarrierOptionNewParams{\n\t\t\tCode:              "ground",\n\t\t\tIsDefault:         false,\n\t\t\tIsPortalEnabled:   true,\n\t\t\tName:              "Ground Shipping",\n\t\t\tServiceLevelToken: param.Null[string](),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", carrierOption.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/carriers/$CARRIER_ID/options \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "code": "ground",\n          "is_default": false,\n          "is_portal_enabled": true,\n          "name": "Ground Shipping",\n          "service_level_token": null\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/v1/core/carriers/{carrier_id}/options/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete Carrier Option',
+    description:
+      'This endpoint permanently deletes a carrier option. Default (system-synced) options cannot be deleted.',
+    stainlessPath: '(resource) core.carriers.options > (method) delete',
+    qualified: 'client.core.carriers.options.delete',
+    params: ['carrier_id: string;', 'id: string;'],
+    response: '{  }',
+    markdown:
+      "## delete\n\n`client.core.carriers.options.delete(carrier_id: string, id: string): {  }`\n\n**delete** `/v1/core/carriers/{carrier_id}/options/{id}`\n\nThis endpoint permanently deletes a carrier option. Default (system-synced) options cannot be deleted.\n\n### Parameters\n\n- `carrier_id: string`\n\n- `id: string`\n\n### Returns\n\n- `{  }`\n\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst option = await client.core.carriers.options.delete('id', { carrier_id: 'carrier_id' });\n\nconsole.log(option);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.carriers.options.delete',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst option = await client.core.carriers.options.delete('id', { carrier_id: 'carrier_id' });\n\nconsole.log(option);",
+      },
+      go: {
+        method: 'client.Core.Carriers.Options.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\toption, err := client.Core.Carriers.Options.Delete(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreCarrierOptionDeleteParams{\n\t\t\tCarrierID: "carrier_id",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", option)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/carriers/$CARRIER_ID/options/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/core/carriers/{carrier_id}/options/{id}',
+    httpMethod: 'get',
+    summary: 'Get Carrier Option',
+    description: 'This endpoint returns a single carrier option by its ID.',
+    stainlessPath: '(resource) core.carriers.options > (method) retrieve',
+    qualified: 'client.core.carriers.options.retrieve',
+    params: ['carrier_id: string;', 'id: string;'],
+    response:
+      "{ id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }",
+    markdown:
+      "## retrieve\n\n`client.core.carriers.options.retrieve(carrier_id: string, id: string): { id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }`\n\n**get** `/v1/core/carriers/{carrier_id}/options/{id}`\n\nThis endpoint returns a single carrier option by its ID.\n\n### Parameters\n\n- `carrier_id: string`\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }`\n  CarrierOption represents a shipping service level for a carrier.\n\n  - `id: string`\n  - `code: string`\n  - `created_at: string`\n  - `is_default: boolean`\n  - `is_portal_enabled: boolean`\n  - `name: string`\n  - `object: 'carrier_option'`\n  - `service_level_token: string`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst carrierOption = await client.core.carriers.options.retrieve('id', { carrier_id: 'carrier_id' });\n\nconsole.log(carrierOption);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.carriers.options.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst carrierOption = await client.core.carriers.options.retrieve('id', {\n  carrier_id: 'carrier_id',\n});\n\nconsole.log(carrierOption.id);",
+      },
+      go: {
+        method: 'client.Core.Carriers.Options.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcarrierOption, err := client.Core.Carriers.Options.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreCarrierOptionGetParams{\n\t\t\tCarrierID: "carrier_id",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", carrierOption.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/carriers/$CARRIER_ID/options/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/v1/core/carriers/{carrier_id}/options/{id}',
+    httpMethod: 'patch',
+    summary: 'Update Carrier Option',
+    description: "This endpoint partially updates a carrier option's name, code, and portal visibility.",
+    stainlessPath: '(resource) core.carriers.options > (method) update',
+    qualified: 'client.core.carriers.options.update',
+    params: [
+      'carrier_id: string;',
+      'id: string;',
+      'code: string;',
+      'is_default: boolean;',
+      'is_portal_enabled: boolean;',
+      'name: string;',
+    ],
+    response:
+      "{ id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }",
+    markdown:
+      "## update\n\n`client.core.carriers.options.update(carrier_id: string, id: string, code: string, is_default: boolean, is_portal_enabled: boolean, name: string): { id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }`\n\n**patch** `/v1/core/carriers/{carrier_id}/options/{id}`\n\nThis endpoint partially updates a carrier option's name, code, and portal visibility.\n\n### Parameters\n\n- `carrier_id: string`\n\n- `id: string`\n\n- `code: string`\n  The new carrier option code.\n\n- `is_default: boolean`\n  Whether this is a default (system-synced) option.\n\n- `is_portal_enabled: boolean`\n  Whether this option is enabled for the customer portal.\n\n- `name: string`\n  The new display name for the carrier option.\n\n### Returns\n\n- `{ id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }`\n  CarrierOption represents a shipping service level for a carrier.\n\n  - `id: string`\n  - `code: string`\n  - `created_at: string`\n  - `is_default: boolean`\n  - `is_portal_enabled: boolean`\n  - `name: string`\n  - `object: 'carrier_option'`\n  - `service_level_token: string`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst carrierOption = await client.core.carriers.options.update('id', {\n  carrier_id: 'carrier_id',\n  code: null,\n  is_default: null,\n  is_portal_enabled: null,\n  name: 'Express Shipping',\n});\n\nconsole.log(carrierOption);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.carriers.options.update',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst carrierOption = await client.core.carriers.options.update('id', {\n  carrier_id: 'carrier_id',\n  code: null,\n  is_default: null,\n  is_portal_enabled: null,\n  name: 'Express Shipping',\n});\n\nconsole.log(carrierOption.id);",
+      },
+      go: {
+        method: 'client.Core.Carriers.Options.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n\t"github.com/stainless-sdks/augno-go/packages/param"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcarrierOption, err := client.Core.Carriers.Options.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreCarrierOptionUpdateParams{\n\t\t\tCarrierID:       "carrier_id",\n\t\t\tCode:            param.Null[string](),\n\t\t\tIsDefault:       param.Null[bool](),\n\t\t\tIsPortalEnabled: param.Null[bool](),\n\t\t\tName:            augno.String("Express Shipping"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", carrierOption.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/carriers/$CARRIER_ID/options/$ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "code": null,\n          "is_default": null,\n          "is_portal_enabled": null,\n          "name": "Express Shipping"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'initiate_oauth',
+    endpoint: '/v1/core/carriers/{id}/actions/initiate-oauth',
+    httpMethod: 'post',
+    summary: 'Initiate Carrier OAuth',
+    description:
+      'This endpoint initiates the OAuth flow for a Shippo-managed carrier (e.g. FedEx). Returns an OAuth URL to redirect the user to. Not available in sandbox mode.',
+    stainlessPath: '(resource) core.carriers.actions > (method) initiate_oauth',
+    qualified: 'client.core.carriers.actions.initiateOAuth',
+    params: ['id: string;', 'redirect_uri: string;', 'state: string;'],
+    response: '{ oauth_url: string; }',
+    markdown:
+      "## initiate_oauth\n\n`client.core.carriers.actions.initiateOAuth(id: string, redirect_uri: string, state: string): { oauth_url: string; }`\n\n**post** `/v1/core/carriers/{id}/actions/initiate-oauth`\n\nThis endpoint initiates the OAuth flow for a Shippo-managed carrier (e.g. FedEx). Returns an OAuth URL to redirect the user to. Not available in sandbox mode.\n\n### Parameters\n\n- `id: string`\n\n- `redirect_uri: string`\n  The URI to redirect to after OAuth completes.\n\n- `state: string`\n  An optional opaque state value passed through the OAuth flow.\n\n### Returns\n\n- `{ oauth_url: string; }`\n  OAuthResponse represents the response from initiating carrier OAuth.\n\n  - `oauth_url: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.core.carriers.actions.initiateOAuth('id', { redirect_uri: 'https://app.example.com/carriers/oauth/callback', state: null });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.carriers.actions.initiateOAuth',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.carriers.actions.initiateOAuth('id', {\n  redirect_uri: 'https://app.example.com/carriers/oauth/callback',\n  state: null,\n});\n\nconsole.log(response.oauth_url);",
+      },
+      go: {
+        method: 'client.Core.Carriers.Actions.InitiateOAuth',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n\t"github.com/stainless-sdks/augno-go/packages/param"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Carriers.Actions.InitiateOAuth(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreCarrierActionInitiateOAuthParams{\n\t\t\tRedirectUri: "https://app.example.com/carriers/oauth/callback",\n\t\t\tState:       param.Null[string](),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.OAuthURL)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/carriers/$ID/actions/initiate-oauth \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "redirect_uri": "https://app.example.com/carriers/oauth/callback",\n          "state": null\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'sync_options',
+    endpoint: '/v1/core/carriers/{id}/actions/sync-options',
+    httpMethod: 'post',
+    summary: 'Sync Carrier Options',
+    description:
+      'This endpoint syncs carrier options from Shippo service levels. Adds new service levels and removes stale ones. Not available in sandbox mode.',
+    stainlessPath: '(resource) core.carriers.actions > (method) sync_options',
+    qualified: 'client.core.carriers.actions.syncOptions',
+    params: ['id: string;'],
+    response:
+      "{ id: string; account_number: string; code: string; created_at: string; deleted_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier'; options: { id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }[]; shippo_carrier_account_id: string; updated_at: string; }",
+    markdown:
+      "## sync_options\n\n`client.core.carriers.actions.syncOptions(id: string): { id: string; account_number: string; code: string; created_at: string; deleted_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier'; options: carrier_option[]; shippo_carrier_account_id: string; updated_at: string; }`\n\n**post** `/v1/core/carriers/{id}/actions/sync-options`\n\nThis endpoint syncs carrier options from Shippo service levels. Adds new service levels and removes stale ones. Not available in sandbox mode.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; account_number: string; code: string; created_at: string; deleted_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier'; options: { id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }[]; shippo_carrier_account_id: string; updated_at: string; }`\n  Carrier represents a shipping carrier configured for the account.\n\n  - `id: string`\n  - `account_number: string`\n  - `code: string`\n  - `created_at: string`\n  - `deleted_at: string`\n  - `is_default: boolean`\n  - `is_portal_enabled: boolean`\n  - `name: string`\n  - `object: 'carrier'`\n  - `options: { id: string; code: string; created_at: string; is_default: boolean; is_portal_enabled: boolean; name: string; object: 'carrier_option'; service_level_token: string; updated_at: string; }[]`\n  - `shippo_carrier_account_id: string`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst carrier = await client.core.carriers.actions.syncOptions('id');\n\nconsole.log(carrier);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.carriers.actions.syncOptions',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst carrier = await client.core.carriers.actions.syncOptions('id');\n\nconsole.log(carrier.id);",
+      },
+      go: {
+        method: 'client.Core.Carriers.Actions.SyncOptions',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcarrier, err := client.Core.Carriers.Actions.SyncOptions(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", carrier.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/carriers/$ID/actions/sync-options \\\n    -X POST \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/core/child-accounts',
+    httpMethod: 'get',
+    summary: 'List Child Accounts',
+    description:
+      'This endpoint returns a paginated list of child accounts for the target account (parent).\nSupports cursor-based pagination and search by account name.',
+    stainlessPath: '(resource) core.child_accounts > (method) list',
+    qualified: 'client.core.childAccounts.list',
+    response:
+      "{ data: { id: string; account: light_account; created_at: string; email: string; external_number: string; object: 'child_account'; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list\n\n`client.core.childAccounts.list(): { data: child_account[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/core/child-accounts`\n\nThis endpoint returns a paginated list of child accounts for the target account (parent).\nSupports cursor-based pagination and search by account name.\n\n### Returns\n\n- `{ data: { id: string; account: light_account; created_at: string; email: string; external_number: string; object: 'child_account'; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of ChildAccount resources\n\n  - `data: { id: string; account: { id: string; name: string; object: 'account'; }; created_at: string; email: string; external_number: string; object: 'child_account'; updated_at: string; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst childAccounts = await client.core.childAccounts.list();\n\nconsole.log(childAccounts);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.childAccounts.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst childAccounts = await client.core.childAccounts.list();\n\nconsole.log(childAccounts.data);",
+      },
+      go: {
+        method: 'client.Core.ChildAccounts.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tchildAccounts, err := client.Core.ChildAccounts.List(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", childAccounts.Data)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/child-accounts \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'remove',
+    endpoint: '/v1/core/child-accounts/{child_account_id}',
+    httpMethod: 'delete',
+    summary: 'Remove Child Account',
+    description:
+      'This endpoint removes a child account from the target account (parent).\nThe operation is idempotent — removing an already-removed child returns success.',
+    stainlessPath: '(resource) core.child_accounts > (method) remove',
+    qualified: 'client.core.childAccounts.remove',
+    params: ['child_account_id: string;'],
+    response: '{  }',
+    markdown:
+      "## remove\n\n`client.core.childAccounts.remove(child_account_id: string): {  }`\n\n**delete** `/v1/core/child-accounts/{child_account_id}`\n\nThis endpoint removes a child account from the target account (parent).\nThe operation is idempotent — removing an already-removed child returns success.\n\n### Parameters\n\n- `child_account_id: string`\n\n### Returns\n\n- `{  }`\n\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst childAccount = await client.core.childAccounts.remove('child_account_id');\n\nconsole.log(childAccount);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.childAccounts.remove',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst childAccount = await client.core.childAccounts.remove('child_account_id');\n\nconsole.log(childAccount);",
+      },
+      go: {
+        method: 'client.Core.ChildAccounts.Remove',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tchildAccount, err := client.Core.ChildAccounts.Remove(context.TODO(), "child_account_id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", childAccount)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/child-accounts/$CHILD_ACCOUNT_ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'add',
+    endpoint: '/v1/core/child-accounts/{child_account_id}',
+    httpMethod: 'put',
+    summary: 'Add Child Account',
+    description:
+      'This endpoint adds a child account to the target account (parent).\nThe child must be an existing account relation. The operation is idempotent.',
+    stainlessPath: '(resource) core.child_accounts > (method) add',
+    qualified: 'client.core.childAccounts.add',
+    params: ['child_account_id: string;'],
+    response:
+      "{ id: string; account: { id: string; name: string; object: 'account'; }; created_at: string; email: string; external_number: string; object: 'child_account'; updated_at: string; }",
+    markdown:
+      "## add\n\n`client.core.childAccounts.add(child_account_id: string): { id: string; account: light_account; created_at: string; email: string; external_number: string; object: 'child_account'; updated_at: string; }`\n\n**put** `/v1/core/child-accounts/{child_account_id}`\n\nThis endpoint adds a child account to the target account (parent).\nThe child must be an existing account relation. The operation is idempotent.\n\n### Parameters\n\n- `child_account_id: string`\n\n### Returns\n\n- `{ id: string; account: { id: string; name: string; object: 'account'; }; created_at: string; email: string; external_number: string; object: 'child_account'; updated_at: string; }`\n  ChildAccount represents a child customer account in a parent-child relationship.\n\n  - `id: string`\n  - `account: { id: string; name: string; object: 'account'; }`\n  - `created_at: string`\n  - `email: string`\n  - `external_number: string`\n  - `object: 'child_account'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst childAccount = await client.core.childAccounts.add('child_account_id');\n\nconsole.log(childAccount);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.childAccounts.add',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst childAccount = await client.core.childAccounts.add('child_account_id');\n\nconsole.log(childAccount.id);",
+      },
+      go: {
+        method: 'client.Core.ChildAccounts.Add',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tchildAccount, err := client.Core.ChildAccounts.Add(context.TODO(), "child_account_id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", childAccount.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/child-accounts/$CHILD_ACCOUNT_ID \\\n    -X PUT \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/core/integrations',
+    httpMethod: 'get',
+    summary: 'List Account Integrations',
+    description:
+      'This endpoint returns a paginated list of integrations for the target account.\nSupports cursor-based pagination and search by name.',
+    stainlessPath: '(resource) core.integrations > (method) list',
+    qualified: 'client.core.integrations.list',
+    response:
+      "{ data: { id: string; created_at: string; integration_code: 'stripe' | 'shippo'; is_active: boolean; name: string; object: 'account_integration'; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list\n\n`client.core.integrations.list(): { data: account_integration[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/core/integrations`\n\nThis endpoint returns a paginated list of integrations for the target account.\nSupports cursor-based pagination and search by name.\n\n### Returns\n\n- `{ data: { id: string; created_at: string; integration_code: 'stripe' | 'shippo'; is_active: boolean; name: string; object: 'account_integration'; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of AccountIntegration resources\n\n  - `data: { id: string; created_at: string; integration_code: 'stripe' | 'shippo'; is_active: boolean; name: string; object: 'account_integration'; updated_at: string; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst integrations = await client.core.integrations.list();\n\nconsole.log(integrations);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.integrations.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst integrations = await client.core.integrations.list();\n\nconsole.log(integrations.data);",
+      },
+      go: {
+        method: 'client.Core.Integrations.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tintegrations, err := client.Core.Integrations.List(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", integrations.Data)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/integrations \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/core/integrations',
+    httpMethod: 'post',
+    summary: 'Create Account Integration',
+    description:
+      'This endpoint creates a new account integration or updates an existing one with the same integration code.\nCredentials are encrypted at rest and never returned in API responses.',
+    stainlessPath: '(resource) core.integrations > (method) create',
+    qualified: 'client.core.integrations.create',
+    params: ['credentials: string;', "integration_code: 'stripe' | 'shippo';", 'name: string;'],
+    response:
+      "{ id: string; created_at: string; integration_code: 'stripe' | 'shippo'; is_active: boolean; name: string; object: 'account_integration'; updated_at: string; }",
+    markdown:
+      "## create\n\n`client.core.integrations.create(credentials: string, integration_code: 'stripe' | 'shippo', name: string): { id: string; created_at: string; integration_code: 'stripe' | 'shippo'; is_active: boolean; name: string; object: 'account_integration'; updated_at: string; }`\n\n**post** `/v1/core/integrations`\n\nThis endpoint creates a new account integration or updates an existing one with the same integration code.\nCredentials are encrypted at rest and never returned in API responses.\n\n### Parameters\n\n- `credentials: string`\n  The credentials JSON string containing provider-specific keys.\n\n- `integration_code: 'stripe' | 'shippo'`\n  The integration provider code (e.g. \"stripe\", \"shippo\").\n\n- `name: string`\n  The human-readable name for the integration.\n\n### Returns\n\n- `{ id: string; created_at: string; integration_code: 'stripe' | 'shippo'; is_active: boolean; name: string; object: 'account_integration'; updated_at: string; }`\n  AccountIntegration represents a third-party integration connected to an account.\n\n  - `id: string`\n  - `created_at: string`\n  - `integration_code: 'stripe' | 'shippo'`\n  - `is_active: boolean`\n  - `name: string`\n  - `object: 'account_integration'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountIntegration = await client.core.integrations.create({\n  credentials: '{\"privateKey\":\"sk_test_...\",\"publishableKey\":\"pk_test_...\",\"webhookSecret\":\"whsec_...\"}',\n  integration_code: 'stripe',\n  name: 'My Stripe Integration',\n});\n\nconsole.log(accountIntegration);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.integrations.create',
+        example:
+          'import AugnoClient from \'augno\';\n\nconst client = new AugnoClient({\n  apiKey: process.env[\'AUGNO_API_KEY\'], // This is the default and can be omitted\n});\n\nconst accountIntegration = await client.core.integrations.create({\n  credentials:\n    \'{"privateKey":"sk_test_...","publishableKey":"pk_test_...","webhookSecret":"whsec_..."}\',\n  integration_code: \'stripe\',\n  name: \'My Stripe Integration\',\n});\n\nconsole.log(accountIntegration.id);',
+      },
+      go: {
+        method: 'client.Core.Integrations.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountIntegration, err := client.Core.Integrations.New(context.TODO(), augno.CoreIntegrationNewParams{\n\t\tCredentials:     `{"privateKey":"sk_test_...","publishableKey":"pk_test_...","webhookSecret":"whsec_..."}`,\n\t\tIntegrationCode: augno.CoreIntegrationNewParamsIntegrationCodeStripe,\n\t\tName:            "My Stripe Integration",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountIntegration.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/integrations \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "credentials": "{\\\\"privateKey\\\\":\\\\"sk_test_...\\\\",\\\\"publishableKey\\\\":\\\\"pk_test_...\\\\",\\\\"webhookSecret\\\\":\\\\"whsec_...\\\\"}",\n          "integration_code": "stripe",\n          "name": "My Stripe Integration"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/v1/core/integrations/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete Account Integration',
+    description: 'This endpoint deletes an account integration and returns the deleted resource.',
+    stainlessPath: '(resource) core.integrations > (method) delete',
+    qualified: 'client.core.integrations.delete',
+    params: ['id: string;'],
+    response:
+      "{ id: string; created_at: string; integration_code: 'stripe' | 'shippo'; is_active: boolean; name: string; object: 'account_integration'; updated_at: string; }",
+    markdown:
+      "## delete\n\n`client.core.integrations.delete(id: string): { id: string; created_at: string; integration_code: 'stripe' | 'shippo'; is_active: boolean; name: string; object: 'account_integration'; updated_at: string; }`\n\n**delete** `/v1/core/integrations/{id}`\n\nThis endpoint deletes an account integration and returns the deleted resource.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; created_at: string; integration_code: 'stripe' | 'shippo'; is_active: boolean; name: string; object: 'account_integration'; updated_at: string; }`\n  AccountIntegration represents a third-party integration connected to an account.\n\n  - `id: string`\n  - `created_at: string`\n  - `integration_code: 'stripe' | 'shippo'`\n  - `is_active: boolean`\n  - `name: string`\n  - `object: 'account_integration'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountIntegration = await client.core.integrations.delete('id');\n\nconsole.log(accountIntegration);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.integrations.delete',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountIntegration = await client.core.integrations.delete('id');\n\nconsole.log(accountIntegration.id);",
+      },
+      go: {
+        method: 'client.Core.Integrations.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountIntegration, err := client.Core.Integrations.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountIntegration.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/integrations/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/v1/core/integrations/{id}',
+    httpMethod: 'put',
+    summary: 'Update Account Integration',
+    description:
+      "This endpoint updates an account integration's name and/or active status.\nOnly provided fields are updated; absent fields retain their current values.",
+    stainlessPath: '(resource) core.integrations > (method) update',
+    qualified: 'client.core.integrations.update',
+    params: ['id: string;', 'is_active?: boolean;', 'name?: string;'],
+    response:
+      "{ id: string; created_at: string; integration_code: 'stripe' | 'shippo'; is_active: boolean; name: string; object: 'account_integration'; updated_at: string; }",
+    markdown:
+      "## update\n\n`client.core.integrations.update(id: string, is_active?: boolean, name?: string): { id: string; created_at: string; integration_code: 'stripe' | 'shippo'; is_active: boolean; name: string; object: 'account_integration'; updated_at: string; }`\n\n**put** `/v1/core/integrations/{id}`\n\nThis endpoint updates an account integration's name and/or active status.\nOnly provided fields are updated; absent fields retain their current values.\n\n### Parameters\n\n- `id: string`\n\n- `is_active?: boolean`\n  Whether this integration is currently active.\n\n- `name?: string`\n  The human-readable name for the integration.\n\n### Returns\n\n- `{ id: string; created_at: string; integration_code: 'stripe' | 'shippo'; is_active: boolean; name: string; object: 'account_integration'; updated_at: string; }`\n  AccountIntegration represents a third-party integration connected to an account.\n\n  - `id: string`\n  - `created_at: string`\n  - `integration_code: 'stripe' | 'shippo'`\n  - `is_active: boolean`\n  - `name: string`\n  - `object: 'account_integration'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountIntegration = await client.core.integrations.update('id');\n\nconsole.log(accountIntegration);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.integrations.update',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountIntegration = await client.core.integrations.update('id', {\n  name: 'Updated Stripe Integration',\n});\n\nconsole.log(accountIntegration.id);",
+      },
+      go: {
+        method: 'client.Core.Integrations.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountIntegration, err := client.Core.Integrations.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreIntegrationUpdateParams{\n\t\t\tName: augno.String("Updated Stripe Integration"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountIntegration.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/integrations/$ID \\\n    -X PUT \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'get_publishable_key',
+    endpoint: '/v1/core/integrations/stripe/publishable-key',
+    httpMethod: 'get',
+    summary: 'Get Stripe Publishable Key',
+    description:
+      'This endpoint returns the Stripe publishable key for the target account.\nAvailable to both internal and customer actors with read access.',
+    stainlessPath: '(resource) core.integrations.stripe > (method) get_publishable_key',
+    qualified: 'client.core.integrations.stripe.getPublishableKey',
+    response: '{ publishable_key: string; }',
+    markdown:
+      "## get_publishable_key\n\n`client.core.integrations.stripe.getPublishableKey(): { publishable_key: string; }`\n\n**get** `/v1/core/integrations/stripe/publishable-key`\n\nThis endpoint returns the Stripe publishable key for the target account.\nAvailable to both internal and customer actors with read access.\n\n### Returns\n\n- `{ publishable_key: string; }`\n  StripePublishableKey represents the Stripe publishable key for an account.\n\n  - `publishable_key: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.core.integrations.stripe.getPublishableKey();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.integrations.stripe.getPublishableKey',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.integrations.stripe.getPublishableKey();\n\nconsole.log(response.publishable_key);",
+      },
+      go: {
+        method: 'client.Core.Integrations.Stripe.GetPublishableKey',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Integrations.Stripe.GetPublishableKey(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.PublishableKey)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/integrations/stripe/publishable-key \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'get_status',
+    endpoint: '/v1/core/integrations/stripe/status',
+    httpMethod: 'get',
+    summary: 'Get Stripe Status',
+    description:
+      'This endpoint returns whether the target account has a Stripe integration configured.\nAvailable to both internal and customer actors with read access.',
+    stainlessPath: '(resource) core.integrations.stripe > (method) get_status',
+    qualified: 'client.core.integrations.stripe.getStatus',
+    response: '{ has_stripe_integration: boolean; }',
+    markdown:
+      "## get_status\n\n`client.core.integrations.stripe.getStatus(): { has_stripe_integration: boolean; }`\n\n**get** `/v1/core/integrations/stripe/status`\n\nThis endpoint returns whether the target account has a Stripe integration configured.\nAvailable to both internal and customer actors with read access.\n\n### Returns\n\n- `{ has_stripe_integration: boolean; }`\n  StripeStatus represents whether an account has a Stripe integration.\n\n  - `has_stripe_integration: boolean`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.core.integrations.stripe.getStatus();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.integrations.stripe.getStatus',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.integrations.stripe.getStatus();\n\nconsole.log(response.has_stripe_integration);",
+      },
+      go: {
+        method: 'client.Core.Integrations.Stripe.GetStatus',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Integrations.Stripe.GetStatus(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.HasStripeIntegration)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/integrations/stripe/status \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/core/items',
+    httpMethod: 'get',
+    summary: 'List Items',
+    description:
+      'This endpoint returns a paginated list of items for the target account.\nSupports cursor-based pagination, filtering by type, category, attributes, supplier, date range, and search by SKU or description.',
+    stainlessPath: '(resource) core.items > (method) list',
+    qualified: 'client.core.items.list',
+    params: [
+      'attribute_ids?: string[];',
+      'category_ids?: string[];',
+      'end_date?: string;',
+      "include?: 'category' | 'unit_value' | 'unit_cost' | 'burn_rate'[];",
+      'is_exact_match?: boolean;',
+      'only_initial_subassemblies?: boolean;',
+      'start_date?: string;',
+      'supplier_id?: string;',
+      'types?: string[];',
+    ],
+    response:
+      "{ data: { id: string; attributes: light_attribute[]; burn_rate: light_rate; category: light_item_category; created_at: string; description: string; is_dirty: boolean; item_type_code: string; notes: string; object: 'item'; sku: string; unit_cost: light_rate; unit_value: light_rate; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list\n\n`client.core.items.list(attribute_ids?: string[], category_ids?: string[], end_date?: string, include?: 'category' | 'unit_value' | 'unit_cost' | 'burn_rate'[], is_exact_match?: boolean, only_initial_subassemblies?: boolean, start_date?: string, supplier_id?: string, types?: string[]): { data: item[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/core/items`\n\nThis endpoint returns a paginated list of items for the target account.\nSupports cursor-based pagination, filtering by type, category, attributes, supplier, date range, and search by SKU or description.\n\n### Parameters\n\n- `attribute_ids?: string[]`\n  Filter by attribute IDs.\n\n- `category_ids?: string[]`\n  Filter by category IDs.\n\n- `end_date?: string`\n  Filter items created on or before this date.\n\n- `include?: 'category' | 'unit_value' | 'unit_cost' | 'burn_rate'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n- `is_exact_match?: boolean`\n  When true, search query must match exactly rather than partial match.\n\n- `only_initial_subassemblies?: boolean`\n  When true, only return items that are initial subassemblies.\n\n- `start_date?: string`\n  Filter items created on or after this date.\n\n- `supplier_id?: string`\n  Filter by supplier ID.\n\n- `types?: string[]`\n  Filter by item type codes.\n\n### Returns\n\n- `{ data: { id: string; attributes: light_attribute[]; burn_rate: light_rate; category: light_item_category; created_at: string; description: string; is_dirty: boolean; item_type_code: string; notes: string; object: 'item'; sku: string; unit_cost: light_rate; unit_value: light_rate; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of Item resources\n\n  - `data: { id: string; attributes: { id: string; object: 'attribute'; text: string; }[]; burn_rate: { id: string; denominator_unit: light_unit; numerator_unit: light_unit; object: 'rate'; value: string; }; category: { id: string; name: string; object: 'item_category'; }; created_at: string; description: string; is_dirty: boolean; item_type_code: string; notes: string; object: 'item'; sku: string; unit_cost: { id: string; denominator_unit: light_unit; numerator_unit: light_unit; object: 'rate'; value: string; }; unit_value: { id: string; denominator_unit: light_unit; numerator_unit: light_unit; object: 'rate'; value: string; }; updated_at: string; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst items = await client.core.items.list();\n\nconsole.log(items);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.items.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst items = await client.core.items.list();\n\nconsole.log(items.data);",
+      },
+      go: {
+        method: 'client.Core.Items.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\titems, err := client.Core.Items.List(context.TODO(), augno.CoreItemListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", items.Data)\n}\n',
+      },
+      http: {
+        example: 'curl https://api.augno.com/v1/core/items \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/core/items/{id}',
+    httpMethod: 'get',
+    summary: 'Get Item',
+    description: 'This endpoint returns a single item by its ID.',
+    stainlessPath: '(resource) core.items > (method) retrieve',
+    qualified: 'client.core.items.retrieve',
+    params: ['id: string;', "include?: 'category' | 'unit_value' | 'unit_cost' | 'burn_rate'[];"],
+    response:
+      "{ id: string; attributes: { id: string; object: 'attribute'; text: string; }[]; burn_rate: { id: string; denominator_unit: light_unit; numerator_unit: light_unit; object: 'rate'; value: string; }; category: { id: string; name: string; object: 'item_category'; }; created_at: string; description: string; is_dirty: boolean; item_type_code: string; notes: string; object: 'item'; sku: string; unit_cost: { id: string; denominator_unit: light_unit; numerator_unit: light_unit; object: 'rate'; value: string; }; unit_value: { id: string; denominator_unit: light_unit; numerator_unit: light_unit; object: 'rate'; value: string; }; updated_at: string; }",
+    markdown:
+      "## retrieve\n\n`client.core.items.retrieve(id: string, include?: 'category' | 'unit_value' | 'unit_cost' | 'burn_rate'[]): { id: string; attributes: light_attribute[]; burn_rate: light_rate; category: light_item_category; created_at: string; description: string; is_dirty: boolean; item_type_code: string; notes: string; object: 'item'; sku: string; unit_cost: light_rate; unit_value: light_rate; updated_at: string; }`\n\n**get** `/v1/core/items/{id}`\n\nThis endpoint returns a single item by its ID.\n\n### Parameters\n\n- `id: string`\n\n- `include?: 'category' | 'unit_value' | 'unit_cost' | 'burn_rate'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; attributes: { id: string; object: 'attribute'; text: string; }[]; burn_rate: { id: string; denominator_unit: light_unit; numerator_unit: light_unit; object: 'rate'; value: string; }; category: { id: string; name: string; object: 'item_category'; }; created_at: string; description: string; is_dirty: boolean; item_type_code: string; notes: string; object: 'item'; sku: string; unit_cost: { id: string; denominator_unit: light_unit; numerator_unit: light_unit; object: 'rate'; value: string; }; unit_value: { id: string; denominator_unit: light_unit; numerator_unit: light_unit; object: 'rate'; value: string; }; updated_at: string; }`\n  Item represents an inventory item (product, material, or part).\n\n  - `id: string`\n  - `attributes: { id: string; object: 'attribute'; text: string; }[]`\n  - `burn_rate: { id: string; denominator_unit: { id: string; object: 'unit'; }; numerator_unit: { id: string; object: 'unit'; }; object: 'rate'; value: string; }`\n  - `category: { id: string; name: string; object: 'item_category'; }`\n  - `created_at: string`\n  - `description: string`\n  - `is_dirty: boolean`\n  - `item_type_code: string`\n  - `notes: string`\n  - `object: 'item'`\n  - `sku: string`\n  - `unit_cost: { id: string; denominator_unit: { id: string; object: 'unit'; }; numerator_unit: { id: string; object: 'unit'; }; object: 'rate'; value: string; }`\n  - `unit_value: { id: string; denominator_unit: { id: string; object: 'unit'; }; numerator_unit: { id: string; object: 'unit'; }; object: 'rate'; value: string; }`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst item = await client.core.items.retrieve('id');\n\nconsole.log(item);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.items.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst item = await client.core.items.retrieve('id');\n\nconsole.log(item.id);",
+      },
+      go: {
+        method: 'client.Core.Items.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\titem, err := client.Core.Items.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreItemGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", item.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/items/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'get_costs',
+    endpoint: '/v1/core/items/{id}/costs',
+    httpMethod: 'get',
+    summary: 'Get Item Costs',
+    description:
+      'This endpoint returns the production cost breakdown for an item, including direct material, direct labor, overhead, and total costs.',
+    stainlessPath: '(resource) core.items > (method) get_costs',
+    qualified: 'client.core.items.getCosts',
+    params: ['id: string;'],
+    response:
+      "{ direct_labor_cost: string; direct_material_cost: string; object: 'item'; overhead_cost: string; total_cost: string; unit: { id: string; object: 'unit'; }; }",
+    markdown:
+      "## get_costs\n\n`client.core.items.getCosts(id: string): { direct_labor_cost: string; direct_material_cost: string; object: 'item'; overhead_cost: string; total_cost: string; unit: light_unit; }`\n\n**get** `/v1/core/items/{id}/costs`\n\nThis endpoint returns the production cost breakdown for an item, including direct material, direct labor, overhead, and total costs.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ direct_labor_cost: string; direct_material_cost: string; object: 'item'; overhead_cost: string; total_cost: string; unit: { id: string; object: 'unit'; }; }`\n  ItemCosts represents cost breakdown for an item.\n\n  - `direct_labor_cost: string`\n  - `direct_material_cost: string`\n  - `object: 'item'`\n  - `overhead_cost: string`\n  - `total_cost: string`\n  - `unit: { id: string; object: 'unit'; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.core.items.getCosts('id');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.items.getCosts',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.items.getCosts('id');\n\nconsole.log(response.direct_labor_cost);",
+      },
+      go: {
+        method: 'client.Core.Items.GetCosts',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Items.GetCosts(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.DirectLaborCost)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/items/$ID/costs \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'get_inventory',
+    endpoint: '/v1/core/items/{id}/inventory',
+    httpMethod: 'get',
+    summary: 'Get Item Inventory',
+    description:
+      'This endpoint returns inventory quantities for an item, including on-hand, reserved, available-to-promise, and short quantities.',
+    stainlessPath: '(resource) core.items > (method) get_inventory',
+    qualified: 'client.core.items.getInventory',
+    params: ['id: string;'],
+    response:
+      "{ available_to_promise: { unit: light_unit; value: string; }; object: 'item'; on_hand: { unit: light_unit; value: string; }; reserved: { unit: light_unit; value: string; }; short: { unit: light_unit; value: string; }; }",
+    markdown:
+      "## get_inventory\n\n`client.core.items.getInventory(id: string): { available_to_promise: quantity_info; object: 'item'; on_hand: quantity_info; reserved: quantity_info; short: quantity_info; }`\n\n**get** `/v1/core/items/{id}/inventory`\n\nThis endpoint returns inventory quantities for an item, including on-hand, reserved, available-to-promise, and short quantities.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ available_to_promise: { unit: light_unit; value: string; }; object: 'item'; on_hand: { unit: light_unit; value: string; }; reserved: { unit: light_unit; value: string; }; short: { unit: light_unit; value: string; }; }`\n  ItemInventory represents inventory quantities for an item.\n\n  - `available_to_promise: { unit: { id: string; object: 'unit'; }; value: string; }`\n  - `object: 'item'`\n  - `on_hand: { unit: { id: string; object: 'unit'; }; value: string; }`\n  - `reserved: { unit: { id: string; object: 'unit'; }; value: string; }`\n  - `short: { unit: { id: string; object: 'unit'; }; value: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.core.items.getInventory('id');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.items.getInventory',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.items.getInventory('id');\n\nconsole.log(response.available_to_promise);",
+      },
+      go: {
+        method: 'client.Core.Items.GetInventory',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Items.GetInventory(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.AvailableToPromise)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/items/$ID/inventory \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'get_trends',
+    endpoint: '/v1/core/items/{id}/trends',
+    httpMethod: 'get',
+    summary: 'Get Item Trends',
+    description:
+      'This endpoint returns historical trend data for an item. The trend_type query parameter specifies which metric to retrieve trends for.',
+    stainlessPath: '(resource) core.items > (method) get_trends',
+    qualified: 'client.core.items.getTrends',
+    params: ['id: string;', 'trend_type: string;'],
+    response: "{ object: 'item'; points: { date: string; value: string; }[]; trend_type: string; }",
+    markdown:
+      "## get_trends\n\n`client.core.items.getTrends(id: string, trend_type: string): { object: 'item'; points: object[]; trend_type: string; }`\n\n**get** `/v1/core/items/{id}/trends`\n\nThis endpoint returns historical trend data for an item. The trend_type query parameter specifies which metric to retrieve trends for.\n\n### Parameters\n\n- `id: string`\n\n- `trend_type: string`\n  The type of trend to retrieve (e.g. \"on_hand\", \"cost\").\n\n### Returns\n\n- `{ object: 'item'; points: { date: string; value: string; }[]; trend_type: string; }`\n  ItemTrends represents historical trend data for an item.\n\n  - `object: 'item'`\n  - `points: { date: string; value: string; }[]`\n  - `trend_type: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.core.items.getTrends('id', { trend_type: 'trend_type' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.items.getTrends',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.items.getTrends('id', { trend_type: 'trend_type' });\n\nconsole.log(response.object);",
+      },
+      go: {
+        method: 'client.Core.Items.GetTrends',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Items.GetTrends(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreItemGetTrendsParams{\n\t\t\tTrendType: "trend_type",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Object)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/items/$ID/trends \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'export',
+    endpoint: '/v1/core/items/actions/export',
+    httpMethod: 'get',
+    summary: 'Export Items',
+    description: 'This endpoint exports all items with their on-hand inventory for the target account.',
+    stainlessPath: '(resource) core.items.actions > (method) export',
+    qualified: 'client.core.items.actions.export',
+    response:
+      "{ count: number; items: { id: string; category_name: string; created_at: string; description: string; item_type_code: string; notes: string; object: 'item'; on_hand_quantity: string; on_hand_unit: object; sku: string; updated_at: string; }[]; object: 'list'; }",
+    markdown:
+      "## export\n\n`client.core.items.actions.export(): { count: number; items: object[]; object: 'list'; }`\n\n**get** `/v1/core/items/actions/export`\n\nThis endpoint exports all items with their on-hand inventory for the target account.\n\n### Returns\n\n- `{ count: number; items: { id: string; category_name: string; created_at: string; description: string; item_type_code: string; notes: string; object: 'item'; on_hand_quantity: string; on_hand_unit: object; sku: string; updated_at: string; }[]; object: 'list'; }`\n  ExportItemsResponse represents the export items response.\n\n  - `count: number`\n  - `items: { id: string; category_name: string; created_at: string; description: string; item_type_code: string; notes: string; object: 'item'; on_hand_quantity: string; on_hand_unit: { id: string; object: 'unit'; }; sku: string; updated_at: string; }[]`\n  - `object: 'list'`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.core.items.actions.export();\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.items.actions.export',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.items.actions.export();\n\nconsole.log(response.count);",
+      },
+      go: {
+        method: 'client.Core.Items.Actions.Export',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Items.Actions.Export(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Count)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/items/actions/export \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/core/payment-terms',
+    httpMethod: 'get',
+    summary: 'List Payment Terms',
+    description:
+      'This endpoint returns a paginated list of payment terms for the target account, including both account-specific and default system payment terms.\nSupports cursor-based pagination and search by name.',
+    stainlessPath: '(resource) core.payment_terms > (method) list',
+    qualified: 'client.core.paymentTerms.list',
+    response:
+      "{ data: { id: string; created_at: string; is_active: boolean; name: string; object: 'payment_term'; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list\n\n`client.core.paymentTerms.list(): { data: payment_term[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/core/payment-terms`\n\nThis endpoint returns a paginated list of payment terms for the target account, including both account-specific and default system payment terms.\nSupports cursor-based pagination and search by name.\n\n### Returns\n\n- `{ data: { id: string; created_at: string; is_active: boolean; name: string; object: 'payment_term'; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of PaymentTerm resources\n\n  - `data: { id: string; created_at: string; is_active: boolean; name: string; object: 'payment_term'; updated_at: string; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst paymentTerms = await client.core.paymentTerms.list();\n\nconsole.log(paymentTerms);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.paymentTerms.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst paymentTerms = await client.core.paymentTerms.list();\n\nconsole.log(paymentTerms.data);",
+      },
+      go: {
+        method: 'client.Core.PaymentTerms.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpaymentTerms, err := client.Core.PaymentTerms.List(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", paymentTerms.Data)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/payment-terms \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/core/payment-terms',
+    httpMethod: 'post',
+    summary: 'Create Payment Term',
+    description: 'This endpoint creates a new account-owned payment term.',
+    stainlessPath: '(resource) core.payment_terms > (method) create',
+    qualified: 'client.core.paymentTerms.create',
+    params: ['name: string;'],
+    response:
+      "{ id: string; created_at: string; is_active: boolean; name: string; object: 'payment_term'; updated_at: string; }",
+    markdown:
+      "## create\n\n`client.core.paymentTerms.create(name: string): { id: string; created_at: string; is_active: boolean; name: string; object: 'payment_term'; updated_at: string; }`\n\n**post** `/v1/core/payment-terms`\n\nThis endpoint creates a new account-owned payment term.\n\n### Parameters\n\n- `name: string`\n  The display name of the payment term (e.g. \"Net 30\").\n\n### Returns\n\n- `{ id: string; created_at: string; is_active: boolean; name: string; object: 'payment_term'; updated_at: string; }`\n  PaymentTerm represents an account-owned or default payment term.\n\n  - `id: string`\n  - `created_at: string`\n  - `is_active: boolean`\n  - `name: string`\n  - `object: 'payment_term'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst paymentTerm = await client.core.paymentTerms.create({ name: 'Net 30' });\n\nconsole.log(paymentTerm);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.paymentTerms.create',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst paymentTerm = await client.core.paymentTerms.create({ name: 'Net 30' });\n\nconsole.log(paymentTerm.id);",
+      },
+      go: {
+        method: 'client.Core.PaymentTerms.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpaymentTerm, err := client.Core.PaymentTerms.New(context.TODO(), augno.CorePaymentTermNewParams{\n\t\tName: "Net 30",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", paymentTerm.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/payment-terms \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "name": "Net 30"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/v1/core/payment-terms/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete Payment Term',
+    description:
+      'This endpoint deletes an account-owned payment term.\nDefault payment terms cannot be deleted.',
+    stainlessPath: '(resource) core.payment_terms > (method) delete',
+    qualified: 'client.core.paymentTerms.delete',
+    params: ['id: string;'],
+    response: '{  }',
+    markdown:
+      "## delete\n\n`client.core.paymentTerms.delete(id: string): {  }`\n\n**delete** `/v1/core/payment-terms/{id}`\n\nThis endpoint deletes an account-owned payment term.\nDefault payment terms cannot be deleted.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{  }`\n\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst paymentTerm = await client.core.paymentTerms.delete('id');\n\nconsole.log(paymentTerm);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.paymentTerms.delete',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst paymentTerm = await client.core.paymentTerms.delete('id');\n\nconsole.log(paymentTerm);",
+      },
+      go: {
+        method: 'client.Core.PaymentTerms.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpaymentTerm, err := client.Core.PaymentTerms.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", paymentTerm)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/payment-terms/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/core/payment-terms/{id}',
+    httpMethod: 'get',
+    summary: 'Get Payment Term',
+    description:
+      'This endpoint returns a single payment term by its ID.\nThe payment term must belong to the requesting account or be a default (global) payment term.',
+    stainlessPath: '(resource) core.payment_terms > (method) retrieve',
+    qualified: 'client.core.paymentTerms.retrieve',
+    params: ['id: string;'],
+    response:
+      "{ id: string; created_at: string; is_active: boolean; name: string; object: 'payment_term'; updated_at: string; }",
+    markdown:
+      "## retrieve\n\n`client.core.paymentTerms.retrieve(id: string): { id: string; created_at: string; is_active: boolean; name: string; object: 'payment_term'; updated_at: string; }`\n\n**get** `/v1/core/payment-terms/{id}`\n\nThis endpoint returns a single payment term by its ID.\nThe payment term must belong to the requesting account or be a default (global) payment term.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; created_at: string; is_active: boolean; name: string; object: 'payment_term'; updated_at: string; }`\n  PaymentTerm represents an account-owned or default payment term.\n\n  - `id: string`\n  - `created_at: string`\n  - `is_active: boolean`\n  - `name: string`\n  - `object: 'payment_term'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst paymentTerm = await client.core.paymentTerms.retrieve('id');\n\nconsole.log(paymentTerm);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.paymentTerms.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst paymentTerm = await client.core.paymentTerms.retrieve('id');\n\nconsole.log(paymentTerm.id);",
+      },
+      go: {
+        method: 'client.Core.PaymentTerms.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpaymentTerm, err := client.Core.PaymentTerms.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", paymentTerm.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/payment-terms/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/v1/core/payment-terms/{id}',
+    httpMethod: 'patch',
+    summary: 'Update Payment Term',
+    description:
+      'This endpoint partially updates an account-owned payment term.\nOnly provided fields are updated; absent fields retain their current values.\nDefault payment terms cannot be updated.',
+    stainlessPath: '(resource) core.payment_terms > (method) update',
+    qualified: 'client.core.paymentTerms.update',
+    params: ['id: string;', 'name?: string;'],
+    response:
+      "{ id: string; created_at: string; is_active: boolean; name: string; object: 'payment_term'; updated_at: string; }",
+    markdown:
+      "## update\n\n`client.core.paymentTerms.update(id: string, name?: string): { id: string; created_at: string; is_active: boolean; name: string; object: 'payment_term'; updated_at: string; }`\n\n**patch** `/v1/core/payment-terms/{id}`\n\nThis endpoint partially updates an account-owned payment term.\nOnly provided fields are updated; absent fields retain their current values.\nDefault payment terms cannot be updated.\n\n### Parameters\n\n- `id: string`\n\n- `name?: string`\n  The display name of the payment term.\n\n### Returns\n\n- `{ id: string; created_at: string; is_active: boolean; name: string; object: 'payment_term'; updated_at: string; }`\n  PaymentTerm represents an account-owned or default payment term.\n\n  - `id: string`\n  - `created_at: string`\n  - `is_active: boolean`\n  - `name: string`\n  - `object: 'payment_term'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst paymentTerm = await client.core.paymentTerms.update('id');\n\nconsole.log(paymentTerm);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.paymentTerms.update',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst paymentTerm = await client.core.paymentTerms.update('id', { name: 'Net 60' });\n\nconsole.log(paymentTerm.id);",
+      },
+      go: {
+        method: 'client.Core.PaymentTerms.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpaymentTerm, err := client.Core.PaymentTerms.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CorePaymentTermUpdateParams{\n\t\t\tName: augno.String("Net 60"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", paymentTerm.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/payment-terms/$ID \\\n    -X PATCH \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/core/product-line-access/account-groups',
+    httpMethod: 'get',
+    summary: 'List Account Group Product Line Access',
+    description:
+      'This endpoint returns a paginated list of product line access records grouped by account group.\nSupports cursor-based pagination and search.',
+    stainlessPath: '(resource) core.product_line_access.account_groups > (method) list',
+    qualified: 'client.core.productLineAccess.accountGroups.list',
+    response:
+      "{ data: { account_group: object; created_at: string; object: 'account_group_product_line_access'; product_lines: light_product_line[]; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list\n\n`client.core.productLineAccess.accountGroups.list(): { data: product_line_access[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/core/product-line-access/account-groups`\n\nThis endpoint returns a paginated list of product line access records grouped by account group.\nSupports cursor-based pagination and search.\n\n### Returns\n\n- `{ data: { account_group: object; created_at: string; object: 'account_group_product_line_access'; product_lines: light_product_line[]; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of AccountGroupProductLineAccess resources\n\n  - `data: { account_group: { id: string; name: string; object: 'account_group'; }; created_at: string; object: 'account_group_product_line_access'; product_lines: { id: string; name: string; object: 'product_line'; }[]; updated_at: string; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountGroups = await client.core.productLineAccess.accountGroups.list();\n\nconsole.log(accountGroups);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.productLineAccess.accountGroups.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountGroups = await client.core.productLineAccess.accountGroups.list();\n\nconsole.log(accountGroups.data);",
+      },
+      go: {
+        method: 'client.Core.ProductLineAccess.AccountGroups.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountGroups, err := client.Core.ProductLineAccess.AccountGroups.List(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountGroups.Data)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/product-line-access/account-groups \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/core/product-line-access/account-groups',
+    httpMethod: 'post',
+    summary: 'Create Account Group Product Line Access',
+    description: 'This endpoint creates product line access for an account group.',
+    stainlessPath: '(resource) core.product_line_access.account_groups > (method) create',
+    qualified: 'client.core.productLineAccess.accountGroups.create',
+    params: ['account_group_id: string;', 'product_line_ids: string[];'],
+    response:
+      "{ account_group: { id: string; name: string; object: 'account_group'; }; created_at: string; object: 'account_group_product_line_access'; product_lines: { id: string; name: string; object: 'product_line'; }[]; updated_at: string; }",
+    markdown:
+      "## create\n\n`client.core.productLineAccess.accountGroups.create(account_group_id: string, product_line_ids: string[]): { account_group: object; created_at: string; object: 'account_group_product_line_access'; product_lines: light_product_line[]; updated_at: string; }`\n\n**post** `/v1/core/product-line-access/account-groups`\n\nThis endpoint creates product line access for an account group.\n\n### Parameters\n\n- `account_group_id: string`\n  The ID of the account group.\n\n- `product_line_ids: string[]`\n  The IDs of the product lines to grant access to.\n\n### Returns\n\n- `{ account_group: { id: string; name: string; object: 'account_group'; }; created_at: string; object: 'account_group_product_line_access'; product_lines: { id: string; name: string; object: 'product_line'; }[]; updated_at: string; }`\n  AccountGroupProductLineAccess represents the product lines accessible to an account group.\n\n  - `account_group: { id: string; name: string; object: 'account_group'; }`\n  - `created_at: string`\n  - `object: 'account_group_product_line_access'`\n  - `product_lines: { id: string; name: string; object: 'product_line'; }[]`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst productLineAccess = await client.core.productLineAccess.accountGroups.create({ account_group_id: 'acgp_01jm4r6700f8nwq3v5hx2d9ktp', product_line_ids: ['pl_01jm4r6700f8nwq3v5hx2d9ktp'] });\n\nconsole.log(productLineAccess);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.productLineAccess.accountGroups.create',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst productLineAccess = await client.core.productLineAccess.accountGroups.create({\n  account_group_id: 'acgp_01jm4r6700f8nwq3v5hx2d9ktp',\n  product_line_ids: ['pl_01jm4r6700f8nwq3v5hx2d9ktp'],\n});\n\nconsole.log(productLineAccess.account_group);",
+      },
+      go: {
+        method: 'client.Core.ProductLineAccess.AccountGroups.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproductLineAccess, err := client.Core.ProductLineAccess.AccountGroups.New(context.TODO(), augno.CoreProductLineAccessAccountGroupNewParams{\n\t\tAccountGroupID: "acgp_01jm4r6700f8nwq3v5hx2d9ktp",\n\t\tProductLineIDs: []string{"pl_01jm4r6700f8nwq3v5hx2d9ktp"},\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", productLineAccess.AccountGroup)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/product-line-access/account-groups \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "account_group_id": "acgp_01jm4r6700f8nwq3v5hx2d9ktp",\n          "product_line_ids": [\n            "pl_01jm4r6700f8nwq3v5hx2d9ktp"\n          ]\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/v1/core/product-line-access/account-groups/{account_group_id}',
+    httpMethod: 'delete',
+    summary: 'Delete Account Group Product Line Access',
+    description: 'This endpoint removes all product line access for an account group.',
+    stainlessPath: '(resource) core.product_line_access.account_groups > (method) delete',
+    qualified: 'client.core.productLineAccess.accountGroups.delete',
+    params: ['account_group_id: string;'],
+    response: '{  }',
+    markdown:
+      "## delete\n\n`client.core.productLineAccess.accountGroups.delete(account_group_id: string): {  }`\n\n**delete** `/v1/core/product-line-access/account-groups/{account_group_id}`\n\nThis endpoint removes all product line access for an account group.\n\n### Parameters\n\n- `account_group_id: string`\n\n### Returns\n\n- `{  }`\n\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst accountGroup = await client.core.productLineAccess.accountGroups.delete('account_group_id');\n\nconsole.log(accountGroup);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.productLineAccess.accountGroups.delete',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst accountGroup = await client.core.productLineAccess.accountGroups.delete('account_group_id');\n\nconsole.log(accountGroup);",
+      },
+      go: {
+        method: 'client.Core.ProductLineAccess.AccountGroups.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountGroup, err := client.Core.ProductLineAccess.AccountGroups.Delete(context.TODO(), "account_group_id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountGroup)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/product-line-access/account-groups/$ACCOUNT_GROUP_ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/core/product-line-access/account-groups/{account_group_id}',
+    httpMethod: 'get',
+    summary: 'Get Account Group Product Line Access',
+    description: 'This endpoint returns the product line access for a single account group by its ID.',
+    stainlessPath: '(resource) core.product_line_access.account_groups > (method) retrieve',
+    qualified: 'client.core.productLineAccess.accountGroups.retrieve',
+    params: ['account_group_id: string;'],
+    response:
+      "{ account_group: { id: string; name: string; object: 'account_group'; }; created_at: string; object: 'account_group_product_line_access'; product_lines: { id: string; name: string; object: 'product_line'; }[]; updated_at: string; }",
+    markdown:
+      "## retrieve\n\n`client.core.productLineAccess.accountGroups.retrieve(account_group_id: string): { account_group: object; created_at: string; object: 'account_group_product_line_access'; product_lines: light_product_line[]; updated_at: string; }`\n\n**get** `/v1/core/product-line-access/account-groups/{account_group_id}`\n\nThis endpoint returns the product line access for a single account group by its ID.\n\n### Parameters\n\n- `account_group_id: string`\n\n### Returns\n\n- `{ account_group: { id: string; name: string; object: 'account_group'; }; created_at: string; object: 'account_group_product_line_access'; product_lines: { id: string; name: string; object: 'product_line'; }[]; updated_at: string; }`\n  AccountGroupProductLineAccess represents the product lines accessible to an account group.\n\n  - `account_group: { id: string; name: string; object: 'account_group'; }`\n  - `created_at: string`\n  - `object: 'account_group_product_line_access'`\n  - `product_lines: { id: string; name: string; object: 'product_line'; }[]`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst productLineAccess = await client.core.productLineAccess.accountGroups.retrieve('account_group_id');\n\nconsole.log(productLineAccess);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.productLineAccess.accountGroups.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst productLineAccess = await client.core.productLineAccess.accountGroups.retrieve(\n  'account_group_id',\n);\n\nconsole.log(productLineAccess.account_group);",
+      },
+      go: {
+        method: 'client.Core.ProductLineAccess.AccountGroups.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproductLineAccess, err := client.Core.ProductLineAccess.AccountGroups.Get(context.TODO(), "account_group_id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", productLineAccess.AccountGroup)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/product-line-access/account-groups/$ACCOUNT_GROUP_ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/v1/core/product-line-access/account-groups/{account_group_id}',
+    httpMethod: 'patch',
+    summary: 'Update Account Group Product Line Access',
+    description: 'This endpoint replaces all product line access for an account group.',
+    stainlessPath: '(resource) core.product_line_access.account_groups > (method) update',
+    qualified: 'client.core.productLineAccess.accountGroups.update',
+    params: ['account_group_id: string;', 'product_line_ids: string[];'],
+    response:
+      "{ account_group: { id: string; name: string; object: 'account_group'; }; created_at: string; object: 'account_group_product_line_access'; product_lines: { id: string; name: string; object: 'product_line'; }[]; updated_at: string; }",
+    markdown:
+      "## update\n\n`client.core.productLineAccess.accountGroups.update(account_group_id: string, product_line_ids: string[]): { account_group: object; created_at: string; object: 'account_group_product_line_access'; product_lines: light_product_line[]; updated_at: string; }`\n\n**patch** `/v1/core/product-line-access/account-groups/{account_group_id}`\n\nThis endpoint replaces all product line access for an account group.\n\n### Parameters\n\n- `account_group_id: string`\n\n- `product_line_ids: string[]`\n  The IDs of the product lines to grant access to.\n\n### Returns\n\n- `{ account_group: { id: string; name: string; object: 'account_group'; }; created_at: string; object: 'account_group_product_line_access'; product_lines: { id: string; name: string; object: 'product_line'; }[]; updated_at: string; }`\n  AccountGroupProductLineAccess represents the product lines accessible to an account group.\n\n  - `account_group: { id: string; name: string; object: 'account_group'; }`\n  - `created_at: string`\n  - `object: 'account_group_product_line_access'`\n  - `product_lines: { id: string; name: string; object: 'product_line'; }[]`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst productLineAccess = await client.core.productLineAccess.accountGroups.update('account_group_id', { product_line_ids: ['pl_01jm4r6700f8nwq3v5hx2d9ktp'] });\n\nconsole.log(productLineAccess);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.productLineAccess.accountGroups.update',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst productLineAccess = await client.core.productLineAccess.accountGroups.update(\n  'account_group_id',\n  { product_line_ids: ['pl_01jm4r6700f8nwq3v5hx2d9ktp'] },\n);\n\nconsole.log(productLineAccess.account_group);",
+      },
+      go: {
+        method: 'client.Core.ProductLineAccess.AccountGroups.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproductLineAccess, err := client.Core.ProductLineAccess.AccountGroups.Update(\n\t\tcontext.TODO(),\n\t\t"account_group_id",\n\t\taugno.CoreProductLineAccessAccountGroupUpdateParams{\n\t\t\tProductLineIDs: []string{"pl_01jm4r6700f8nwq3v5hx2d9ktp"},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", productLineAccess.AccountGroup)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/product-line-access/account-groups/$ACCOUNT_GROUP_ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "product_line_ids": [\n            "pl_01jm4r6700f8nwq3v5hx2d9ktp"\n          ]\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/core/properties',
+    httpMethod: 'get',
+    summary: 'List Properties',
+    description:
+      'This endpoint returns a paginated list of properties for the target account.\nSupports cursor-based pagination and search by name.',
+    stainlessPath: '(resource) core.properties > (method) list',
+    qualified: 'client.core.properties.list',
+    response:
+      "{ data: { id: string; created_at: string; name: string; object: 'property'; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list\n\n`client.core.properties.list(): { data: property[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/core/properties`\n\nThis endpoint returns a paginated list of properties for the target account.\nSupports cursor-based pagination and search by name.\n\n### Returns\n\n- `{ data: { id: string; created_at: string; name: string; object: 'property'; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of Property resources\n\n  - `data: { id: string; created_at: string; name: string; object: 'property'; updated_at: string; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst properties = await client.core.properties.list();\n\nconsole.log(properties);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.properties.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst properties = await client.core.properties.list();\n\nconsole.log(properties.data);",
+      },
+      go: {
+        method: 'client.Core.Properties.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproperties, err := client.Core.Properties.List(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", properties.Data)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/properties \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/core/properties',
+    httpMethod: 'post',
+    summary: 'Create Property',
+    description: 'This endpoint creates a new property.',
+    stainlessPath: '(resource) core.properties > (method) create',
+    qualified: 'client.core.properties.create',
+    params: ['name: string;'],
+    response: "{ id: string; created_at: string; name: string; object: 'property'; updated_at: string; }",
+    markdown:
+      "## create\n\n`client.core.properties.create(name: string): { id: string; created_at: string; name: string; object: 'property'; updated_at: string; }`\n\n**post** `/v1/core/properties`\n\nThis endpoint creates a new property.\n\n### Parameters\n\n- `name: string`\n  The name of the property.\n\n### Returns\n\n- `{ id: string; created_at: string; name: string; object: 'property'; updated_at: string; }`\n  Property represents a property that groups attributes.\n\n  - `id: string`\n  - `created_at: string`\n  - `name: string`\n  - `object: 'property'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst property = await client.core.properties.create({ name: 'Color' });\n\nconsole.log(property);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.properties.create',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst property = await client.core.properties.create({ name: 'Color' });\n\nconsole.log(property.id);",
+      },
+      go: {
+        method: 'client.Core.Properties.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproperty, err := client.Core.Properties.New(context.TODO(), augno.CorePropertyNewParams{\n\t\tName: "Color",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", property.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/properties \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "name": "Color"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/v1/core/properties/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete Property',
+    description: 'This endpoint deletes a property and all its associated attributes.',
+    stainlessPath: '(resource) core.properties > (method) delete',
+    qualified: 'client.core.properties.delete',
+    params: ['id: string;'],
+    response: '{  }',
+    markdown:
+      "## delete\n\n`client.core.properties.delete(id: string): {  }`\n\n**delete** `/v1/core/properties/{id}`\n\nThis endpoint deletes a property and all its associated attributes.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{  }`\n\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst property = await client.core.properties.delete('id');\n\nconsole.log(property);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.properties.delete',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst property = await client.core.properties.delete('id');\n\nconsole.log(property);",
+      },
+      go: {
+        method: 'client.Core.Properties.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproperty, err := client.Core.Properties.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", property)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/properties/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/core/properties/{id}',
+    httpMethod: 'get',
+    summary: 'Get Property',
+    description: 'This endpoint returns a single property by its ID.',
+    stainlessPath: '(resource) core.properties > (method) retrieve',
+    qualified: 'client.core.properties.retrieve',
+    params: ['id: string;'],
+    response: "{ id: string; created_at: string; name: string; object: 'property'; updated_at: string; }",
+    markdown:
+      "## retrieve\n\n`client.core.properties.retrieve(id: string): { id: string; created_at: string; name: string; object: 'property'; updated_at: string; }`\n\n**get** `/v1/core/properties/{id}`\n\nThis endpoint returns a single property by its ID.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; created_at: string; name: string; object: 'property'; updated_at: string; }`\n  Property represents a property that groups attributes.\n\n  - `id: string`\n  - `created_at: string`\n  - `name: string`\n  - `object: 'property'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst property = await client.core.properties.retrieve('id');\n\nconsole.log(property);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.properties.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst property = await client.core.properties.retrieve('id');\n\nconsole.log(property.id);",
+      },
+      go: {
+        method: 'client.Core.Properties.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproperty, err := client.Core.Properties.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", property.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/properties/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/v1/core/properties/{id}',
+    httpMethod: 'patch',
+    summary: 'Update Property',
+    description: 'This endpoint partially updates a property.',
+    stainlessPath: '(resource) core.properties > (method) update',
+    qualified: 'client.core.properties.update',
+    params: ['id: string;', 'name?: string;'],
+    response: "{ id: string; created_at: string; name: string; object: 'property'; updated_at: string; }",
+    markdown:
+      "## update\n\n`client.core.properties.update(id: string, name?: string): { id: string; created_at: string; name: string; object: 'property'; updated_at: string; }`\n\n**patch** `/v1/core/properties/{id}`\n\nThis endpoint partially updates a property.\n\n### Parameters\n\n- `id: string`\n\n- `name?: string`\n  The new name of the property.\n\n### Returns\n\n- `{ id: string; created_at: string; name: string; object: 'property'; updated_at: string; }`\n  Property represents a property that groups attributes.\n\n  - `id: string`\n  - `created_at: string`\n  - `name: string`\n  - `object: 'property'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst property = await client.core.properties.update('id');\n\nconsole.log(property);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.properties.update',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst property = await client.core.properties.update('id', { name: 'Size' });\n\nconsole.log(property.id);",
+      },
+      go: {
+        method: 'client.Core.Properties.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproperty, err := client.Core.Properties.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CorePropertyUpdateParams{\n\t\t\tName: augno.String("Size"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", property.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/properties/$ID \\\n    -X PATCH \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/core/properties/{property_id}/attributes',
+    httpMethod: 'get',
+    summary: 'List Attributes',
+    description:
+      'This endpoint returns a paginated list of attributes for a property.\nSupports cursor-based pagination and search by text.',
+    stainlessPath: '(resource) core.properties.attributes > (method) list',
+    qualified: 'client.core.properties.attributes.list',
+    params: ['property_id: string;', "include?: 'property'[];"],
+    response:
+      "{ data: { id: string; color_code: string; created_at: string; object: 'attribute'; order: number; property: object; text: string; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list\n\n`client.core.properties.attributes.list(property_id: string, include?: 'property'[]): { data: attribute[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/core/properties/{property_id}/attributes`\n\nThis endpoint returns a paginated list of attributes for a property.\nSupports cursor-based pagination and search by text.\n\n### Parameters\n\n- `property_id: string`\n\n- `include?: 'property'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ data: { id: string; color_code: string; created_at: string; object: 'attribute'; order: number; property: object; text: string; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of Attribute resources\n\n  - `data: { id: string; color_code: string; created_at: string; object: 'attribute'; order: number; property: { id: string; name: string; object: 'property'; }; text: string; updated_at: string; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst attributes = await client.core.properties.attributes.list('property_id');\n\nconsole.log(attributes);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.properties.attributes.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst attributes = await client.core.properties.attributes.list('property_id');\n\nconsole.log(attributes.data);",
+      },
+      go: {
+        method: 'client.Core.Properties.Attributes.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tattributes, err := client.Core.Properties.Attributes.List(\n\t\tcontext.TODO(),\n\t\t"property_id",\n\t\taugno.CorePropertyAttributeListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", attributes.Data)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/properties/$PROPERTY_ID/attributes \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/core/properties/{property_id}/attributes',
+    httpMethod: 'post',
+    summary: 'Create Attribute',
+    description: 'This endpoint creates a new attribute under a property.',
+    stainlessPath: '(resource) core.properties.attributes > (method) create',
+    qualified: 'client.core.properties.attributes.create',
+    params: [
+      'property_id: string;',
+      'color_code: string;',
+      'order: number;',
+      'text: string;',
+      "include?: 'property'[];",
+    ],
+    response:
+      "{ id: string; color_code: string; created_at: string; object: 'attribute'; order: number; property: { id: string; name: string; object: 'property'; }; text: string; updated_at: string; }",
+    markdown:
+      "## create\n\n`client.core.properties.attributes.create(property_id: string, color_code: string, order: number, text: string, include?: 'property'[]): { id: string; color_code: string; created_at: string; object: 'attribute'; order: number; property: object; text: string; updated_at: string; }`\n\n**post** `/v1/core/properties/{property_id}/attributes`\n\nThis endpoint creates a new attribute under a property.\n\n### Parameters\n\n- `property_id: string`\n\n- `color_code: string`\n  The color code of the attribute.\n\n- `order: number`\n  The display order of the attribute.\n\n- `text: string`\n  The text value of the attribute.\n\n- `include?: 'property'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; color_code: string; created_at: string; object: 'attribute'; order: number; property: { id: string; name: string; object: 'property'; }; text: string; updated_at: string; }`\n  Attribute represents a value option within a property.\n\n  - `id: string`\n  - `color_code: string`\n  - `created_at: string`\n  - `object: 'attribute'`\n  - `order: number`\n  - `property: { id: string; name: string; object: 'property'; }`\n  - `text: string`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst attribute = await client.core.properties.attributes.create('property_id', {\n  color_code: 'red',\n  order: 1,\n  text: 'Red',\n});\n\nconsole.log(attribute);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.properties.attributes.create',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst attribute = await client.core.properties.attributes.create('property_id', {\n  color_code: 'red',\n  order: 1,\n  text: 'Red',\n});\n\nconsole.log(attribute.id);",
+      },
+      go: {
+        method: 'client.Core.Properties.Attributes.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tattribute, err := client.Core.Properties.Attributes.New(\n\t\tcontext.TODO(),\n\t\t"property_id",\n\t\taugno.CorePropertyAttributeNewParams{\n\t\t\tColorCode: "red",\n\t\t\tOrder:     1,\n\t\t\tText:      "Red",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", attribute.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/properties/$PROPERTY_ID/attributes \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "color_code": "red",\n          "order": 1,\n          "text": "Red"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/v1/core/properties/{property_id}/attributes/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete Attribute',
+    description: 'This endpoint deletes an attribute from a property.',
+    stainlessPath: '(resource) core.properties.attributes > (method) delete',
+    qualified: 'client.core.properties.attributes.delete',
+    params: ['property_id: string;', 'id: string;'],
+    response: '{  }',
+    markdown:
+      "## delete\n\n`client.core.properties.attributes.delete(property_id: string, id: string): {  }`\n\n**delete** `/v1/core/properties/{property_id}/attributes/{id}`\n\nThis endpoint deletes an attribute from a property.\n\n### Parameters\n\n- `property_id: string`\n\n- `id: string`\n\n### Returns\n\n- `{  }`\n\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst attribute = await client.core.properties.attributes.delete('id', { property_id: 'property_id' });\n\nconsole.log(attribute);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.properties.attributes.delete',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst attribute = await client.core.properties.attributes.delete('id', {\n  property_id: 'property_id',\n});\n\nconsole.log(attribute);",
+      },
+      go: {
+        method: 'client.Core.Properties.Attributes.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tattribute, err := client.Core.Properties.Attributes.Delete(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CorePropertyAttributeDeleteParams{\n\t\t\tPropertyID: "property_id",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", attribute)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/properties/$PROPERTY_ID/attributes/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/core/properties/{property_id}/attributes/{id}',
+    httpMethod: 'get',
+    summary: 'Get Attribute',
+    description: 'This endpoint returns a single attribute by its ID within a property.',
+    stainlessPath: '(resource) core.properties.attributes > (method) retrieve',
+    qualified: 'client.core.properties.attributes.retrieve',
+    params: ['property_id: string;', 'id: string;', "include?: 'property'[];"],
+    response:
+      "{ id: string; color_code: string; created_at: string; object: 'attribute'; order: number; property: { id: string; name: string; object: 'property'; }; text: string; updated_at: string; }",
+    markdown:
+      "## retrieve\n\n`client.core.properties.attributes.retrieve(property_id: string, id: string, include?: 'property'[]): { id: string; color_code: string; created_at: string; object: 'attribute'; order: number; property: object; text: string; updated_at: string; }`\n\n**get** `/v1/core/properties/{property_id}/attributes/{id}`\n\nThis endpoint returns a single attribute by its ID within a property.\n\n### Parameters\n\n- `property_id: string`\n\n- `id: string`\n\n- `include?: 'property'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; color_code: string; created_at: string; object: 'attribute'; order: number; property: { id: string; name: string; object: 'property'; }; text: string; updated_at: string; }`\n  Attribute represents a value option within a property.\n\n  - `id: string`\n  - `color_code: string`\n  - `created_at: string`\n  - `object: 'attribute'`\n  - `order: number`\n  - `property: { id: string; name: string; object: 'property'; }`\n  - `text: string`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst attribute = await client.core.properties.attributes.retrieve('id', { property_id: 'property_id' });\n\nconsole.log(attribute);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.properties.attributes.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst attribute = await client.core.properties.attributes.retrieve('id', {\n  property_id: 'property_id',\n});\n\nconsole.log(attribute.id);",
+      },
+      go: {
+        method: 'client.Core.Properties.Attributes.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tattribute, err := client.Core.Properties.Attributes.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CorePropertyAttributeGetParams{\n\t\t\tPropertyID: "property_id",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", attribute.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/properties/$PROPERTY_ID/attributes/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/v1/core/properties/{property_id}/attributes/{id}',
+    httpMethod: 'patch',
+    summary: 'Update Attribute',
+    description: 'This endpoint partially updates an attribute.',
+    stainlessPath: '(resource) core.properties.attributes > (method) update',
+    qualified: 'client.core.properties.attributes.update',
+    params: [
+      'property_id: string;',
+      'id: string;',
+      "include?: 'property'[];",
+      'color_code?: string;',
+      'order?: number;',
+      'text?: string;',
+    ],
+    response:
+      "{ id: string; color_code: string; created_at: string; object: 'attribute'; order: number; property: { id: string; name: string; object: 'property'; }; text: string; updated_at: string; }",
+    markdown:
+      "## update\n\n`client.core.properties.attributes.update(property_id: string, id: string, include?: 'property'[], color_code?: string, order?: number, text?: string): { id: string; color_code: string; created_at: string; object: 'attribute'; order: number; property: object; text: string; updated_at: string; }`\n\n**patch** `/v1/core/properties/{property_id}/attributes/{id}`\n\nThis endpoint partially updates an attribute.\n\n### Parameters\n\n- `property_id: string`\n\n- `id: string`\n\n- `include?: 'property'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n- `color_code?: string`\n  The new color code of the attribute.\n\n- `order?: number`\n  The new display order of the attribute.\n\n- `text?: string`\n  The new text value of the attribute.\n\n### Returns\n\n- `{ id: string; color_code: string; created_at: string; object: 'attribute'; order: number; property: { id: string; name: string; object: 'property'; }; text: string; updated_at: string; }`\n  Attribute represents a value option within a property.\n\n  - `id: string`\n  - `color_code: string`\n  - `created_at: string`\n  - `object: 'attribute'`\n  - `order: number`\n  - `property: { id: string; name: string; object: 'property'; }`\n  - `text: string`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst attribute = await client.core.properties.attributes.update('id', { property_id: 'property_id' });\n\nconsole.log(attribute);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.properties.attributes.update',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst attribute = await client.core.properties.attributes.update('id', {\n  property_id: 'property_id',\n  text: 'Blue',\n});\n\nconsole.log(attribute.id);",
+      },
+      go: {
+        method: 'client.Core.Properties.Attributes.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tattribute, err := client.Core.Properties.Attributes.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CorePropertyAttributeUpdateParams{\n\t\t\tPropertyID: "property_id",\n\t\t\tText:       augno.String("Blue"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", attribute.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/properties/$PROPERTY_ID/attributes/$ID \\\n    -X PATCH \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/core/request-logs',
+    httpMethod: 'get',
+    summary: 'List Request Logs',
+    description:
+      'This endpoint returns a paginated, filterable list of request logs for the target account.\nSupports cursor-based pagination and various filters.',
+    stainlessPath: '(resource) core.request_logs > (method) list',
+    qualified: 'client.core.requestLogs.list',
+    params: [
+      'account_id?: string;',
+      'actor_id?: string;',
+      'actor_name?: string;',
+      'actor_type?: string;',
+      'cursor?: string;',
+      'end_date?: string;',
+      'error_code?: string;',
+      'exact_match?: boolean;',
+      "include?: 'account' | 'actor' | 'actor.role' | 'actor.role.permissions'[];",
+      'limit?: number;',
+      'method?: string;',
+      'q?: string;',
+      'start_date?: string;',
+      'status_code?: number;',
+    ],
+    response:
+      "{ id: string; account: { id: string; name: string; object: 'account'; }; actor: { id: string; email: string; name: string; object: 'user'; redacted_value: string; role: light_role; }; api_version: string; client_ip: string; created_at: string; error_code: string; error_message: string; host: string; idempotency_key: string; identity_type: string; latency_us: number; method: string; normalized_route: string; object: 'request_log'; occurred_at: string; path: string; query_json: string; referrer: string; status_code: number; user_agent: string; }",
+    markdown:
+      "## list\n\n`client.core.requestLogs.list(account_id?: string, actor_id?: string, actor_name?: string, actor_type?: string, cursor?: string, end_date?: string, error_code?: string, exact_match?: boolean, include?: 'account' | 'actor' | 'actor.role' | 'actor.role.permissions'[], limit?: number, method?: string, q?: string, start_date?: string, status_code?: number): { id: string; account: light_account; actor: request_log_actor; api_version: string; client_ip: string; created_at: string; error_code: string; error_message: string; host: string; idempotency_key: string; identity_type: string; latency_us: number; method: string; normalized_route: string; object: 'request_log'; occurred_at: string; path: string; query_json: string; referrer: string; status_code: number; user_agent: string; }`\n\n**get** `/v1/core/request-logs`\n\nThis endpoint returns a paginated, filterable list of request logs for the target account.\nSupports cursor-based pagination and various filters.\n\n### Parameters\n\n- `account_id?: string`\n  Filter: actor's home account ID.\n\n- `actor_id?: string`\n  Filter: actor ID.\n\n- `actor_name?: string`\n  Filter: actor name (partial or exact match).\n\n- `actor_type?: string`\n  Filter: actor type (\"user\" or \"api_key\").\n\n- `cursor?: string`\n  Cursor for fetching the next page, from a previous response's next_cursor field.\n\n- `end_date?: string`\n  Filter: end of date range for occurred_at.\n\n- `error_code?: string`\n  Filter: API error code.\n\n- `exact_match?: boolean`\n  When true, string filters use exact match instead of partial (LIKE).\n\n- `include?: 'account' | 'actor' | 'actor.role' | 'actor.role.permissions'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n- `limit?: number`\n  Maximum number of results to return per page (default: 100, max: 1000).\n\n- `method?: string`\n  Filter: HTTP method.\n\n- `q?: string`\n  Search query: matches against ID (exact), path (partial), or error message (partial).\n\n- `start_date?: string`\n  Filter: start of date range for occurred_at.\n\n- `status_code?: number`\n  Filter: HTTP status code.\n\n### Returns\n\n- `{ id: string; account: { id: string; name: string; object: 'account'; }; actor: { id: string; email: string; name: string; object: 'user'; redacted_value: string; role: light_role; }; api_version: string; client_ip: string; created_at: string; error_code: string; error_message: string; host: string; idempotency_key: string; identity_type: string; latency_us: number; method: string; normalized_route: string; object: 'request_log'; occurred_at: string; path: string; query_json: string; referrer: string; status_code: number; user_agent: string; }`\n  RequestLogListItem is the list representation of a request log entry.\nIt omits the request and response body JSON fields which are only\navailable when retrieving a single request log by ID.\n\n  - `id: string`\n  - `account: { id: string; name: string; object: 'account'; }`\n  - `actor: { id: string; email: string; name: string; object: 'user'; redacted_value: string; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; }`\n  - `api_version: string`\n  - `client_ip: string`\n  - `created_at: string`\n  - `error_code: string`\n  - `error_message: string`\n  - `host: string`\n  - `idempotency_key: string`\n  - `identity_type: string`\n  - `latency_us: number`\n  - `method: string`\n  - `normalized_route: string`\n  - `object: 'request_log'`\n  - `occurred_at: string`\n  - `path: string`\n  - `query_json: string`\n  - `referrer: string`\n  - `status_code: number`\n  - `user_agent: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\n// Automatically fetches more pages as needed.\nfor await (const requestLogListResponse of client.core.requestLogs.list()) {\n  console.log(requestLogListResponse);\n}\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.requestLogs.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const requestLogListResponse of client.core.requestLogs.list()) {\n  console.log(requestLogListResponse.id);\n}",
+      },
+      go: {
+        method: 'client.Core.RequestLogs.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Core.RequestLogs.List(context.TODO(), augno.CoreRequestLogListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/request-logs \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/core/request-logs/{id}',
+    httpMethod: 'get',
+    summary: 'Get Request Log',
+    description: 'This endpoint returns a single request log by its ID.',
+    stainlessPath: '(resource) core.request_logs > (method) retrieve',
+    qualified: 'client.core.requestLogs.retrieve',
+    params: ['id: string;', "include?: 'account' | 'actor' | 'actor.role' | 'actor.role.permissions'[];"],
+    response:
+      "{ id: string; account: { id: string; name: string; object: 'account'; }; actor: { id: string; email: string; name: string; object: 'user'; redacted_value: string; role: light_role; }; api_version: string; client_ip: string; created_at: string; error_code: string; error_message: string; host: string; idempotency_key: string; identity_type: string; latency_us: number; method: string; normalized_route: string; object: 'request_log'; occurred_at: string; path: string; query_json: string; referrer: string; request_body_json: string; response_body_json: string; status_code: number; user_agent: string; }",
+    markdown:
+      "## retrieve\n\n`client.core.requestLogs.retrieve(id: string, include?: 'account' | 'actor' | 'actor.role' | 'actor.role.permissions'[]): { id: string; account: light_account; actor: request_log_actor; api_version: string; client_ip: string; created_at: string; error_code: string; error_message: string; host: string; idempotency_key: string; identity_type: string; latency_us: number; method: string; normalized_route: string; object: 'request_log'; occurred_at: string; path: string; query_json: string; referrer: string; request_body_json: string; response_body_json: string; status_code: number; user_agent: string; }`\n\n**get** `/v1/core/request-logs/{id}`\n\nThis endpoint returns a single request log by its ID.\n\n### Parameters\n\n- `id: string`\n\n- `include?: 'account' | 'actor' | 'actor.role' | 'actor.role.permissions'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; account: { id: string; name: string; object: 'account'; }; actor: { id: string; email: string; name: string; object: 'user'; redacted_value: string; role: light_role; }; api_version: string; client_ip: string; created_at: string; error_code: string; error_message: string; host: string; idempotency_key: string; identity_type: string; latency_us: number; method: string; normalized_route: string; object: 'request_log'; occurred_at: string; path: string; query_json: string; referrer: string; request_body_json: string; response_body_json: string; status_code: number; user_agent: string; }`\n  RequestLog represents a single API request log entry.\n\n  - `id: string`\n  - `account: { id: string; name: string; object: 'account'; }`\n  - `actor: { id: string; email: string; name: string; object: 'user'; redacted_value: string; role: { id: string; name: string; object: 'role'; permissions: object; role_type_code: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'; }; }`\n  - `api_version: string`\n  - `client_ip: string`\n  - `created_at: string`\n  - `error_code: string`\n  - `error_message: string`\n  - `host: string`\n  - `idempotency_key: string`\n  - `identity_type: string`\n  - `latency_us: number`\n  - `method: string`\n  - `normalized_route: string`\n  - `object: 'request_log'`\n  - `occurred_at: string`\n  - `path: string`\n  - `query_json: string`\n  - `referrer: string`\n  - `request_body_json: string`\n  - `response_body_json: string`\n  - `status_code: number`\n  - `user_agent: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst requestLog = await client.core.requestLogs.retrieve('id');\n\nconsole.log(requestLog);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.requestLogs.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst requestLog = await client.core.requestLogs.retrieve('id');\n\nconsole.log(requestLog.id);",
+      },
+      go: {
+        method: 'client.Core.RequestLogs.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\trequestLog, err := client.Core.RequestLogs.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreRequestLogGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", requestLog.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/request-logs/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/core/sandboxes',
+    httpMethod: 'get',
+    summary: 'List Sandboxes',
+    description:
+      'This endpoint returns a paginated list of sandbox accounts for the target account.\nSupports cursor-based pagination.',
+    stainlessPath: '(resource) core.sandboxes > (method) list',
+    qualified: 'client.core.sandboxes.list',
+    params: ['cursor?: string;', "include?: 'owner_account'[];", 'limit?: number;', 'q?: string;'],
+    response:
+      "{ id: string; created_at: string; name: string; object: 'sandbox'; owner_account: { id: string; name: string; object: 'account'; }; updated_at: string; }",
+    markdown:
+      "## list\n\n`client.core.sandboxes.list(cursor?: string, include?: 'owner_account'[], limit?: number, q?: string): { id: string; created_at: string; name: string; object: 'sandbox'; owner_account: light_account; updated_at: string; }`\n\n**get** `/v1/core/sandboxes`\n\nThis endpoint returns a paginated list of sandbox accounts for the target account.\nSupports cursor-based pagination.\n\n### Parameters\n\n- `cursor?: string`\n  Cursor for fetching the next page, from a previous response's next_cursor field.\n\n- `include?: 'owner_account'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n- `limit?: number`\n  Maximum number of results to return per page (default: 100, max: 1000).\n\n- `q?: string`\n  Optional search query to filter results.\n\n### Returns\n\n- `{ id: string; created_at: string; name: string; object: 'sandbox'; owner_account: { id: string; name: string; object: 'account'; }; updated_at: string; }`\n  Sandbox represents an isolated testing environment for an account.\n\n  - `id: string`\n  - `created_at: string`\n  - `name: string`\n  - `object: 'sandbox'`\n  - `owner_account: { id: string; name: string; object: 'account'; }`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\n// Automatically fetches more pages as needed.\nfor await (const sandbox of client.core.sandboxes.list()) {\n  console.log(sandbox);\n}\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.sandboxes.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const sandbox of client.core.sandboxes.list()) {\n  console.log(sandbox.id);\n}",
+      },
+      go: {
+        method: 'client.Core.Sandboxes.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Core.Sandboxes.List(context.TODO(), augno.CoreSandboxListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/sandboxes \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/core/sandboxes',
+    httpMethod: 'post',
+    summary: 'Create Sandbox',
+    description:
+      'This endpoint creates a new sandbox account for the target account.\nEnforces a per-account sandbox limit. Requires admin permissions.',
+    stainlessPath: '(resource) core.sandboxes > (method) create',
+    qualified: 'client.core.sandboxes.create',
+    params: ["mode: 'blank' | 'seeded';", 'name: string;', "include?: 'owner_account'[];"],
+    response:
+      "{ id: string; created_at: string; name: string; object: 'sandbox'; owner_account: { id: string; name: string; object: 'account'; }; updated_at: string; }",
+    markdown:
+      "## create\n\n`client.core.sandboxes.create(mode: 'blank' | 'seeded', name: string, include?: 'owner_account'[]): { id: string; created_at: string; name: string; object: 'sandbox'; owner_account: light_account; updated_at: string; }`\n\n**post** `/v1/core/sandboxes`\n\nThis endpoint creates a new sandbox account for the target account.\nEnforces a per-account sandbox limit. Requires admin permissions.\n\n### Parameters\n\n- `mode: 'blank' | 'seeded'`\n  Controls whether the sandbox is blank or seeded with tutorial data.\n\n- `name: string`\n  The display name for the sandbox.\n\n- `include?: 'owner_account'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; created_at: string; name: string; object: 'sandbox'; owner_account: { id: string; name: string; object: 'account'; }; updated_at: string; }`\n  Sandbox represents an isolated testing environment for an account.\n\n  - `id: string`\n  - `created_at: string`\n  - `name: string`\n  - `object: 'sandbox'`\n  - `owner_account: { id: string; name: string; object: 'account'; }`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst sandbox = await client.core.sandboxes.create({ mode: 'blank', name: 'Integration Testing' });\n\nconsole.log(sandbox);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.sandboxes.create',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst sandbox = await client.core.sandboxes.create({ mode: 'blank', name: 'Integration Testing' });\n\nconsole.log(sandbox.id);",
+      },
+      go: {
+        method: 'client.Core.Sandboxes.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tsandbox, err := client.Core.Sandboxes.New(context.TODO(), augno.CoreSandboxNewParams{\n\t\tMode: augno.CoreSandboxNewParamsModeBlank,\n\t\tName: "Integration Testing",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", sandbox.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/sandboxes \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "mode": "blank",\n          "name": "Integration Testing"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/v1/core/sandboxes/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete Sandbox',
+    description:
+      'This endpoint deletes a sandbox account. At least one sandbox must remain\nper production account. The sandbox and its account record are removed synchronously, and all\naccount-scoped data is purged asynchronously.',
+    stainlessPath: '(resource) core.sandboxes > (method) delete',
+    qualified: 'client.core.sandboxes.delete',
+    params: ['id: string;'],
+    response: '{  }',
+    markdown:
+      "## delete\n\n`client.core.sandboxes.delete(id: string): {  }`\n\n**delete** `/v1/core/sandboxes/{id}`\n\nThis endpoint deletes a sandbox account. At least one sandbox must remain\nper production account. The sandbox and its account record are removed synchronously, and all\naccount-scoped data is purged asynchronously.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{  }`\n\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst sandbox = await client.core.sandboxes.delete('id');\n\nconsole.log(sandbox);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.sandboxes.delete',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst sandbox = await client.core.sandboxes.delete('id');\n\nconsole.log(sandbox);",
+      },
+      go: {
+        method: 'client.Core.Sandboxes.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tsandbox, err := client.Core.Sandboxes.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", sandbox)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/sandboxes/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/core/sandboxes/{id}',
+    httpMethod: 'get',
+    summary: 'Get Sandbox',
+    description: 'This endpoint returns a single sandbox account by its ID.',
+    stainlessPath: '(resource) core.sandboxes > (method) retrieve',
+    qualified: 'client.core.sandboxes.retrieve',
+    params: ['id: string;', "include?: 'owner_account'[];"],
+    response:
+      "{ id: string; created_at: string; name: string; object: 'sandbox'; owner_account: { id: string; name: string; object: 'account'; }; updated_at: string; }",
+    markdown:
+      "## retrieve\n\n`client.core.sandboxes.retrieve(id: string, include?: 'owner_account'[]): { id: string; created_at: string; name: string; object: 'sandbox'; owner_account: light_account; updated_at: string; }`\n\n**get** `/v1/core/sandboxes/{id}`\n\nThis endpoint returns a single sandbox account by its ID.\n\n### Parameters\n\n- `id: string`\n\n- `include?: 'owner_account'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; created_at: string; name: string; object: 'sandbox'; owner_account: { id: string; name: string; object: 'account'; }; updated_at: string; }`\n  Sandbox represents an isolated testing environment for an account.\n\n  - `id: string`\n  - `created_at: string`\n  - `name: string`\n  - `object: 'sandbox'`\n  - `owner_account: { id: string; name: string; object: 'account'; }`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst sandbox = await client.core.sandboxes.retrieve('id');\n\nconsole.log(sandbox);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.sandboxes.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst sandbox = await client.core.sandboxes.retrieve('id');\n\nconsole.log(sandbox.id);",
+      },
+      go: {
+        method: 'client.Core.Sandboxes.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tsandbox, err := client.Core.Sandboxes.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreSandboxGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", sandbox.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/sandboxes/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/core/shipping-terms',
+    httpMethod: 'get',
+    summary: 'List Shipping Terms',
+    description:
+      'This endpoint returns a paginated list of shipping terms for the target account, including both account-specific and default system shipping terms.\nSupports cursor-based pagination and search by name.',
+    stainlessPath: '(resource) core.shipping_terms > (method) list',
+    qualified: 'client.core.shippingTerms.list',
+    params: ["include?: 'flat_rate.unit' | 'minimum_order_value.unit'[];"],
+    response:
+      "{ data: { id: string; created_at: string; flat_rate: quantity; free_shipping_carrier_option_ids: string[]; minimum_order_value: quantity; name: string; object: 'shipping_term'; type: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight'; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list\n\n`client.core.shippingTerms.list(include?: 'flat_rate.unit' | 'minimum_order_value.unit'[]): { data: shipping_term[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/core/shipping-terms`\n\nThis endpoint returns a paginated list of shipping terms for the target account, including both account-specific and default system shipping terms.\nSupports cursor-based pagination and search by name.\n\n### Parameters\n\n- `include?: 'flat_rate.unit' | 'minimum_order_value.unit'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ data: { id: string; created_at: string; flat_rate: quantity; free_shipping_carrier_option_ids: string[]; minimum_order_value: quantity; name: string; object: 'shipping_term'; type: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight'; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of ShippingTerm resources\n\n  - `data: { id: string; created_at: string; flat_rate: { id: string; display_value: string; object: 'quantity'; unit: unit; value: string; }; free_shipping_carrier_option_ids: string[]; minimum_order_value: { id: string; display_value: string; object: 'quantity'; unit: unit; value: string; }; name: string; object: 'shipping_term'; type: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight'; updated_at: string; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst shippingTerms = await client.core.shippingTerms.list();\n\nconsole.log(shippingTerms);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.shippingTerms.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst shippingTerms = await client.core.shippingTerms.list();\n\nconsole.log(shippingTerms.data);",
+      },
+      go: {
+        method: 'client.Core.ShippingTerms.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tshippingTerms, err := client.Core.ShippingTerms.List(context.TODO(), augno.CoreShippingTermListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", shippingTerms.Data)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/shipping-terms \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/core/shipping-terms',
+    httpMethod: 'post',
+    summary: 'Create Shipping Term',
+    description: 'This endpoint creates a new account-owned shipping term.',
+    stainlessPath: '(resource) core.shipping_terms > (method) create',
+    qualified: 'client.core.shippingTerms.create',
+    params: [
+      'free_shipping_carrier_option_ids: string[];',
+      'name: string;',
+      "type: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight';",
+      "include?: 'flat_rate.unit' | 'minimum_order_value.unit'[];",
+      'flat_rate?: { unit_id: string; value: string; };',
+      'minimum_order_value?: { unit_id: string; value: string; };',
+    ],
+    response:
+      "{ id: string; created_at: string; flat_rate: { id: string; display_value: string; object: 'quantity'; unit: unit; value: string; }; free_shipping_carrier_option_ids: string[]; minimum_order_value: { id: string; display_value: string; object: 'quantity'; unit: unit; value: string; }; name: string; object: 'shipping_term'; type: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight'; updated_at: string; }",
+    markdown:
+      "## create\n\n`client.core.shippingTerms.create(free_shipping_carrier_option_ids: string[], name: string, type: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight', include?: 'flat_rate.unit' | 'minimum_order_value.unit'[], flat_rate?: { unit_id: string; value: string; }, minimum_order_value?: { unit_id: string; value: string; }): { id: string; created_at: string; flat_rate: quantity; free_shipping_carrier_option_ids: string[]; minimum_order_value: quantity; name: string; object: 'shipping_term'; type: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight'; updated_at: string; }`\n\n**post** `/v1/core/shipping-terms`\n\nThis endpoint creates a new account-owned shipping term.\n\n### Parameters\n\n- `free_shipping_carrier_option_ids: string[]`\n  The carrier option IDs that qualify for free shipping.\n\n- `name: string`\n  The display name of the shipping term.\n\n- `type: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight'`\n  The shipping term type.\n\n- `include?: 'flat_rate.unit' | 'minimum_order_value.unit'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n- `flat_rate?: { unit_id: string; value: string; }`\n  QuantityInputRequest represents a quantity value and unit pair.\n  - `unit_id: string`\n    The unit ID for the value.\n  - `value: string`\n    The decimal value.\n\n- `minimum_order_value?: { unit_id: string; value: string; }`\n  QuantityInputRequest represents a quantity value and unit pair.\n  - `unit_id: string`\n    The unit ID for the value.\n  - `value: string`\n    The decimal value.\n\n### Returns\n\n- `{ id: string; created_at: string; flat_rate: { id: string; display_value: string; object: 'quantity'; unit: unit; value: string; }; free_shipping_carrier_option_ids: string[]; minimum_order_value: { id: string; display_value: string; object: 'quantity'; unit: unit; value: string; }; name: string; object: 'shipping_term'; type: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight'; updated_at: string; }`\n  ShippingTerm represents a shipping term configuration.\n\n  - `id: string`\n  - `created_at: string`\n  - `flat_rate: { id: string; display_value: string; object: 'quantity'; unit: { id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }; value: string; }`\n  - `free_shipping_carrier_option_ids: string[]`\n  - `minimum_order_value: { id: string; display_value: string; object: 'quantity'; unit: { id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }; value: string; }`\n  - `name: string`\n  - `object: 'shipping_term'`\n  - `type: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst shippingTerm = await client.core.shippingTerms.create({\n  free_shipping_carrier_option_ids: ['string'],\n  name: 'Prepaid',\n  type: 'carrier_rate_freight',\n});\n\nconsole.log(shippingTerm);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.shippingTerms.create',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst shippingTerm = await client.core.shippingTerms.create({\n  free_shipping_carrier_option_ids: ['string'],\n  name: 'Prepaid',\n  type: 'carrier_rate_freight',\n});\n\nconsole.log(shippingTerm.id);",
+      },
+      go: {
+        method: 'client.Core.ShippingTerms.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tshippingTerm, err := client.Core.ShippingTerms.New(context.TODO(), augno.CoreShippingTermNewParams{\n\t\tFreeShippingCarrierOptionIDs: []string{"string"},\n\t\tName:                         "Prepaid",\n\t\tType:                         augno.CoreShippingTermNewParamsTypeCarrierRateFreight,\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", shippingTerm.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/shipping-terms \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "free_shipping_carrier_option_ids": [\n            "string"\n          ],\n          "name": "Prepaid",\n          "type": "carrier_rate_freight"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/v1/core/shipping-terms/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete Shipping Term',
+    description:
+      'This endpoint deletes an account-owned shipping term.\nAssociated free shipping rules and quantity records are also removed. Default shipping terms cannot be deleted.',
+    stainlessPath: '(resource) core.shipping_terms > (method) delete',
+    qualified: 'client.core.shippingTerms.delete',
+    params: ['id: string;'],
+    response: '{  }',
+    markdown:
+      "## delete\n\n`client.core.shippingTerms.delete(id: string): {  }`\n\n**delete** `/v1/core/shipping-terms/{id}`\n\nThis endpoint deletes an account-owned shipping term.\nAssociated free shipping rules and quantity records are also removed. Default shipping terms cannot be deleted.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{  }`\n\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst shippingTerm = await client.core.shippingTerms.delete('id');\n\nconsole.log(shippingTerm);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.shippingTerms.delete',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst shippingTerm = await client.core.shippingTerms.delete('id');\n\nconsole.log(shippingTerm);",
+      },
+      go: {
+        method: 'client.Core.ShippingTerms.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tshippingTerm, err := client.Core.ShippingTerms.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", shippingTerm)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/shipping-terms/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/core/shipping-terms/{id}',
+    httpMethod: 'get',
+    summary: 'Get Shipping Term',
+    description:
+      'This endpoint returns a single shipping term by its ID.\nThe shipping term must belong to the requesting account or be a default (global) shipping term.',
+    stainlessPath: '(resource) core.shipping_terms > (method) retrieve',
+    qualified: 'client.core.shippingTerms.retrieve',
+    params: ['id: string;', "include?: 'flat_rate.unit' | 'minimum_order_value.unit'[];"],
+    response:
+      "{ id: string; created_at: string; flat_rate: { id: string; display_value: string; object: 'quantity'; unit: unit; value: string; }; free_shipping_carrier_option_ids: string[]; minimum_order_value: { id: string; display_value: string; object: 'quantity'; unit: unit; value: string; }; name: string; object: 'shipping_term'; type: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight'; updated_at: string; }",
+    markdown:
+      "## retrieve\n\n`client.core.shippingTerms.retrieve(id: string, include?: 'flat_rate.unit' | 'minimum_order_value.unit'[]): { id: string; created_at: string; flat_rate: quantity; free_shipping_carrier_option_ids: string[]; minimum_order_value: quantity; name: string; object: 'shipping_term'; type: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight'; updated_at: string; }`\n\n**get** `/v1/core/shipping-terms/{id}`\n\nThis endpoint returns a single shipping term by its ID.\nThe shipping term must belong to the requesting account or be a default (global) shipping term.\n\n### Parameters\n\n- `id: string`\n\n- `include?: 'flat_rate.unit' | 'minimum_order_value.unit'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; created_at: string; flat_rate: { id: string; display_value: string; object: 'quantity'; unit: unit; value: string; }; free_shipping_carrier_option_ids: string[]; minimum_order_value: { id: string; display_value: string; object: 'quantity'; unit: unit; value: string; }; name: string; object: 'shipping_term'; type: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight'; updated_at: string; }`\n  ShippingTerm represents a shipping term configuration.\n\n  - `id: string`\n  - `created_at: string`\n  - `flat_rate: { id: string; display_value: string; object: 'quantity'; unit: { id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }; value: string; }`\n  - `free_shipping_carrier_option_ids: string[]`\n  - `minimum_order_value: { id: string; display_value: string; object: 'quantity'; unit: { id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }; value: string; }`\n  - `name: string`\n  - `object: 'shipping_term'`\n  - `type: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst shippingTerm = await client.core.shippingTerms.retrieve('id');\n\nconsole.log(shippingTerm);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.shippingTerms.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst shippingTerm = await client.core.shippingTerms.retrieve('id');\n\nconsole.log(shippingTerm.id);",
+      },
+      go: {
+        method: 'client.Core.ShippingTerms.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tshippingTerm, err := client.Core.ShippingTerms.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreShippingTermGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", shippingTerm.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/shipping-terms/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/v1/core/shipping-terms/{id}',
+    httpMethod: 'patch',
+    summary: 'Update Shipping Term',
+    description:
+      'This endpoint partially updates an account-owned shipping term.\nOnly provided fields are updated; absent fields retain their current values.\nDefault shipping terms cannot be updated.',
+    stainlessPath: '(resource) core.shipping_terms > (method) update',
+    qualified: 'client.core.shippingTerms.update',
+    params: [
+      'id: string;',
+      'free_shipping_carrier_option_ids: string[];',
+      "include?: 'flat_rate.unit' | 'minimum_order_value.unit'[];",
+      'flat_rate?: { unit_id: string; value: string; };',
+      'minimum_order_value?: { unit_id: string; value: string; };',
+      'name?: string;',
+      "type?: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight';",
+    ],
+    response:
+      "{ id: string; created_at: string; flat_rate: { id: string; display_value: string; object: 'quantity'; unit: unit; value: string; }; free_shipping_carrier_option_ids: string[]; minimum_order_value: { id: string; display_value: string; object: 'quantity'; unit: unit; value: string; }; name: string; object: 'shipping_term'; type: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight'; updated_at: string; }",
+    markdown:
+      "## update\n\n`client.core.shippingTerms.update(id: string, free_shipping_carrier_option_ids: string[], include?: 'flat_rate.unit' | 'minimum_order_value.unit'[], flat_rate?: { unit_id: string; value: string; }, minimum_order_value?: { unit_id: string; value: string; }, name?: string, type?: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight'): { id: string; created_at: string; flat_rate: quantity; free_shipping_carrier_option_ids: string[]; minimum_order_value: quantity; name: string; object: 'shipping_term'; type: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight'; updated_at: string; }`\n\n**patch** `/v1/core/shipping-terms/{id}`\n\nThis endpoint partially updates an account-owned shipping term.\nOnly provided fields are updated; absent fields retain their current values.\nDefault shipping terms cannot be updated.\n\n### Parameters\n\n- `id: string`\n\n- `free_shipping_carrier_option_ids: string[]`\n  The carrier option IDs that qualify for free shipping.\n\n- `include?: 'flat_rate.unit' | 'minimum_order_value.unit'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n- `flat_rate?: { unit_id: string; value: string; }`\n  QuantityInputRequest represents a quantity value and unit pair.\n  - `unit_id: string`\n    The unit ID for the value.\n  - `value: string`\n    The decimal value.\n\n- `minimum_order_value?: { unit_id: string; value: string; }`\n  QuantityInputRequest represents a quantity value and unit pair.\n  - `unit_id: string`\n    The unit ID for the value.\n  - `value: string`\n    The decimal value.\n\n- `name?: string`\n  The display name of the shipping term.\n\n- `type?: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight'`\n  The shipping term type.\n\n### Returns\n\n- `{ id: string; created_at: string; flat_rate: { id: string; display_value: string; object: 'quantity'; unit: unit; value: string; }; free_shipping_carrier_option_ids: string[]; minimum_order_value: { id: string; display_value: string; object: 'quantity'; unit: unit; value: string; }; name: string; object: 'shipping_term'; type: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight'; updated_at: string; }`\n  ShippingTerm represents a shipping term configuration.\n\n  - `id: string`\n  - `created_at: string`\n  - `flat_rate: { id: string; display_value: string; object: 'quantity'; unit: { id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }; value: string; }`\n  - `free_shipping_carrier_option_ids: string[]`\n  - `minimum_order_value: { id: string; display_value: string; object: 'quantity'; unit: { id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }; value: string; }`\n  - `name: string`\n  - `object: 'shipping_term'`\n  - `type: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst shippingTerm = await client.core.shippingTerms.update('id', { free_shipping_carrier_option_ids: ['string'] });\n\nconsole.log(shippingTerm);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.shippingTerms.update',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst shippingTerm = await client.core.shippingTerms.update('id', {\n  free_shipping_carrier_option_ids: ['string'],\n  name: 'Collect',\n});\n\nconsole.log(shippingTerm.id);",
+      },
+      go: {
+        method: 'client.Core.ShippingTerms.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tshippingTerm, err := client.Core.ShippingTerms.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreShippingTermUpdateParams{\n\t\t\tFreeShippingCarrierOptionIDs: []string{"string"},\n\t\t\tName:                         augno.String("Collect"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", shippingTerm.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/shipping-terms/$ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "free_shipping_carrier_option_ids": [\n            "string"\n          ],\n          "name": "Collect"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/core/units',
+    httpMethod: 'get',
+    summary: 'List Units',
+    description:
+      'This endpoint returns a paginated list of units for the target account, including both account-specific and global system units.\nSupports cursor-based pagination, filtering by dimension type and unit group membership, and search by name or abbreviation.',
+    stainlessPath: '(resource) core.units > (method) list',
+    qualified: 'client.core.units.list',
+    params: ['type?: string;', 'unit_group_ids?: string[];'],
+    response:
+      "{ data: { id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list\n\n`client.core.units.list(type?: string, unit_group_ids?: string[]): { data: unit[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/core/units`\n\nThis endpoint returns a paginated list of units for the target account, including both account-specific and global system units.\nSupports cursor-based pagination, filtering by dimension type and unit group membership, and search by name or abbreviation.\n\n### Parameters\n\n- `type?: string`\n  Filter by unit dimension code (e.g. \"mass\", \"quantity\").\n\n- `unit_group_ids?: string[]`\n  Filter by unit group membership.\n\n### Returns\n\n- `{ data: { id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of Unit resources\n\n  - `data: { id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst units = await client.core.units.list();\n\nconsole.log(units);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.units.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst units = await client.core.units.list();\n\nconsole.log(units.data);",
+      },
+      go: {
+        method: 'client.Core.Units.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tunits, err := client.Core.Units.List(context.TODO(), augno.CoreUnitListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", units.Data)\n}\n',
+      },
+      http: {
+        example: 'curl https://api.augno.com/v1/core/units \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/core/units',
+    httpMethod: 'post',
+    summary: 'Create Unit',
+    description: 'This endpoint creates a new account-owned unit.',
+    stainlessPath: '(resource) core.units > (method) create',
+    qualified: 'client.core.units.create',
+    params: [
+      'abbreviation: string;',
+      'is_base_unit: boolean;',
+      'name: string;',
+      'offset_denominator: string;',
+      'offset_numerator: string;',
+      'ratio_denominator: string;',
+      'ratio_numerator: string;',
+      "type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area';",
+    ],
+    response:
+      "{ id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }",
+    markdown:
+      "## create\n\n`client.core.units.create(abbreviation: string, is_base_unit: boolean, name: string, offset_denominator: string, offset_numerator: string, ratio_denominator: string, ratio_numerator: string, type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'): { id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }`\n\n**post** `/v1/core/units`\n\nThis endpoint creates a new account-owned unit.\n\n### Parameters\n\n- `abbreviation: string`\n  The short abbreviation for the unit (e.g. \"g\").\n\n- `is_base_unit: boolean`\n  Whether this unit is the base unit for its dimension.\n\n- `name: string`\n  The display name of the unit (e.g. \"Gram\").\n\n- `offset_denominator: string`\n  The conversion offset denominator, as a decimal string.\n\n- `offset_numerator: string`\n  The conversion offset numerator, as a decimal string.\n\n- `ratio_denominator: string`\n  The conversion ratio denominator relative to the base unit, as a decimal string.\n\n- `ratio_numerator: string`\n  The conversion ratio numerator relative to the base unit, as a decimal string.\n\n- `type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'`\n  The unit dimension code.\n\n### Returns\n\n- `{ id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }`\n  Unit represents a unit of measurement used for conversions and product quantities.\n\n  - `id: string`\n  - `abbreviation: string`\n  - `created_at: string`\n  - `is_base_unit: boolean`\n  - `is_internal: boolean`\n  - `name: string`\n  - `object: 'unit'`\n  - `offset_denominator: string`\n  - `offset_numerator: string`\n  - `ratio_denominator: string`\n  - `ratio_numerator: string`\n  - `type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst unit = await client.core.units.create({\n  abbreviation: 'g',\n  is_base_unit: true,\n  name: 'Gram',\n  offset_denominator: '1.000000000000000000000000000000',\n  offset_numerator: '0.000000000000000000000000000000',\n  ratio_denominator: '1.000000000000000000000000000000',\n  ratio_numerator: '1.000000000000000000000000000000',\n  type: 'mass',\n});\n\nconsole.log(unit);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.units.create',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst unit = await client.core.units.create({\n  abbreviation: 'g',\n  is_base_unit: true,\n  name: 'Gram',\n  offset_denominator: '1.000000000000000000000000000000',\n  offset_numerator: '0.000000000000000000000000000000',\n  ratio_denominator: '1.000000000000000000000000000000',\n  ratio_numerator: '1.000000000000000000000000000000',\n  type: 'mass',\n});\n\nconsole.log(unit.id);",
+      },
+      go: {
+        method: 'client.Core.Units.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tunit, err := client.Core.Units.New(context.TODO(), augno.CoreUnitNewParams{\n\t\tAbbreviation:      "g",\n\t\tIsBaseUnit:        true,\n\t\tName:              "Gram",\n\t\tOffsetDenominator: "1.000000000000000000000000000000",\n\t\tOffsetNumerator:   "0.000000000000000000000000000000",\n\t\tRatioDenominator:  "1.000000000000000000000000000000",\n\t\tRatioNumerator:    "1.000000000000000000000000000000",\n\t\tType:              augno.CoreUnitNewParamsTypeMass,\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", unit.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/units \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "abbreviation": "g",\n          "is_base_unit": true,\n          "name": "Gram",\n          "offset_denominator": "1.000000000000000000000000000000",\n          "offset_numerator": "0.000000000000000000000000000000",\n          "ratio_denominator": "1.000000000000000000000000000000",\n          "ratio_numerator": "1.000000000000000000000000000000",\n          "type": "mass"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/v1/core/units/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete Unit',
+    description:
+      'This endpoint deletes an account-owned unit.\nAssociated unit group memberships are also removed. System units cannot be deleted.',
+    stainlessPath: '(resource) core.units > (method) delete',
+    qualified: 'client.core.units.delete',
+    params: ['id: string;'],
+    response: '{  }',
+    markdown:
+      "## delete\n\n`client.core.units.delete(id: string): {  }`\n\n**delete** `/v1/core/units/{id}`\n\nThis endpoint deletes an account-owned unit.\nAssociated unit group memberships are also removed. System units cannot be deleted.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{  }`\n\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst unit = await client.core.units.delete('id');\n\nconsole.log(unit);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.units.delete',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst unit = await client.core.units.delete('id');\n\nconsole.log(unit);",
+      },
+      go: {
+        method: 'client.Core.Units.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tunit, err := client.Core.Units.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", unit)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/units/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/core/units/{id}',
+    httpMethod: 'get',
+    summary: 'Get Unit',
+    description:
+      'This endpoint returns a single unit by its ID.\nThe unit must belong to the requesting account or be a system (global) unit.',
+    stainlessPath: '(resource) core.units > (method) retrieve',
+    qualified: 'client.core.units.retrieve',
+    params: ['id: string;'],
+    response:
+      "{ id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }",
+    markdown:
+      "## retrieve\n\n`client.core.units.retrieve(id: string): { id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }`\n\n**get** `/v1/core/units/{id}`\n\nThis endpoint returns a single unit by its ID.\nThe unit must belong to the requesting account or be a system (global) unit.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }`\n  Unit represents a unit of measurement used for conversions and product quantities.\n\n  - `id: string`\n  - `abbreviation: string`\n  - `created_at: string`\n  - `is_base_unit: boolean`\n  - `is_internal: boolean`\n  - `name: string`\n  - `object: 'unit'`\n  - `offset_denominator: string`\n  - `offset_numerator: string`\n  - `ratio_denominator: string`\n  - `ratio_numerator: string`\n  - `type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst unit = await client.core.units.retrieve('id');\n\nconsole.log(unit);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.units.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst unit = await client.core.units.retrieve('id');\n\nconsole.log(unit.id);",
+      },
+      go: {
+        method: 'client.Core.Units.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tunit, err := client.Core.Units.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", unit.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/units/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/v1/core/units/{id}',
+    httpMethod: 'patch',
+    summary: 'Update Unit',
+    description:
+      'This endpoint partially updates an account-owned unit.\nOnly provided fields are updated; absent fields retain their current values.\nSystem units cannot be updated.',
+    stainlessPath: '(resource) core.units > (method) update',
+    qualified: 'client.core.units.update',
+    params: [
+      'id: string;',
+      'abbreviation?: string;',
+      'name?: string;',
+      'offset_denominator?: string;',
+      'offset_numerator?: string;',
+      'ratio_denominator?: string;',
+      'ratio_numerator?: string;',
+    ],
+    response:
+      "{ id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }",
+    markdown:
+      "## update\n\n`client.core.units.update(id: string, abbreviation?: string, name?: string, offset_denominator?: string, offset_numerator?: string, ratio_denominator?: string, ratio_numerator?: string): { id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }`\n\n**patch** `/v1/core/units/{id}`\n\nThis endpoint partially updates an account-owned unit.\nOnly provided fields are updated; absent fields retain their current values.\nSystem units cannot be updated.\n\n### Parameters\n\n- `id: string`\n\n- `abbreviation?: string`\n  The short abbreviation for the unit.\n\n- `name?: string`\n  The display name of the unit.\n\n- `offset_denominator?: string`\n  The conversion offset denominator, as a decimal string.\n\n- `offset_numerator?: string`\n  The conversion offset numerator, as a decimal string.\n\n- `ratio_denominator?: string`\n  The conversion ratio denominator, as a decimal string.\n\n- `ratio_numerator?: string`\n  The conversion ratio numerator, as a decimal string.\n\n### Returns\n\n- `{ id: string; abbreviation: string; created_at: string; is_base_unit: boolean; is_internal: boolean; name: string; object: 'unit'; offset_denominator: string; offset_numerator: string; ratio_denominator: string; ratio_numerator: string; type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'; updated_at: string; }`\n  Unit represents a unit of measurement used for conversions and product quantities.\n\n  - `id: string`\n  - `abbreviation: string`\n  - `created_at: string`\n  - `is_base_unit: boolean`\n  - `is_internal: boolean`\n  - `name: string`\n  - `object: 'unit'`\n  - `offset_denominator: string`\n  - `offset_numerator: string`\n  - `ratio_denominator: string`\n  - `ratio_numerator: string`\n  - `type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area'`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst unit = await client.core.units.update('id');\n\nconsole.log(unit);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.units.update',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst unit = await client.core.units.update('id', { abbreviation: 'kg', name: 'Kilogram' });\n\nconsole.log(unit.id);",
+      },
+      go: {
+        method: 'client.Core.Units.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tunit, err := client.Core.Units.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreUnitUpdateParams{\n\t\t\tAbbreviation: augno.String("kg"),\n\t\t\tName:         augno.String("Kilogram"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", unit.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/units/$ID \\\n    -X PATCH \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/v1/core/item-categories',
+    httpMethod: 'get',
+    summary: 'List Item Categories',
+    description:
+      'This endpoint returns a paginated list of item categories for the target account, including both account-specific and global system categories.\nSupports cursor-based pagination, filtering by category type, and search by name.',
+    stainlessPath: '(resource) core.item_categories > (method) list',
+    qualified: 'client.core.itemCategories.list',
+    params: ["include?: 'properties' | 'unit_group'[];", 'type?: string;'],
+    response:
+      "{ data: { id: string; created_at: string; name: string; notes: string; object: 'item_category'; properties: { id: string; name: string; object: 'property'; }[]; type: string; unit_group: { id: string; name: string; object: 'unit_group'; }; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }",
+    markdown:
+      "## list\n\n`client.core.itemCategories.list(include?: 'properties' | 'unit_group'[], type?: string): { data: object[]; object: 'list'; page_info: page_info; }`\n\n**get** `/v1/core/item-categories`\n\nThis endpoint returns a paginated list of item categories for the target account, including both account-specific and global system categories.\nSupports cursor-based pagination, filtering by category type, and search by name.\n\n### Parameters\n\n- `include?: 'properties' | 'unit_group'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n- `type?: string`\n  Filter by item category type code (material_category or product_category).\n\n### Returns\n\n- `{ data: { id: string; created_at: string; name: string; notes: string; object: 'item_category'; properties: { id: string; name: string; object: 'property'; }[]; type: string; unit_group: { id: string; name: string; object: 'unit_group'; }; updated_at: string; }[]; object: 'list'; page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }; }`\n  A paginated list of ItemCategory resources\n\n  - `data: { id: string; created_at: string; name: string; notes: string; object: 'item_category'; properties: { id: string; name: string; object: 'property'; }[]; type: string; unit_group: { id: string; name: string; object: 'unit_group'; }; updated_at: string; }[]`\n  - `object: 'list'`\n  - `page_info: { has_next_page: boolean; has_prev_page: boolean; next_cursor: string; prev_cursor: string; }`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst itemCategories = await client.core.itemCategories.list();\n\nconsole.log(itemCategories);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.itemCategories.list',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst itemCategories = await client.core.itemCategories.list();\n\nconsole.log(itemCategories.data);",
+      },
+      go: {
+        method: 'client.Core.ItemCategories.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\titemCategories, err := client.Core.ItemCategories.List(context.TODO(), augno.CoreItemCategoryListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", itemCategories.Data)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/item-categories \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'create',
+    endpoint: '/v1/core/item-categories',
+    httpMethod: 'post',
+    summary: 'Create Item Category',
+    description: 'This endpoint creates a new account-owned item category.',
+    stainlessPath: '(resource) core.item_categories > (method) create',
+    qualified: 'client.core.itemCategories.create',
+    params: ['name: string;', 'type: string;', 'unit_group_id: string;'],
+    response:
+      "{ id: string; created_at: string; name: string; notes: string; object: 'item_category'; properties: { id: string; name: string; object: 'property'; }[]; type: string; unit_group: { id: string; name: string; object: 'unit_group'; }; updated_at: string; }",
+    markdown:
+      "## create\n\n`client.core.itemCategories.create(name: string, type: string, unit_group_id: string): { id: string; created_at: string; name: string; notes: string; object: 'item_category'; properties: object[]; type: string; unit_group: object; updated_at: string; }`\n\n**post** `/v1/core/item-categories`\n\nThis endpoint creates a new account-owned item category.\n\n### Parameters\n\n- `name: string`\n  The display name of the item category.\n\n- `type: string`\n  The type of item category (material_category or product_category).\n\n- `unit_group_id: string`\n  The ID of the unit group to associate with this item category.\n\n### Returns\n\n- `{ id: string; created_at: string; name: string; notes: string; object: 'item_category'; properties: { id: string; name: string; object: 'property'; }[]; type: string; unit_group: { id: string; name: string; object: 'unit_group'; }; updated_at: string; }`\n  ItemCategory represents a full item category resource.\n\n  - `id: string`\n  - `created_at: string`\n  - `name: string`\n  - `notes: string`\n  - `object: 'item_category'`\n  - `properties: { id: string; name: string; object: 'property'; }[]`\n  - `type: string`\n  - `unit_group: { id: string; name: string; object: 'unit_group'; }`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst itemCategory = await client.core.itemCategories.create({\n  name: 'Electronics',\n  type: 'material_category',\n  unit_group_id: 'ug_01jm4r6700f8nwq3v5hx2d9ktp',\n});\n\nconsole.log(itemCategory);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.itemCategories.create',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst itemCategory = await client.core.itemCategories.create({\n  name: 'Electronics',\n  type: 'material_category',\n  unit_group_id: 'ug_01jm4r6700f8nwq3v5hx2d9ktp',\n});\n\nconsole.log(itemCategory.id);",
+      },
+      go: {
+        method: 'client.Core.ItemCategories.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\titemCategory, err := client.Core.ItemCategories.New(context.TODO(), augno.CoreItemCategoryNewParams{\n\t\tName:        "Electronics",\n\t\tType:        "material_category",\n\t\tUnitGroupID: "ug_01jm4r6700f8nwq3v5hx2d9ktp",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", itemCategory.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/item-categories \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "name": "Electronics",\n          "type": "material_category",\n          "unit_group_id": "ug_01jm4r6700f8nwq3v5hx2d9ktp"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'delete',
+    endpoint: '/v1/core/item-categories/{id}',
+    httpMethod: 'delete',
+    summary: 'Delete Item Category',
+    description:
+      'This endpoint deletes an account-owned item category.\nDefault system categories cannot be deleted.',
+    stainlessPath: '(resource) core.item_categories > (method) delete',
+    qualified: 'client.core.itemCategories.delete',
+    params: ['id: string;'],
+    response: '{  }',
+    markdown:
+      "## delete\n\n`client.core.itemCategories.delete(id: string): {  }`\n\n**delete** `/v1/core/item-categories/{id}`\n\nThis endpoint deletes an account-owned item category.\nDefault system categories cannot be deleted.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{  }`\n\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst itemCategory = await client.core.itemCategories.delete('id');\n\nconsole.log(itemCategory);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.itemCategories.delete',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst itemCategory = await client.core.itemCategories.delete('id');\n\nconsole.log(itemCategory);",
+      },
+      go: {
+        method: 'client.Core.ItemCategories.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\titemCategory, err := client.Core.ItemCategories.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", itemCategory)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/item-categories/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/v1/core/item-categories/{id}',
+    httpMethod: 'get',
+    summary: 'Get Item Category',
+    description:
+      'This endpoint returns a single item category by its ID.\nThe item category must belong to the requesting account or be a system (global) category.',
+    stainlessPath: '(resource) core.item_categories > (method) retrieve',
+    qualified: 'client.core.itemCategories.retrieve',
+    params: ['id: string;', "include?: 'properties' | 'unit_group'[];"],
+    response:
+      "{ id: string; created_at: string; name: string; notes: string; object: 'item_category'; properties: { id: string; name: string; object: 'property'; }[]; type: string; unit_group: { id: string; name: string; object: 'unit_group'; }; updated_at: string; }",
+    markdown:
+      "## retrieve\n\n`client.core.itemCategories.retrieve(id: string, include?: 'properties' | 'unit_group'[]): { id: string; created_at: string; name: string; notes: string; object: 'item_category'; properties: object[]; type: string; unit_group: object; updated_at: string; }`\n\n**get** `/v1/core/item-categories/{id}`\n\nThis endpoint returns a single item category by its ID.\nThe item category must belong to the requesting account or be a system (global) category.\n\n### Parameters\n\n- `id: string`\n\n- `include?: 'properties' | 'unit_group'[]`\n  Sub-objects to expand in the response. When omitted, sub-objects are returned as `null`.\n\n### Returns\n\n- `{ id: string; created_at: string; name: string; notes: string; object: 'item_category'; properties: { id: string; name: string; object: 'property'; }[]; type: string; unit_group: { id: string; name: string; object: 'unit_group'; }; updated_at: string; }`\n  ItemCategory represents a full item category resource.\n\n  - `id: string`\n  - `created_at: string`\n  - `name: string`\n  - `notes: string`\n  - `object: 'item_category'`\n  - `properties: { id: string; name: string; object: 'property'; }[]`\n  - `type: string`\n  - `unit_group: { id: string; name: string; object: 'unit_group'; }`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst itemCategory = await client.core.itemCategories.retrieve('id');\n\nconsole.log(itemCategory);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.itemCategories.retrieve',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst itemCategory = await client.core.itemCategories.retrieve('id');\n\nconsole.log(itemCategory.id);",
+      },
+      go: {
+        method: 'client.Core.ItemCategories.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\titemCategory, err := client.Core.ItemCategories.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreItemCategoryGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", itemCategory.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/item-categories/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/v1/core/item-categories/{id}',
+    httpMethod: 'patch',
+    summary: 'Update Item Category',
+    description:
+      'This endpoint partially updates an account-owned item category.\nOnly provided fields are updated; absent fields retain their current values.\nDefault system categories cannot be updated.',
+    stainlessPath: '(resource) core.item_categories > (method) update',
+    qualified: 'client.core.itemCategories.update',
+    params: ['id: string;', 'name?: string;', 'notes?: string;'],
+    response:
+      "{ id: string; created_at: string; name: string; notes: string; object: 'item_category'; properties: { id: string; name: string; object: 'property'; }[]; type: string; unit_group: { id: string; name: string; object: 'unit_group'; }; updated_at: string; }",
+    markdown:
+      "## update\n\n`client.core.itemCategories.update(id: string, name?: string, notes?: string): { id: string; created_at: string; name: string; notes: string; object: 'item_category'; properties: object[]; type: string; unit_group: object; updated_at: string; }`\n\n**patch** `/v1/core/item-categories/{id}`\n\nThis endpoint partially updates an account-owned item category.\nOnly provided fields are updated; absent fields retain their current values.\nDefault system categories cannot be updated.\n\n### Parameters\n\n- `id: string`\n\n- `name?: string`\n  The display name of the item category.\n\n- `notes?: string`\n  Optional notes about the item category.\n\n### Returns\n\n- `{ id: string; created_at: string; name: string; notes: string; object: 'item_category'; properties: { id: string; name: string; object: 'property'; }[]; type: string; unit_group: { id: string; name: string; object: 'unit_group'; }; updated_at: string; }`\n  ItemCategory represents a full item category resource.\n\n  - `id: string`\n  - `created_at: string`\n  - `name: string`\n  - `notes: string`\n  - `object: 'item_category'`\n  - `properties: { id: string; name: string; object: 'property'; }[]`\n  - `type: string`\n  - `unit_group: { id: string; name: string; object: 'unit_group'; }`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst itemCategory = await client.core.itemCategories.update('id');\n\nconsole.log(itemCategory);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.itemCategories.update',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst itemCategory = await client.core.itemCategories.update('id', { name: 'Updated Electronics' });\n\nconsole.log(itemCategory.id);",
+      },
+      go: {
+        method: 'client.Core.ItemCategories.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\titemCategory, err := client.Core.ItemCategories.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreItemCategoryUpdateParams{\n\t\t\tName: augno.String("Updated Electronics"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", itemCategory.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/item-categories/$ID \\\n    -X PATCH \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'change_unit_group',
+    endpoint: '/v1/core/item-categories/{id}/unit-groups/{unit_group_id}',
+    httpMethod: 'put',
+    summary: 'Change Item Category Unit Group',
+    description:
+      'This endpoint changes the unit group associated with an item category.\nThe unit group must be visible to the requesting account.\nDefault system categories cannot be modified.\nWhen the unit group is changed, all items in the category will be updated to use the new base unit asynchronously.',
+    stainlessPath: '(resource) core.item_categories > (method) change_unit_group',
+    qualified: 'client.core.itemCategories.changeUnitGroup',
+    params: ['id: string;', 'unit_group_id: string;'],
+    response:
+      "{ id: string; created_at: string; name: string; notes: string; object: 'item_category'; properties: { id: string; name: string; object: 'property'; }[]; type: string; unit_group: { id: string; name: string; object: 'unit_group'; }; updated_at: string; }",
+    markdown:
+      "## change_unit_group\n\n`client.core.itemCategories.changeUnitGroup(id: string, unit_group_id: string): { id: string; created_at: string; name: string; notes: string; object: 'item_category'; properties: object[]; type: string; unit_group: object; updated_at: string; }`\n\n**put** `/v1/core/item-categories/{id}/unit-groups/{unit_group_id}`\n\nThis endpoint changes the unit group associated with an item category.\nThe unit group must be visible to the requesting account.\nDefault system categories cannot be modified.\nWhen the unit group is changed, all items in the category will be updated to use the new base unit asynchronously.\n\n### Parameters\n\n- `id: string`\n\n- `unit_group_id: string`\n\n### Returns\n\n- `{ id: string; created_at: string; name: string; notes: string; object: 'item_category'; properties: { id: string; name: string; object: 'property'; }[]; type: string; unit_group: { id: string; name: string; object: 'unit_group'; }; updated_at: string; }`\n  ItemCategory represents a full item category resource.\n\n  - `id: string`\n  - `created_at: string`\n  - `name: string`\n  - `notes: string`\n  - `object: 'item_category'`\n  - `properties: { id: string; name: string; object: 'property'; }[]`\n  - `type: string`\n  - `unit_group: { id: string; name: string; object: 'unit_group'; }`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.core.itemCategories.changeUnitGroup('unit_group_id', { id: 'id' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.itemCategories.changeUnitGroup',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.itemCategories.changeUnitGroup('unit_group_id', { id: 'id' });\n\nconsole.log(response.id);",
+      },
+      go: {
+        method: 'client.Core.ItemCategories.ChangeUnitGroup',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.ItemCategories.ChangeUnitGroup(\n\t\tcontext.TODO(),\n\t\t"unit_group_id",\n\t\taugno.CoreItemCategoryChangeUnitGroupParams{\n\t\t\tID: "id",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/item-categories/$ID/unit-groups/$UNIT_GROUP_ID \\\n    -X PUT \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'remove',
+    endpoint: '/v1/core/item-categories/{id}/properties/{property_id}',
+    httpMethod: 'delete',
+    summary: 'Remove Item Category Property',
+    description:
+      'This endpoint removes a property from an item category.\nBoth the item category and the property must belong to the requesting account.\nDefault system categories cannot be modified.',
+    stainlessPath: '(resource) core.item_categories.properties > (method) remove',
+    qualified: 'client.core.itemCategories.properties.remove',
+    params: ['id: string;', 'property_id: string;'],
+    response:
+      "{ id: string; created_at: string; name: string; notes: string; object: 'item_category'; properties: { id: string; name: string; object: 'property'; }[]; type: string; unit_group: { id: string; name: string; object: 'unit_group'; }; updated_at: string; }",
+    markdown:
+      "## remove\n\n`client.core.itemCategories.properties.remove(id: string, property_id: string): { id: string; created_at: string; name: string; notes: string; object: 'item_category'; properties: object[]; type: string; unit_group: object; updated_at: string; }`\n\n**delete** `/v1/core/item-categories/{id}/properties/{property_id}`\n\nThis endpoint removes a property from an item category.\nBoth the item category and the property must belong to the requesting account.\nDefault system categories cannot be modified.\n\n### Parameters\n\n- `id: string`\n\n- `property_id: string`\n\n### Returns\n\n- `{ id: string; created_at: string; name: string; notes: string; object: 'item_category'; properties: { id: string; name: string; object: 'property'; }[]; type: string; unit_group: { id: string; name: string; object: 'unit_group'; }; updated_at: string; }`\n  ItemCategory represents a full item category resource.\n\n  - `id: string`\n  - `created_at: string`\n  - `name: string`\n  - `notes: string`\n  - `object: 'item_category'`\n  - `properties: { id: string; name: string; object: 'property'; }[]`\n  - `type: string`\n  - `unit_group: { id: string; name: string; object: 'unit_group'; }`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst property = await client.core.itemCategories.properties.remove('property_id', { id: 'id' });\n\nconsole.log(property);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.itemCategories.properties.remove',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst property = await client.core.itemCategories.properties.remove('property_id', { id: 'id' });\n\nconsole.log(property.id);",
+      },
+      go: {
+        method: 'client.Core.ItemCategories.Properties.Remove',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproperty, err := client.Core.ItemCategories.Properties.Remove(\n\t\tcontext.TODO(),\n\t\t"property_id",\n\t\taugno.CoreItemCategoryPropertyRemoveParams{\n\t\t\tID: "id",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", property.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/item-categories/$ID/properties/$PROPERTY_ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+  {
+    name: 'add',
+    endpoint: '/v1/core/item-categories/{id}/properties/{property_id}',
+    httpMethod: 'put',
+    summary: 'Add Item Category Property',
+    description:
+      'This endpoint adds a property to an item category.\nBoth the item category and the property must belong to the requesting account.\nDefault system categories cannot be modified.',
+    stainlessPath: '(resource) core.item_categories.properties > (method) add',
+    qualified: 'client.core.itemCategories.properties.add',
+    params: ['id: string;', 'property_id: string;'],
+    response:
+      "{ id: string; created_at: string; name: string; notes: string; object: 'item_category'; properties: { id: string; name: string; object: 'property'; }[]; type: string; unit_group: { id: string; name: string; object: 'unit_group'; }; updated_at: string; }",
+    markdown:
+      "## add\n\n`client.core.itemCategories.properties.add(id: string, property_id: string): { id: string; created_at: string; name: string; notes: string; object: 'item_category'; properties: object[]; type: string; unit_group: object; updated_at: string; }`\n\n**put** `/v1/core/item-categories/{id}/properties/{property_id}`\n\nThis endpoint adds a property to an item category.\nBoth the item category and the property must belong to the requesting account.\nDefault system categories cannot be modified.\n\n### Parameters\n\n- `id: string`\n\n- `property_id: string`\n\n### Returns\n\n- `{ id: string; created_at: string; name: string; notes: string; object: 'item_category'; properties: { id: string; name: string; object: 'property'; }[]; type: string; unit_group: { id: string; name: string; object: 'unit_group'; }; updated_at: string; }`\n  ItemCategory represents a full item category resource.\n\n  - `id: string`\n  - `created_at: string`\n  - `name: string`\n  - `notes: string`\n  - `object: 'item_category'`\n  - `properties: { id: string; name: string; object: 'property'; }[]`\n  - `type: string`\n  - `unit_group: { id: string; name: string; object: 'unit_group'; }`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient();\n\nconst response = await client.core.itemCategories.properties.add('property_id', { id: 'id' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.core.itemCategories.properties.add',
+        example:
+          "import AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.core.itemCategories.properties.add('property_id', { id: 'id' });\n\nconsole.log(response.id);",
+      },
+      go: {
+        method: 'client.Core.ItemCategories.Properties.Add',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.ItemCategories.Properties.Add(\n\t\tcontext.TODO(),\n\t\t"property_id",\n\t\taugno.CoreItemCategoryPropertyAddParams{\n\t\t\tID: "id",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://api.augno.com/v1/core/item-categories/$ID/properties/$PROPERTY_ID \\\n    -X PUT \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
+      },
+    },
+  },
+];
+
+const EMBEDDED_READMES: { language: string; content: string }[] = [
+  {
+    language: 'go',
+    content:
+      '# Augno Client Go API Library\n\n<a href="https://pkg.go.dev/github.com/stainless-sdks/augno-go"><img src="https://pkg.go.dev/badge/github.com/stainless-sdks/augno-go.svg" alt="Go Reference"></a>\n\nThe Augno Client Go library provides convenient access to the [Augno Client REST API](https://www.docs.augno.com)\nfrom applications written in Go.\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Augno Client MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=augno-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImF1Z25vLW1jcCJdLCJlbnYiOnsiQVVHTk9fQVBJX0tFWSI6Ik15IEFQSSBLZXkifX0)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22augno-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22augno-mcp%22%5D%2C%22env%22%3A%7B%22AUGNO_API_KEY%22%3A%22My%20API%20Key%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Installation\n\n\n\n```go\nimport (\n\t"github.com/stainless-sdks/augno-go" // imported as SDK_PackageName\n)\n```\n\n\n\nOr to pin the version:\n\n\n\n```sh\ngo get -u \'github.com/stainless-sdks/augno-go@v0.0.1\'\n```\n\n\n\n## Requirements\n\nThis library requires Go 1.22+.\n\n## Usage\n\nThe full API of this library can be found in [api.md](api.md).\n\n```go\npackage main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),      // defaults to os.LookupEnv("AUGNO_API_KEY")\n\t\toption.WithEnvironmentEnvironment1(), // defaults to option.WithEnvironmentProduction()\n\t)\n\tresponse, err := client.AI.ListToolGroups(context.TODO(), augno.AIListToolGroupsParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Data)\n}\n\n```\n\n### Request fields\n\nAll request parameters are wrapped in a generic `Field` type,\nwhich we use to distinguish zero values from null or omitted fields.\n\nThis prevents accidentally sending a zero value if you forget a required parameter,\nand enables explicitly sending `null`, `false`, `\'\'`, or `0` on optional parameters.\nAny field not specified is not sent.\n\nTo construct fields with values, use the helpers `String()`, `Int()`, `Float()`, or most commonly, the generic `F[T]()`.\nTo send a null, use `Null[T]()`, and to send a nonconforming value, use `Raw[T](any)`. For example:\n\n```go\nparams := FooParams{\n\tName: SDK_PackageName.F("hello"),\n\n\t// Explicitly send `"description": null`\n\tDescription: SDK_PackageName.Null[string](),\n\n\tPoint: SDK_PackageName.F(SDK_PackageName.Point{\n\t\tX: SDK_PackageName.Int(0),\n\t\tY: SDK_PackageName.Int(1),\n\n\t\t// In cases where the API specifies a given type,\n\t\t// but you want to send something else, use `Raw`:\n\t\tZ: SDK_PackageName.Raw[int64](0.01), // sends a float\n\t}),\n}\n```\n\n### Response objects\n\nAll fields in response structs are value types (not pointers or wrappers).\n\nIf a given field is `null`, not present, or invalid, the corresponding field\nwill simply be its zero value.\n\nAll response structs also include a special `JSON` field, containing more detailed\ninformation about each property, which you can use like so:\n\n```go\nif res.Name == "" {\n\t// true if `"name"` is either not present or explicitly null\n\tres.JSON.Name.IsNull()\n\n\t// true if the `"name"` key was not present in the response JSON at all\n\tres.JSON.Name.IsMissing()\n\n\t// When the API returns data that cannot be coerced to the expected type:\n\tif res.JSON.Name.IsInvalid() {\n\t\traw := res.JSON.Name.Raw()\n\n\t\tlegacyName := struct{\n\t\t\tFirst string `json:"first"`\n\t\t\tLast  string `json:"last"`\n\t\t}{}\n\t\tjson.Unmarshal([]byte(raw), &legacyName)\n\t\tname = legacyName.First + " " + legacyName.Last\n\t}\n}\n```\n\nThese `.JSON` structs also include an `Extras` map containing\nany properties in the json response that were not specified\nin the struct. This can be useful for API features not yet\npresent in the SDK.\n\n```go\nbody := res.JSON.ExtraFields["my_unexpected_field"].Raw()\n```\n\n### RequestOptions\n\nThis library uses the functional options pattern. Functions defined in the\n`SDK_PackageOptionName` package return a `RequestOption`, which is a closure that mutates a\n`RequestConfig`. These options can be supplied to the client or at individual\nrequests. For example:\n\n```go\nclient := SDK_PackageName.SDK_ClientInitializerName(\n\t// Adds a header to every request made by the client\n\tSDK_PackageOptionName.WithHeader("X-Some-Header", "custom_header_info"),\n)\n\nclient.AI.ListToolGroups(context.TODO(), ...,\n\t// Override the header\n\tSDK_PackageOptionName.WithHeader("X-Some-Header", "some_other_custom_header_info"),\n\t// Add an undocumented field to the request body, using sjson syntax\n\tSDK_PackageOptionName.WithJSONSet("some.json.path", map[string]string{"my": "object"}),\n)\n```\n\nSee the [full list of request options](https://pkg.go.dev/github.com/stainless-sdks/augno-go/SDK_PackageOptionName).\n\n### Pagination\n\nThis library provides some conveniences for working with paginated list endpoints.\n\nYou can use `.ListAutoPaging()` methods to iterate through items across all pages:\n\n```go\niter := client.AI.ListUsageAutoPaging(context.TODO(), augno.AIListUsageParams{})\n// Automatically fetches more pages as needed.\nfor iter.Next() {\n\taiListUsageResponse := iter.Current()\n\tfmt.Printf("%+v\\n", aiListUsageResponse)\n}\nif err := iter.Err(); err != nil {\n\tpanic(err.Error())\n}\n```\n\nOr you can use simple `.List()` methods to fetch a single page and receive a standard response object\nwith additional helper methods like `.GetNextPage()`, e.g.:\n\n```go\npage, err := client.AI.ListUsage(context.TODO(), augno.AIListUsageParams{})\nfor page != nil {\n\tfor _, ai := range page.Data {\n\t\tfmt.Printf("%+v\\n", ai)\n\t}\n\tpage, err = page.GetNextPage()\n}\nif err != nil {\n\tpanic(err.Error())\n}\n```\n\n### Errors\n\nWhen the API returns a non-success status code, we return an error with type\n`*SDK_PackageName.Error`. This contains the `StatusCode`, `*http.Request`, and\n`*http.Response` values of the request, as well as the JSON of the error body\n(much like other response objects in the SDK).\n\nTo handle errors, we recommend that you use the `errors.As` pattern:\n\n```go\n_, err := client.AI.ListToolGroups(context.TODO(), augno.AIListToolGroupsParams{})\nif err != nil {\n\tvar apierr *augno.Error\n\tif errors.As(err, &apierr) {\n\t\tprintln(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request\n\t\tprintln(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response\n\t}\n\tpanic(err.Error()) // GET "/v1/ai/tool-groups": 400 Bad Request { ... }\n}\n```\n\nWhen other errors occur, they are returned unwrapped; for example,\nif HTTP transport fails, you might receive `*url.Error` wrapping `*net.OpError`.\n\n### Timeouts\n\nRequests do not time out by default; use context to configure a timeout for a request lifecycle.\n\nNote that if a request is [retried](#retries), the context timeout does not start over.\nTo set a per-retry timeout, use `SDK_PackageOptionName.WithRequestTimeout()`.\n\n```go\n// This sets the timeout for the request, including all the retries.\nctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)\ndefer cancel()\nclient.AI.ListToolGroups(\n\tctx,\n\taugno.AIListToolGroupsParams{},\n\t// This sets the per-retry timeout\n\toption.WithRequestTimeout(20*time.Second),\n)\n```\n\n### File uploads\n\nRequest parameters that correspond to file uploads in multipart requests are typed as\n`param.Field[io.Reader]`. The contents of the `io.Reader` will by default be sent as a multipart form\npart with the file name of "anonymous_file" and content-type of "application/octet-stream".\n\nThe file name and content-type can be customized by implementing `Name() string` or `ContentType()\nstring` on the run-time type of `io.Reader`. Note that `os.File` implements `Name() string`, so a\nfile returned by `os.Open` will be sent with the file name on disk.\n\nWe also provide a helper `SDK_PackageName.FileParam(reader io.Reader, filename string, contentType string)`\nwhich can be used to wrap any `io.Reader` with the appropriate file name and content type.\n\n\n\n### Retries\n\nCertain errors will be automatically retried 2 times by default, with a short exponential backoff.\nWe retry by default all connection errors, 408 Request Timeout, 409 Conflict, 429 Rate Limit,\nand >=500 Internal errors.\n\nYou can use the `WithMaxRetries` option to configure or disable this:\n\n```go\n// Configure the default for all requests:\nclient := augno.NewClient(\n\toption.WithMaxRetries(0), // default is 2\n)\n\n// Override per-request:\nclient.AI.ListToolGroups(\n\tcontext.TODO(),\n\taugno.AIListToolGroupsParams{},\n\toption.WithMaxRetries(5),\n)\n```\n\n\n### Accessing raw response data (e.g. response headers)\n\nYou can access the raw HTTP response data by using the `option.WithResponseInto()` request option. This is useful when\nyou need to examine response headers, status codes, or other details.\n\n```go\n// Create a variable to store the HTTP response\nvar response *http.Response\nresponse, err := client.AI.ListToolGroups(\n\tcontext.TODO(),\n\taugno.AIListToolGroupsParams{},\n\toption.WithResponseInto(&response),\n)\nif err != nil {\n\t// handle error\n}\nfmt.Printf("%+v\\n", response)\n\nfmt.Printf("Status Code: %d\\n", response.StatusCode)\nfmt.Printf("Headers: %+#v\\n", response.Header)\n```\n\n### Making custom/undocumented requests\n\nThis library is typed for convenient access to the documented API. If you need to access undocumented\nendpoints, params, or response properties, the library can still be used.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints, you can use `client.Get`, `client.Post`, and other HTTP verbs.\n`RequestOptions` on the client, such as retries, will be respected when making these requests.\n\n```go\nvar (\n    // params can be an io.Reader, a []byte, an encoding/json serializable object,\n    // or a "…Params" struct defined in this library.\n    params map[string]interface{}\n\n    // result can be an []byte, *http.Response, a encoding/json deserializable object,\n    // or a model defined in this library.\n    result *http.Response\n)\nerr := client.Post(context.Background(), "/unspecified", params, &result)\nif err != nil {\n    …\n}\n```\n\n#### Undocumented request params\n\nTo make requests using undocumented parameters, you may use either the `SDK_PackageOptionName.WithQuerySet()`\nor the `SDK_PackageOptionName.WithJSONSet()` methods.\n\n```go\nparams := FooNewParams{\n    ID:   SDK_PackageName.F("id_xxxx"),\n    Data: SDK_PackageName.F(FooNewParamsData{\n        FirstName: SDK_PackageName.F("John"),\n    }),\n}\nclient.Foo.New(context.Background(), params, SDK_PackageOptionName.WithJSONSet("data.last_name", "Doe"))\n```\n\n#### Undocumented response properties\n\nTo access undocumented response properties, you may either access the raw JSON of the response as a string\nwith `result.JSON.RawJSON()`, or get the raw JSON of a particular field on the result with\n`result.JSON.Foo.Raw()`.\n\nAny fields that are not present on the response struct will be saved and can be accessed by `result.JSON.ExtraFields()` which returns the extra fields as a `map[string]Field`.\n\n### Middleware\n\nWe provide `SDK_PackageOptionName.WithMiddleware` which applies the given\nmiddleware to requests.\n\n```go\nfunc Logger(req *http.Request, next SDK_PackageOptionName.MiddlewareNext) (res *http.Response, err error) {\n\t// Before the request\n\tstart := time.Now()\n\tLogReq(req)\n\n\t// Forward the request to the next handler\n\tres, err = next(req)\n\n\t// Handle stuff after the request\n\tend := time.Now()\n\tLogRes(res, err, start - end)\n\n    return res, err\n}\n\nclient := SDK_PackageName.SDK_ClientInitializerName(\n\tSDK_PackageOptionName.WithMiddleware(Logger),\n)\n```\n\nWhen multiple middlewares are provided as variadic arguments, the middlewares\nare applied left to right. If `SDK_PackageOptionName.WithMiddleware` is given\nmultiple times, for example first in the client then the method, the\nmiddleware in the client will run first and the middleware given in the method\nwill run next.\n\nYou may also replace the default `http.Client` with\n`SDK_PackageOptionName.WithHTTPClient(client)`. Only one http client is\naccepted (this overwrites any previous client) and receives requests after any\nmiddleware has been applied.\n\n## Semantic versioning\n\nThis package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:\n\n1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_\n2. Changes that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\n\nWe are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/augno-go/issues) with questions, bugs, or suggestions.\n\n## Contributing\n\nSee [the contributing documentation](./CONTRIBUTING.md).\n',
+  },
+  {
+    language: 'typescript',
+    content:
+      "# Augno Client TypeScript API Library\n\n[![NPM version](https://img.shields.io/npm/v/augno.svg?label=npm%20(stable))](https://npmjs.org/package/augno) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/augno)\n\nThis library provides convenient access to the Augno Client REST API from server-side TypeScript or JavaScript.\n\n\n\nThe REST API documentation can be found on [www.docs.augno.com](https://www.docs.augno.com). The full API of this library can be found in [api.md](api.md).\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Augno Client MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=augno-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImF1Z25vLW1jcCJdLCJlbnYiOnsiQVVHTk9fQVBJX0tFWSI6Ik15IEFQSSBLZXkifX0)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22augno-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22augno-mcp%22%5D%2C%22env%22%3A%7B%22AUGNO_API_KEY%22%3A%22My%20API%20Key%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Installation\n\n```sh\nnpm install git+ssh://git@github.com:Augno/typescript-sdk.git\n```\n> [!NOTE]\n> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npm install augno`\n\n\n\n## Usage\n\nThe full API of this library can be found in [api.md](api.md).\n\n<!-- prettier-ignore -->\n```js\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n  environment: 'environment_1', // defaults to 'production'\n});\n\nconst response = await client.ai.listToolGroups();\n\nconsole.log(response.data);\n```\n\n\n\n### Request & Response types\n\nThis library includes TypeScript definitions for all request params and response fields. You may import and use them like so:\n\n<!-- prettier-ignore -->\n```ts\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted\n  environment: 'environment_1', // defaults to 'production'\n});\n\nconst response: AugnoClient.AIListToolGroupsResponse = await client.ai.listToolGroups();\n```\n\nDocumentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.\n\n\n\n\n\n## Handling errors\n\nWhen the library is unable to connect to the API,\nor if the API returns a non-success status code (i.e., 4xx or 5xx response),\na subclass of `APIError` will be thrown:\n\n<!-- prettier-ignore -->\n```ts\nconst response = await client.ai.listToolGroups().catch(async (err) => {\n  if (err instanceof AugnoClient.APIError) {\n    console.log(err.status); // 400\n    console.log(err.name); // BadRequestError\n    console.log(err.headers); // {server: 'nginx', ...}\n  } else {\n    throw err;\n  }\n});\n```\n\nError codes are as follows:\n\n| Status Code | Error Type                 |\n| ----------- | -------------------------- |\n| 400         | `BadRequestError`          |\n| 401         | `AuthenticationError`      |\n| 403         | `PermissionDeniedError`    |\n| 404         | `NotFoundError`            |\n| 422         | `UnprocessableEntityError` |\n| 429         | `RateLimitError`           |\n| >=500       | `InternalServerError`      |\n| N/A         | `APIConnectionError`       |\n\n### Retries\n\nCertain errors will be automatically retried 2 times by default, with a short exponential backoff.\nConnection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,\n429 Rate Limit, and >=500 Internal errors will all be retried by default.\n\nYou can use the `maxRetries` option to configure or disable this:\n\n<!-- prettier-ignore -->\n```js\n// Configure the default for all requests:\nconst client = new AugnoClient({\n  maxRetries: 0, // default is 2\n});\n\n// Or, configure per-request:\nawait client.ai.listToolGroups({\n  maxRetries: 5,\n});\n```\n\n### Timeouts\n\nRequests time out after 1 minute by default. You can configure this with a `timeout` option:\n\n<!-- prettier-ignore -->\n```ts\n// Configure the default for all requests:\nconst client = new AugnoClient({\n  timeout: 20 * 1000, // 20 seconds (default is 1 minute)\n});\n\n// Override per-request:\nawait client.ai.listToolGroups({\n  timeout: 5 * 1000,\n});\n```\n\nOn timeout, an `APIConnectionTimeoutError` is thrown.\n\nNote that requests which time out will be [retried twice by default](#retries).\n\n## Auto-pagination\n\nList methods in the AugnoClient API are paginated.\nYou can use the `for await … of` syntax to iterate through items across all pages:\n\n```ts\nasync function fetchAllAIListUsageResponses(params) {\n  const allAIListUsageResponses = [];\n  // Automatically fetches more pages as needed.\n  for await (const aiListUsageResponse of client.ai.listUsage()) {\n    allAIListUsageResponses.push(aiListUsageResponse);\n  }\n  return allAIListUsageResponses;\n}\n```\n\nAlternatively, you can request a single page at a time:\n\n```ts\nlet page = await client.ai.listUsage();\nfor (const aiListUsageResponse of page.data) {\n  console.log(aiListUsageResponse);\n}\n\n// Convenience methods are provided for manually paginating:\nwhile (page.hasNextPage()) {\n  page = await page.getNextPage();\n  // ...\n}\n```\n\n\n\n## Advanced Usage\n\n### Accessing raw Response data (e.g., headers)\n\nThe \"raw\" `Response` returned by `fetch()` can be accessed through the `.asResponse()` method on the `APIPromise` type that all methods return.\nThis method returns as soon as the headers for a successful response are received and does not consume the response body, so you are free to write custom parsing or streaming logic.\n\nYou can also use the `.withResponse()` method to get the raw `Response` along with the parsed data.\nUnlike `.asResponse()` this method consumes the body, returning once it is parsed.\n\n<!-- prettier-ignore -->\n```ts\nconst client = new AugnoClient();\n\nconst response = await client.ai.listToolGroups().asResponse();\nconsole.log(response.headers.get('X-My-Header'));\nconsole.log(response.statusText); // access the underlying Response object\n\nconst { data: response, response: raw } = await client.ai.listToolGroups().withResponse();\nconsole.log(raw.headers.get('X-My-Header'));\nconsole.log(response.data);\n```\n\n### Logging\n\n> [!IMPORTANT]\n> All log messages are intended for debugging only. The format and content of log messages\n> may change between releases.\n\n#### Log levels\n\nThe log level can be configured in two ways:\n\n1. Via the `AUGNO_CLIENT_LOG` environment variable\n2. Using the `logLevel` client option (overrides the environment variable if set)\n\n```ts\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  logLevel: 'debug', // Show all log messages\n});\n```\n\nAvailable log levels, from most to least verbose:\n\n- `'debug'` - Show debug messages, info, warnings, and errors\n- `'info'` - Show info messages, warnings, and errors\n- `'warn'` - Show warnings and errors (default)\n- `'error'` - Show only errors\n- `'off'` - Disable all logging\n\nAt the `'debug'` level, all HTTP requests and responses are logged, including headers and bodies.\nSome authentication-related headers are redacted, but sensitive data in request and response bodies\nmay still be visible.\n\n#### Custom logger\n\nBy default, this library logs to `globalThis.console`. You can also provide a custom logger.\nMost logging libraries are supported, including [pino](https://www.npmjs.com/package/pino), [winston](https://www.npmjs.com/package/winston), [bunyan](https://www.npmjs.com/package/bunyan), [consola](https://www.npmjs.com/package/consola), [signale](https://www.npmjs.com/package/signale), and [@std/log](https://jsr.io/@std/log). If your logger doesn't work, please open an issue.\n\nWhen providing a custom logger, the `logLevel` option still controls which messages are emitted, messages\nbelow the configured level will not be sent to your logger.\n\n```ts\nimport AugnoClient from 'augno';\nimport pino from 'pino';\n\nconst logger = pino();\n\nconst client = new AugnoClient({\n  logger: logger.child({ name: 'AugnoClient' }),\n  logLevel: 'debug', // Send all messages to pino, allowing it to filter\n});\n```\n\n### Making custom/undocumented requests\n\nThis library is typed for convenient access to the documented API. If you need to access undocumented\nendpoints, params, or response properties, the library can still be used.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints, you can use `client.get`, `client.post`, and other HTTP verbs.\nOptions on the client, such as retries, will be respected when making these requests.\n\n```ts\nawait client.post('/some/path', {\n  body: { some_prop: 'foo' },\n  query: { some_query_arg: 'bar' },\n});\n```\n\n#### Undocumented request params\n\nTo make requests using undocumented parameters, you may use `// @ts-expect-error` on the undocumented\nparameter. This library doesn't validate at runtime that the request matches the type, so any extra values you\nsend will be sent as-is.\n\n```ts\nclient.ai.listToolGroups({\n  // ...\n  // @ts-expect-error baz is not yet public\n  baz: 'undocumented option',\n});\n```\n\nFor requests with the `GET` verb, any extra params will be in the query, all other requests will send the\nextra param in the body.\n\nIf you want to explicitly send an extra argument, you can do so with the `query`, `body`, and `headers` request\noptions.\n\n#### Undocumented response properties\n\nTo access undocumented response properties, you may access the response object with `// @ts-expect-error` on\nthe response object, or cast the response object to the requisite type. Like the request params, we do not\nvalidate or strip extra properties from the response from the API.\n\n### Customizing the fetch client\n\nBy default, this library expects a global `fetch` function is defined.\n\nIf you want to use a different `fetch` function, you can either polyfill the global:\n\n```ts\nimport fetch from 'my-fetch';\n\nglobalThis.fetch = fetch;\n```\n\nOr pass it to the client:\n\n```ts\nimport AugnoClient from 'augno';\nimport fetch from 'my-fetch';\n\nconst client = new AugnoClient({ fetch });\n```\n\n### Fetch options\n\nIf you want to set custom `fetch` options without overriding the `fetch` function, you can provide a `fetchOptions` object when instantiating the client or making a request. (Request-specific options override client options.)\n\n```ts\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  fetchOptions: {\n    // `RequestInit` options\n  },\n});\n```\n\n#### Configuring proxies\n\nTo modify proxy behavior, you can provide custom `fetchOptions` that add runtime-specific proxy\noptions to requests:\n\n<img src=\"https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/node.svg\" align=\"top\" width=\"18\" height=\"21\"> **Node** <sup>[[docs](https://github.com/nodejs/undici/blob/main/docs/docs/api/ProxyAgent.md#example---proxyagent-with-fetch)]</sup>\n\n```ts\nimport AugnoClient from 'augno';\nimport * as undici from 'undici';\n\nconst proxyAgent = new undici.ProxyAgent('http://localhost:8888');\nconst client = new AugnoClient({\n  fetchOptions: {\n    dispatcher: proxyAgent,\n  },\n});\n```\n\n<img src=\"https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/bun.svg\" align=\"top\" width=\"18\" height=\"21\"> **Bun** <sup>[[docs](https://bun.sh/guides/http/proxy)]</sup>\n\n```ts\nimport AugnoClient from 'augno';\n\nconst client = new AugnoClient({\n  fetchOptions: {\n    proxy: 'http://localhost:8888',\n  },\n});\n```\n\n<img src=\"https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/deno.svg\" align=\"top\" width=\"18\" height=\"21\"> **Deno** <sup>[[docs](https://docs.deno.com/api/deno/~/Deno.createHttpClient)]</sup>\n\n```ts\nimport AugnoClient from 'npm:augno';\n\nconst httpClient = Deno.createHttpClient({ proxy: { url: 'http://localhost:8888' } });\nconst client = new AugnoClient({\n  fetchOptions: {\n    client: httpClient,\n  },\n});\n```\n\n## Frequently Asked Questions\n\n## Semantic versioning\n\nThis package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:\n\n1. Changes that only affect static types, without breaking runtime behavior.\n2. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_\n3. Changes that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\n\nWe are keen for your feedback; please open an [issue](https://www.github.com/Augno/typescript-sdk/issues) with questions, bugs, or suggestions.\n\n## Requirements\n\nTypeScript >= 4.9 is supported.\n\nThe following runtimes are supported:\n\n- Web browsers (Up-to-date Chrome, Firefox, Safari, Edge, and more)\n- Node.js 20 LTS or later ([non-EOL](https://endoflife.date/nodejs)) versions.\n- Deno v1.28.0 or higher.\n- Bun 1.0 or later.\n- Cloudflare Workers.\n- Vercel Edge Runtime.\n- Jest 28 or greater with the `\"node\"` environment (`\"jsdom\"` is not supported at this time).\n- Nitro v2.6 or greater.\n\nNote that React Native is not supported at this time.\n\nIf you are interested in other runtime environments, please open or upvote an issue on GitHub.\n\n## Contributing\n\nSee [the contributing documentation](./CONTRIBUTING.md).\n",
+  },
+];
+
+const INDEX_OPTIONS = {
+  fields: [
+    'name',
+    'endpoint',
+    'summary',
+    'description',
+    'qualified',
+    'stainlessPath',
+    'content',
+    'sectionContext',
+  ],
+  storeFields: ['kind', '_original'],
+  searchOptions: {
+    prefix: true,
+    fuzzy: 0.1,
+    boost: {
+      name: 5,
+      stainlessPath: 3,
+      endpoint: 3,
+      qualified: 3,
+      summary: 2,
+      content: 1,
+      description: 1,
+    } as Record<string, number>,
+  },
+};
+
+/**
+ * Self-contained local search engine backed by MiniSearch.
+ * Method data is embedded at SDK build time; prose documents
+ * can be loaded from an optional docs directory at runtime.
+ */
+export class LocalDocsSearch {
+  private methodIndex: MiniSearch<MiniSearchDocument>;
+  private proseIndex: MiniSearch<MiniSearchDocument>;
+
+  private constructor() {
+    this.methodIndex = new MiniSearch<MiniSearchDocument>(INDEX_OPTIONS);
+    this.proseIndex = new MiniSearch<MiniSearchDocument>(INDEX_OPTIONS);
+  }
+
+  static async create(opts?: { docsDir?: string }): Promise<LocalDocsSearch> {
+    const instance = new LocalDocsSearch();
+    instance.indexMethods(EMBEDDED_METHODS);
+    for (const readme of EMBEDDED_READMES) {
+      instance.indexProse(readme.content, `readme:${readme.language}`);
+    }
+    if (opts?.docsDir) {
+      await instance.loadDocsDirectory(opts.docsDir);
+    }
+    return instance;
+  }
+
+  search(props: {
+    query: string;
+    language?: string;
+    detail?: string;
+    maxResults?: number;
+    maxLength?: number;
+  }): SearchResult {
+    const { query, language = 'typescript', detail = 'default', maxResults = 5, maxLength = 100_000 } = props;
+
+    const useMarkdown = detail === 'verbose' || detail === 'high';
+
+    // Search both indices and merge results by score.
+    // Filter prose hits so language-tagged content (READMEs and docs with
+    // frontmatter) only matches the requested language.
+    const methodHits = this.methodIndex
+      .search(query)
+      .map((hit) => ({ ...hit, _kind: 'http_method' as const }));
+    const proseHits = this.proseIndex
+      .search(query)
+      .filter((hit) => {
+        const source = ((hit as Record<string, unknown>)['_original'] as ProseChunk | undefined)?.source;
+        if (!source) return true;
+        // Check for language-tagged sources: "readme:<lang>" or "lang:<lang>:<filename>"
+        let taggedLang: string | undefined;
+        if (source.startsWith('readme:')) taggedLang = source.slice('readme:'.length);
+        else if (source.startsWith('lang:')) taggedLang = source.split(':')[1];
+        if (!taggedLang) return true;
+        return taggedLang === language || (language === 'javascript' && taggedLang === 'typescript');
+      })
+      .map((hit) => ({ ...hit, _kind: 'prose' as const }));
+    const merged = [...methodHits, ...proseHits].sort((a, b) => b.score - a.score);
+    const top = merged.slice(0, maxResults);
+
+    const fullResults: (string | Record<string, unknown>)[] = [];
+
+    for (const hit of top) {
+      const original = (hit as Record<string, unknown>)['_original'];
+      if (hit._kind === 'http_method') {
+        const m = original as MethodEntry;
+        if (useMarkdown && m.markdown) {
+          fullResults.push(m.markdown);
+        } else {
+          // Use per-language data when available, falling back to the
+          // top-level fields (which are TypeScript-specific in the
+          // legacy codepath).
+          const langData = m.perLanguage?.[language];
+          fullResults.push({
+            method: langData?.method ?? m.qualified,
+            summary: m.summary,
+            description: m.description,
+            endpoint: `${m.httpMethod.toUpperCase()} ${m.endpoint}`,
+            ...(langData?.example ? { example: langData.example } : {}),
+            ...(m.params ? { params: m.params } : {}),
+            ...(m.response ? { response: m.response } : {}),
+          });
+        }
+      } else {
+        const c = original as ProseChunk;
+        fullResults.push({
+          content: c.content,
+          ...(c.source ? { source: c.source } : {}),
+        });
+      }
+    }
+
+    let totalLength = 0;
+    const results: (string | Record<string, unknown>)[] = [];
+    for (const result of fullResults) {
+      const len = typeof result === 'string' ? result.length : JSON.stringify(result).length;
+      totalLength += len;
+      if (totalLength > maxLength) break;
+      results.push(result);
+    }
+
+    if (results.length < fullResults.length) {
+      results.unshift(`Truncated; showing ${results.length} of ${fullResults.length} results.`);
+    }
+
+    return { results };
+  }
+
+  private indexMethods(methods: MethodEntry[]): void {
+    const docs: MiniSearchDocument[] = methods.map((m, i) => ({
+      id: `method-${i}`,
+      kind: 'http_method' as const,
+      name: m.name,
+      endpoint: m.endpoint,
+      summary: m.summary,
+      description: m.description,
+      qualified: m.qualified,
+      stainlessPath: m.stainlessPath,
+      _original: m as unknown as Record<string, unknown>,
+    }));
+    if (docs.length > 0) {
+      this.methodIndex.addAll(docs);
+    }
+  }
+
+  private async loadDocsDirectory(docsDir: string): Promise<void> {
+    let entries;
+    try {
+      entries = await fs.readdir(docsDir, { withFileTypes: true });
+    } catch (err) {
+      getLogger().warn({ err, docsDir }, 'Could not read docs directory');
+      return;
+    }
+
+    const files = entries
+      .filter((e) => e.isFile())
+      .filter((e) => e.name.endsWith('.md') || e.name.endsWith('.markdown') || e.name.endsWith('.json'));
+
+    for (const file of files) {
+      try {
+        const filePath = path.join(docsDir, file.name);
+        const content = await fs.readFile(filePath, 'utf-8');
+
+        if (file.name.endsWith('.json')) {
+          const texts = extractTexts(JSON.parse(content));
+          if (texts.length > 0) {
+            this.indexProse(texts.join('\n\n'), file.name);
+          }
+        } else {
+          // Parse optional YAML frontmatter for language tagging.
+          // Files with a "language" field in frontmatter will only
+          // surface in searches for that language.
+          //
+          // Example:
+          //   ---
+          //   language: python
+          //   ---
+          //   # Error handling in Python
+          //   ...
+          const frontmatter = parseFrontmatter(content);
+          const source = frontmatter.language ? `lang:${frontmatter.language}:${file.name}` : file.name;
+          this.indexProse(content, source);
+        }
+      } catch (err) {
+        getLogger().warn({ err, file: file.name }, 'Failed to index docs file');
+      }
+    }
+  }
+
+  private indexProse(markdown: string, source: string): void {
+    const chunks = chunkMarkdown(markdown);
+    const baseId = this.proseIndex.documentCount;
+
+    const docs: MiniSearchDocument[] = chunks.map((chunk, i) => ({
+      id: `prose-${baseId + i}`,
+      kind: 'prose' as const,
+      content: chunk.content,
+      ...(chunk.sectionContext != null ? { sectionContext: chunk.sectionContext } : {}),
+      _original: { ...chunk, source } as unknown as Record<string, unknown>,
+    }));
+
+    if (docs.length > 0) {
+      this.proseIndex.addAll(docs);
+    }
+  }
+}
+
+/** Lightweight markdown chunker — splits on headers, chunks by word count. */
+function chunkMarkdown(markdown: string): { content: string; tag: string; sectionContext?: string }[] {
+  // Strip YAML frontmatter
+  const stripped = markdown.replace(/^---\n[\s\S]*?\n---\n?/, '');
+  const lines = stripped.split('\n');
+
+  const chunks: { content: string; tag: string; sectionContext?: string }[] = [];
+  const headers: string[] = [];
+  let current: string[] = [];
+
+  const flush = () => {
+    const text = current.join('\n').trim();
+    if (!text) return;
+    const sectionContext = headers.length > 0 ? headers.join(' > ') : undefined;
+    // Split into ~200-word chunks
+    const words = text.split(/\s+/);
+    for (let i = 0; i < words.length; i += 200) {
+      const slice = words.slice(i, i + 200).join(' ');
+      if (slice) {
+        chunks.push({ content: slice, tag: 'p', ...(sectionContext != null ? { sectionContext } : {}) });
+      }
+    }
+    current = [];
+  };
+
+  for (const line of lines) {
+    const headerMatch = line.match(/^(#{1,6})\s+(.+)/);
+    if (headerMatch) {
+      flush();
+      const level = headerMatch[1]!.length;
+      const text = headerMatch[2]!.trim();
+      while (headers.length >= level) headers.pop();
+      headers.push(text);
+    } else {
+      current.push(line);
+    }
+  }
+  flush();
+
+  return chunks;
+}
+
+/** Recursively extracts string values from a JSON structure. */
+function extractTexts(data: unknown, depth = 0): string[] {
+  if (depth > 10) return [];
+  if (typeof data === 'string') return data.trim() ? [data] : [];
+  if (Array.isArray(data)) return data.flatMap((item) => extractTexts(item, depth + 1));
+  if (typeof data === 'object' && data !== null) {
+    return Object.values(data).flatMap((v) => extractTexts(v, depth + 1));
+  }
+  return [];
+}
+
+/** Parses YAML frontmatter from a markdown string, extracting the language field if present. */
+function parseFrontmatter(markdown: string): { language?: string } {
+  const match = markdown.match(/^---\n([\s\S]*?)\n---/);
+  if (!match) return {};
+  const body = match[1] ?? '';
+  const langMatch = body.match(/^language:\s*(.+)$/m);
+  return langMatch ? { language: langMatch[1]!.trim() } : {};
+}

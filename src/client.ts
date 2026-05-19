@@ -11,17 +11,28 @@ import type { APIResponseProps } from './internal/parse';
 import { getPlatformHeaders } from './internal/detect-platform';
 import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
+import { stringifyQuery } from './internal/utils/query';
 import { VERSION } from './version';
 import * as Errors from './core/error';
+import * as Pagination from './core/pagination';
+import { AbstractPage, type DefaultCursorPageParams, DefaultCursorPageResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import {
-  Auth,
-  AuthRefreshTokenResponse,
-  AuthRegisterUserParams,
-  AuthRevokeRefreshTokenResponse,
-} from './resources/auth/auth';
+  AI,
+  AIListToolGroupsParams,
+  AIListToolGroupsResponse,
+  AIListToolsParams,
+  AIListToolsResponse,
+  AIListUsageParams,
+  AIListUsageResponse,
+  AIListUsageResponsesDefaultCursorPage,
+  AvailableTool,
+  ToolGroup,
+} from './resources/ai/ai';
+import { Auth } from './resources/auth/auth';
+import { Core, CoreListAdjustmentTypesResponse } from './resources/core/core';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -189,6 +200,18 @@ export class AugnoClient {
     this.fetch = options.fetch ?? Shims.getDefaultFetch();
     this.#encoder = Opts.FallbackEncoder;
 
+    const customHeadersEnv = readEnv('AUGNO_CLIENT_CUSTOM_HEADERS');
+    if (customHeadersEnv) {
+      const parsed: Record<string, string> = {};
+      for (const line of customHeadersEnv.split('\n')) {
+        const colon = line.indexOf(':');
+        if (colon >= 0) {
+          parsed[line.substring(0, colon).trim()] = line.substring(colon + 1).trim();
+        }
+      }
+      options.defaultHeaders = { ...parsed, ...options.defaultHeaders };
+    }
+
     this._options = options;
 
     this.apiKey = apiKey;
@@ -245,24 +268,8 @@ export class AugnoClient {
     return buildHeaders([{ Authorization: `Bearer ${this.apiKey}` }]);
   }
 
-  /**
-   * Basic re-implementation of `qs.stringify` for primitive types.
-   */
-  protected stringifyQuery(query: Record<string, unknown>): string {
-    return Object.entries(query)
-      .filter(([_, value]) => typeof value !== 'undefined')
-      .map(([key, value]) => {
-        if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-          return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
-        }
-        if (value === null) {
-          return `${encodeURIComponent(key)}=`;
-        }
-        throw new Errors.AugnoClientError(
-          `Cannot stringify type ${typeof value}; Expected string, number, boolean, or null. If you need to pass nested query parameters, you can manually encode them, e.g. { query: { 'foo[key1]': value1, 'foo[key2]': value2 } }, and please open a GitHub issue requesting better support for your use case.`,
-        );
-      })
-      .join('&');
+  protected stringifyQuery(query: object | Record<string, unknown>): string {
+    return stringifyQuery(query);
   }
 
   private getUserAgent(): string {
@@ -294,12 +301,13 @@ export class AugnoClient {
       : new URL(baseURL + (baseURL.endsWith('/') && path.startsWith('/') ? path.slice(1) : path));
 
     const defaultQuery = this.defaultQuery();
-    if (!isEmptyObj(defaultQuery)) {
-      query = { ...defaultQuery, ...query };
+    const pathQuery = Object.fromEntries(url.searchParams);
+    if (!isEmptyObj(defaultQuery) || !isEmptyObj(pathQuery)) {
+      query = { ...pathQuery, ...defaultQuery, ...query };
     }
 
     if (typeof query === 'object' && query && !Array.isArray(query)) {
-      url.search = this.stringifyQuery(query as Record<string, unknown>);
+      url.search = this.stringifyQuery(query);
     }
 
     return url.toString();
@@ -517,6 +525,30 @@ export class AugnoClient {
     return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
   }
 
+  getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
+    path: string,
+    Page: new (...args: any[]) => PageClass,
+    opts?: PromiseOrValue<RequestOptions>,
+  ): Pagination.PagePromise<PageClass, Item> {
+    return this.requestAPIList(
+      Page,
+      opts && 'then' in opts ?
+        opts.then((opts) => ({ method: 'get', path, ...opts }))
+      : { method: 'get', path, ...opts },
+    );
+  }
+
+  requestAPIList<
+    Item = unknown,
+    PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
+  >(
+    Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
+    options: PromiseOrValue<FinalRequestOptions>,
+  ): Pagination.PagePromise<PageClass, Item> {
+    const request = this.makeRequest(options, null, undefined);
+    return new Pagination.PagePromise<PageClass, Item>(this as any as AugnoClient, request, Page);
+  }
+
   async fetchWithTimeout(
     url: RequestInfo,
     init: RequestInit | undefined,
@@ -604,9 +636,9 @@ export class AugnoClient {
       }
     }
 
-    // If the API asks us to wait a certain amount of time (and it's a reasonable amount),
-    // just do what it says, but otherwise calculate a default
-    if (!(timeoutMillis && 0 <= timeoutMillis && timeoutMillis < 60 * 1000)) {
+    // If the API asks us to wait a certain amount of time, just do what it
+    // says, but otherwise calculate a default
+    if (timeoutMillis === undefined) {
       const maxRetries = options.maxRetries ?? this.maxRetries;
       timeoutMillis = this.calculateDefaultRetryTimeoutMillis(retriesRemaining, maxRetries);
     }
@@ -738,7 +770,7 @@ export class AugnoClient {
     ) {
       return {
         bodyHeaders: { 'content-type': 'application/x-www-form-urlencoded' },
-        body: this.stringifyQuery(body as Record<string, unknown>),
+        body: this.stringifyQuery(body),
       };
     } else {
       return this.#encoder({ body, headers });
@@ -764,18 +796,41 @@ export class AugnoClient {
 
   static toFile = Uploads.toFile;
 
+  ai: API.AI = new API.AI(this);
   auth: API.Auth = new API.Auth(this);
+  /**
+   * List adjustment types.
+   */
+  core: API.Core = new API.Core(this);
 }
 
+AugnoClient.AI = AI;
 AugnoClient.Auth = Auth;
+AugnoClient.Core = Core;
 
 export declare namespace AugnoClient {
   export type RequestOptions = Opts.RequestOptions;
 
+  export import DefaultCursorPage = Pagination.DefaultCursorPage;
   export {
-    Auth as Auth,
-    type AuthRefreshTokenResponse as AuthRefreshTokenResponse,
-    type AuthRevokeRefreshTokenResponse as AuthRevokeRefreshTokenResponse,
-    type AuthRegisterUserParams as AuthRegisterUserParams,
+    type DefaultCursorPageParams as DefaultCursorPageParams,
+    type DefaultCursorPageResponse as DefaultCursorPageResponse,
   };
+
+  export {
+    AI as AI,
+    type AvailableTool as AvailableTool,
+    type ToolGroup as ToolGroup,
+    type AIListToolGroupsResponse as AIListToolGroupsResponse,
+    type AIListToolsResponse as AIListToolsResponse,
+    type AIListUsageResponse as AIListUsageResponse,
+    type AIListUsageResponsesDefaultCursorPage as AIListUsageResponsesDefaultCursorPage,
+    type AIListToolGroupsParams as AIListToolGroupsParams,
+    type AIListToolsParams as AIListToolsParams,
+    type AIListUsageParams as AIListUsageParams,
+  };
+
+  export { Auth as Auth };
+
+  export { Core as Core, type CoreListAdjustmentTypesResponse as CoreListAdjustmentTypesResponse };
 }
