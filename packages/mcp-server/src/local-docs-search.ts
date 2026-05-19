@@ -84,6 +84,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.AI.ListToolGroups(context.TODO(), augno.AIListToolGroupsParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Data)\n}\n',
       },
+      ruby: {
+        method: 'ai.list_tool_groups',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.ai.list_tool_groups\n\nputs(response)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/ai/tool-groups \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -124,6 +129,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.AI.ListTools(context.TODO(), augno.AIListToolsParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Data)\n}\n',
       },
+      ruby: {
+        method: 'ai.list_tools',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.ai.list_tools\n\nputs(response)',
+      },
       http: {
         example: 'curl https://api.augno.com/v1/ai/tools \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
       },
@@ -162,6 +172,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.AI.ListUsage',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.AI.ListUsage(context.TODO(), augno.AIListUsageParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      ruby: {
+        method: 'ai.list_usage',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\npage = augno_client.ai.list_usage\n\nputs(page)',
       },
       http: {
         example: 'curl https://api.augno.com/v1/ai/usage \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -206,6 +221,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.AI.Agents.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagents, err := client.AI.Agents.List(context.TODO(), augno.AIAgentListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agents.Data)\n}\n',
+      },
+      ruby: {
+        method: 'ai.agents.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagents = augno_client.ai.agents.list\n\nputs(agents)',
       },
       http: {
         example: 'curl https://api.augno.com/v1/ai/agents \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -256,6 +276,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n\t"github.com/stainless-sdks/augno-go/packages/param"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentDefinition, err := client.AI.Agents.New(context.TODO(), augno.AIAgentNewParams{\n\t\tCategoryCode: "inventory",\n\t\tConfig: augno.AgentDefinitionConfigParam{\n\t\t\tSystemPrompt: augno.String("You are an order processing agent. Parse incoming emails and create draft orders."),\n\t\t\tModel:        augno.String("claude-sonnet-4"),\n\t\t\tProvider:     augno.String("anthropic"),\n\t\t\tTemperature:  augno.Float(0.2),\n\t\t\tTriggerConfig: augno.AgentDefinitionConfigTriggerConfigParam{\n\t\t\t\tCronSchedule: param.Null[string](),\n\t\t\t\tTimezone:     param.Null[string](),\n\t\t\t\tEventFilters: []string{"email.received"},\n\t\t\t},\n\t\t},\n\t\tDescription: "Monitors inventory levels and creates restock alerts.",\n\t\tName:        "Inventory Monitor",\n\t\tRoleID:      "rl_01gf7a8200er3ar3pkfrb6kk29",\n\t\tSlug:        "inventory_monitor",\n\t\tTools: []augno.ToolInputParam{{\n\t\t\tToolID:        "tdef_01k0b1seed0searchproduct0",\n\t\t\tSortOrder:     1,\n\t\t\tRequireReview: true,\n\t\t}},\n\t\tTriggerType: augno.AIAgentNewParamsTriggerTypeEvent,\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentDefinition.ID)\n}\n',
       },
+      ruby: {
+        method: 'ai.agents.create',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_definition = augno_client.ai.agents.create(\n  category_code: "inventory",\n  config: {\n    model: "claude-sonnet-4",\n    provider: "anthropic",\n    system_prompt: "You are an order processing agent. Parse incoming emails and create draft orders.",\n    temperature: 0.2,\n    trigger_config: {cron_schedule: nil, event_filters: ["email.received"], timezone: nil}\n  },\n  description: "Monitors inventory levels and creates restock alerts.",\n  name: "Inventory Monitor",\n  role_id: "rl_01gf7a8200er3ar3pkfrb6kk29",\n  slug: "inventory_monitor",\n  tools: [\n    {config_json: "config_json", require_review: true, sort_order: 1, tool_id: "tdef_01k0b1seed0searchproduct0"}\n  ],\n  trigger_type: :event\n)\n\nputs(agent_definition)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/ai/agents \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "category_code": "inventory",\n          "config": {\n            "model": "claude-sonnet-4",\n            "provider": "anthropic",\n            "system_prompt": "You are an order processing agent. Parse incoming emails and create draft orders.",\n            "temperature": 0.2,\n            "trigger_config": {\n              "cron_schedule": null,\n              "event_filters": [\n                "email.received"\n              ],\n              "timezone": null\n            }\n          },\n          "description": "Monitors inventory levels and creates restock alerts.",\n          "name": "Inventory Monitor",\n          "role_id": "rl_01gf7a8200er3ar3pkfrb6kk29",\n          "slug": "inventory_monitor",\n          "tools": [\n            {\n              "config_json": "config_json",\n              "require_review": true,\n              "sort_order": 1,\n              "tool_id": "tdef_01k0b1seed0searchproduct0"\n            }\n          ],\n          "trigger_type": "event"\n        }\'',
@@ -294,6 +319,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.AI.Agents.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagent, err := client.AI.Agents.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agent)\n}\n',
+      },
+      ruby: {
+        method: 'ai.agents.delete',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent = augno_client.ai.agents.delete("id")\n\nputs(agent)',
       },
       http: {
         example:
@@ -334,6 +364,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.AI.Agents.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentDefinition, err := client.AI.Agents.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.AIAgentGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentDefinition.ID)\n}\n',
+      },
+      ruby: {
+        method: 'ai.agents.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_definition = augno_client.ai.agents.retrieve("id")\n\nputs(agent_definition)',
       },
       http: {
         example:
@@ -386,6 +421,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n\t"github.com/stainless-sdks/augno-go/packages/param"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentDefinition, err := client.AI.Agents.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.AIAgentUpdateParams{\n\t\t\tCategoryCode: "inventory",\n\t\t\tConfig: augno.AgentDefinitionConfigParam{\n\t\t\t\tSystemPrompt: augno.String("You are an order processing agent. Parse incoming emails and create draft orders."),\n\t\t\t\tModel:        augno.String("claude-sonnet-4"),\n\t\t\t\tProvider:     augno.String("anthropic"),\n\t\t\t\tTemperature:  augno.Float(0.2),\n\t\t\t\tTriggerConfig: augno.AgentDefinitionConfigTriggerConfigParam{\n\t\t\t\t\tCronSchedule: param.Null[string](),\n\t\t\t\t\tTimezone:     param.Null[string](),\n\t\t\t\t\tEventFilters: []string{"email.received"},\n\t\t\t\t},\n\t\t\t},\n\t\t\tDescription: "Monitors inventory levels and creates restock alerts.",\n\t\t\tName:        "Inventory Monitor",\n\t\t\tRoleID:      "rl_01gf7a8200er3ar3pkfrb6kk29",\n\t\t\tSlug:        "inventory_monitor",\n\t\t\tTools: []augno.ToolInputParam{{\n\t\t\t\tConfigJson:    "config_json",\n\t\t\t\tRequireReview: true,\n\t\t\t\tSortOrder:     1,\n\t\t\t\tToolID:        "tdef_01k0b1seed0searchproduct0",\n\t\t\t}},\n\t\t\tTriggerType: augno.AIAgentUpdateParamsTriggerTypeEvent,\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentDefinition.ID)\n}\n',
       },
+      ruby: {
+        method: 'ai.agents.update',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_definition = augno_client.ai.agents.update(\n  "id",\n  category_code: "inventory",\n  config: {\n    model: "claude-sonnet-4",\n    provider: "anthropic",\n    system_prompt: "You are an order processing agent. Parse incoming emails and create draft orders.",\n    temperature: 0.2,\n    trigger_config: {cron_schedule: nil, event_filters: ["email.received"], timezone: nil}\n  },\n  description: "Monitors inventory levels and creates restock alerts.",\n  name: "Inventory Monitor",\n  role_id: "rl_01gf7a8200er3ar3pkfrb6kk29",\n  slug: "inventory_monitor",\n  tools: [\n    {config_json: "config_json", require_review: true, sort_order: 1, tool_id: "tdef_01k0b1seed0searchproduct0"}\n  ],\n  trigger_type: :event\n)\n\nputs(agent_definition)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/ai/agents/$ID \\\n    -X PUT \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "category_code": "inventory",\n          "config": {\n            "model": "claude-sonnet-4",\n            "provider": "anthropic",\n            "system_prompt": "You are an order processing agent. Parse incoming emails and create draft orders.",\n            "temperature": 0.2,\n            "trigger_config": {\n              "cron_schedule": null,\n              "event_filters": [\n                "email.received"\n              ],\n              "timezone": null\n            }\n          },\n          "description": "Monitors inventory levels and creates restock alerts.",\n          "name": "Inventory Monitor",\n          "role_id": "rl_01gf7a8200er3ar3pkfrb6kk29",\n          "slug": "inventory_monitor",\n          "tools": [\n            {\n              "config_json": "config_json",\n              "require_review": true,\n              "sort_order": 1,\n              "tool_id": "tdef_01k0b1seed0searchproduct0"\n            }\n          ],\n          "trigger_type": "event"\n        }\'',
@@ -429,6 +469,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.AI.Agents.UpdateStatus',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentDefinition, err := client.AI.Agents.UpdateStatus(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.AIAgentUpdateStatusParams{\n\t\t\tStatusCode: "active",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentDefinition.ID)\n}\n',
+      },
+      ruby: {
+        method: 'ai.agents.update_status',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_definition = augno_client.ai.agents.update_status("id", status_code: "active")\n\nputs(agent_definition)',
       },
       http: {
         example:
@@ -476,6 +521,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.AI.Alerts.List(context.TODO(), augno.AIAlertListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
+      ruby: {
+        method: 'ai.alerts.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\npage = augno_client.ai.alerts.list\n\nputs(page)',
+      },
       http: {
         example: 'curl https://api.augno.com/v1/ai/alerts \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
       },
@@ -514,6 +564,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.AI.Alerts.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentAlert, err := client.AI.Alerts.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.AIAlertGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentAlert.ID)\n}\n',
+      },
+      ruby: {
+        method: 'ai.alerts.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_alert = augno_client.ai.alerts.retrieve("id")\n\nputs(agent_alert)',
       },
       http: {
         example:
@@ -555,6 +610,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentAlert, err := client.AI.Alerts.Actions.Acknowledge(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.AIAlertActionAcknowledgeParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentAlert.ID)\n}\n',
       },
+      ruby: {
+        method: 'ai.alerts.actions.acknowledge',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_alert = augno_client.ai.alerts.actions.acknowledge("id")\n\nputs(agent_alert)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/ai/alerts/$ID/actions/acknowledge \\\n    -X POST \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -594,6 +654,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.AI.Memories.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.AI.Memories.List(context.TODO(), augno.AIMemoryListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      ruby: {
+        method: 'ai.memories.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\npage = augno_client.ai.memories.list\n\nputs(page)',
       },
       http: {
         example:
@@ -643,6 +708,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentMemory, err := client.AI.Memories.New(context.TODO(), augno.AIMemoryNewParams{\n\t\tCategory:   "preference",\n\t\tContent:    "Customer prefers express shipping on all orders.",\n\t\tImportance: 0.8,\n\t\tMetadata:   nil,\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentMemory.ID)\n}\n',
       },
+      ruby: {
+        method: 'ai.memories.create',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_memory = augno_client.ai.memories.create(\n  category: "preference",\n  content: "Customer prefers express shipping on all orders.",\n  importance: 0.8,\n  metadata: [{}]\n)\n\nputs(agent_memory)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/ai/memories \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "category": "preference",\n          "content": "Customer prefers express shipping on all orders.",\n          "importance": 0.8,\n          "metadata": [\n            {}\n          ]\n        }\'',
@@ -681,6 +751,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.AI.Memories.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tmemory, err := client.AI.Memories.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", memory)\n}\n',
+      },
+      ruby: {
+        method: 'ai.memories.delete',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nmemory = augno_client.ai.memories.delete("id")\n\nputs(memory)',
       },
       http: {
         example:
@@ -721,6 +796,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.AI.Memories.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentMemory, err := client.AI.Memories.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentMemory.ID)\n}\n',
+      },
+      ruby: {
+        method: 'ai.memories.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_memory = augno_client.ai.memories.retrieve("id")\n\nputs(agent_memory)',
       },
       http: {
         example:
@@ -771,6 +851,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentMemory, err := client.AI.Memories.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.AIMemoryUpdateParams{\n\t\t\tCategory:   "category",\n\t\t\tContent:    "Customer prefers next-day shipping on all orders.",\n\t\t\tImportance: 0.9,\n\t\t\tMetadata:   []any{map[string]any{}},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentMemory.ID)\n}\n',
       },
+      ruby: {
+        method: 'ai.memories.update',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_memory = augno_client.ai.memories.update(\n  "id",\n  category: "category",\n  content: "Customer prefers next-day shipping on all orders.",\n  importance: 0.9,\n  metadata: [{}]\n)\n\nputs(agent_memory)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/ai/memories/$ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "category": "category",\n          "content": "Customer prefers next-day shipping on all orders.",\n          "importance": 0.9,\n          "metadata": [\n            {}\n          ]\n        }\'',
@@ -817,6 +902,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.AI.Runs.List(context.TODO(), augno.AIRunListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
+      ruby: {
+        method: 'ai.runs.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\npage = augno_client.ai.runs.list\n\nputs(page)',
+      },
       http: {
         example: 'curl https://api.augno.com/v1/ai/runs \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
       },
@@ -859,6 +949,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.AI.Runs.Trigger',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentRun, err := client.AI.Runs.Trigger(context.TODO(), augno.AIRunTriggerParams{\n\t\tAgentDefinitionID: "agdf_01jm4r6700f8nwq3v5hx2d9ktp",\n\t\tInput:             "Process the latest incoming orders.",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentRun.ID)\n}\n',
+      },
+      ruby: {
+        method: 'ai.runs.trigger',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_run = augno_client.ai.runs.trigger(\n  agent_definition_id: "agdf_01jm4r6700f8nwq3v5hx2d9ktp",\n  input: "Process the latest incoming orders."\n)\n\nputs(agent_run)',
       },
       http: {
         example:
@@ -903,6 +998,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentRun, err := client.AI.Runs.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.AIRunGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentRun.ID)\n}\n',
       },
+      ruby: {
+        method: 'ai.runs.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_run = augno_client.ai.runs.retrieve("id")\n\nputs(agent_run)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/ai/runs/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -945,6 +1045,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.AI.Runs.Actions.Cancel',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentRun, err := client.AI.Runs.Actions.Cancel(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.AIRunActionCancelParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentRun.ID)\n}\n',
+      },
+      ruby: {
+        method: 'ai.runs.actions.cancel',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_run = augno_client.ai.runs.actions.cancel("id")\n\nputs(agent_run)',
       },
       http: {
         example:
@@ -992,6 +1097,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tagentRun, err := client.AI.Runs.Actions.Continue(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.AIRunActionContinueParams{\n\t\t\tAllowedToolSlugs:  []string{"string"},\n\t\t\tApprovedToolSlugs: []string{"string"},\n\t\t\tMessage:           "Yes, proceed with creating the order.",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentRun.ID)\n}\n',
       },
+      ruby: {
+        method: 'ai.runs.actions.continue',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_run = augno_client.ai.runs.actions.continue(\n  "id",\n  allowed_tool_slugs: ["string"],\n  approved_tool_slugs: ["string"],\n  message: "Yes, proceed with creating the order."\n)\n\nputs(agent_run)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/ai/runs/$ID/actions/continue \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "allowed_tool_slugs": [\n            "string"\n          ],\n          "approved_tool_slugs": [\n            "string"\n          ],\n          "message": "Yes, proceed with creating the order."\n        }\'',
@@ -1032,6 +1142,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Auth.APIKeys.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKeys, err := client.Auth.APIKeys.List(context.TODO(), augno.AuthAPIKeyListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKeys.Data)\n}\n',
+      },
+      ruby: {
+        method: 'auth.api_keys.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\napi_keys = augno_client.auth.api_keys.list\n\nputs(api_keys)',
       },
       http: {
         example:
@@ -1079,6 +1194,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcreatedAPIKey, err := client.Auth.APIKeys.New(context.TODO(), augno.AuthAPIKeyNewParams{\n\t\tName:   "Production API Key",\n\t\tRoleID: "rl_01gf7a8200er3ar3pkfrb6kk29",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", createdAPIKey.APIKeyInfo)\n}\n',
       },
+      ruby: {
+        method: 'auth.api_keys.create',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\ncreated_api_key = augno_client.auth.api_keys.create(name: "Production API Key", role_id: "rl_01gf7a8200er3ar3pkfrb6kk29")\n\nputs(created_api_key)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/auth/api-keys \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "name": "Production API Key",\n          "role_id": "rl_01gf7a8200er3ar3pkfrb6kk29"\n        }\'',
@@ -1119,6 +1239,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Auth.APIKeys.Revoke(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
       },
+      ruby: {
+        method: 'auth.api_keys.revoke',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.auth.api_keys.revoke("id")\n\nputs(response)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/auth/api-keys/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -1158,6 +1283,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Auth.APIKeys.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tapiKey, err := client.Auth.APIKeys.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.AuthAPIKeyGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiKey.ID)\n}\n',
+      },
+      ruby: {
+        method: 'auth.api_keys.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\napi_key = augno_client.auth.api_keys.retrieve("id")\n\nputs(api_key)',
       },
       http: {
         example:
@@ -1200,6 +1330,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\t"time"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcreatedAPIKey, err := client.Auth.APIKeys.Actions.Rotate(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.AuthAPIKeyActionRotateParams{\n\t\t\tExpiresAt: augno.Time(time.Now()),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", createdAPIKey.APIKeyInfo)\n}\n',
       },
+      ruby: {
+        method: 'auth.api_keys.actions.rotate',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\ncreated_api_key = augno_client.auth.api_keys.actions.rotate("id")\n\nputs(created_api_key)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/auth/api-keys/$ID/actions/rotate \\\n    -X POST \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -1239,6 +1374,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.ListAdjustmentTypes',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.ListAdjustmentTypes(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Data)\n}\n',
+      },
+      ruby: {
+        method: 'core.list_adjustment_types',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.list_adjustment_types\n\nputs(response)',
       },
       http: {
         example:
@@ -1280,6 +1420,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.AccountGroups.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountGroups, err := client.Core.AccountGroups.List(context.TODO(), augno.CoreAccountGroupListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountGroups.Data)\n}\n',
+      },
+      ruby: {
+        method: 'core.account_groups.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_groups = augno_client.core.account_groups.list\n\nputs(account_groups)',
       },
       http: {
         example:
@@ -1327,6 +1472,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountGroup, err := client.Core.AccountGroups.New(context.TODO(), augno.CoreAccountGroupNewParams{\n\t\tCommissionStatus: augno.CoreAccountGroupNewParamsCommissionStatusCommissionApplied,\n\t\tFreightStatus:    augno.CoreAccountGroupNewParamsFreightStatusBilledFreight,\n\t\tName:             "Wholesale Customers",\n\t\tType:             augno.CoreAccountGroupNewParamsTypePricingGroup,\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountGroup.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.account_groups.create',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_group = augno_client.core.account_groups.create(\n  commission_status: :commission_applied,\n  freight_status: :billed_freight,\n  name: "Wholesale Customers",\n  type: :pricing_group\n)\n\nputs(account_group)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/account-groups \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "commission_status": "commission_applied",\n          "freight_status": "billed_freight",\n          "name": "Wholesale Customers",\n          "type": "pricing_group"\n        }\'',
@@ -1365,6 +1515,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.AccountGroups.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountGroup, err := client.Core.AccountGroups.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountGroup)\n}\n',
+      },
+      ruby: {
+        method: 'core.account_groups.delete',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_group = augno_client.core.account_groups.delete("id")\n\nputs(account_group)',
       },
       http: {
         example:
@@ -1405,6 +1560,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.AccountGroups.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountGroup, err := client.Core.AccountGroups.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountGroup.ID)\n}\n',
+      },
+      ruby: {
+        method: 'core.account_groups.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_group = augno_client.core.account_groups.retrieve("id")\n\nputs(account_group)',
       },
       http: {
         example:
@@ -1453,6 +1613,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountGroup, err := client.Core.AccountGroups.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountGroupUpdateParams{\n\t\t\tName: augno.String("Updated Wholesale Customers"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountGroup.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.account_groups.update',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_group = augno_client.core.account_groups.update("id")\n\nputs(account_group)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/account-groups/$ID \\\n    -X PATCH \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -1493,6 +1658,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.AccountPrices.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountPrices, err := client.Core.AccountPrices.List(context.TODO(), augno.CoreAccountPriceListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountPrices.Data)\n}\n',
+      },
+      ruby: {
+        method: 'core.account_prices.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_prices = augno_client.core.account_prices.list\n\nputs(account_prices)',
       },
       http: {
         example:
@@ -1544,6 +1714,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountPrice, err := client.Core.AccountPrices.New(context.TODO(), augno.CoreAccountPriceNewParams{\n\t\tAttributeIDs:          []string{"at_01jm4r6700f8nwq3v5hx2d9ktp"},\n\t\tCategoryIDs:           []string{"ic_01jm4r6700f8nwq3v5hx2d9ktp"},\n\t\tProductLineID:         "pl_01jm4r6700f8nwq3v5hx2d9ktp",\n\t\tRateDenominatorUnitID: "un_01jm4r6700f8nwq3v5hx2d9ktp",\n\t\tRateNumeratorUnitID:   "un_01jm4r6700f8nwq3v5hx2d9ktp",\n\t\tRateValue:             "25.500000000000000000000000000000",\n\t\tRecipientAccountID:    "ac_01gf7a8200eaj8fke1xvw4h50x",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountPrice.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.account_prices.create',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_price = augno_client.core.account_prices.create(\n  attribute_ids: ["at_01jm4r6700f8nwq3v5hx2d9ktp"],\n  category_ids: ["ic_01jm4r6700f8nwq3v5hx2d9ktp"],\n  product_line_id: "pl_01jm4r6700f8nwq3v5hx2d9ktp",\n  rate_denominator_unit_id: "un_01jm4r6700f8nwq3v5hx2d9ktp",\n  rate_numerator_unit_id: "un_01jm4r6700f8nwq3v5hx2d9ktp",\n  rate_value: "25.500000000000000000000000000000",\n  recipient_account_id: "ac_01gf7a8200eaj8fke1xvw4h50x"\n)\n\nputs(account_price)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/account-prices \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "attribute_ids": [\n            "at_01jm4r6700f8nwq3v5hx2d9ktp"\n          ],\n          "category_ids": [\n            "ic_01jm4r6700f8nwq3v5hx2d9ktp"\n          ],\n          "product_line_id": "pl_01jm4r6700f8nwq3v5hx2d9ktp",\n          "rate_denominator_unit_id": "un_01jm4r6700f8nwq3v5hx2d9ktp",\n          "rate_numerator_unit_id": "un_01jm4r6700f8nwq3v5hx2d9ktp",\n          "rate_value": "25.500000000000000000000000000000",\n          "recipient_account_id": "ac_01gf7a8200eaj8fke1xvw4h50x"\n        }\'',
@@ -1583,6 +1758,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.AccountPrices.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountPrice, err := client.Core.AccountPrices.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountPrice)\n}\n',
+      },
+      ruby: {
+        method: 'core.account_prices.delete',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_price = augno_client.core.account_prices.delete("id")\n\nputs(account_price)',
       },
       http: {
         example:
@@ -1624,6 +1804,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.AccountPrices.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountPrice, err := client.Core.AccountPrices.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountPriceGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountPrice.ID)\n}\n',
+      },
+      ruby: {
+        method: 'core.account_prices.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_price = augno_client.core.account_prices.retrieve("id")\n\nputs(account_price)',
       },
       http: {
         example:
@@ -1676,6 +1861,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountPrice, err := client.Core.AccountPrices.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountPriceUpdateParams{\n\t\t\tRateValue: augno.String("30.000000000000000000000000000000"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountPrice.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.account_prices.update',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_price = augno_client.core.account_prices.update("id")\n\nputs(account_price)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/account-prices/$ID \\\n    -X PATCH \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -1716,6 +1906,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountStatuses, err := client.Core.AccountStatuses.List(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountStatuses.Data)\n}\n',
       },
+      ruby: {
+        method: 'core.account_statuses.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_statuses = augno_client.core.account_statuses.list\n\nputs(account_statuses)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/account-statuses \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -1755,6 +1950,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.AccountStatuses.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountStatus, err := client.Core.AccountStatuses.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountStatus.ID)\n}\n',
+      },
+      ruby: {
+        method: 'core.account_statuses.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_status = augno_client.core.account_statuses.retrieve("id")\n\nputs(account_status)',
       },
       http: {
         example:
@@ -1799,6 +1999,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.AccountUsers.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountUsers, err := client.Core.AccountUsers.List(context.TODO(), augno.CoreAccountUserListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountUsers.Data)\n}\n',
+      },
+      ruby: {
+        method: 'core.account_users.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_users = augno_client.core.account_users.list\n\nputs(account_users)',
       },
       http: {
         example:
@@ -1851,6 +2056,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountUser, err := client.Core.AccountUsers.New(context.TODO(), augno.CoreAccountUserNewParams{\n\t\tCustomEmail:                   augno.String("custom_email"),\n\t\tName:                          augno.String("name"),\n\t\tPassword:                      augno.String("password"),\n\t\tReceivesInvoiceNotifications:  true,\n\t\tReceivesOrderAcknowledgements: true,\n\t\tReceivesPurchaseOrderSubmissionNotifications: true,\n\t\tUsername: augno.String("username"),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountUser.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.account_users.create',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_user = augno_client.core.account_users.create(\n  custom_email: "custom_email",\n  name: "name",\n  password: "password",\n  receives_invoice_notifications: true,\n  receives_order_acknowledgements: true,\n  receives_purchase_order_submission_notifications: true,\n  username: "username"\n)\n\nputs(account_user)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/account-users \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "custom_email": "custom_email",\n          "name": "name",\n          "password": "password",\n          "receives_invoice_notifications": true,\n          "receives_order_acknowledgements": true,\n          "receives_purchase_order_submission_notifications": true,\n          "username": "username"\n        }\'',
@@ -1889,6 +2099,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.AccountUsers.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountUser, err := client.Core.AccountUsers.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountUser)\n}\n',
+      },
+      ruby: {
+        method: 'core.account_users.delete',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_user = augno_client.core.account_users.delete("id")\n\nputs(account_user)',
       },
       http: {
         example:
@@ -1929,6 +2144,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.AccountUsers.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountUser, err := client.Core.AccountUsers.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountUserGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountUser.ID)\n}\n',
+      },
+      ruby: {
+        method: 'core.account_users.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_user = augno_client.core.account_users.retrieve("id")\n\nputs(account_user)',
       },
       http: {
         example:
@@ -1978,6 +2198,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountUser, err := client.Core.AccountUsers.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountUserUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountUser.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.account_users.update',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_user = augno_client.core.account_users.update("id")\n\nputs(account_user)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/account-users/$ID \\\n    -X PATCH \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -2016,6 +2241,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.AccountUsers.Lock',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.AccountUsers.Lock(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
+      },
+      ruby: {
+        method: 'core.account_users.lock',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.account_users.lock("id")\n\nputs(response)',
       },
       http: {
         example:
@@ -2058,6 +2288,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountUser, err := client.Core.AccountUsers.UpdateNotificationPreferences(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountUserUpdateNotificationPreferencesParams{\n\t\t\tPreferences: []augno.CoreAccountUserUpdateNotificationPreferencesParamsPreference{{\n\t\t\t\tEnabled:              true,\n\t\t\t\tNotificationTypeCode: "notification_type_code",\n\t\t\t}},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountUser.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.account_users.update_notification_preferences',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_user = augno_client.core.account_users.update_notification_preferences(\n  "id",\n  preferences: [{enabled: true, notification_type_code: "notification_type_code"}]\n)\n\nputs(account_user)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/account-users/$ID/notification-preferences \\\n    -X PUT \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "preferences": [\n            {\n              "enabled": true,\n              "notification_type_code": "notification_type_code"\n            }\n          ]\n        }\'',
@@ -2097,6 +2332,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.AccountUsers.UpdatePassword',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.AccountUsers.UpdatePassword(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountUserUpdatePasswordParams{\n\t\t\tNewPassword:       "new_password",\n\t\t\tRequesterPassword: "requester_password",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
+      },
+      ruby: {
+        method: 'core.account_users.update_password',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.account_users.update_password(\n  "id",\n  new_password: "new_password",\n  requester_password: "requester_password"\n)\n\nputs(response)',
       },
       http: {
         example:
@@ -2138,6 +2378,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.AccountUsers.Restore(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
       },
+      ruby: {
+        method: 'core.account_users.restore',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.account_users.restore("id")\n\nputs(response)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/account-users/$ID/restore \\\n    -X POST \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -2177,6 +2422,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.AccountUsers.Unlock',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.AccountUsers.Unlock(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
+      },
+      ruby: {
+        method: 'core.account_users.unlock',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.account_users.unlock("id")\n\nputs(response)',
       },
       http: {
         example:
@@ -2218,6 +2468,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.AccountUsers.SalesTargets.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tsalesTargets, err := client.Core.AccountUsers.SalesTargets.List(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountUserSalesTargetListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", salesTargets.Data)\n}\n',
+      },
+      ruby: {
+        method: 'core.account_users.sales_targets.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nsales_targets = augno_client.core.account_users.sales_targets.list("id")\n\nputs(sales_targets)',
       },
       http: {
         example:
@@ -2264,6 +2519,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.AccountUsers.SalesTargets.New',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\t"time"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tsalesTarget, err := client.Core.AccountUsers.SalesTargets.New(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountUserSalesTargetNewParams{\n\t\t\tAmountUnitID: "amount_unit_id",\n\t\t\tAmountValue:  "amount_value",\n\t\t\tEndDate:      time.Now(),\n\t\t\tStartDate:    time.Now(),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", salesTarget.ID)\n}\n',
+      },
+      ruby: {
+        method: 'core.account_users.sales_targets.create',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nsales_target = augno_client.core.account_users.sales_targets.create(\n  "id",\n  amount_unit_id: "amount_unit_id",\n  amount_value: "amount_value",\n  end_date: "2019-12-27T18:11:19.117Z",\n  start_date: "2019-12-27T18:11:19.117Z"\n)\n\nputs(sales_target)',
       },
       http: {
         example:
@@ -2313,6 +2573,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\t"time"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tsalesTarget, err := client.Core.AccountUsers.SalesTargets.Upsert(\n\t\tcontext.TODO(),\n\t\t"target_id",\n\t\taugno.CoreAccountUserSalesTargetUpsertParams{\n\t\t\tID:           "id",\n\t\t\tAmountUnitID: "amount_unit_id",\n\t\t\tAmountValue:  "amount_value",\n\t\t\tEndDate:      time.Now(),\n\t\t\tStartDate:    time.Now(),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", salesTarget.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.account_users.sales_targets.upsert',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nsales_target = augno_client.core.account_users.sales_targets.upsert(\n  "target_id",\n  id: "id",\n  amount_unit_id: "amount_unit_id",\n  amount_value: "amount_value",\n  end_date: "2019-12-27T18:11:19.117Z",\n  start_date: "2019-12-27T18:11:19.117Z"\n)\n\nputs(sales_target)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/account-users/$ID/sales-targets/$TARGET_ID \\\n    -X PUT \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "amount_unit_id": "amount_unit_id",\n          "amount_value": "amount_value",\n          "end_date": "2019-12-27T18:11:19.117Z",\n          "start_date": "2019-12-27T18:11:19.117Z"\n        }\'',
@@ -2354,6 +2619,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Accounts.GetBySlug(context.TODO(), "slug")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.accounts.retrieve_by_slug',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.accounts.retrieve_by_slug("slug")\n\nputs(response)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/accounts/slug/$SLUG \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -2394,6 +2664,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Accounts.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccount, err := client.Core.Accounts.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", account.ID)\n}\n',
+      },
+      ruby: {
+        method: 'core.accounts.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount = augno_client.core.accounts.retrieve("id")\n\nputs(account)',
       },
       http: {
         example:
@@ -2448,6 +2723,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccount, err := client.Core.Accounts.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountUpdateParams{\n\t\t\tName: augno.String("Acme Inc."),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", account.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.accounts.update',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount = augno_client.core.accounts.update("id")\n\nputs(account)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/accounts/$ID \\\n    -X PATCH \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -2487,6 +2767,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Accounts.GetLogoURL',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Accounts.GetLogoURL(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.URL)\n}\n',
+      },
+      ruby: {
+        method: 'core.accounts.get_logo_url',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.accounts.get_logo_url("id")\n\nputs(response)',
       },
       http: {
         example:
@@ -2528,6 +2813,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Accounts.UploadPhoto(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Success)\n}\n',
       },
+      ruby: {
+        method: 'core.accounts.upload_photo',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.accounts.upload_photo("id")\n\nputs(response)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/accounts/$ID/photo \\\n    -X PUT \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -2568,6 +2858,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Accounts.Addresses.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taddresses, err := client.Core.Accounts.Addresses.List(context.TODO(), "account_id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", addresses.Data)\n}\n',
+      },
+      ruby: {
+        method: 'core.accounts.addresses.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naddresses = augno_client.core.accounts.addresses.list("account_id")\n\nputs(addresses)',
       },
       http: {
         example:
@@ -2621,6 +2916,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taddress, err := client.Core.Accounts.Addresses.New(\n\t\tcontext.TODO(),\n\t\t"account_id",\n\t\taugno.CoreAccountAddressNewParams{\n\t\t\tCountry:     "US",\n\t\t\tIsDropShip:  false,\n\t\t\tName:        "Headquarters",\n\t\t\tLocality:    augno.String("Springfield"),\n\t\t\tPostalCode:  augno.String("62701"),\n\t\t\tState:       augno.String("IL"),\n\t\t\tStreetLine1: augno.String("123 Main St"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", address.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.accounts.addresses.create',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naddress = augno_client.core.accounts.addresses.create(\n  "account_id",\n  country: "US",\n  is_drop_ship: false,\n  name: "Headquarters"\n)\n\nputs(address)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/accounts/$ACCOUNT_ID/addresses \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "country": "US",\n          "is_drop_ship": false,\n          "name": "Headquarters",\n          "locality": "Springfield",\n          "postal_code": "62701",\n          "state": "IL",\n          "street_line_1": "123 Main St"\n        }\'',
@@ -2660,6 +2960,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Accounts.Addresses.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taddress, err := client.Core.Accounts.Addresses.Delete(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountAddressDeleteParams{\n\t\t\tAccountID: "account_id",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", address)\n}\n',
+      },
+      ruby: {
+        method: 'core.accounts.addresses.delete',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naddress = augno_client.core.accounts.addresses.delete("id", account_id: "account_id")\n\nputs(address)',
       },
       http: {
         example:
@@ -2701,6 +3006,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Accounts.Addresses.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taddress, err := client.Core.Accounts.Addresses.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountAddressGetParams{\n\t\t\tAccountID: "account_id",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", address.ID)\n}\n',
+      },
+      ruby: {
+        method: 'core.accounts.addresses.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naddress = augno_client.core.accounts.addresses.retrieve("id", account_id: "account_id")\n\nputs(address)',
       },
       http: {
         example:
@@ -2756,6 +3066,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taddress, err := client.Core.Accounts.Addresses.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAccountAddressUpdateParams{\n\t\t\tAccountID: "account_id",\n\t\t\tName:      augno.String("Warehouse"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", address.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.accounts.addresses.update',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naddress = augno_client.core.accounts.addresses.update("id", account_id: "account_id")\n\nputs(address)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/accounts/$ACCOUNT_ID/addresses/$ID \\\n    -X PATCH \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -2797,6 +3112,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Addresses.Autocomplete(context.TODO(), augno.CoreAddressAutocompleteParams{\n\t\tInput: "input",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Data)\n}\n',
       },
+      ruby: {
+        method: 'core.addresses.autocomplete',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.addresses.autocomplete(input: "input")\n\nputs(response)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/addresses/autocomplete \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -2837,6 +3157,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Addresses.GetDetails',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Addresses.GetDetails(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreAddressGetDetailsParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Address)\n}\n',
+      },
+      ruby: {
+        method: 'core.addresses.get_details',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.addresses.get_details("id")\n\nputs(response)',
       },
       http: {
         example:
@@ -2886,6 +3211,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Addresses.Validate(context.TODO(), augno.CoreAddressValidateParams{\n\t\tAddressLine1: "123 Main St",\n\t\tCity:         "Springfield",\n\t\tCountry:      "US",\n\t\tPostalCode:   "62701",\n\t\tState:        "IL",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.IsValid)\n}\n',
       },
+      ruby: {
+        method: 'core.addresses.validate',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.addresses.validate(\n  address_line_1: "123 Main St",\n  city: "Springfield",\n  country: "US",\n  postal_code: "62701",\n  state: "IL"\n)\n\nputs(response)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/addresses/validate \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "address_line_1": "123 Main St",\n          "city": "Springfield",\n          "country": "US",\n          "postal_code": "62701",\n          "state": "IL"\n        }\'',
@@ -2926,6 +3256,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Carriers.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcarriers, err := client.Core.Carriers.List(context.TODO(), augno.CoreCarrierListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", carriers.Data)\n}\n',
+      },
+      ruby: {
+        method: 'core.carriers.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\ncarriers = augno_client.core.carriers.list\n\nputs(carriers)',
       },
       http: {
         example:
@@ -2968,6 +3303,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n\t"github.com/stainless-sdks/augno-go/packages/param"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcarrier, err := client.Core.Carriers.New(context.TODO(), augno.CoreCarrierNewParams{\n\t\tAccountNumber:   param.Null[string](),\n\t\tCode:            augno.String("fedex"),\n\t\tIsPortalEnabled: true,\n\t\tName:            "FedEx",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", carrier.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.carriers.create',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\ncarrier = augno_client.core.carriers.create(\n  account_number: nil,\n  code: "fedex",\n  is_portal_enabled: true,\n  name: "FedEx"\n)\n\nputs(carrier)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/carriers \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "account_number": null,\n          "code": "fedex",\n          "is_portal_enabled": true,\n          "name": "FedEx"\n        }\'',
@@ -3007,6 +3347,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Carriers.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcarrier, err := client.Core.Carriers.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", carrier)\n}\n',
+      },
+      ruby: {
+        method: 'core.carriers.delete',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\ncarrier = augno_client.core.carriers.delete("id")\n\nputs(carrier)',
       },
       http: {
         example:
@@ -3048,6 +3393,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcarrier, err := client.Core.Carriers.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreCarrierGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", carrier.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.carriers.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\ncarrier = augno_client.core.carriers.retrieve("id")\n\nputs(carrier)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/carriers/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -3087,6 +3437,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Carriers.Update',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n\t"github.com/stainless-sdks/augno-go/packages/param"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcarrier, err := client.Core.Carriers.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreCarrierUpdateParams{\n\t\t\tIsPortalEnabled: param.Null[bool](),\n\t\t\tName:            augno.String("FedEx Express"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", carrier.ID)\n}\n',
+      },
+      ruby: {
+        method: 'core.carriers.update',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\ncarrier = augno_client.core.carriers.update("id", is_portal_enabled: nil, name: "FedEx Express")\n\nputs(carrier)',
       },
       http: {
         example:
@@ -3128,6 +3483,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Carriers.GetOAuthStatus(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Status)\n}\n',
       },
+      ruby: {
+        method: 'core.carriers.get_oauth_status',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.carriers.get_oauth_status("id")\n\nputs(response)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/carriers/$ID/oauth-status \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -3168,6 +3528,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Carriers.Options.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\toptions, err := client.Core.Carriers.Options.List(context.TODO(), "carrier_id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", options.Data)\n}\n',
+      },
+      ruby: {
+        method: 'core.carriers.options.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\noptions = augno_client.core.carriers.options.list("carrier_id")\n\nputs(options)',
       },
       http: {
         example:
@@ -3216,6 +3581,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n\t"github.com/stainless-sdks/augno-go/packages/param"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcarrierOption, err := client.Core.Carriers.Options.New(\n\t\tcontext.TODO(),\n\t\t"carrier_id",\n\t\taugno.CoreCarrierOptionNewParams{\n\t\t\tCode:              "ground",\n\t\t\tIsDefault:         false,\n\t\t\tIsPortalEnabled:   true,\n\t\t\tName:              "Ground Shipping",\n\t\t\tServiceLevelToken: param.Null[string](),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", carrierOption.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.carriers.options.create',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\ncarrier_option = augno_client.core.carriers.options.create(\n  "carrier_id",\n  code: "ground",\n  is_default: false,\n  is_portal_enabled: true,\n  name: "Ground Shipping",\n  service_level_token: nil\n)\n\nputs(carrier_option)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/carriers/$CARRIER_ID/options \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "code": "ground",\n          "is_default": false,\n          "is_portal_enabled": true,\n          "name": "Ground Shipping",\n          "service_level_token": null\n        }\'',
@@ -3256,6 +3626,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\toption, err := client.Core.Carriers.Options.Delete(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreCarrierOptionDeleteParams{\n\t\t\tCarrierID: "carrier_id",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", option)\n}\n',
       },
+      ruby: {
+        method: 'core.carriers.options.delete',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\noption = augno_client.core.carriers.options.delete("id", carrier_id: "carrier_id")\n\nputs(option)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/carriers/$CARRIER_ID/options/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -3295,6 +3670,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Carriers.Options.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcarrierOption, err := client.Core.Carriers.Options.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreCarrierOptionGetParams{\n\t\t\tCarrierID: "carrier_id",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", carrierOption.ID)\n}\n',
+      },
+      ruby: {
+        method: 'core.carriers.options.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\ncarrier_option = augno_client.core.carriers.options.retrieve("id", carrier_id: "carrier_id")\n\nputs(carrier_option)',
       },
       http: {
         example:
@@ -3343,6 +3723,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n\t"github.com/stainless-sdks/augno-go/packages/param"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcarrierOption, err := client.Core.Carriers.Options.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreCarrierOptionUpdateParams{\n\t\t\tCarrierID:       "carrier_id",\n\t\t\tCode:            param.Null[string](),\n\t\t\tIsDefault:       param.Null[bool](),\n\t\t\tIsPortalEnabled: param.Null[bool](),\n\t\t\tName:            augno.String("Express Shipping"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", carrierOption.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.carriers.options.update',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\ncarrier_option = augno_client.core.carriers.options.update(\n  "id",\n  carrier_id: "carrier_id",\n  code: nil,\n  is_default: nil,\n  is_portal_enabled: nil,\n  name: "Express Shipping"\n)\n\nputs(carrier_option)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/carriers/$CARRIER_ID/options/$ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "code": null,\n          "is_default": null,\n          "is_portal_enabled": null,\n          "name": "Express Shipping"\n        }\'',
@@ -3382,6 +3767,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Carriers.Actions.InitiateOAuth',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n\t"github.com/stainless-sdks/augno-go/packages/param"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Carriers.Actions.InitiateOAuth(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreCarrierActionInitiateOAuthParams{\n\t\t\tRedirectUri: "https://app.example.com/carriers/oauth/callback",\n\t\t\tState:       param.Null[string](),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.OAuthURL)\n}\n',
+      },
+      ruby: {
+        method: 'core.carriers.actions.initiate_oauth',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.carriers.actions.initiate_oauth(\n  "id",\n  redirect_uri: "https://app.example.com/carriers/oauth/callback",\n  state: nil\n)\n\nputs(response)',
       },
       http: {
         example:
@@ -3424,6 +3814,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tcarrier, err := client.Core.Carriers.Actions.SyncOptions(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", carrier.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.carriers.actions.sync_options',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\ncarrier = augno_client.core.carriers.actions.sync_options("id")\n\nputs(carrier)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/carriers/$ID/actions/sync-options \\\n    -X POST \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -3464,6 +3859,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tchildAccounts, err := client.Core.ChildAccounts.List(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", childAccounts.Data)\n}\n',
       },
+      ruby: {
+        method: 'core.child_accounts.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nchild_accounts = augno_client.core.child_accounts.list\n\nputs(child_accounts)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/child-accounts \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -3503,6 +3903,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.ChildAccounts.Remove',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tchildAccount, err := client.Core.ChildAccounts.Remove(context.TODO(), "child_account_id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", childAccount)\n}\n',
+      },
+      ruby: {
+        method: 'core.child_accounts.remove',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nchild_account = augno_client.core.child_accounts.remove("child_account_id")\n\nputs(child_account)',
       },
       http: {
         example:
@@ -3545,6 +3950,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tchildAccount, err := client.Core.ChildAccounts.Add(context.TODO(), "child_account_id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", childAccount.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.child_accounts.add',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nchild_account = augno_client.core.child_accounts.add("child_account_id")\n\nputs(child_account)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/child-accounts/$CHILD_ACCOUNT_ID \\\n    -X PUT \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -3584,6 +3994,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Integrations.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tintegrations, err := client.Core.Integrations.List(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", integrations.Data)\n}\n',
+      },
+      ruby: {
+        method: 'core.integrations.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nintegrations = augno_client.core.integrations.list\n\nputs(integrations)',
       },
       http: {
         example:
@@ -3626,6 +4041,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountIntegration, err := client.Core.Integrations.New(context.TODO(), augno.CoreIntegrationNewParams{\n\t\tCredentials:     `{"privateKey":"sk_test_...","publishableKey":"pk_test_...","webhookSecret":"whsec_..."}`,\n\t\tIntegrationCode: augno.CoreIntegrationNewParamsIntegrationCodeStripe,\n\t\tName:            "My Stripe Integration",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountIntegration.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.integrations.create',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_integration = augno_client.core.integrations.create(\n  credentials: "{\\"privateKey\\":\\"sk_test_...\\",\\"publishableKey\\":\\"pk_test_...\\",\\"webhookSecret\\":\\"whsec_...\\"}",\n  integration_code: :stripe,\n  name: "My Stripe Integration"\n)\n\nputs(account_integration)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/integrations \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "credentials": "{\\\\"privateKey\\\\":\\\\"sk_test_...\\\\",\\\\"publishableKey\\\\":\\\\"pk_test_...\\\\",\\\\"webhookSecret\\\\":\\\\"whsec_...\\\\"}",\n          "integration_code": "stripe",\n          "name": "My Stripe Integration"\n        }\'',
@@ -3665,6 +4085,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Integrations.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountIntegration, err := client.Core.Integrations.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountIntegration.ID)\n}\n',
+      },
+      ruby: {
+        method: 'core.integrations.delete',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_integration = augno_client.core.integrations.delete("id")\n\nputs(account_integration)',
       },
       http: {
         example:
@@ -3707,6 +4132,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountIntegration, err := client.Core.Integrations.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreIntegrationUpdateParams{\n\t\t\tName: augno.String("Updated Stripe Integration"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountIntegration.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.integrations.update',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_integration = augno_client.core.integrations.update("id")\n\nputs(account_integration)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/integrations/$ID \\\n    -X PUT \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -3746,6 +4176,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Integrations.Stripe.GetPublishableKey(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.PublishableKey)\n}\n',
       },
+      ruby: {
+        method: 'core.integrations.stripe.get_publishable_key',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.integrations.stripe.get_publishable_key\n\nputs(response)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/integrations/stripe/publishable-key \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -3784,6 +4219,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Integrations.Stripe.GetStatus',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Integrations.Stripe.GetStatus(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.HasStripeIntegration)\n}\n',
+      },
+      ruby: {
+        method: 'core.integrations.stripe.get_status',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.integrations.stripe.get_status\n\nputs(response)',
       },
       http: {
         example:
@@ -3836,6 +4276,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\titems, err := client.Core.Items.List(context.TODO(), augno.CoreItemListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", items.Data)\n}\n',
       },
+      ruby: {
+        method: 'core.items.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nitems = augno_client.core.items.list\n\nputs(items)',
+      },
       http: {
         example: 'curl https://api.augno.com/v1/core/items \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
       },
@@ -3874,6 +4319,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Items.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\titem, err := client.Core.Items.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreItemGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", item.ID)\n}\n',
+      },
+      ruby: {
+        method: 'core.items.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nitem = augno_client.core.items.retrieve("id")\n\nputs(item)',
       },
       http: {
         example:
@@ -3916,6 +4366,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Items.GetCosts(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.DirectLaborCost)\n}\n',
       },
+      ruby: {
+        method: 'core.items.get_costs',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.items.get_costs("id")\n\nputs(response)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/items/$ID/costs \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -3957,6 +4412,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Items.GetInventory(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.AvailableToPromise)\n}\n',
       },
+      ruby: {
+        method: 'core.items.get_inventory',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.items.get_inventory("id")\n\nputs(response)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/items/$ID/inventory \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -3997,6 +4457,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Items.GetTrends(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreItemGetTrendsParams{\n\t\t\tTrendType: "trend_type",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Object)\n}\n',
       },
+      ruby: {
+        method: 'core.items.get_trends',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.items.get_trends("id", trend_type: "trend_type")\n\nputs(response)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/items/$ID/trends \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -4035,6 +4500,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Items.Actions.Export',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.Items.Actions.Export(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Count)\n}\n',
+      },
+      ruby: {
+        method: 'core.items.actions.export',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.items.actions.export\n\nputs(response)',
       },
       http: {
         example:
@@ -4076,6 +4546,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpaymentTerms, err := client.Core.PaymentTerms.List(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", paymentTerms.Data)\n}\n',
       },
+      ruby: {
+        method: 'core.payment_terms.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\npayment_terms = augno_client.core.payment_terms.list\n\nputs(payment_terms)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/payment-terms \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -4116,6 +4591,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpaymentTerm, err := client.Core.PaymentTerms.New(context.TODO(), augno.CorePaymentTermNewParams{\n\t\tName: "Net 30",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", paymentTerm.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.payment_terms.create',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\npayment_term = augno_client.core.payment_terms.create(name: "Net 30")\n\nputs(payment_term)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/payment-terms \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "name": "Net 30"\n        }\'',
@@ -4155,6 +4635,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.PaymentTerms.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpaymentTerm, err := client.Core.PaymentTerms.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", paymentTerm)\n}\n',
+      },
+      ruby: {
+        method: 'core.payment_terms.delete',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\npayment_term = augno_client.core.payment_terms.delete("id")\n\nputs(payment_term)',
       },
       http: {
         example:
@@ -4197,6 +4682,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpaymentTerm, err := client.Core.PaymentTerms.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", paymentTerm.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.payment_terms.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\npayment_term = augno_client.core.payment_terms.retrieve("id")\n\nputs(payment_term)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/payment-terms/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -4238,6 +4728,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpaymentTerm, err := client.Core.PaymentTerms.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CorePaymentTermUpdateParams{\n\t\t\tName: augno.String("Net 60"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", paymentTerm.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.payment_terms.update',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\npayment_term = augno_client.core.payment_terms.update("id")\n\nputs(payment_term)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/payment-terms/$ID \\\n    -X PATCH \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -4277,6 +4772,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.ProductLineAccess.AccountGroups.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountGroups, err := client.Core.ProductLineAccess.AccountGroups.List(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountGroups.Data)\n}\n',
+      },
+      ruby: {
+        method: 'core.product_line_access.account_groups.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_groups = augno_client.core.product_line_access.account_groups.list\n\nputs(account_groups)',
       },
       http: {
         example:
@@ -4318,6 +4818,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproductLineAccess, err := client.Core.ProductLineAccess.AccountGroups.New(context.TODO(), augno.CoreProductLineAccessAccountGroupNewParams{\n\t\tAccountGroupID: "acgp_01jm4r6700f8nwq3v5hx2d9ktp",\n\t\tProductLineIDs: []string{"pl_01jm4r6700f8nwq3v5hx2d9ktp"},\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", productLineAccess.AccountGroup)\n}\n',
       },
+      ruby: {
+        method: 'core.product_line_access.account_groups.create',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nproduct_line_access = augno_client.core.product_line_access.account_groups.create(\n  account_group_id: "acgp_01jm4r6700f8nwq3v5hx2d9ktp",\n  product_line_ids: ["pl_01jm4r6700f8nwq3v5hx2d9ktp"]\n)\n\nputs(product_line_access)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/product-line-access/account-groups \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "account_group_id": "acgp_01jm4r6700f8nwq3v5hx2d9ktp",\n          "product_line_ids": [\n            "pl_01jm4r6700f8nwq3v5hx2d9ktp"\n          ]\n        }\'',
@@ -4356,6 +4861,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.ProductLineAccess.AccountGroups.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\taccountGroup, err := client.Core.ProductLineAccess.AccountGroups.Delete(context.TODO(), "account_group_id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", accountGroup)\n}\n',
+      },
+      ruby: {
+        method: 'core.product_line_access.account_groups.delete',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_group = augno_client.core.product_line_access.account_groups.delete("account_group_id")\n\nputs(account_group)',
       },
       http: {
         example:
@@ -4397,6 +4907,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproductLineAccess, err := client.Core.ProductLineAccess.AccountGroups.Get(context.TODO(), "account_group_id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", productLineAccess.AccountGroup)\n}\n',
       },
+      ruby: {
+        method: 'core.product_line_access.account_groups.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nproduct_line_access = augno_client.core.product_line_access.account_groups.retrieve("account_group_id")\n\nputs(product_line_access)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/product-line-access/account-groups/$ACCOUNT_GROUP_ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -4436,6 +4951,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.ProductLineAccess.AccountGroups.Update',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproductLineAccess, err := client.Core.ProductLineAccess.AccountGroups.Update(\n\t\tcontext.TODO(),\n\t\t"account_group_id",\n\t\taugno.CoreProductLineAccessAccountGroupUpdateParams{\n\t\t\tProductLineIDs: []string{"pl_01jm4r6700f8nwq3v5hx2d9ktp"},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", productLineAccess.AccountGroup)\n}\n',
+      },
+      ruby: {
+        method: 'core.product_line_access.account_groups.update',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nproduct_line_access = augno_client.core.product_line_access.account_groups.update(\n  "account_group_id",\n  product_line_ids: ["pl_01jm4r6700f8nwq3v5hx2d9ktp"]\n)\n\nputs(product_line_access)',
       },
       http: {
         example:
@@ -4477,6 +4997,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproperties, err := client.Core.Properties.List(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", properties.Data)\n}\n',
       },
+      ruby: {
+        method: 'core.properties.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nproperties = augno_client.core.properties.list\n\nputs(properties)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/properties \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -4515,6 +5040,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Properties.New',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproperty, err := client.Core.Properties.New(context.TODO(), augno.CorePropertyNewParams{\n\t\tName: "Color",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", property.ID)\n}\n',
+      },
+      ruby: {
+        method: 'core.properties.create',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nproperty = augno_client.core.properties.create(name: "Color")\n\nputs(property)',
       },
       http: {
         example:
@@ -4555,6 +5085,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproperty, err := client.Core.Properties.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", property)\n}\n',
       },
+      ruby: {
+        method: 'core.properties.delete',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nproperty = augno_client.core.properties.delete("id")\n\nputs(property)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/properties/$ID \\\n    -X DELETE \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -4594,6 +5129,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproperty, err := client.Core.Properties.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", property.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.properties.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nproperty = augno_client.core.properties.retrieve("id")\n\nputs(property)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/properties/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -4632,6 +5172,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Properties.Update',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproperty, err := client.Core.Properties.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CorePropertyUpdateParams{\n\t\t\tName: augno.String("Size"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", property.ID)\n}\n',
+      },
+      ruby: {
+        method: 'core.properties.update',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nproperty = augno_client.core.properties.update("id")\n\nputs(property)',
       },
       http: {
         example:
@@ -4673,6 +5218,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Properties.Attributes.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tattributes, err := client.Core.Properties.Attributes.List(\n\t\tcontext.TODO(),\n\t\t"property_id",\n\t\taugno.CorePropertyAttributeListParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", attributes.Data)\n}\n',
+      },
+      ruby: {
+        method: 'core.properties.attributes.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nattributes = augno_client.core.properties.attributes.list("property_id")\n\nputs(attributes)',
       },
       http: {
         example:
@@ -4720,6 +5270,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tattribute, err := client.Core.Properties.Attributes.New(\n\t\tcontext.TODO(),\n\t\t"property_id",\n\t\taugno.CorePropertyAttributeNewParams{\n\t\t\tColorCode: "red",\n\t\t\tOrder:     1,\n\t\t\tText:      "Red",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", attribute.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.properties.attributes.create',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nattribute = augno_client.core.properties.attributes.create("property_id", color_code: "red", order: 1, text: "Red")\n\nputs(attribute)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/properties/$PROPERTY_ID/attributes \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "color_code": "red",\n          "order": 1,\n          "text": "Red"\n        }\'',
@@ -4758,6 +5313,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Properties.Attributes.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tattribute, err := client.Core.Properties.Attributes.Delete(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CorePropertyAttributeDeleteParams{\n\t\t\tPropertyID: "property_id",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", attribute)\n}\n',
+      },
+      ruby: {
+        method: 'core.properties.attributes.delete',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nattribute = augno_client.core.properties.attributes.delete("id", property_id: "property_id")\n\nputs(attribute)',
       },
       http: {
         example:
@@ -4798,6 +5358,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Properties.Attributes.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tattribute, err := client.Core.Properties.Attributes.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CorePropertyAttributeGetParams{\n\t\t\tPropertyID: "property_id",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", attribute.ID)\n}\n',
+      },
+      ruby: {
+        method: 'core.properties.attributes.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nattribute = augno_client.core.properties.attributes.retrieve("id", property_id: "property_id")\n\nputs(attribute)',
       },
       http: {
         example:
@@ -4845,6 +5410,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Properties.Attributes.Update',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tattribute, err := client.Core.Properties.Attributes.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CorePropertyAttributeUpdateParams{\n\t\t\tPropertyID: "property_id",\n\t\t\tText:       augno.String("Blue"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", attribute.ID)\n}\n',
+      },
+      ruby: {
+        method: 'core.properties.attributes.update',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nattribute = augno_client.core.properties.attributes.update("id", property_id: "property_id")\n\nputs(attribute)',
       },
       http: {
         example:
@@ -4902,6 +5472,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Core.RequestLogs.List(context.TODO(), augno.CoreRequestLogListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
+      ruby: {
+        method: 'core.request_logs.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\npage = augno_client.core.request_logs.list\n\nputs(page)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/request-logs \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -4941,6 +5516,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.RequestLogs.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\trequestLog, err := client.Core.RequestLogs.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreRequestLogGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", requestLog.ID)\n}\n',
+      },
+      ruby: {
+        method: 'core.request_logs.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nrequest_log = augno_client.core.request_logs.retrieve("id")\n\nputs(request_log)',
       },
       http: {
         example:
@@ -4983,6 +5563,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tpage, err := client.Core.Sandboxes.List(context.TODO(), augno.CoreSandboxListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
+      ruby: {
+        method: 'core.sandboxes.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\npage = augno_client.core.sandboxes.list\n\nputs(page)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/sandboxes \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -5024,6 +5609,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tsandbox, err := client.Core.Sandboxes.New(context.TODO(), augno.CoreSandboxNewParams{\n\t\tMode: augno.CoreSandboxNewParamsModeBlank,\n\t\tName: "Integration Testing",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", sandbox.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.sandboxes.create',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nsandbox = augno_client.core.sandboxes.create(mode: :blank, name: "Integration Testing")\n\nputs(sandbox)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/sandboxes \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "mode": "blank",\n          "name": "Integration Testing"\n        }\'',
@@ -5063,6 +5653,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Sandboxes.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tsandbox, err := client.Core.Sandboxes.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", sandbox)\n}\n',
+      },
+      ruby: {
+        method: 'core.sandboxes.delete',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nsandbox = augno_client.core.sandboxes.delete("id")\n\nputs(sandbox)',
       },
       http: {
         example:
@@ -5104,6 +5699,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tsandbox, err := client.Core.Sandboxes.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreSandboxGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", sandbox.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.sandboxes.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nsandbox = augno_client.core.sandboxes.retrieve("id")\n\nputs(sandbox)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/sandboxes/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -5144,6 +5744,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.ShippingTerms.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tshippingTerms, err := client.Core.ShippingTerms.List(context.TODO(), augno.CoreShippingTermListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", shippingTerms.Data)\n}\n',
+      },
+      ruby: {
+        method: 'core.shipping_terms.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nshipping_terms = augno_client.core.shipping_terms.list\n\nputs(shipping_terms)',
       },
       http: {
         example:
@@ -5192,6 +5797,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tshippingTerm, err := client.Core.ShippingTerms.New(context.TODO(), augno.CoreShippingTermNewParams{\n\t\tFreeShippingCarrierOptionIDs: []string{"string"},\n\t\tName:                         "Prepaid",\n\t\tType:                         augno.CoreShippingTermNewParamsTypeCarrierRateFreight,\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", shippingTerm.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.shipping_terms.create',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nshipping_term = augno_client.core.shipping_terms.create(\n  free_shipping_carrier_option_ids: ["string"],\n  name: "Prepaid",\n  type: :carrier_rate_freight\n)\n\nputs(shipping_term)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/shipping-terms \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "free_shipping_carrier_option_ids": [\n            "string"\n          ],\n          "name": "Prepaid",\n          "type": "carrier_rate_freight"\n        }\'',
@@ -5231,6 +5841,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.ShippingTerms.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tshippingTerm, err := client.Core.ShippingTerms.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", shippingTerm)\n}\n',
+      },
+      ruby: {
+        method: 'core.shipping_terms.delete',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nshipping_term = augno_client.core.shipping_terms.delete("id")\n\nputs(shipping_term)',
       },
       http: {
         example:
@@ -5272,6 +5887,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.ShippingTerms.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tshippingTerm, err := client.Core.ShippingTerms.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreShippingTermGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", shippingTerm.ID)\n}\n',
+      },
+      ruby: {
+        method: 'core.shipping_terms.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nshipping_term = augno_client.core.shipping_terms.retrieve("id")\n\nputs(shipping_term)',
       },
       http: {
         example:
@@ -5322,6 +5942,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tshippingTerm, err := client.Core.ShippingTerms.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreShippingTermUpdateParams{\n\t\t\tFreeShippingCarrierOptionIDs: []string{"string"},\n\t\t\tName:                         augno.String("Collect"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", shippingTerm.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.shipping_terms.update',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nshipping_term = augno_client.core.shipping_terms.update("id", free_shipping_carrier_option_ids: ["string"])\n\nputs(shipping_term)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/shipping-terms/$ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "free_shipping_carrier_option_ids": [\n            "string"\n          ],\n          "name": "Collect"\n        }\'',
@@ -5362,6 +5987,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Units.List',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tunits, err := client.Core.Units.List(context.TODO(), augno.CoreUnitListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", units.Data)\n}\n',
+      },
+      ruby: {
+        method: 'core.units.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nunits = augno_client.core.units.list\n\nputs(units)',
       },
       http: {
         example: 'curl https://api.augno.com/v1/core/units \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -5411,6 +6041,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tunit, err := client.Core.Units.New(context.TODO(), augno.CoreUnitNewParams{\n\t\tAbbreviation:      "g",\n\t\tIsBaseUnit:        true,\n\t\tName:              "Gram",\n\t\tOffsetDenominator: "1.000000000000000000000000000000",\n\t\tOffsetNumerator:   "0.000000000000000000000000000000",\n\t\tRatioDenominator:  "1.000000000000000000000000000000",\n\t\tRatioNumerator:    "1.000000000000000000000000000000",\n\t\tType:              augno.CoreUnitNewParamsTypeMass,\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", unit.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.units.create',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nunit = augno_client.core.units.create(\n  abbreviation: "g",\n  is_base_unit: true,\n  name: "Gram",\n  offset_denominator: "1.000000000000000000000000000000",\n  offset_numerator: "0.000000000000000000000000000000",\n  ratio_denominator: "1.000000000000000000000000000000",\n  ratio_numerator: "1.000000000000000000000000000000",\n  type: :mass\n)\n\nputs(unit)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/units \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "abbreviation": "g",\n          "is_base_unit": true,\n          "name": "Gram",\n          "offset_denominator": "1.000000000000000000000000000000",\n          "offset_numerator": "0.000000000000000000000000000000",\n          "ratio_denominator": "1.000000000000000000000000000000",\n          "ratio_numerator": "1.000000000000000000000000000000",\n          "type": "mass"\n        }\'',
@@ -5450,6 +6085,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Units.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tunit, err := client.Core.Units.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", unit)\n}\n',
+      },
+      ruby: {
+        method: 'core.units.delete',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nunit = augno_client.core.units.delete("id")\n\nputs(unit)',
       },
       http: {
         example:
@@ -5491,6 +6131,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.Units.Get',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tunit, err := client.Core.Units.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", unit.ID)\n}\n',
+      },
+      ruby: {
+        method: 'core.units.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nunit = augno_client.core.units.retrieve("id")\n\nputs(unit)',
       },
       http: {
         example:
@@ -5541,6 +6186,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tunit, err := client.Core.Units.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreUnitUpdateParams{\n\t\t\tAbbreviation: augno.String("kg"),\n\t\t\tName:         augno.String("Kilogram"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", unit.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.units.update',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nunit = augno_client.core.units.update("id")\n\nputs(unit)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/units/$ID \\\n    -X PATCH \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -5582,6 +6232,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\titemCategories, err := client.Core.ItemCategories.List(context.TODO(), augno.CoreItemCategoryListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", itemCategories.Data)\n}\n',
       },
+      ruby: {
+        method: 'core.item_categories.list',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nitem_categories = augno_client.core.item_categories.list\n\nputs(item_categories)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/item-categories \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -5622,6 +6277,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\titemCategory, err := client.Core.ItemCategories.New(context.TODO(), augno.CoreItemCategoryNewParams{\n\t\tName:        "Electronics",\n\t\tType:        "material_category",\n\t\tUnitGroupID: "ug_01jm4r6700f8nwq3v5hx2d9ktp",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", itemCategory.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.item_categories.create',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nitem_category = augno_client.core.item_categories.create(\n  name: "Electronics",\n  type: "material_category",\n  unit_group_id: "ug_01jm4r6700f8nwq3v5hx2d9ktp"\n)\n\nputs(item_category)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/item-categories \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $AUGNO_API_KEY" \\\n    -d \'{\n          "name": "Electronics",\n          "type": "material_category",\n          "unit_group_id": "ug_01jm4r6700f8nwq3v5hx2d9ktp"\n        }\'',
@@ -5661,6 +6321,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.ItemCategories.Delete',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\titemCategory, err := client.Core.ItemCategories.Delete(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", itemCategory)\n}\n',
+      },
+      ruby: {
+        method: 'core.item_categories.delete',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nitem_category = augno_client.core.item_categories.delete("id")\n\nputs(item_category)',
       },
       http: {
         example:
@@ -5703,6 +6368,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\titemCategory, err := client.Core.ItemCategories.Get(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreItemCategoryGetParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", itemCategory.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.item_categories.retrieve',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nitem_category = augno_client.core.item_categories.retrieve("id")\n\nputs(item_category)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/item-categories/$ID \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -5743,6 +6413,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.ItemCategories.Update',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\titemCategory, err := client.Core.ItemCategories.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\taugno.CoreItemCategoryUpdateParams{\n\t\t\tName: augno.String("Updated Electronics"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", itemCategory.ID)\n}\n',
+      },
+      ruby: {
+        method: 'core.item_categories.update',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nitem_category = augno_client.core.item_categories.update("id")\n\nputs(item_category)',
       },
       http: {
         example:
@@ -5785,6 +6460,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.ItemCategories.ChangeUnitGroup(\n\t\tcontext.TODO(),\n\t\t"unit_group_id",\n\t\taugno.CoreItemCategoryChangeUnitGroupParams{\n\t\t\tID: "id",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.item_categories.change_unit_group',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.item_categories.change_unit_group("unit_group_id", id: "id")\n\nputs(response)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/item-categories/$ID/unit-groups/$UNIT_GROUP_ID \\\n    -X PUT \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -5825,6 +6505,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.Core.ItemCategories.Properties.Remove',
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tproperty, err := client.Core.ItemCategories.Properties.Remove(\n\t\tcontext.TODO(),\n\t\t"property_id",\n\t\taugno.CoreItemCategoryPropertyRemoveParams{\n\t\t\tID: "id",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", property.ID)\n}\n',
+      },
+      ruby: {
+        method: 'core.item_categories.properties.remove',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nproperty = augno_client.core.item_categories.properties.remove("property_id", id: "id")\n\nputs(property)',
       },
       http: {
         example:
@@ -5867,6 +6552,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),\n\t)\n\tresponse, err := client.Core.ItemCategories.Properties.Add(\n\t\tcontext.TODO(),\n\t\t"property_id",\n\t\taugno.CoreItemCategoryPropertyAddParams{\n\t\t\tID: "id",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
       },
+      ruby: {
+        method: 'core.item_categories.properties.add',
+        example:
+          'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.item_categories.properties.add("property_id", id: "id")\n\nputs(response)',
+      },
       http: {
         example:
           'curl https://api.augno.com/v1/core/item-categories/$ID/properties/$PROPERTY_ID \\\n    -X PUT \\\n    -H "Authorization: Bearer $AUGNO_API_KEY"',
@@ -5890,6 +6580,11 @@ const EMBEDDED_READMES: { language: string; content: string }[] = [
     language: 'python',
     content:
       '# Augno Client Python API library\n\n<!-- prettier-ignore -->\n[![PyPI version](https://img.shields.io/pypi/v/augno.svg?label=pypi%20(stable))](https://pypi.org/project/augno/)\n\nThe Augno Client Python library provides convenient access to the Augno Client REST API from any Python 3.9+\napplication. The library includes type definitions for all request params and response fields,\nand offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).\n\n\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Augno Client MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=augno-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImF1Z25vLW1jcCJdLCJlbnYiOnsiQVVHTk9fQVBJX0tFWSI6Ik15IEFQSSBLZXkifX0)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22augno-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22augno-mcp%22%5D%2C%22env%22%3A%7B%22AUGNO_API_KEY%22%3A%22My%20API%20Key%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Documentation\n\nThe REST API documentation can be found on [www.docs.augno.com](https://www.docs.augno.com). The full API of this library can be found in [api.md](api.md).\n\n## Installation\n\n```sh\n# install from this staging repo\npip install git+ssh://git@github.com/stainless-sdks/augno-python.git\n```\n> [!NOTE]\n> Once this package is [published to PyPI](https://www.stainless.com/docs/guides/publish), this will become: `pip install augno`\n\n## Usage\n\nThe full API of this library can be found in [api.md](api.md).\n\n```python\nimport os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n    # defaults to "production".\n    environment="environment_1",\n)\n\nresponse = client.ai.list_tool_groups()\nprint(response.data)\n```\n\nWhile you can provide an `api_key` keyword argument,\nwe recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)\nto add `AUGNO_API_KEY="My API Key"` to your `.env` file\nso that your API Key is not stored in source control.\n\n## Async usage\n\nSimply import `AsyncAugnoClient` instead of `AugnoClient` and use `await` with each API call:\n\n```python\nimport os\nimport asyncio\nfrom augno import AsyncAugnoClient\n\nclient = AsyncAugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n    # defaults to "production".\n    environment="environment_1",\n)\n\nasync def main() -> None:\n  response = await client.ai.list_tool_groups()\n  print(response.data)\n\nasyncio.run(main())\n```\n\nFunctionality between the synchronous and asynchronous clients is otherwise identical.\n\n### With aiohttp\n\nBy default, the async client uses `httpx` for HTTP requests. However, for improved concurrency performance you may also use `aiohttp` as the HTTP backend.\n\nYou can enable this by installing `aiohttp`:\n\n```sh\n# install from this staging repo\npip install \'augno[aiohttp] @ git+ssh://git@github.com/stainless-sdks/augno-python.git\'\n```\n\nThen you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:\n\n```python\nimport os\nimport asyncio\nfrom augno import DefaultAioHttpClient\nfrom augno import AsyncAugnoClient\n\nasync def main() -> None:\n  async with AsyncAugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n    http_client=DefaultAioHttpClient(),\n) as client:\n    response = await client.ai.list_tool_groups()\n    print(response.data)\n\nasyncio.run(main())\n```\n\n\n\n## Using types\n\nNested request parameters are [TypedDicts](https://docs.python.org/3/library/typing.html#typing.TypedDict). Responses are [Pydantic models](https://docs.pydantic.dev) which also provide helper methods for things like:\n\n- Serializing back into JSON, `model.to_json()`\n- Converting to a dictionary, `model.to_dict()`\n\nTyped requests and responses provide autocomplete and documentation within your editor. If you would like to see type errors in VS Code to help catch bugs earlier, set `python.analysis.typeCheckingMode` to `basic`.\n\n## Pagination\n\nList methods in the Augno Client API are paginated.\n\nThis library provides auto-paginating iterators with each list response, so you do not have to request successive pages manually:\n\n```python\nfrom augno import AugnoClient\n\nclient = AugnoClient()\n\nall_ais = []\n# Automatically fetches more pages as needed.\nfor ai in client.ai.list_usage():\n    # Do something with ai here\n    all_ais.append(ai)\nprint(all_ais)\n```\n\nOr, asynchronously:\n\n```python\nimport asyncio\nfrom augno import AsyncAugnoClient\n\nclient = AsyncAugnoClient()\n\nasync def main() -> None:\n    all_ais = []\n    # Iterate through items across all pages, issuing requests as needed.\n    async for ai in client.ai.list_usage():\n        all_ais.append(ai)\n    print(all_ais)\n\nasyncio.run(main())\n```\n\nAlternatively, you can use the `.has_next_page()`, `.next_page_info()`, or  `.get_next_page()` methods for more granular control working with pages:\n\n```python\nfirst_page = await client.ai.list_usage()\nif first_page.has_next_page():\n    print(f"will fetch next page using these details: {first_page.next_page_info()}")\n    next_page = await first_page.get_next_page()\n    print(f"number of items we just fetched: {len(next_page.data)}")\n\n# Remove `await` for non-async usage.\n```\n\nOr just work directly with the returned data:\n\n```python\nfirst_page = await client.ai.list_usage()\n\nprint(f"next page cursor: {first_page.page_info.next_cursor}") # => "next page cursor: ..."\nfor ai in first_page.data:\n    print(ai.id)\n\n# Remove `await` for non-async usage.\n```\n\n## Nested params\n\nNested parameters are dictionaries, typed using `TypedDict`, for example:\n\n```python\nfrom augno import AugnoClient\n\nclient = AugnoClient()\n\nagent_definition = client.ai.agents.create(\n    category_code="inventory",\n    config={\n        "model": "claude-sonnet-4",\n        "provider": "anthropic",\n        "system_prompt": "You are an order processing agent. Parse incoming emails and create draft orders.",\n        "temperature": 0.2,\n        "trigger_config": {\n            "cron_schedule": None,\n            "event_filters": ["email.received"],\n            "timezone": None,\n        },\n    },\n    description="Monitors inventory levels and creates restock alerts.",\n    name="Inventory Monitor",\n    role_id="rl_01gf7a8200er3ar3pkfrb6kk29",\n    slug="inventory_monitor",\n    tools=[{\n        "config_json": "config_json",\n        "require_review": True,\n        "sort_order": 1,\n        "tool_id": "tdef_01k0b1seed0searchproduct0",\n    }],\n    trigger_type="event",\n)\nprint(agent_definition.config)\n```\n\n\n\n## Handling errors\n\nWhen the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `augno.APIConnectionError` is raised.\n\nWhen the API returns a non-success status code (that is, 4xx or 5xx\nresponse), a subclass of `augno.APIStatusError` is raised, containing `status_code` and `response` properties.\n\nAll errors inherit from `augno.APIError`.\n\n```python\nimport augno\nfrom augno import AugnoClient\n\nclient = AugnoClient()\n\ntry:\n    client.ai.list_tool_groups()\nexcept augno.APIConnectionError as e:\n    print("The server could not be reached")\n    print(e.__cause__) # an underlying Exception, likely raised within httpx.\nexcept augno.RateLimitError as e:\n    print("A 429 status code was received; we should back off a bit.")\nexcept augno.APIStatusError as e:\n    print("Another non-200-range status code was received")\n    print(e.status_code)\n    print(e.response)\n```\n\nError codes are as follows:\n\n| Status Code | Error Type                 |\n| ----------- | -------------------------- |\n| 400         | `BadRequestError`          |\n| 401         | `AuthenticationError`      |\n| 403         | `PermissionDeniedError`    |\n| 404         | `NotFoundError`            |\n| 422         | `UnprocessableEntityError` |\n| 429         | `RateLimitError`           |\n| >=500       | `InternalServerError`      |\n| N/A         | `APIConnectionError`       |\n\n### Retries\n\nCertain errors are automatically retried 2 times by default, with a short exponential backoff.\nConnection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,\n429 Rate Limit, and >=500 Internal errors are all retried by default.\n\nYou can use the `max_retries` option to configure or disable retry settings:\n\n```python\nfrom augno import AugnoClient\n\n# Configure the default for all requests:\nclient = AugnoClient(\n    # default is 2\n    max_retries=0,\n)\n\n# Or, configure per-request:\nclient.with_options(max_retries = 5).ai.list_tool_groups()\n```\n\n### Timeouts\n\nBy default requests time out after 1 minute. You can configure this with a `timeout` option,\nwhich accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration) object:\n\n```python\nfrom augno import AugnoClient\n\n# Configure the default for all requests:\nclient = AugnoClient(\n    # 20 seconds (default is 1 minute)\n    timeout=20.0,\n)\n\n# More granular control:\nclient = AugnoClient(\n    timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),\n)\n\n# Override per-request:\nclient.with_options(timeout = 5.0).ai.list_tool_groups()\n```\n\nOn timeout, an `APITimeoutError` is thrown.\n\nNote that requests that time out are [retried twice by default](#retries).\n\n\n\n## Advanced\n\n### Logging\n\nWe use the standard library [`logging`](https://docs.python.org/3/library/logging.html) module.\n\nYou can enable logging by setting the environment variable `AUGNO_CLIENT_LOG` to `info`.\n\n```shell\n$ export AUGNO_CLIENT_LOG=info\n```\n\nOr to `debug` for more verbose logging.\n\n### How to tell whether `None` means `null` or missing\n\nIn an API response, a field may be explicitly `null`, or missing entirely; in either case, its value is `None` in this library. You can differentiate the two cases with `.model_fields_set`:\n\n```py\nif response.my_field is None:\n  if \'my_field\' not in response.model_fields_set:\n    print(\'Got json like {}, without a "my_field" key present at all.\')\n  else:\n    print(\'Got json like {"my_field": null}.\')\n```\n\n### Accessing raw response data (e.g. headers)\n\nThe "raw" Response object can be accessed by prefixing `.with_raw_response.` to any HTTP method call, e.g.,\n\n```py\nfrom augno import AugnoClient\n\nclient = AugnoClient()\nresponse = client.ai.with_raw_response.list_tool_groups()\nprint(response.headers.get(\'X-My-Header\'))\n\nai = response.parse()  # get the object that `ai.list_tool_groups()` would have returned\nprint(ai.data)\n```\n\nThese methods return an [`APIResponse`](https://github.com/stainless-sdks/augno-python/tree/main/src/augno/_response.py) object.\n\nThe async client returns an [`AsyncAPIResponse`](https://github.com/stainless-sdks/augno-python/tree/main/src/augno/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.\n\n#### `.with_streaming_response`\n\nThe above interface eagerly reads the full response body when you make the request, which may not always be what you want.\n\nTo stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.\n\n```python\nwith client.ai.with_streaming_response.list_tool_groups() as response :\n    print(response.headers.get(\'X-My-Header\'))\n\n    for line in response.iter_lines():\n      print(line)\n```\n\nThe context manager is required so that the response will reliably be closed.\n\n### Making custom/undocumented requests\n\nThis library is typed for convenient access to the documented API.\n\nIf you need to access undocumented endpoints, params, or response properties, the library can still be used.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints, you can make requests using `client.get`, `client.post`, and other\nhttp verbs. Options on the client will be respected (such as retries) when making this request.\n\n```py\nimport httpx\n\nresponse = client.post(\n    "/foo",\n    cast_to=httpx.Response,\n    body={"my_param": True},\n)\n\nprint(response.headers.get("x-foo"))\n```\n\n#### Undocumented request params\n\nIf you want to explicitly send an extra param, you can do so with the `extra_query`, `extra_body`, and `extra_headers` request\noptions.\n\n#### Undocumented response properties\n\nTo access undocumented response properties, you can access the extra fields like `response.unknown_prop`. You\ncan also get all the extra fields on the Pydantic model as a dict with\n[`response.model_extra`](https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel.model_extra).\n\n### Configuring the HTTP client\n\nYou can directly override the [httpx client](https://www.python-httpx.org/api/#client) to customize it for your use case, including:\n\n- Support for [proxies](https://www.python-httpx.org/advanced/proxies/)\n- Custom [transports](https://www.python-httpx.org/advanced/transports/)\n- Additional [advanced](https://www.python-httpx.org/advanced/clients/) functionality\n\n```python\nimport httpx\nfrom augno import AugnoClient, DefaultHttpxClient\n\nclient = AugnoClient(\n    # Or use the `AUGNO_CLIENT_BASE_URL` env var\n    base_url="http://my.test.server.example.com:8083",\n    http_client=DefaultHttpxClient(proxy="http://my.test.proxy.example.com", transport=httpx.HTTPTransport(local_address="0.0.0.0")),\n)\n```\n\nYou can also customize the client on a per-request basis by using `with_options()`:\n\n```python\nclient.with_options(http_client=DefaultHttpxClient(...))\n```\n\n### Managing HTTP resources\n\nBy default the library closes underlying HTTP connections whenever the client is [garbage collected](https://docs.python.org/3/reference/datamodel.html#object.__del__). You can manually close the client using the `.close()` method if desired, or with a context manager that closes when exiting.\n\n```py\nfrom augno import AugnoClient\n\nwith AugnoClient() as client:\n  # make requests here\n  ...\n\n# HTTP client is now closed\n```\n\n## Versioning\n\nThis package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:\n\n1. Changes that only affect static types, without breaking runtime behavior.\n2. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_\n3. Changes that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\n\nWe are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/augno-python/issues) with questions, bugs, or suggestions.\n\n### Determining the installed version\n\nIf you\'ve upgraded to the latest version but aren\'t seeing any new features you were expecting then your python environment is likely still using an older version.\n\nYou can determine the version that is being used at runtime with:\n\n```py\nimport augno\nprint(augno.__version__)\n```\n\n## Requirements\n\nPython 3.9 or higher.\n\n## Contributing\n\nSee [the contributing documentation](./CONTRIBUTING.md).\n',
+  },
+  {
+    language: 'ruby',
+    content:
+      '# Augno Client Ruby API library\n\nThe Augno Client Ruby library provides convenient access to the Augno Client REST API from any Ruby 3.2.0+ application. It ships with comprehensive types & docstrings in Yard, RBS, and RBI – [see below](https://github.com/stainless-sdks/augno-ruby#Sorbet) for usage with Sorbet. The standard library\'s `net/http` is used as the HTTP transport, with connection pooling via the `connection_pool` gem.\n\n\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Augno Client MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=augno-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImF1Z25vLW1jcCJdLCJlbnYiOnsiQVVHTk9fQVBJX0tFWSI6Ik15IEFQSSBLZXkifX0)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22augno-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22augno-mcp%22%5D%2C%22env%22%3A%7B%22AUGNO_API_KEY%22%3A%22My%20API%20Key%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Documentation\n\nDocumentation for releases of this gem can be found [on RubyDoc](https://gemdocs.org/gems/augno).\n\nThe REST API documentation can be found on [www.docs.augno.com](https://www.docs.augno.com).\n\n## Installation\n\nTo use this gem, install via Bundler by adding the following to your application\'s `Gemfile`:\n\n```ruby\ngem "augno", "~> 0.0.1"\n```\n\n## Usage\n\n```ruby\nrequire "bundler/setup"\nrequire "augno"\n\naugno_client = Augno::Client.new(\n  api_key: ENV["AUGNO_API_KEY"], # This is the default and can be omitted\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.ai.list_tool_groups\n\nputs(response.data)\n```\n\n\n\n### Pagination\n\nList methods in the Augno Client API are paginated.\n\nThis library provides auto-paginating iterators with each list response, so you do not have to request successive pages manually:\n\n```ruby\npage = augno_client.ai.list_usage\n\n# Fetch single item from page.\nai = page.data[0]\nputs(ai.id)\n\n# Automatically fetches more pages as needed.\npage.auto_paging_each do |ai|\n  puts(ai.id)\nend\n```\n\nAlternatively, you can use the `#next_page?` and `#next_page` methods for more granular control working with pages.\n\n```ruby\nif page.next_page?\n  new_page = page.next_page\n  puts(new_page.data[0].id)\nend\n```\n\n\n\n### Handling errors\n\nWhen the library is unable to connect to the API, or if the API returns a non-success status code (i.e., 4xx or 5xx response), a subclass of `Augno::Errors::APIError` will be thrown:\n\n```ruby\nbegin\n  ai = augno_client.ai.list_tool_groups\nrescue Augno::Errors::APIConnectionError => e\n  puts("The server could not be reached")\n  puts(e.cause)  # an underlying Exception, likely raised within `net/http`\nrescue Augno::Errors::RateLimitError => e\n  puts("A 429 status code was received; we should back off a bit.")\nrescue Augno::Errors::APIStatusError => e\n  puts("Another non-200-range status code was received")\n  puts(e.status)\nend\n```\n\nError codes are as follows:\n\n| Cause            | Error Type                 |\n| ---------------- | -------------------------- |\n| HTTP 400         | `BadRequestError`          |\n| HTTP 401         | `AuthenticationError`      |\n| HTTP 403         | `PermissionDeniedError`    |\n| HTTP 404         | `NotFoundError`            |\n| HTTP 409         | `ConflictError`            |\n| HTTP 422         | `UnprocessableEntityError` |\n| HTTP 429         | `RateLimitError`           |\n| HTTP >= 500      | `InternalServerError`      |\n| Other HTTP error | `APIStatusError`           |\n| Timeout          | `APITimeoutError`          |\n| Network error    | `APIConnectionError`       |\n\n### Retries\n\nCertain errors will be automatically retried 2 times by default, with a short exponential backoff.\n\nConnection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict, 429 Rate Limit, >=500 Internal errors, and timeouts will all be retried by default.\n\nYou can use the `max_retries` option to configure or disable this:\n\n```ruby\n# Configure the default for all requests:\naugno_client = Augno::Client.new(\n  max_retries: 0 # default is 2\n)\n\n# Or, configure per-request:\naugno_client.ai.list_tool_groups(request_options: {max_retries: 5})\n```\n\n### Timeouts\n\nBy default, requests will time out after 60 seconds. You can use the timeout option to configure or disable this:\n\n```ruby\n# Configure the default for all requests:\naugno_client = Augno::Client.new(\n  timeout: nil # default is 60\n)\n\n# Or, configure per-request:\naugno_client.ai.list_tool_groups(request_options: {timeout: 5})\n```\n\nOn timeout, `Augno::Errors::APITimeoutError` is raised.\n\nNote that requests that time out are retried by default.\n\n## Advanced concepts\n\n### BaseModel\n\nAll parameter and response objects inherit from `Augno::Internal::Type::BaseModel`, which provides several conveniences, including:\n\n1. All fields, including unknown ones, are accessible with `obj[:prop]` syntax, and can be destructured with `obj => {prop: prop}` or pattern-matching syntax.\n\n2. Structural equivalence for equality; if two API calls return the same values, comparing the responses with == will return true.\n\n3. Both instances and the classes themselves can be pretty-printed.\n\n4. Helpers such as `#to_h`, `#deep_to_h`, `#to_json`, and `#to_yaml`.\n\n### Making custom or undocumented requests\n\n#### Undocumented properties\n\nYou can send undocumented parameters to any endpoint, and read undocumented response properties, like so:\n\nNote: the `extra_` parameters of the same name overrides the documented parameters.\n\n```ruby\nresponse =\n  augno_client.ai.list_tool_groups(\n    request_options: {\n      extra_query: {my_query_parameter: value},\n      extra_body: {my_body_parameter: value},\n      extra_headers: {"my-header": value}\n    }\n  )\n\nputs(response[:my_undocumented_property])\n```\n\n#### Undocumented request params\n\nIf you want to explicitly send an extra param, you can do so with the `extra_query`, `extra_body`, and `extra_headers` under the `request_options:` parameter when making a request, as seen in the examples above.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints while retaining the benefit of auth, retries, and so on, you can make requests using `client.request`, like so:\n\n```ruby\nresponse = client.request(\n  method: :post,\n  path: \'/undocumented/endpoint\',\n  query: {"dog": "woof"},\n  headers: {"useful-header": "interesting-value"},\n  body: {"hello": "world"}\n)\n```\n\n### Concurrency & connection pooling\n\nThe `Augno::Client` instances are threadsafe, but are only are fork-safe when there are no in-flight HTTP requests.\n\nEach instance of `Augno::Client` has its own HTTP connection pool with a default size of 99. As such, we recommend instantiating the client once per application in most settings.\n\nWhen all available connections from the pool are checked out, requests wait for a new connection to become available, with queue time counting towards the request timeout.\n\nUnless otherwise specified, other classes in the SDK do not have locks protecting their underlying data structure.\n\n## Sorbet\n\nThis library provides comprehensive [RBI](https://sorbet.org/docs/rbi) definitions, and has no dependency on sorbet-runtime.\n\nYou can provide typesafe request parameters like so:\n\n```ruby\naugno_client.ai.list_tool_groups \n```\n\nOr, equivalently:\n\n```ruby\n# Hashes work, but are not typesafe:\naugno_client.ai.list_tool_groups\n\n# You can also splat a full Params class:\nparams = Augno::AIListToolGroupsParams.new\naugno_client.ai.list_tool_groups(**params)\n```\n\n### Enums\n\nSince this library does not depend on `sorbet-runtime`, it cannot provide [`T::Enum`](https://sorbet.org/docs/tenum) instances. Instead, we provide "tagged symbols" instead, which is always a primitive at runtime:\n\n```ruby\n# :scheduled\nputs(Augno::AI::AgentCreateParams::TriggerType::SCHEDULED)\n\n# Revealed type: `T.all(Augno::AI::AgentCreateParams::TriggerType, Symbol)`\nT.reveal_type(Augno::AI::AgentCreateParams::TriggerType::SCHEDULED)\n```\n\nEnum parameters have a "relaxed" type, so you can either pass in enum constants or their literal value:\n\n```ruby\n# Using the enum constants preserves the tagged type information:\naugno_client.ai.agents.create(\n  trigger_type: Augno::AI::AgentCreateParams::TriggerType::SCHEDULED,\n  # …\n)\n\n# Literal values are also permissible:\naugno_client.ai.agents.create(\n  trigger_type: :scheduled,\n  # …\n)\n```\n\n## Versioning\n\nThis package follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions. As the library is in initial development and has a major version of `0`, APIs may change at any time.\n\nThis package considers improvements to the (non-runtime) `*.rbi` and `*.rbs` type definitions to be non-breaking changes.\n\n## Requirements\n\nRuby 3.2.0 or higher.\n\n## Contributing\n\nSee [the contributing documentation](https://github.com/stainless-sdks/augno-ruby/tree/main/CONTRIBUTING.md).\n',
   },
   {
     language: 'typescript',
