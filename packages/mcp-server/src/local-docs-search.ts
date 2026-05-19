@@ -74,6 +74,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.ai.list_tool_groups()\nprint(response.data)',
       },
+      java: {
+        method: 'ai().listToolGroups',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.ai.AiListToolGroupsParams;\nimport com.augno.api.models.ai.AiListToolGroupsResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AiListToolGroupsResponse response = client.ai().listToolGroups();\n    }\n}',
+      },
       kotlin: {
         method: 'ai().listToolGroups',
         example:
@@ -128,6 +133,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.ai.list_tools()\nprint(response.data)',
       },
+      java: {
+        method: 'ai().listTools',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.ai.AiListToolsParams;\nimport com.augno.api.models.ai.AiListToolsResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AiListToolsResponse response = client.ai().listTools();\n    }\n}',
+      },
       kotlin: {
         method: 'ai().listTools',
         example:
@@ -180,6 +190,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'ai.list_usage',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\npage = client.ai.list_usage()\npage = page.data[0]\nprint(page.id)',
+      },
+      java: {
+        method: 'ai().listUsage',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.ai.AiListUsagePage;\nimport com.augno.api.models.ai.AiListUsageParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AiListUsagePage page = client.ai().listUsage();\n    }\n}',
       },
       kotlin: {
         method: 'ai().listUsage',
@@ -238,6 +253,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'ai.agents.list',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagents = client.ai.agents.list()\nprint(agents.data)',
+      },
+      java: {
+        method: 'ai().agents().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.ai.agents.AgentListParams;\nimport com.augno.api.models.ai.agents.AgentListResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AgentListResponse agents = client.ai().agents().list();\n    }\n}',
       },
       kotlin: {
         method: 'ai().agents().list',
@@ -302,6 +322,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_definition = client.ai.agents.create(\n    category_code="inventory",\n    config={\n        "system_prompt": "You are an order processing agent. Parse incoming emails and create draft orders.",\n        "model": "claude-sonnet-4",\n        "provider": "anthropic",\n        "temperature": 0.2,\n        "trigger_config": {\n            "cron_schedule": None,\n            "timezone": None,\n            "event_filters": ["email.received"],\n        },\n    },\n    description="Monitors inventory levels and creates restock alerts.",\n    name="Inventory Monitor",\n    role_id="rl_01gf7a8200er3ar3pkfrb6kk29",\n    slug="inventory_monitor",\n    tools=[{\n        "tool_id": "tdef_01k0b1seed0searchproduct0",\n        "sort_order": 1,\n        "require_review": True,\n    }],\n    trigger_type="event",\n)\nprint(agent_definition.id)',
       },
+      java: {
+        method: 'ai().agents().create',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.ai.agents.AgentCreateParams;\nimport com.augno.api.models.ai.agents.AgentDefinition;\nimport com.augno.api.models.ai.agents.AgentDefinitionConfig;\nimport com.augno.api.models.ai.agents.ToolInput;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AgentCreateParams params = AgentCreateParams.builder()\n            .categoryCode("inventory")\n            .config(AgentDefinitionConfig.builder()\n                .model("claude-sonnet-4")\n                .provider("anthropic")\n                .systemPrompt("You are an order processing agent. Parse incoming emails and create draft orders.")\n                .temperature(0.2)\n                .triggerConfig(AgentDefinitionConfig.TriggerConfig.builder()\n                    .cronSchedule(null)\n                    .addEventFilter("email.received")\n                    .timezone(null)\n                    .build())\n                .build())\n            .description("Monitors inventory levels and creates restock alerts.")\n            .name("Inventory Monitor")\n            .roleId("rl_01gf7a8200er3ar3pkfrb6kk29")\n            .slug("inventory_monitor")\n            .addTool(ToolInput.builder()\n                .configJson("config_json")\n                .requireReview(true)\n                .sortOrder(1L)\n                .toolId("tdef_01k0b1seed0searchproduct0")\n                .build())\n            .triggerType(AgentCreateParams.TriggerType.EVENT)\n            .build();\n        AgentDefinition agentDefinition = client.ai().agents().create(params);\n    }\n}',
+      },
       kotlin: {
         method: 'ai().agents().create',
         example:
@@ -356,6 +381,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent = client.ai.agents.delete(\n    "id",\n)\nprint(agent)',
       },
+      java: {
+        method: 'ai().agents().delete',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.ai.agents.AgentDeleteParams;\nimport com.augno.api.models.ai.agents.AgentDeleteResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AgentDeleteResponse agent = client.ai().agents().delete("id");\n    }\n}',
+      },
       kotlin: {
         method: 'ai().agents().delete',
         example:
@@ -409,6 +439,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'ai.agents.retrieve',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_definition = client.ai.agents.retrieve(\n    id="id",\n)\nprint(agent_definition.id)',
+      },
+      java: {
+        method: 'ai().agents().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.ai.agents.AgentDefinition;\nimport com.augno.api.models.ai.agents.AgentRetrieveParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AgentDefinition agentDefinition = client.ai().agents().retrieve("id");\n    }\n}',
       },
       kotlin: {
         method: 'ai().agents().retrieve',
@@ -475,6 +510,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_definition = client.ai.agents.update(\n    id="id",\n    category_code="inventory",\n    config={\n        "system_prompt": "You are an order processing agent. Parse incoming emails and create draft orders.",\n        "model": "claude-sonnet-4",\n        "provider": "anthropic",\n        "temperature": 0.2,\n        "trigger_config": {\n            "cron_schedule": None,\n            "timezone": None,\n            "event_filters": ["email.received"],\n        },\n    },\n    description="Monitors inventory levels and creates restock alerts.",\n    name="Inventory Monitor",\n    role_id="rl_01gf7a8200er3ar3pkfrb6kk29",\n    slug="inventory_monitor",\n    tools=[{\n        "config_json": "config_json",\n        "require_review": True,\n        "sort_order": 1,\n        "tool_id": "tdef_01k0b1seed0searchproduct0",\n    }],\n    trigger_type="event",\n)\nprint(agent_definition.id)',
       },
+      java: {
+        method: 'ai().agents().update',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.ai.agents.AgentDefinition;\nimport com.augno.api.models.ai.agents.AgentDefinitionConfig;\nimport com.augno.api.models.ai.agents.AgentUpdateParams;\nimport com.augno.api.models.ai.agents.ToolInput;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AgentUpdateParams params = AgentUpdateParams.builder()\n            .id("id")\n            .categoryCode("inventory")\n            .config(AgentDefinitionConfig.builder()\n                .model("claude-sonnet-4")\n                .provider("anthropic")\n                .systemPrompt("You are an order processing agent. Parse incoming emails and create draft orders.")\n                .temperature(0.2)\n                .triggerConfig(AgentDefinitionConfig.TriggerConfig.builder()\n                    .cronSchedule(null)\n                    .addEventFilter("email.received")\n                    .timezone(null)\n                    .build())\n                .build())\n            .description("Monitors inventory levels and creates restock alerts.")\n            .name("Inventory Monitor")\n            .roleId("rl_01gf7a8200er3ar3pkfrb6kk29")\n            .slug("inventory_monitor")\n            .addTool(ToolInput.builder()\n                .configJson("config_json")\n                .requireReview(true)\n                .sortOrder(1L)\n                .toolId("tdef_01k0b1seed0searchproduct0")\n                .build())\n            .triggerType(AgentUpdateParams.TriggerType.EVENT)\n            .build();\n        AgentDefinition agentDefinition = client.ai().agents().update(params);\n    }\n}',
+      },
       kotlin: {
         method: 'ai().agents().update',
         example:
@@ -533,6 +573,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'ai.agents.update_status',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_definition = client.ai.agents.update_status(\n    id="id",\n    status_code="active",\n)\nprint(agent_definition.id)',
+      },
+      java: {
+        method: 'ai().agents().updateStatus',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.ai.agents.AgentDefinition;\nimport com.augno.api.models.ai.agents.AgentUpdateStatusParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AgentUpdateStatusParams params = AgentUpdateStatusParams.builder()\n            .id("id")\n            .statusCode("active")\n            .build();\n        AgentDefinition agentDefinition = client.ai().agents().updateStatus(params);\n    }\n}',
       },
       kotlin: {
         method: 'ai().agents().updateStatus',
@@ -595,6 +640,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\npage = client.ai.alerts.list()\npage = page.data[0]\nprint(page.id)',
       },
+      java: {
+        method: 'ai().alerts().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.ai.alerts.AlertListPage;\nimport com.augno.api.models.ai.alerts.AlertListParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AlertListPage page = client.ai().alerts().list();\n    }\n}',
+      },
       kotlin: {
         method: 'ai().alerts().list',
         example:
@@ -647,6 +697,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'ai.alerts.retrieve',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_alert = client.ai.alerts.retrieve(\n    id="id",\n)\nprint(agent_alert.id)',
+      },
+      java: {
+        method: 'ai().alerts().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.ai.alerts.AgentAlert;\nimport com.augno.api.models.ai.alerts.AlertRetrieveParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AgentAlert agentAlert = client.ai().alerts().retrieve("id");\n    }\n}',
       },
       kotlin: {
         method: 'ai().alerts().retrieve',
@@ -702,6 +757,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_alert = client.ai.alerts.actions.acknowledge(\n    id="id",\n)\nprint(agent_alert.id)',
       },
+      java: {
+        method: 'ai().alerts().actions().acknowledge',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.ai.alerts.AgentAlert;\nimport com.augno.api.models.ai.alerts.actions.ActionAcknowledgeParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AgentAlert agentAlert = client.ai().alerts().actions().acknowledge("id");\n    }\n}',
+      },
       kotlin: {
         method: 'ai().alerts().actions().acknowledge',
         example:
@@ -755,6 +815,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'ai.memories.list',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\npage = client.ai.memories.list()\npage = page.data[0]\nprint(page.id)',
+      },
+      java: {
+        method: 'ai().memories().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.ai.memories.MemoryListPage;\nimport com.augno.api.models.ai.memories.MemoryListParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        MemoryListPage page = client.ai().memories().list();\n    }\n}',
       },
       kotlin: {
         method: 'ai().memories().list',
@@ -818,6 +883,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_memory = client.ai.memories.create(\n    category="preference",\n    content="Customer prefers express shipping on all orders.",\n    importance=0.8,\n    metadata=None,\n)\nprint(agent_memory.id)',
       },
+      java: {
+        method: 'ai().memories().create',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.core.JsonValue;\nimport com.augno.api.models.ai.memories.AgentMemory;\nimport com.augno.api.models.ai.memories.MemoryCreateParams;\nimport java.util.Map;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        MemoryCreateParams params = MemoryCreateParams.builder()\n            .category("preference")\n            .content("Customer prefers express shipping on all orders.")\n            .importance(0.8)\n            .addMetadata(JsonValue.from(<String, Object>Map.of()))\n            .build();\n        AgentMemory agentMemory = client.ai().memories().create(params);\n    }\n}',
+      },
       kotlin: {
         method: 'ai().memories().create',
         example:
@@ -872,6 +942,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nmemory = client.ai.memories.delete(\n    "id",\n)\nprint(memory)',
       },
+      java: {
+        method: 'ai().memories().delete',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.ai.memories.MemoryDeleteParams;\nimport com.augno.api.models.ai.memories.MemoryDeleteResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        MemoryDeleteResponse memory = client.ai().memories().delete("id");\n    }\n}',
+      },
       kotlin: {
         method: 'ai().memories().delete',
         example:
@@ -925,6 +1000,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'ai.memories.retrieve',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_memory = client.ai.memories.retrieve(\n    "id",\n)\nprint(agent_memory.id)',
+      },
+      java: {
+        method: 'ai().memories().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.ai.memories.AgentMemory;\nimport com.augno.api.models.ai.memories.MemoryRetrieveParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AgentMemory agentMemory = client.ai().memories().retrieve("id");\n    }\n}',
       },
       kotlin: {
         method: 'ai().memories().retrieve',
@@ -989,6 +1069,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_memory = client.ai.memories.update(\n    id="id",\n    category="category",\n    content="Customer prefers next-day shipping on all orders.",\n    importance=0.9,\n    metadata=[{}],\n)\nprint(agent_memory.id)',
       },
+      java: {
+        method: 'ai().memories().update',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.core.JsonValue;\nimport com.augno.api.models.ai.memories.AgentMemory;\nimport com.augno.api.models.ai.memories.MemoryUpdateParams;\nimport java.util.Map;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        MemoryUpdateParams params = MemoryUpdateParams.builder()\n            .id("id")\n            .category("category")\n            .content("Customer prefers next-day shipping on all orders.")\n            .importance(0.9)\n            .addMetadata(JsonValue.from(<String, Object>Map.of()))\n            .build();\n        AgentMemory agentMemory = client.ai().memories().update(params);\n    }\n}',
+      },
       kotlin: {
         method: 'ai().memories().update',
         example:
@@ -1050,6 +1135,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\npage = client.ai.runs.list()\npage = page.data[0]\nprint(page.id)',
       },
+      java: {
+        method: 'ai().runs().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.ai.runs.RunListPage;\nimport com.augno.api.models.ai.runs.RunListParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        RunListPage page = client.ai().runs().list();\n    }\n}',
+      },
       kotlin: {
         method: 'ai().runs().list',
         example:
@@ -1106,6 +1196,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'ai.runs.trigger',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_run = client.ai.runs.trigger(\n    agent_definition_id="agdf_01jm4r6700f8nwq3v5hx2d9ktp",\n    input="Process the latest incoming orders.",\n)\nprint(agent_run.id)',
+      },
+      java: {
+        method: 'ai().runs().trigger',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.ai.runs.AgentRun;\nimport com.augno.api.models.ai.runs.RunTriggerParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        RunTriggerParams params = RunTriggerParams.builder()\n            .agentDefinitionId("agdf_01jm4r6700f8nwq3v5hx2d9ktp")\n            .input("Process the latest incoming orders.")\n            .build();\n        AgentRun agentRun = client.ai().runs().trigger(params);\n    }\n}',
       },
       kotlin: {
         method: 'ai().runs().trigger',
@@ -1165,6 +1260,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_run = client.ai.runs.retrieve(\n    id="id",\n)\nprint(agent_run.id)',
       },
+      java: {
+        method: 'ai().runs().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.ai.runs.AgentRun;\nimport com.augno.api.models.ai.runs.RunRetrieveParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AgentRun agentRun = client.ai().runs().retrieve("id");\n    }\n}',
+      },
       kotlin: {
         method: 'ai().runs().retrieve',
         example:
@@ -1221,6 +1321,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'ai.runs.actions.cancel',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_run = client.ai.runs.actions.cancel(\n    id="id",\n)\nprint(agent_run.id)',
+      },
+      java: {
+        method: 'ai().runs().actions().cancel',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.ai.runs.AgentRun;\nimport com.augno.api.models.ai.runs.actions.ActionCancelParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AgentRun agentRun = client.ai().runs().actions().cancel("id");\n    }\n}',
       },
       kotlin: {
         method: 'ai().runs().actions().cancel',
@@ -1282,6 +1387,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nagent_run = client.ai.runs.actions.continue_(\n    id="id",\n    allowed_tool_slugs=["string"],\n    approved_tool_slugs=["string"],\n    message="Yes, proceed with creating the order.",\n)\nprint(agent_run.id)',
       },
+      java: {
+        method: 'ai().runs().actions().continue_',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.ai.runs.AgentRun;\nimport com.augno.api.models.ai.runs.actions.ActionContinueParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ActionContinueParams params = ActionContinueParams.builder()\n            .id("id")\n            .addAllowedToolSlug("string")\n            .addApprovedToolSlug("string")\n            .message("Yes, proceed with creating the order.")\n            .build();\n        AgentRun agentRun = client.ai().runs().actions().continue_(params);\n    }\n}',
+      },
       kotlin: {
         method: 'ai().runs().actions().continue_',
         example:
@@ -1337,6 +1447,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth.api_keys.list',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\napi_keys = client.auth.api_keys.list()\nprint(api_keys.data)',
+      },
+      java: {
+        method: 'auth().apiKeys().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.auth.apikeys.ApiKeyListParams;\nimport com.augno.api.models.auth.apikeys.ApiKeyListResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ApiKeyListResponse apiKeys = client.auth().apiKeys().list();\n    }\n}',
       },
       kotlin: {
         method: 'auth().apiKeys().list',
@@ -1398,6 +1513,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\ncreated_api_key = client.auth.api_keys.create(\n    name="Production API Key",\n    role_id="rl_01gf7a8200er3ar3pkfrb6kk29",\n)\nprint(created_api_key.api_key_info)',
       },
+      java: {
+        method: 'auth().apiKeys().create',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.auth.apikeys.ApiKeyCreateParams;\nimport com.augno.api.models.auth.apikeys.CreatedApiKey;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ApiKeyCreateParams params = ApiKeyCreateParams.builder()\n            .name("Production API Key")\n            .roleId("rl_01gf7a8200er3ar3pkfrb6kk29")\n            .build();\n        CreatedApiKey createdApiKey = client.auth().apiKeys().create(params);\n    }\n}',
+      },
       kotlin: {
         method: 'auth().apiKeys().create',
         example:
@@ -1453,6 +1573,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.auth.api_keys.revoke(\n    "id",\n)\nprint(response)',
       },
+      java: {
+        method: 'auth().apiKeys().revoke',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.auth.apikeys.ApiKeyRevokeParams;\nimport com.augno.api.models.auth.apikeys.ApiKeyRevokeResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ApiKeyRevokeResponse response = client.auth().apiKeys().revoke("id");\n    }\n}',
+      },
       kotlin: {
         method: 'auth().apiKeys().revoke',
         example:
@@ -1506,6 +1631,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth.api_keys.retrieve',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\napi_key = client.auth.api_keys.retrieve(\n    id="id",\n)\nprint(api_key.id)',
+      },
+      java: {
+        method: 'auth().apiKeys().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.auth.apikeys.ApiKey;\nimport com.augno.api.models.auth.apikeys.ApiKeyRetrieveParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ApiKey apiKey = client.auth().apiKeys().retrieve("id");\n    }\n}',
       },
       kotlin: {
         method: 'auth().apiKeys().retrieve',
@@ -1562,6 +1692,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom datetime import datetime\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\ncreated_api_key = client.auth.api_keys.actions.rotate(\n    id="id",\n    expires_at=datetime.fromisoformat("2026-12-31T23:59:59"),\n)\nprint(created_api_key.api_key_info)',
       },
+      java: {
+        method: 'auth().apiKeys().actions().rotate',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.auth.apikeys.CreatedApiKey;\nimport com.augno.api.models.auth.apikeys.actions.ActionRotateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        CreatedApiKey createdApiKey = client.auth().apiKeys().actions().rotate("id");\n    }\n}',
+      },
       kotlin: {
         method: 'auth().apiKeys().actions().rotate',
         example:
@@ -1615,6 +1750,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.list_adjustment_types',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.list_adjustment_types()\nprint(response.data)',
+      },
+      java: {
+        method: 'core().listAdjustmentTypes',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.CoreListAdjustmentTypesParams;\nimport com.augno.api.models.core.CoreListAdjustmentTypesResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        CoreListAdjustmentTypesResponse response = client.core().listAdjustmentTypes();\n    }\n}',
       },
       kotlin: {
         method: 'core().listAdjustmentTypes',
@@ -1670,6 +1810,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_groups.list',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_groups = client.core.account_groups.list()\nprint(account_groups.data)',
+      },
+      java: {
+        method: 'core().accountGroups().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountgroups.AccountGroupListParams;\nimport com.augno.api.models.core.accountgroups.AccountGroupListResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountGroupListResponse accountGroups = client.core().accountGroups().list();\n    }\n}',
       },
       kotlin: {
         method: 'core().accountGroups().list',
@@ -1731,6 +1876,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_group = client.core.account_groups.create(\n    commission_status="commission_applied",\n    freight_status="billed_freight",\n    name="Wholesale Customers",\n    type="pricing_group",\n)\nprint(account_group.id)',
       },
+      java: {
+        method: 'core().accountGroups().create',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountgroups.AccountGroup;\nimport com.augno.api.models.core.accountgroups.AccountGroupCreateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountGroupCreateParams params = AccountGroupCreateParams.builder()\n            .commissionStatus(AccountGroupCreateParams.CommissionStatus.COMMISSION_APPLIED)\n            .freightStatus(AccountGroupCreateParams.FreightStatus.BILLED_FREIGHT)\n            .name("Wholesale Customers")\n            .type(AccountGroupCreateParams.Type.PRICING_GROUP)\n            .build();\n        AccountGroup accountGroup = client.core().accountGroups().create(params);\n    }\n}',
+      },
       kotlin: {
         method: 'core().accountGroups().create',
         example:
@@ -1785,6 +1935,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_group = client.core.account_groups.delete(\n    "id",\n)\nprint(account_group)',
       },
+      java: {
+        method: 'core().accountGroups().delete',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountgroups.AccountGroupDeleteParams;\nimport com.augno.api.models.core.accountgroups.AccountGroupDeleteResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountGroupDeleteResponse accountGroup = client.core().accountGroups().delete("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().accountGroups().delete',
         example:
@@ -1838,6 +1993,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_groups.retrieve',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_group = client.core.account_groups.retrieve(\n    "id",\n)\nprint(account_group.id)',
+      },
+      java: {
+        method: 'core().accountGroups().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountgroups.AccountGroup;\nimport com.augno.api.models.core.accountgroups.AccountGroupRetrieveParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountGroup accountGroup = client.core().accountGroups().retrieve("id");\n    }\n}',
       },
       kotlin: {
         method: 'core().accountGroups().retrieve',
@@ -1900,6 +2060,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_group = client.core.account_groups.update(\n    id="id",\n    name="Updated Wholesale Customers",\n)\nprint(account_group.id)',
       },
+      java: {
+        method: 'core().accountGroups().update',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountgroups.AccountGroup;\nimport com.augno.api.models.core.accountgroups.AccountGroupUpdateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountGroup accountGroup = client.core().accountGroups().update("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().accountGroups().update',
         example:
@@ -1954,6 +2119,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_prices.list',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_prices = client.core.account_prices.list()\nprint(account_prices.data)',
+      },
+      java: {
+        method: 'core().accountPrices().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountprices.AccountPriceListParams;\nimport com.augno.api.models.core.accountprices.AccountPriceListResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountPriceListResponse accountPrices = client.core().accountPrices().list();\n    }\n}',
       },
       kotlin: {
         method: 'core().accountPrices().list',
@@ -2019,6 +2189,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_price = client.core.account_prices.create(\n    attribute_ids=["at_01jm4r6700f8nwq3v5hx2d9ktp"],\n    category_ids=["ic_01jm4r6700f8nwq3v5hx2d9ktp"],\n    product_line_id="pl_01jm4r6700f8nwq3v5hx2d9ktp",\n    rate_denominator_unit_id="un_01jm4r6700f8nwq3v5hx2d9ktp",\n    rate_numerator_unit_id="un_01jm4r6700f8nwq3v5hx2d9ktp",\n    rate_value="25.500000000000000000000000000000",\n    recipient_account_id="ac_01gf7a8200eaj8fke1xvw4h50x",\n)\nprint(account_price.id)',
       },
+      java: {
+        method: 'core().accountPrices().create',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountprices.AccountPrice;\nimport com.augno.api.models.core.accountprices.AccountPriceCreateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountPriceCreateParams params = AccountPriceCreateParams.builder()\n            .addAttributeId("at_01jm4r6700f8nwq3v5hx2d9ktp")\n            .addCategoryId("ic_01jm4r6700f8nwq3v5hx2d9ktp")\n            .productLineId("pl_01jm4r6700f8nwq3v5hx2d9ktp")\n            .rateDenominatorUnitId("un_01jm4r6700f8nwq3v5hx2d9ktp")\n            .rateNumeratorUnitId("un_01jm4r6700f8nwq3v5hx2d9ktp")\n            .rateValue("25.500000000000000000000000000000")\n            .recipientAccountId("ac_01gf7a8200eaj8fke1xvw4h50x")\n            .build();\n        AccountPrice accountPrice = client.core().accountPrices().create(params);\n    }\n}',
+      },
       kotlin: {
         method: 'core().accountPrices().create',
         example:
@@ -2074,6 +2249,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_price = client.core.account_prices.delete(\n    "id",\n)\nprint(account_price)',
       },
+      java: {
+        method: 'core().accountPrices().delete',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountprices.AccountPriceDeleteParams;\nimport com.augno.api.models.core.accountprices.AccountPriceDeleteResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountPriceDeleteResponse accountPrice = client.core().accountPrices().delete("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().accountPrices().delete',
         example:
@@ -2128,6 +2308,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_prices.retrieve',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_price = client.core.account_prices.retrieve(\n    id="id",\n)\nprint(account_price.id)',
+      },
+      java: {
+        method: 'core().accountPrices().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountprices.AccountPrice;\nimport com.augno.api.models.core.accountprices.AccountPriceRetrieveParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountPrice accountPrice = client.core().accountPrices().retrieve("id");\n    }\n}',
       },
       kotlin: {
         method: 'core().accountPrices().retrieve',
@@ -2194,6 +2379,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_price = client.core.account_prices.update(\n    id="id",\n    rate_value="30.000000000000000000000000000000",\n)\nprint(account_price.id)',
       },
+      java: {
+        method: 'core().accountPrices().update',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountprices.AccountPrice;\nimport com.augno.api.models.core.accountprices.AccountPriceUpdateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountPrice accountPrice = client.core().accountPrices().update("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().accountPrices().update',
         example:
@@ -2248,6 +2438,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_statuses = client.core.account_statuses.list()\nprint(account_statuses.data)',
       },
+      java: {
+        method: 'core().accountStatuses().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountstatuses.AccountStatusListParams;\nimport com.augno.api.models.core.accountstatuses.AccountStatusListResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountStatusListResponse accountStatuses = client.core().accountStatuses().list();\n    }\n}',
+      },
       kotlin: {
         method: 'core().accountStatuses().list',
         example:
@@ -2301,6 +2496,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_statuses.retrieve',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_status = client.core.account_statuses.retrieve(\n    "id",\n)\nprint(account_status.id)',
+      },
+      java: {
+        method: 'core().accountStatuses().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountstatuses.AccountStatus;\nimport com.augno.api.models.core.accountstatuses.AccountStatusRetrieveParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountStatus accountStatus = client.core().accountStatuses().retrieve("id");\n    }\n}',
       },
       kotlin: {
         method: 'core().accountStatuses().retrieve',
@@ -2359,6 +2559,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_users.list',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_users = client.core.account_users.list()\nprint(account_users.data)',
+      },
+      java: {
+        method: 'core().accountUsers().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountusers.AccountUserListParams;\nimport com.augno.api.models.core.accountusers.AccountUserListResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountUserListResponse accountUsers = client.core().accountUsers().list();\n    }\n}',
       },
       kotlin: {
         method: 'core().accountUsers().list',
@@ -2425,6 +2630,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_user = client.core.account_users.create(\n    custom_email="custom_email",\n    name="name",\n    password="password",\n    receives_invoice_notifications=True,\n    receives_order_acknowledgements=True,\n    receives_purchase_order_submission_notifications=True,\n    username="username",\n)\nprint(account_user.id)',
       },
+      java: {
+        method: 'core().accountUsers().create',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountusers.AccountUser;\nimport com.augno.api.models.core.accountusers.AccountUserCreateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountUserCreateParams params = AccountUserCreateParams.builder()\n            .customEmail("custom_email")\n            .name("name")\n            .password("password")\n            .receivesInvoiceNotifications(true)\n            .receivesOrderAcknowledgements(true)\n            .receivesPurchaseOrderSubmissionNotifications(true)\n            .username("username")\n            .build();\n        AccountUser accountUser = client.core().accountUsers().create(params);\n    }\n}',
+      },
       kotlin: {
         method: 'core().accountUsers().create',
         example:
@@ -2479,6 +2689,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_user = client.core.account_users.delete(\n    "id",\n)\nprint(account_user)',
       },
+      java: {
+        method: 'core().accountUsers().delete',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountusers.AccountUserDeleteParams;\nimport com.augno.api.models.core.accountusers.AccountUserDeleteResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountUserDeleteResponse accountUser = client.core().accountUsers().delete("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().accountUsers().delete',
         example:
@@ -2532,6 +2747,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_users.retrieve',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_user = client.core.account_users.retrieve(\n    id="id",\n)\nprint(account_user.id)',
+      },
+      java: {
+        method: 'core().accountUsers().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountusers.AccountUser;\nimport com.augno.api.models.core.accountusers.AccountUserRetrieveParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountUser accountUser = client.core().accountUsers().retrieve("id");\n    }\n}',
       },
       kotlin: {
         method: 'core().accountUsers().retrieve',
@@ -2595,6 +2815,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_user = client.core.account_users.update(\n    id="id",\n)\nprint(account_user.id)',
       },
+      java: {
+        method: 'core().accountUsers().update',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountusers.AccountUser;\nimport com.augno.api.models.core.accountusers.AccountUserUpdateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountUser accountUser = client.core().accountUsers().update("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().accountUsers().update',
         example:
@@ -2647,6 +2872,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_users.lock',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.account_users.lock(\n    "id",\n)\nprint(response)',
+      },
+      java: {
+        method: 'core().accountUsers().lock',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountusers.AccountUserLockParams;\nimport com.augno.api.models.core.accountusers.AccountUserLockResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountUserLockResponse response = client.core().accountUsers().lock("id");\n    }\n}',
       },
       kotlin: {
         method: 'core().accountUsers().lock',
@@ -2703,6 +2933,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_user = client.core.account_users.update_notification_preferences(\n    id="id",\n    preferences=[{\n        "enabled": True,\n        "notification_type_code": "notification_type_code",\n    }],\n)\nprint(account_user.id)',
       },
+      java: {
+        method: 'core().accountUsers().updateNotificationPreferences',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountusers.AccountUser;\nimport com.augno.api.models.core.accountusers.AccountUserUpdateNotificationPreferencesParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountUserUpdateNotificationPreferencesParams params = AccountUserUpdateNotificationPreferencesParams.builder()\n            .id("id")\n            .addPreference(AccountUserUpdateNotificationPreferencesParams.Preference.builder()\n                .enabled(true)\n                .notificationTypeCode("notification_type_code")\n                .build())\n            .build();\n        AccountUser accountUser = client.core().accountUsers().updateNotificationPreferences(params);\n    }\n}',
+      },
       kotlin: {
         method: 'core().accountUsers().updateNotificationPreferences',
         example:
@@ -2757,6 +2992,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_users.update_password',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.account_users.update_password(\n    id="id",\n    new_password="new_password",\n    requester_password="requester_password",\n)\nprint(response)',
+      },
+      java: {
+        method: 'core().accountUsers().updatePassword',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountusers.AccountUserUpdatePasswordParams;\nimport com.augno.api.models.core.accountusers.AccountUserUpdatePasswordResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountUserUpdatePasswordParams params = AccountUserUpdatePasswordParams.builder()\n            .id("id")\n            .newPassword("new_password")\n            .requesterPassword("requester_password")\n            .build();\n        AccountUserUpdatePasswordResponse response = client.core().accountUsers().updatePassword(params);\n    }\n}',
       },
       kotlin: {
         method: 'core().accountUsers().updatePassword',
@@ -2813,6 +3053,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.account_users.restore(\n    "id",\n)\nprint(response)',
       },
+      java: {
+        method: 'core().accountUsers().restore',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountusers.AccountUserRestoreParams;\nimport com.augno.api.models.core.accountusers.AccountUserRestoreResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountUserRestoreResponse response = client.core().accountUsers().restore("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().accountUsers().restore',
         example:
@@ -2866,6 +3111,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_users.unlock',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.account_users.unlock(\n    "id",\n)\nprint(response)',
+      },
+      java: {
+        method: 'core().accountUsers().unlock',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountusers.AccountUserUnlockParams;\nimport com.augno.api.models.core.accountusers.AccountUserUnlockResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountUserUnlockResponse response = client.core().accountUsers().unlock("id");\n    }\n}',
       },
       kotlin: {
         method: 'core().accountUsers().unlock',
@@ -2921,6 +3171,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_users.sales_targets.list',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nsales_targets = client.core.account_users.sales_targets.list(\n    id="id",\n)\nprint(sales_targets.data)',
+      },
+      java: {
+        method: 'core().accountUsers().salesTargets().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountusers.salestargets.SalesTargetListParams;\nimport com.augno.api.models.core.accountusers.salestargets.SalesTargetListResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        SalesTargetListResponse salesTargets = client.core().accountUsers().salesTargets().list("id");\n    }\n}',
       },
       kotlin: {
         method: 'core().accountUsers().salesTargets().list',
@@ -2981,6 +3236,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_users.sales_targets.create',
         example:
           'import os\nfrom datetime import datetime\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nsales_target = client.core.account_users.sales_targets.create(\n    id="id",\n    amount_unit_id="amount_unit_id",\n    amount_value="amount_value",\n    end_date=datetime.fromisoformat("2019-12-27T18:11:19.117"),\n    start_date=datetime.fromisoformat("2019-12-27T18:11:19.117"),\n)\nprint(sales_target.id)',
+      },
+      java: {
+        method: 'core().accountUsers().salesTargets().create',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountusers.salestargets.SalesTarget;\nimport com.augno.api.models.core.accountusers.salestargets.SalesTargetCreateParams;\nimport java.time.OffsetDateTime;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        SalesTargetCreateParams params = SalesTargetCreateParams.builder()\n            .id("id")\n            .amountUnitId("amount_unit_id")\n            .amountValue("amount_value")\n            .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))\n            .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))\n            .build();\n        SalesTarget salesTarget = client.core().accountUsers().salesTargets().create(params);\n    }\n}',
       },
       kotlin: {
         method: 'core().accountUsers().salesTargets().create',
@@ -3045,6 +3305,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom datetime import datetime\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nsales_target = client.core.account_users.sales_targets.upsert(\n    target_id="target_id",\n    id="id",\n    amount_unit_id="amount_unit_id",\n    amount_value="amount_value",\n    end_date=datetime.fromisoformat("2019-12-27T18:11:19.117"),\n    start_date=datetime.fromisoformat("2019-12-27T18:11:19.117"),\n)\nprint(sales_target.id)',
       },
+      java: {
+        method: 'core().accountUsers().salesTargets().upsert',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accountusers.salestargets.SalesTarget;\nimport com.augno.api.models.core.accountusers.salestargets.SalesTargetUpsertParams;\nimport java.time.OffsetDateTime;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        SalesTargetUpsertParams params = SalesTargetUpsertParams.builder()\n            .id("id")\n            .targetId("target_id")\n            .amountUnitId("amount_unit_id")\n            .amountValue("amount_value")\n            .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))\n            .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))\n            .build();\n        SalesTarget salesTarget = client.core().accountUsers().salesTargets().upsert(params);\n    }\n}',
+      },
       kotlin: {
         method: 'core().accountUsers().salesTargets().upsert',
         example:
@@ -3101,6 +3366,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.accounts.retrieve_by_slug(\n    "slug",\n)\nprint(response.id)',
       },
+      java: {
+        method: 'core().accounts().retrieveBySlug',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accounts.AccountRetrieveBySlugParams;\nimport com.augno.api.models.core.accounts.AccountRetrieveBySlugResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountRetrieveBySlugResponse response = client.core().accounts().retrieveBySlug("slug");\n    }\n}',
+      },
       kotlin: {
         method: 'core().accounts().retrieveBySlug',
         example:
@@ -3155,6 +3425,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.accounts.retrieve',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount = client.core.accounts.retrieve(\n    id="id",\n)\nprint(account.id)',
+      },
+      java: {
+        method: 'core().accounts().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accounts.Account;\nimport com.augno.api.models.core.accounts.AccountRetrieveParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        Account account = client.core().accounts().retrieve("id");\n    }\n}',
       },
       kotlin: {
         method: 'core().accounts().retrieve',
@@ -3223,6 +3498,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount = client.core.accounts.update(\n    id="id",\n    name="Acme Inc.",\n)\nprint(account.id)',
       },
+      java: {
+        method: 'core().accounts().update',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accounts.Account;\nimport com.augno.api.models.core.accounts.AccountUpdateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        Account account = client.core().accounts().update("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().accounts().update',
         example:
@@ -3276,6 +3556,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.accounts.get_logo_url',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.accounts.get_logo_url(\n    "id",\n)\nprint(response.url)',
+      },
+      java: {
+        method: 'core().accounts().getLogoUrl',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accounts.AccountGetLogoUrlParams;\nimport com.augno.api.models.core.accounts.AccountGetLogoUrlResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountGetLogoUrlResponse response = client.core().accounts().getLogoUrl("id");\n    }\n}',
       },
       kotlin: {
         method: 'core().accounts().getLogoUrl',
@@ -3331,6 +3616,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.accounts.upload_photo(\n    "id",\n)\nprint(response.success)',
       },
+      java: {
+        method: 'core().accounts().uploadPhoto',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accounts.AccountUploadPhotoParams;\nimport com.augno.api.models.core.accounts.AccountUploadPhotoResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountUploadPhotoResponse response = client.core().accounts().uploadPhoto("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().accounts().uploadPhoto',
         example:
@@ -3385,6 +3675,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.accounts.addresses.list',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naddresses = client.core.accounts.addresses.list(\n    "account_id",\n)\nprint(addresses.data)',
+      },
+      java: {
+        method: 'core().accounts().addresses().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accounts.addresses.AddressListParams;\nimport com.augno.api.models.core.accounts.addresses.AddressListResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AddressListResponse addresses = client.core().accounts().addresses().list("account_id");\n    }\n}',
       },
       kotlin: {
         method: 'core().accounts().addresses().list',
@@ -3453,6 +3748,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naddress = client.core.accounts.addresses.create(\n    account_id="account_id",\n    country="US",\n    is_drop_ship=False,\n    name="Headquarters",\n    locality="Springfield",\n    postal_code="62701",\n    state="IL",\n    street_line_1="123 Main St",\n)\nprint(address.id)',
       },
+      java: {
+        method: 'core().accounts().addresses().create',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accounts.addresses.Address;\nimport com.augno.api.models.core.accounts.addresses.AddressCreateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AddressCreateParams params = AddressCreateParams.builder()\n            .accountId("account_id")\n            .country("US")\n            .isDropShip(false)\n            .name("Headquarters")\n            .build();\n        Address address = client.core().accounts().addresses().create(params);\n    }\n}',
+      },
       kotlin: {
         method: 'core().accounts().addresses().create',
         example:
@@ -3507,6 +3807,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.accounts.addresses.delete',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naddress = client.core.accounts.addresses.delete(\n    id="id",\n    account_id="account_id",\n)\nprint(address)',
+      },
+      java: {
+        method: 'core().accounts().addresses().delete',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accounts.addresses.AddressDeleteParams;\nimport com.augno.api.models.core.accounts.addresses.AddressDeleteResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AddressDeleteParams params = AddressDeleteParams.builder()\n            .accountId("account_id")\n            .id("id")\n            .build();\n        AddressDeleteResponse address = client.core().accounts().addresses().delete(params);\n    }\n}',
       },
       kotlin: {
         method: 'core().accounts().addresses().delete',
@@ -3563,6 +3868,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.accounts.addresses.retrieve',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naddress = client.core.accounts.addresses.retrieve(\n    id="id",\n    account_id="account_id",\n)\nprint(address.id)',
+      },
+      java: {
+        method: 'core().accounts().addresses().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accounts.addresses.Address;\nimport com.augno.api.models.core.accounts.addresses.AddressRetrieveParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AddressRetrieveParams params = AddressRetrieveParams.builder()\n            .accountId("account_id")\n            .id("id")\n            .build();\n        Address address = client.core().accounts().addresses().retrieve(params);\n    }\n}',
       },
       kotlin: {
         method: 'core().accounts().addresses().retrieve',
@@ -3633,6 +3943,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naddress = client.core.accounts.addresses.update(\n    id="id",\n    account_id="account_id",\n    name="Warehouse",\n)\nprint(address.id)',
       },
+      java: {
+        method: 'core().accounts().addresses().update',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.accounts.addresses.Address;\nimport com.augno.api.models.core.accounts.addresses.AddressUpdateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AddressUpdateParams params = AddressUpdateParams.builder()\n            .accountId("account_id")\n            .id("id")\n            .build();\n        Address address = client.core().accounts().addresses().update(params);\n    }\n}',
+      },
       kotlin: {
         method: 'core().accounts().addresses().update',
         example:
@@ -3689,6 +4004,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.addresses.autocomplete(\n    input="input",\n)\nprint(response.data)',
       },
+      java: {
+        method: 'core().addresses().autocomplete',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.addresses.AddressAutocompleteParams;\nimport com.augno.api.models.core.addresses.AddressAutocompleteResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AddressAutocompleteParams params = AddressAutocompleteParams.builder()\n            .input("input")\n            .build();\n        AddressAutocompleteResponse response = client.core().addresses().autocomplete(params);\n    }\n}',
+      },
       kotlin: {
         method: 'core().addresses().autocomplete',
         example:
@@ -3743,6 +4063,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.addresses.get_details',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.addresses.get_details(\n    id="id",\n)\nprint(response.address)',
+      },
+      java: {
+        method: 'core().addresses().getDetails',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.addresses.AddressGetDetailsParams;\nimport com.augno.api.models.core.addresses.AddressGetDetailsResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AddressGetDetailsResponse response = client.core().addresses().getDetails("id");\n    }\n}',
       },
       kotlin: {
         method: 'core().addresses().getDetails',
@@ -3806,6 +4131,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.addresses.validate(\n    address_line_1="123 Main St",\n    city="Springfield",\n    country="US",\n    postal_code="62701",\n    state="IL",\n)\nprint(response.is_valid)',
       },
+      java: {
+        method: 'core().addresses().validate',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.addresses.AddressValidateParams;\nimport com.augno.api.models.core.addresses.AddressValidateResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AddressValidateParams params = AddressValidateParams.builder()\n            .addressLine1("123 Main St")\n            .city("Springfield")\n            .country("US")\n            .postalCode("62701")\n            .state("IL")\n            .build();\n        AddressValidateResponse response = client.core().addresses().validate(params);\n    }\n}',
+      },
       kotlin: {
         method: 'core().addresses().validate',
         example:
@@ -3862,6 +4192,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\ncarriers = client.core.carriers.list()\nprint(carriers.data)',
       },
+      java: {
+        method: 'core().carriers().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.carriers.CarrierListParams;\nimport com.augno.api.models.core.carriers.CarrierListResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        CarrierListResponse carriers = client.core().carriers().list();\n    }\n}',
+      },
       kotlin: {
         method: 'core().carriers().list',
         example:
@@ -3916,6 +4251,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.carriers.create',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\ncarrier = client.core.carriers.create(\n    account_number=None,\n    code="fedex",\n    is_portal_enabled=True,\n    name="FedEx",\n)\nprint(carrier.id)',
+      },
+      java: {
+        method: 'core().carriers().create',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.carriers.Carrier;\nimport com.augno.api.models.core.carriers.CarrierCreateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        CarrierCreateParams params = CarrierCreateParams.builder()\n            .accountNumber(null)\n            .code("fedex")\n            .isPortalEnabled(true)\n            .name("FedEx")\n            .build();\n        Carrier carrier = client.core().carriers().create(params);\n    }\n}',
       },
       kotlin: {
         method: 'core().carriers().create',
@@ -3972,6 +4312,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\ncarrier = client.core.carriers.delete(\n    "id",\n)\nprint(carrier)',
       },
+      java: {
+        method: 'core().carriers().delete',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.carriers.CarrierDeleteParams;\nimport com.augno.api.models.core.carriers.CarrierDeleteResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        CarrierDeleteResponse carrier = client.core().carriers().delete("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().carriers().delete',
         example:
@@ -4026,6 +4371,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\ncarrier = client.core.carriers.retrieve(\n    id="id",\n)\nprint(carrier.id)',
       },
+      java: {
+        method: 'core().carriers().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.carriers.Carrier;\nimport com.augno.api.models.core.carriers.CarrierRetrieveParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        Carrier carrier = client.core().carriers().retrieve("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().carriers().retrieve',
         example:
@@ -4079,6 +4429,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.carriers.update',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\ncarrier = client.core.carriers.update(\n    id="id",\n    is_portal_enabled=None,\n    name="FedEx Express",\n)\nprint(carrier.id)',
+      },
+      java: {
+        method: 'core().carriers().update',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.carriers.Carrier;\nimport com.augno.api.models.core.carriers.CarrierUpdateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        CarrierUpdateParams params = CarrierUpdateParams.builder()\n            .id("id")\n            .isPortalEnabled(null)\n            .name("FedEx Express")\n            .build();\n        Carrier carrier = client.core().carriers().update(params);\n    }\n}',
       },
       kotlin: {
         method: 'core().carriers().update',
@@ -4135,6 +4490,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.carriers.get_oauth_status(\n    "id",\n)\nprint(response.status)',
       },
+      java: {
+        method: 'core().carriers().getOAuthStatus',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.carriers.CarrierGetOAuthStatusParams;\nimport com.augno.api.models.core.carriers.CarrierGetOAuthStatusResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        CarrierGetOAuthStatusResponse response = client.core().carriers().getOAuthStatus("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().carriers().getOAuthStatus',
         example:
@@ -4189,6 +4549,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.carriers.options.list',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\noptions = client.core.carriers.options.list(\n    "carrier_id",\n)\nprint(options.data)',
+      },
+      java: {
+        method: 'core().carriers().options().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.carriers.options.OptionListParams;\nimport com.augno.api.models.core.carriers.options.OptionListResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        OptionListResponse options = client.core().carriers().options().list("carrier_id");\n    }\n}',
       },
       kotlin: {
         method: 'core().carriers().options().list',
@@ -4252,6 +4617,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\ncarrier_option = client.core.carriers.options.create(\n    carrier_id="carrier_id",\n    code="ground",\n    is_default=False,\n    is_portal_enabled=True,\n    name="Ground Shipping",\n    service_level_token=None,\n)\nprint(carrier_option.id)',
       },
+      java: {
+        method: 'core().carriers().options().create',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.carriers.options.CarrierOption;\nimport com.augno.api.models.core.carriers.options.OptionCreateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        OptionCreateParams params = OptionCreateParams.builder()\n            .carrierId("carrier_id")\n            .code("ground")\n            .isDefault(false)\n            .isPortalEnabled(true)\n            .name("Ground Shipping")\n            .serviceLevelToken(null)\n            .build();\n        CarrierOption carrierOption = client.core().carriers().options().create(params);\n    }\n}',
+      },
       kotlin: {
         method: 'core().carriers().options().create',
         example:
@@ -4307,6 +4677,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\noption = client.core.carriers.options.delete(\n    id="id",\n    carrier_id="carrier_id",\n)\nprint(option)',
       },
+      java: {
+        method: 'core().carriers().options().delete',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.carriers.options.OptionDeleteParams;\nimport com.augno.api.models.core.carriers.options.OptionDeleteResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        OptionDeleteParams params = OptionDeleteParams.builder()\n            .carrierId("carrier_id")\n            .id("id")\n            .build();\n        OptionDeleteResponse option = client.core().carriers().options().delete(params);\n    }\n}',
+      },
       kotlin: {
         method: 'core().carriers().options().delete',
         example:
@@ -4361,6 +4736,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.carriers.options.retrieve',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\ncarrier_option = client.core.carriers.options.retrieve(\n    id="id",\n    carrier_id="carrier_id",\n)\nprint(carrier_option.id)',
+      },
+      java: {
+        method: 'core().carriers().options().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.carriers.options.CarrierOption;\nimport com.augno.api.models.core.carriers.options.OptionRetrieveParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        OptionRetrieveParams params = OptionRetrieveParams.builder()\n            .carrierId("carrier_id")\n            .id("id")\n            .build();\n        CarrierOption carrierOption = client.core().carriers().options().retrieve(params);\n    }\n}',
       },
       kotlin: {
         method: 'core().carriers().options().retrieve',
@@ -4424,6 +4804,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\ncarrier_option = client.core.carriers.options.update(\n    id="id",\n    carrier_id="carrier_id",\n    code=None,\n    is_default=None,\n    is_portal_enabled=None,\n    name="Express Shipping",\n)\nprint(carrier_option.id)',
       },
+      java: {
+        method: 'core().carriers().options().update',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.carriers.options.CarrierOption;\nimport com.augno.api.models.core.carriers.options.OptionUpdateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        OptionUpdateParams params = OptionUpdateParams.builder()\n            .carrierId("carrier_id")\n            .id("id")\n            .code(null)\n            .isDefault(null)\n            .isPortalEnabled(null)\n            .name("Express Shipping")\n            .build();\n        CarrierOption carrierOption = client.core().carriers().options().update(params);\n    }\n}',
+      },
       kotlin: {
         method: 'core().carriers().options().update',
         example:
@@ -4478,6 +4863,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.carriers.actions.initiate_oauth',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.carriers.actions.initiate_oauth(\n    id="id",\n    redirect_uri="https://app.example.com/carriers/oauth/callback",\n    state=None,\n)\nprint(response.oauth_url)',
+      },
+      java: {
+        method: 'core().carriers().actions().initiateOAuth',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.carriers.actions.ActionInitiateOAuthParams;\nimport com.augno.api.models.core.carriers.actions.ActionInitiateOAuthResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ActionInitiateOAuthParams params = ActionInitiateOAuthParams.builder()\n            .id("id")\n            .redirectUri("https://app.example.com/carriers/oauth/callback")\n            .state(null)\n            .build();\n        ActionInitiateOAuthResponse response = client.core().carriers().actions().initiateOAuth(params);\n    }\n}',
       },
       kotlin: {
         method: 'core().carriers().actions().initiateOAuth',
@@ -4535,6 +4925,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\ncarrier = client.core.carriers.actions.sync_options(\n    "id",\n)\nprint(carrier.id)',
       },
+      java: {
+        method: 'core().carriers().actions().syncOptions',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.carriers.Carrier;\nimport com.augno.api.models.core.carriers.actions.ActionSyncOptionsParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        Carrier carrier = client.core().carriers().actions().syncOptions("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().carriers().actions().syncOptions',
         example:
@@ -4589,6 +4984,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nchild_accounts = client.core.child_accounts.list()\nprint(child_accounts.data)',
       },
+      java: {
+        method: 'core().childAccounts().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.childaccounts.ChildAccountListParams;\nimport com.augno.api.models.core.childaccounts.ChildAccountListResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ChildAccountListResponse childAccounts = client.core().childAccounts().list();\n    }\n}',
+      },
       kotlin: {
         method: 'core().childAccounts().list',
         example:
@@ -4642,6 +5042,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.child_accounts.remove',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nchild_account = client.core.child_accounts.remove(\n    "child_account_id",\n)\nprint(child_account)',
+      },
+      java: {
+        method: 'core().childAccounts().remove',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.childaccounts.ChildAccountRemoveParams;\nimport com.augno.api.models.core.childaccounts.ChildAccountRemoveResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ChildAccountRemoveResponse childAccount = client.core().childAccounts().remove("child_account_id");\n    }\n}',
       },
       kotlin: {
         method: 'core().childAccounts().remove',
@@ -4699,6 +5104,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nchild_account = client.core.child_accounts.add(\n    "child_account_id",\n)\nprint(child_account.id)',
       },
+      java: {
+        method: 'core().childAccounts().add',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.childaccounts.ChildAccount;\nimport com.augno.api.models.core.childaccounts.ChildAccountAddParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ChildAccount childAccount = client.core().childAccounts().add("child_account_id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().childAccounts().add',
         example:
@@ -4753,6 +5163,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.integrations.list',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nintegrations = client.core.integrations.list()\nprint(integrations.data)',
+      },
+      java: {
+        method: 'core().integrations().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.integrations.IntegrationListParams;\nimport com.augno.api.models.core.integrations.IntegrationListResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        IntegrationListResponse integrations = client.core().integrations().list();\n    }\n}',
       },
       kotlin: {
         method: 'core().integrations().list',
@@ -4809,6 +5224,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_integration = client.core.integrations.create(\n    credentials="{\\"privateKey\\":\\"sk_test_...\\",\\"publishableKey\\":\\"pk_test_...\\",\\"webhookSecret\\":\\"whsec_...\\"}",\n    integration_code="stripe",\n    name="My Stripe Integration",\n)\nprint(account_integration.id)',
       },
+      java: {
+        method: 'core().integrations().create',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.integrations.AccountIntegration;\nimport com.augno.api.models.core.integrations.IntegrationCreateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        IntegrationCreateParams params = IntegrationCreateParams.builder()\n            .credentials("{\\"privateKey\\":\\"sk_test_...\\",\\"publishableKey\\":\\"pk_test_...\\",\\"webhookSecret\\":\\"whsec_...\\"}")\n            .integrationCode(IntegrationCreateParams.IntegrationCode.STRIPE)\n            .name("My Stripe Integration")\n            .build();\n        AccountIntegration accountIntegration = client.core().integrations().create(params);\n    }\n}',
+      },
       kotlin: {
         method: 'core().integrations().create',
         example:
@@ -4863,6 +5283,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.integrations.delete',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_integration = client.core.integrations.delete(\n    "id",\n)\nprint(account_integration.id)',
+      },
+      java: {
+        method: 'core().integrations().delete',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.integrations.AccountIntegration;\nimport com.augno.api.models.core.integrations.IntegrationDeleteParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountIntegration accountIntegration = client.core().integrations().delete("id");\n    }\n}',
       },
       kotlin: {
         method: 'core().integrations().delete',
@@ -4919,6 +5344,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_integration = client.core.integrations.update(\n    id="id",\n    name="Updated Stripe Integration",\n)\nprint(account_integration.id)',
       },
+      java: {
+        method: 'core().integrations().update',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.integrations.AccountIntegration;\nimport com.augno.api.models.core.integrations.IntegrationUpdateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountIntegration accountIntegration = client.core().integrations().update("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().integrations().update',
         example:
@@ -4972,6 +5402,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.integrations.stripe.get_publishable_key()\nprint(response.publishable_key)',
       },
+      java: {
+        method: 'core().integrations().stripe().getPublishableKey',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.integrations.stripe.StripeGetPublishableKeyParams;\nimport com.augno.api.models.core.integrations.stripe.StripeGetPublishableKeyResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        StripeGetPublishableKeyResponse response = client.core().integrations().stripe().getPublishableKey();\n    }\n}',
+      },
       kotlin: {
         method: 'core().integrations().stripe().getPublishableKey',
         example:
@@ -5024,6 +5459,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.integrations.stripe.get_status',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.integrations.stripe.get_status()\nprint(response.has_stripe_integration)',
+      },
+      java: {
+        method: 'core().integrations().stripe().getStatus',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.integrations.stripe.StripeGetStatusParams;\nimport com.augno.api.models.core.integrations.stripe.StripeGetStatusResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        StripeGetStatusResponse response = client.core().integrations().stripe().getStatus();\n    }\n}',
       },
       kotlin: {
         method: 'core().integrations().stripe().getStatus',
@@ -5090,6 +5530,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nitems = client.core.items.list()\nprint(items.data)',
       },
+      java: {
+        method: 'core().items().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.items.ItemListParams;\nimport com.augno.api.models.core.items.ItemListResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ItemListResponse items = client.core().items().list();\n    }\n}',
+      },
       kotlin: {
         method: 'core().items().list',
         example:
@@ -5142,6 +5587,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.items.retrieve',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nitem = client.core.items.retrieve(\n    id="id",\n)\nprint(item.id)',
+      },
+      java: {
+        method: 'core().items().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.items.Item;\nimport com.augno.api.models.core.items.ItemRetrieveParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        Item item = client.core().items().retrieve("id");\n    }\n}',
       },
       kotlin: {
         method: 'core().items().retrieve',
@@ -5198,6 +5648,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.items.get_costs(\n    "id",\n)\nprint(response.direct_labor_cost)',
       },
+      java: {
+        method: 'core().items().getCosts',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.items.ItemGetCostsParams;\nimport com.augno.api.models.core.items.ItemGetCostsResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ItemGetCostsResponse response = client.core().items().getCosts("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().items().getCosts',
         example:
@@ -5253,6 +5708,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.items.get_inventory(\n    "id",\n)\nprint(response.available_to_promise)',
       },
+      java: {
+        method: 'core().items().getInventory',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.items.ItemGetInventoryParams;\nimport com.augno.api.models.core.items.ItemGetInventoryResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ItemGetInventoryResponse response = client.core().items().getInventory("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().items().getInventory',
         example:
@@ -5306,6 +5766,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.items.get_trends',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.items.get_trends(\n    id="id",\n    trend_type="trend_type",\n)\nprint(response.object)',
+      },
+      java: {
+        method: 'core().items().getTrends',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.items.ItemGetTrendsParams;\nimport com.augno.api.models.core.items.ItemGetTrendsResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ItemGetTrendsParams params = ItemGetTrendsParams.builder()\n            .id("id")\n            .trendType("trend_type")\n            .build();\n        ItemGetTrendsResponse response = client.core().items().getTrends(params);\n    }\n}',
       },
       kotlin: {
         method: 'core().items().getTrends',
@@ -5361,6 +5826,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.items.actions.export()\nprint(response.count)',
       },
+      java: {
+        method: 'core().items().actions().export',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.items.actions.ActionExportParams;\nimport com.augno.api.models.core.items.actions.ActionExportResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ActionExportResponse response = client.core().items().actions().export();\n    }\n}',
+      },
       kotlin: {
         method: 'core().items().actions().export',
         example:
@@ -5414,6 +5884,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.payment_terms.list',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\npayment_terms = client.core.payment_terms.list()\nprint(payment_terms.data)',
+      },
+      java: {
+        method: 'core().paymentTerms().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.paymentterms.PaymentTermListParams;\nimport com.augno.api.models.core.paymentterms.PaymentTermListResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        PaymentTermListResponse paymentTerms = client.core().paymentTerms().list();\n    }\n}',
       },
       kotlin: {
         method: 'core().paymentTerms().list',
@@ -5469,6 +5944,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\npayment_term = client.core.payment_terms.create(\n    name="Net 30",\n)\nprint(payment_term.id)',
       },
+      java: {
+        method: 'core().paymentTerms().create',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.paymentterms.PaymentTerm;\nimport com.augno.api.models.core.paymentterms.PaymentTermCreateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        PaymentTermCreateParams params = PaymentTermCreateParams.builder()\n            .name("Net 30")\n            .build();\n        PaymentTerm paymentTerm = client.core().paymentTerms().create(params);\n    }\n}',
+      },
       kotlin: {
         method: 'core().paymentTerms().create',
         example:
@@ -5522,6 +6002,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.payment_terms.delete',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\npayment_term = client.core.payment_terms.delete(\n    "id",\n)\nprint(payment_term)',
+      },
+      java: {
+        method: 'core().paymentTerms().delete',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.paymentterms.PaymentTermDeleteParams;\nimport com.augno.api.models.core.paymentterms.PaymentTermDeleteResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        PaymentTermDeleteResponse paymentTerm = client.core().paymentTerms().delete("id");\n    }\n}',
       },
       kotlin: {
         method: 'core().paymentTerms().delete',
@@ -5578,6 +6063,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\npayment_term = client.core.payment_terms.retrieve(\n    "id",\n)\nprint(payment_term.id)',
       },
+      java: {
+        method: 'core().paymentTerms().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.paymentterms.PaymentTerm;\nimport com.augno.api.models.core.paymentterms.PaymentTermRetrieveParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        PaymentTerm paymentTerm = client.core().paymentTerms().retrieve("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().paymentTerms().retrieve',
         example:
@@ -5633,6 +6123,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\npayment_term = client.core.payment_terms.update(\n    id="id",\n    name="Net 60",\n)\nprint(payment_term.id)',
       },
+      java: {
+        method: 'core().paymentTerms().update',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.paymentterms.PaymentTerm;\nimport com.augno.api.models.core.paymentterms.PaymentTermUpdateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        PaymentTerm paymentTerm = client.core().paymentTerms().update("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().paymentTerms().update',
         example:
@@ -5686,6 +6181,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.product_line_access.account_groups.list',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_groups = client.core.product_line_access.account_groups.list()\nprint(account_groups.data)',
+      },
+      java: {
+        method: 'core().productLineAccess().accountGroups().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.productlineaccess.accountgroups.AccountGroupListParams;\nimport com.augno.api.models.core.productlineaccess.accountgroups.AccountGroupListResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountGroupListResponse accountGroups = client.core().productLineAccess().accountGroups().list();\n    }\n}',
       },
       kotlin: {
         method: 'core().productLineAccess().accountGroups().list',
@@ -5741,6 +6241,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nproduct_line_access = client.core.product_line_access.account_groups.create(\n    account_group_id="acgp_01jm4r6700f8nwq3v5hx2d9ktp",\n    product_line_ids=["pl_01jm4r6700f8nwq3v5hx2d9ktp"],\n)\nprint(product_line_access.account_group)',
       },
+      java: {
+        method: 'core().productLineAccess().accountGroups().create',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.productlineaccess.accountgroups.AccountGroupCreateParams;\nimport com.augno.api.models.core.productlineaccess.accountgroups.ProductLineAccess;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountGroupCreateParams params = AccountGroupCreateParams.builder()\n            .accountGroupId("acgp_01jm4r6700f8nwq3v5hx2d9ktp")\n            .addProductLineId("pl_01jm4r6700f8nwq3v5hx2d9ktp")\n            .build();\n        ProductLineAccess productLineAccess = client.core().productLineAccess().accountGroups().create(params);\n    }\n}',
+      },
       kotlin: {
         method: 'core().productLineAccess().accountGroups().create',
         example:
@@ -5794,6 +6299,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.product_line_access.account_groups.delete',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\naccount_group = client.core.product_line_access.account_groups.delete(\n    "account_group_id",\n)\nprint(account_group)',
+      },
+      java: {
+        method: 'core().productLineAccess().accountGroups().delete',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.productlineaccess.accountgroups.AccountGroupDeleteParams;\nimport com.augno.api.models.core.productlineaccess.accountgroups.AccountGroupDeleteResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountGroupDeleteResponse accountGroup = client.core().productLineAccess().accountGroups().delete("account_group_id");\n    }\n}',
       },
       kotlin: {
         method: 'core().productLineAccess().accountGroups().delete',
@@ -5850,6 +6360,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nproduct_line_access = client.core.product_line_access.account_groups.retrieve(\n    "account_group_id",\n)\nprint(product_line_access.account_group)',
       },
+      java: {
+        method: 'core().productLineAccess().accountGroups().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.productlineaccess.accountgroups.AccountGroupRetrieveParams;\nimport com.augno.api.models.core.productlineaccess.accountgroups.ProductLineAccess;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ProductLineAccess productLineAccess = client.core().productLineAccess().accountGroups().retrieve("account_group_id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().productLineAccess().accountGroups().retrieve',
         example:
@@ -5904,6 +6419,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.product_line_access.account_groups.update',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nproduct_line_access = client.core.product_line_access.account_groups.update(\n    account_group_id="account_group_id",\n    product_line_ids=["pl_01jm4r6700f8nwq3v5hx2d9ktp"],\n)\nprint(product_line_access.account_group)',
+      },
+      java: {
+        method: 'core().productLineAccess().accountGroups().update',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.productlineaccess.accountgroups.AccountGroupUpdateParams;\nimport com.augno.api.models.core.productlineaccess.accountgroups.ProductLineAccess;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AccountGroupUpdateParams params = AccountGroupUpdateParams.builder()\n            .accountGroupId("account_group_id")\n            .addProductLineId("pl_01jm4r6700f8nwq3v5hx2d9ktp")\n            .build();\n        ProductLineAccess productLineAccess = client.core().productLineAccess().accountGroups().update(params);\n    }\n}',
       },
       kotlin: {
         method: 'core().productLineAccess().accountGroups().update',
@@ -5960,6 +6480,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nproperties = client.core.properties.list()\nprint(properties.data)',
       },
+      java: {
+        method: 'core().properties().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.properties.PropertyListParams;\nimport com.augno.api.models.core.properties.PropertyListResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        PropertyListResponse properties = client.core().properties().list();\n    }\n}',
+      },
       kotlin: {
         method: 'core().properties().list',
         example:
@@ -6012,6 +6537,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.properties.create',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nproperty = client.core.properties.create(\n    name="Color",\n)\nprint(property.id)',
+      },
+      java: {
+        method: 'core().properties().create',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.properties.Property;\nimport com.augno.api.models.core.properties.PropertyCreateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        PropertyCreateParams params = PropertyCreateParams.builder()\n            .name("Color")\n            .build();\n        Property property = client.core().properties().create(params);\n    }\n}',
       },
       kotlin: {
         method: 'core().properties().create',
@@ -6066,6 +6596,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nproperty = client.core.properties.delete(\n    "id",\n)\nprint(property)',
       },
+      java: {
+        method: 'core().properties().delete',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.properties.PropertyDeleteParams;\nimport com.augno.api.models.core.properties.PropertyDeleteResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        PropertyDeleteResponse property = client.core().properties().delete("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().properties().delete',
         example:
@@ -6119,6 +6654,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nproperty = client.core.properties.retrieve(\n    "id",\n)\nprint(property.id)',
       },
+      java: {
+        method: 'core().properties().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.properties.Property;\nimport com.augno.api.models.core.properties.PropertyRetrieveParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        Property property = client.core().properties().retrieve("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().properties().retrieve',
         example:
@@ -6171,6 +6711,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.properties.update',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nproperty = client.core.properties.update(\n    id="id",\n    name="Size",\n)\nprint(property.id)',
+      },
+      java: {
+        method: 'core().properties().update',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.properties.Property;\nimport com.augno.api.models.core.properties.PropertyUpdateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        Property property = client.core().properties().update("id");\n    }\n}',
       },
       kotlin: {
         method: 'core().properties().update',
@@ -6226,6 +6771,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.properties.attributes.list',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nattributes = client.core.properties.attributes.list(\n    property_id="property_id",\n)\nprint(attributes.data)',
+      },
+      java: {
+        method: 'core().properties().attributes().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.properties.attributes.AttributeListParams;\nimport com.augno.api.models.core.properties.attributes.AttributeListResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AttributeListResponse attributes = client.core().properties().attributes().list("property_id");\n    }\n}',
       },
       kotlin: {
         method: 'core().properties().attributes().list',
@@ -6288,6 +6838,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nattribute = client.core.properties.attributes.create(\n    property_id="property_id",\n    color_code="red",\n    order=1,\n    text="Red",\n)\nprint(attribute.id)',
       },
+      java: {
+        method: 'core().properties().attributes().create',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.properties.attributes.Attribute;\nimport com.augno.api.models.core.properties.attributes.AttributeCreateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AttributeCreateParams params = AttributeCreateParams.builder()\n            .propertyId("property_id")\n            .colorCode("red")\n            .order(1L)\n            .text("Red")\n            .build();\n        Attribute attribute = client.core().properties().attributes().create(params);\n    }\n}',
+      },
       kotlin: {
         method: 'core().properties().attributes().create',
         example:
@@ -6341,6 +6896,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.properties.attributes.delete',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nattribute = client.core.properties.attributes.delete(\n    id="id",\n    property_id="property_id",\n)\nprint(attribute)',
+      },
+      java: {
+        method: 'core().properties().attributes().delete',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.properties.attributes.AttributeDeleteParams;\nimport com.augno.api.models.core.properties.attributes.AttributeDeleteResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AttributeDeleteParams params = AttributeDeleteParams.builder()\n            .propertyId("property_id")\n            .id("id")\n            .build();\n        AttributeDeleteResponse attribute = client.core().properties().attributes().delete(params);\n    }\n}',
       },
       kotlin: {
         method: 'core().properties().attributes().delete',
@@ -6396,6 +6956,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.properties.attributes.retrieve',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nattribute = client.core.properties.attributes.retrieve(\n    id="id",\n    property_id="property_id",\n)\nprint(attribute.id)',
+      },
+      java: {
+        method: 'core().properties().attributes().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.properties.attributes.Attribute;\nimport com.augno.api.models.core.properties.attributes.AttributeRetrieveParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AttributeRetrieveParams params = AttributeRetrieveParams.builder()\n            .propertyId("property_id")\n            .id("id")\n            .build();\n        Attribute attribute = client.core().properties().attributes().retrieve(params);\n    }\n}',
       },
       kotlin: {
         method: 'core().properties().attributes().retrieve',
@@ -6458,6 +7023,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.properties.attributes.update',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nattribute = client.core.properties.attributes.update(\n    id="id",\n    property_id="property_id",\n    text="Blue",\n)\nprint(attribute.id)',
+      },
+      java: {
+        method: 'core().properties().attributes().update',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.properties.attributes.Attribute;\nimport com.augno.api.models.core.properties.attributes.AttributeUpdateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        AttributeUpdateParams params = AttributeUpdateParams.builder()\n            .propertyId("property_id")\n            .id("id")\n            .build();\n        Attribute attribute = client.core().properties().attributes().update(params);\n    }\n}',
       },
       kotlin: {
         method: 'core().properties().attributes().update',
@@ -6530,6 +7100,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\npage = client.core.request_logs.list()\npage = page.data[0]\nprint(page.id)',
       },
+      java: {
+        method: 'core().requestLogs().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.requestlogs.RequestLogListPage;\nimport com.augno.api.models.core.requestlogs.RequestLogListParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        RequestLogListPage page = client.core().requestLogs().list();\n    }\n}',
+      },
       kotlin: {
         method: 'core().requestLogs().list',
         example:
@@ -6583,6 +7158,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.request_logs.retrieve',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nrequest_log = client.core.request_logs.retrieve(\n    id="id",\n)\nprint(request_log.id)',
+      },
+      java: {
+        method: 'core().requestLogs().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.requestlogs.RequestLogRetrieveParams;\nimport com.augno.api.models.core.requestlogs.RequestLogRetrieveResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        RequestLogRetrieveResponse requestLog = client.core().requestLogs().retrieve("id");\n    }\n}',
       },
       kotlin: {
         method: 'core().requestLogs().retrieve',
@@ -6639,6 +7219,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\npage = client.core.sandboxes.list()\npage = page.data[0]\nprint(page.id)',
       },
+      java: {
+        method: 'core().sandboxes().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.sandboxes.SandboxListPage;\nimport com.augno.api.models.core.sandboxes.SandboxListParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        SandboxListPage page = client.core().sandboxes().list();\n    }\n}',
+      },
       kotlin: {
         method: 'core().sandboxes().list',
         example:
@@ -6693,6 +7278,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.sandboxes.create',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nsandbox = client.core.sandboxes.create(\n    mode="blank",\n    name="Integration Testing",\n)\nprint(sandbox.id)',
+      },
+      java: {
+        method: 'core().sandboxes().create',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.sandboxes.Sandbox;\nimport com.augno.api.models.core.sandboxes.SandboxCreateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        SandboxCreateParams params = SandboxCreateParams.builder()\n            .mode(SandboxCreateParams.Mode.BLANK)\n            .name("Integration Testing")\n            .build();\n        Sandbox sandbox = client.core().sandboxes().create(params);\n    }\n}',
       },
       kotlin: {
         method: 'core().sandboxes().create',
@@ -6749,6 +7339,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nsandbox = client.core.sandboxes.delete(\n    "id",\n)\nprint(sandbox)',
       },
+      java: {
+        method: 'core().sandboxes().delete',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.sandboxes.SandboxDeleteParams;\nimport com.augno.api.models.core.sandboxes.SandboxDeleteResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        SandboxDeleteResponse sandbox = client.core().sandboxes().delete("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().sandboxes().delete',
         example:
@@ -6802,6 +7397,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.sandboxes.retrieve',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nsandbox = client.core.sandboxes.retrieve(\n    id="id",\n)\nprint(sandbox.id)',
+      },
+      java: {
+        method: 'core().sandboxes().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.sandboxes.Sandbox;\nimport com.augno.api.models.core.sandboxes.SandboxRetrieveParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        Sandbox sandbox = client.core().sandboxes().retrieve("id");\n    }\n}',
       },
       kotlin: {
         method: 'core().sandboxes().retrieve',
@@ -6857,6 +7457,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.shipping_terms.list',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nshipping_terms = client.core.shipping_terms.list()\nprint(shipping_terms.data)',
+      },
+      java: {
+        method: 'core().shippingTerms().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.shippingterms.ShippingTermListParams;\nimport com.augno.api.models.core.shippingterms.ShippingTermListResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ShippingTermListResponse shippingTerms = client.core().shippingTerms().list();\n    }\n}',
       },
       kotlin: {
         method: 'core().shippingTerms().list',
@@ -6919,6 +7524,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nshipping_term = client.core.shipping_terms.create(\n    free_shipping_carrier_option_ids=["string"],\n    name="Prepaid",\n    type="carrier_rate_freight",\n)\nprint(shipping_term.id)',
       },
+      java: {
+        method: 'core().shippingTerms().create',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.shippingterms.ShippingTerm;\nimport com.augno.api.models.core.shippingterms.ShippingTermCreateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ShippingTermCreateParams params = ShippingTermCreateParams.builder()\n            .addFreeShippingCarrierOptionId("string")\n            .name("Prepaid")\n            .type(ShippingTermCreateParams.Type.CARRIER_RATE_FREIGHT)\n            .build();\n        ShippingTerm shippingTerm = client.core().shippingTerms().create(params);\n    }\n}',
+      },
       kotlin: {
         method: 'core().shippingTerms().create',
         example:
@@ -6974,6 +7584,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nshipping_term = client.core.shipping_terms.delete(\n    "id",\n)\nprint(shipping_term)',
       },
+      java: {
+        method: 'core().shippingTerms().delete',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.shippingterms.ShippingTermDeleteParams;\nimport com.augno.api.models.core.shippingterms.ShippingTermDeleteResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ShippingTermDeleteResponse shippingTerm = client.core().shippingTerms().delete("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().shippingTerms().delete',
         example:
@@ -7028,6 +7643,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.shipping_terms.retrieve',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nshipping_term = client.core.shipping_terms.retrieve(\n    id="id",\n)\nprint(shipping_term.id)',
+      },
+      java: {
+        method: 'core().shippingTerms().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.shippingterms.ShippingTerm;\nimport com.augno.api.models.core.shippingterms.ShippingTermRetrieveParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ShippingTerm shippingTerm = client.core().shippingTerms().retrieve("id");\n    }\n}',
       },
       kotlin: {
         method: 'core().shippingTerms().retrieve',
@@ -7092,6 +7712,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nshipping_term = client.core.shipping_terms.update(\n    id="id",\n    free_shipping_carrier_option_ids=["string"],\n    name="Collect",\n)\nprint(shipping_term.id)',
       },
+      java: {
+        method: 'core().shippingTerms().update',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.shippingterms.ShippingTerm;\nimport com.augno.api.models.core.shippingterms.ShippingTermUpdateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ShippingTermUpdateParams params = ShippingTermUpdateParams.builder()\n            .id("id")\n            .addFreeShippingCarrierOptionId("string")\n            .build();\n        ShippingTerm shippingTerm = client.core().shippingTerms().update(params);\n    }\n}',
+      },
       kotlin: {
         method: 'core().shippingTerms().update',
         example:
@@ -7147,6 +7772,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.units.list',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nunits = client.core.units.list()\nprint(units.data)',
+      },
+      java: {
+        method: 'core().units().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.units.UnitListParams;\nimport com.augno.api.models.core.units.UnitListResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        UnitListResponse units = client.core().units().list();\n    }\n}',
       },
       kotlin: {
         method: 'core().units().list',
@@ -7210,6 +7840,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nunit = client.core.units.create(\n    abbreviation="g",\n    is_base_unit=True,\n    name="Gram",\n    offset_denominator="1.000000000000000000000000000000",\n    offset_numerator="0.000000000000000000000000000000",\n    ratio_denominator="1.000000000000000000000000000000",\n    ratio_numerator="1.000000000000000000000000000000",\n    type="mass",\n)\nprint(unit.id)',
       },
+      java: {
+        method: 'core().units().create',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.units.Unit;\nimport com.augno.api.models.core.units.UnitCreateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        UnitCreateParams params = UnitCreateParams.builder()\n            .abbreviation("g")\n            .isBaseUnit(true)\n            .name("Gram")\n            .offsetDenominator("1.000000000000000000000000000000")\n            .offsetNumerator("0.000000000000000000000000000000")\n            .ratioDenominator("1.000000000000000000000000000000")\n            .ratioNumerator("1.000000000000000000000000000000")\n            .type(UnitCreateParams.Type.MASS)\n            .build();\n        Unit unit = client.core().units().create(params);\n    }\n}',
+      },
       kotlin: {
         method: 'core().units().create',
         example:
@@ -7265,6 +7900,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nunit = client.core.units.delete(\n    "id",\n)\nprint(unit)',
       },
+      java: {
+        method: 'core().units().delete',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.units.UnitDeleteParams;\nimport com.augno.api.models.core.units.UnitDeleteResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        UnitDeleteResponse unit = client.core().units().delete("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().units().delete',
         example:
@@ -7319,6 +7959,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.units.retrieve',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nunit = client.core.units.retrieve(\n    "id",\n)\nprint(unit.id)',
+      },
+      java: {
+        method: 'core().units().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.units.Unit;\nimport com.augno.api.models.core.units.UnitRetrieveParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        Unit unit = client.core().units().retrieve("id");\n    }\n}',
       },
       kotlin: {
         method: 'core().units().retrieve',
@@ -7383,6 +8028,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nunit = client.core.units.update(\n    id="id",\n    abbreviation="kg",\n    name="Kilogram",\n)\nprint(unit.id)',
       },
+      java: {
+        method: 'core().units().update',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.units.Unit;\nimport com.augno.api.models.core.units.UnitUpdateParams;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        Unit unit = client.core().units().update("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().units().update',
         example:
@@ -7438,6 +8088,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nitem_categories = client.core.item_categories.list()\nprint(item_categories.data)',
       },
+      java: {
+        method: 'core().itemCategories().list',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.itemcategories.ItemCategoryListParams;\nimport com.augno.api.models.core.itemcategories.ItemCategoryListResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ItemCategoryListResponse itemCategories = client.core().itemCategories().list();\n    }\n}',
+      },
       kotlin: {
         method: 'core().itemCategories().list',
         example:
@@ -7491,6 +8146,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.item_categories.create',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nitem_category = client.core.item_categories.create(\n    name="Electronics",\n    type="material_category",\n    unit_group_id="ug_01jm4r6700f8nwq3v5hx2d9ktp",\n)\nprint(item_category.id)',
+      },
+      java: {
+        method: 'core().itemCategories().create',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.itemcategories.ItemCategoryCreateParams;\nimport com.augno.api.models.core.itemcategories.ItemCategoryCreateResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ItemCategoryCreateParams params = ItemCategoryCreateParams.builder()\n            .name("Electronics")\n            .type("material_category")\n            .unitGroupId("ug_01jm4r6700f8nwq3v5hx2d9ktp")\n            .build();\n        ItemCategoryCreateResponse itemCategory = client.core().itemCategories().create(params);\n    }\n}',
       },
       kotlin: {
         method: 'core().itemCategories().create',
@@ -7547,6 +8207,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nitem_category = client.core.item_categories.delete(\n    "id",\n)\nprint(item_category)',
       },
+      java: {
+        method: 'core().itemCategories().delete',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.itemcategories.ItemCategoryDeleteParams;\nimport com.augno.api.models.core.itemcategories.ItemCategoryDeleteResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ItemCategoryDeleteResponse itemCategory = client.core().itemCategories().delete("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().itemCategories().delete',
         example:
@@ -7601,6 +8266,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.item_categories.retrieve',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nitem_category = client.core.item_categories.retrieve(\n    id="id",\n)\nprint(item_category.id)',
+      },
+      java: {
+        method: 'core().itemCategories().retrieve',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.itemcategories.ItemCategoryRetrieveParams;\nimport com.augno.api.models.core.itemcategories.ItemCategoryRetrieveResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ItemCategoryRetrieveResponse itemCategory = client.core().itemCategories().retrieve("id");\n    }\n}',
       },
       kotlin: {
         method: 'core().itemCategories().retrieve',
@@ -7657,6 +8327,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nitem_category = client.core.item_categories.update(\n    id="id",\n    name="Updated Electronics",\n)\nprint(item_category.id)',
       },
+      java: {
+        method: 'core().itemCategories().update',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.itemcategories.ItemCategoryUpdateParams;\nimport com.augno.api.models.core.itemcategories.ItemCategoryUpdateResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ItemCategoryUpdateResponse itemCategory = client.core().itemCategories().update("id");\n    }\n}',
+      },
       kotlin: {
         method: 'core().itemCategories().update',
         example:
@@ -7711,6 +8386,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.item_categories.change_unit_group',
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.item_categories.change_unit_group(\n    unit_group_id="unit_group_id",\n    id="id",\n)\nprint(response.id)',
+      },
+      java: {
+        method: 'core().itemCategories().changeUnitGroup',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.itemcategories.ItemCategoryChangeUnitGroupParams;\nimport com.augno.api.models.core.itemcategories.ItemCategoryChangeUnitGroupResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        ItemCategoryChangeUnitGroupParams params = ItemCategoryChangeUnitGroupParams.builder()\n            .id("id")\n            .unitGroupId("unit_group_id")\n            .build();\n        ItemCategoryChangeUnitGroupResponse response = client.core().itemCategories().changeUnitGroup(params);\n    }\n}',
       },
       kotlin: {
         method: 'core().itemCategories().changeUnitGroup',
@@ -7768,6 +8448,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nproperty = client.core.item_categories.properties.remove(\n    property_id="property_id",\n    id="id",\n)\nprint(property.id)',
       },
+      java: {
+        method: 'core().itemCategories().properties().remove',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.itemcategories.properties.PropertyRemoveParams;\nimport com.augno.api.models.core.itemcategories.properties.PropertyRemoveResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        PropertyRemoveParams params = PropertyRemoveParams.builder()\n            .id("id")\n            .propertyId("property_id")\n            .build();\n        PropertyRemoveResponse property = client.core().itemCategories().properties().remove(params);\n    }\n}',
+      },
       kotlin: {
         method: 'core().itemCategories().properties().remove',
         example:
@@ -7824,6 +8509,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom augno import AugnoClient\n\nclient = AugnoClient(\n    api_key=os.environ.get("AUGNO_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.core.item_categories.properties.add(\n    property_id="property_id",\n    id="id",\n)\nprint(response.id)',
       },
+      java: {
+        method: 'core().itemCategories().properties().add',
+        example:
+          'package com.augno.api.example;\n\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.core.itemcategories.properties.PropertyAddParams;\nimport com.augno.api.models.core.itemcategories.properties.PropertyAddResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        AugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\n        PropertyAddParams params = PropertyAddParams.builder()\n            .id("id")\n            .propertyId("property_id")\n            .build();\n        PropertyAddResponse response = client.core().itemCategories().properties().add(params);\n    }\n}',
+      },
       kotlin: {
         method: 'core().itemCategories().properties().add',
         example:
@@ -7872,6 +8562,11 @@ const EMBEDDED_READMES: { language: string; content: string }[] = [
     language: 'go',
     content:
       '# Augno Client Go API Library\n\n<a href="https://pkg.go.dev/github.com/stainless-sdks/augno-go"><img src="https://pkg.go.dev/badge/github.com/stainless-sdks/augno-go.svg" alt="Go Reference"></a>\n\nThe Augno Client Go library provides convenient access to the [Augno Client REST API](https://www.docs.augno.com)\nfrom applications written in Go.\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Augno Client MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=augno-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImF1Z25vLW1jcCJdLCJlbnYiOnsiQVVHTk9fQVBJX0tFWSI6Ik15IEFQSSBLZXkifX0)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22augno-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22augno-mcp%22%5D%2C%22env%22%3A%7B%22AUGNO_API_KEY%22%3A%22My%20API%20Key%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Installation\n\n\n\n```go\nimport (\n\t"github.com/stainless-sdks/augno-go" // imported as SDK_PackageName\n)\n```\n\n\n\nOr to pin the version:\n\n\n\n```sh\ngo get -u \'github.com/stainless-sdks/augno-go@v0.0.1\'\n```\n\n\n\n## Requirements\n\nThis library requires Go 1.22+.\n\n## Usage\n\nThe full API of this library can be found in [api.md](api.md).\n\n```go\npackage main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/augno-go"\n\t"github.com/stainless-sdks/augno-go/option"\n)\n\nfunc main() {\n\tclient := augno.NewClient(\n\t\toption.WithAPIKey("My API Key"),      // defaults to os.LookupEnv("AUGNO_API_KEY")\n\t\toption.WithEnvironmentEnvironment1(), // defaults to option.WithEnvironmentProduction()\n\t)\n\tresponse, err := client.AI.ListToolGroups(context.TODO(), augno.AIListToolGroupsParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Data)\n}\n\n```\n\n### Request fields\n\nAll request parameters are wrapped in a generic `Field` type,\nwhich we use to distinguish zero values from null or omitted fields.\n\nThis prevents accidentally sending a zero value if you forget a required parameter,\nand enables explicitly sending `null`, `false`, `\'\'`, or `0` on optional parameters.\nAny field not specified is not sent.\n\nTo construct fields with values, use the helpers `String()`, `Int()`, `Float()`, or most commonly, the generic `F[T]()`.\nTo send a null, use `Null[T]()`, and to send a nonconforming value, use `Raw[T](any)`. For example:\n\n```go\nparams := FooParams{\n\tName: SDK_PackageName.F("hello"),\n\n\t// Explicitly send `"description": null`\n\tDescription: SDK_PackageName.Null[string](),\n\n\tPoint: SDK_PackageName.F(SDK_PackageName.Point{\n\t\tX: SDK_PackageName.Int(0),\n\t\tY: SDK_PackageName.Int(1),\n\n\t\t// In cases where the API specifies a given type,\n\t\t// but you want to send something else, use `Raw`:\n\t\tZ: SDK_PackageName.Raw[int64](0.01), // sends a float\n\t}),\n}\n```\n\n### Response objects\n\nAll fields in response structs are value types (not pointers or wrappers).\n\nIf a given field is `null`, not present, or invalid, the corresponding field\nwill simply be its zero value.\n\nAll response structs also include a special `JSON` field, containing more detailed\ninformation about each property, which you can use like so:\n\n```go\nif res.Name == "" {\n\t// true if `"name"` is either not present or explicitly null\n\tres.JSON.Name.IsNull()\n\n\t// true if the `"name"` key was not present in the response JSON at all\n\tres.JSON.Name.IsMissing()\n\n\t// When the API returns data that cannot be coerced to the expected type:\n\tif res.JSON.Name.IsInvalid() {\n\t\traw := res.JSON.Name.Raw()\n\n\t\tlegacyName := struct{\n\t\t\tFirst string `json:"first"`\n\t\t\tLast  string `json:"last"`\n\t\t}{}\n\t\tjson.Unmarshal([]byte(raw), &legacyName)\n\t\tname = legacyName.First + " " + legacyName.Last\n\t}\n}\n```\n\nThese `.JSON` structs also include an `Extras` map containing\nany properties in the json response that were not specified\nin the struct. This can be useful for API features not yet\npresent in the SDK.\n\n```go\nbody := res.JSON.ExtraFields["my_unexpected_field"].Raw()\n```\n\n### RequestOptions\n\nThis library uses the functional options pattern. Functions defined in the\n`SDK_PackageOptionName` package return a `RequestOption`, which is a closure that mutates a\n`RequestConfig`. These options can be supplied to the client or at individual\nrequests. For example:\n\n```go\nclient := SDK_PackageName.SDK_ClientInitializerName(\n\t// Adds a header to every request made by the client\n\tSDK_PackageOptionName.WithHeader("X-Some-Header", "custom_header_info"),\n)\n\nclient.AI.ListToolGroups(context.TODO(), ...,\n\t// Override the header\n\tSDK_PackageOptionName.WithHeader("X-Some-Header", "some_other_custom_header_info"),\n\t// Add an undocumented field to the request body, using sjson syntax\n\tSDK_PackageOptionName.WithJSONSet("some.json.path", map[string]string{"my": "object"}),\n)\n```\n\nSee the [full list of request options](https://pkg.go.dev/github.com/stainless-sdks/augno-go/SDK_PackageOptionName).\n\n### Pagination\n\nThis library provides some conveniences for working with paginated list endpoints.\n\nYou can use `.ListAutoPaging()` methods to iterate through items across all pages:\n\n```go\niter := client.AI.ListUsageAutoPaging(context.TODO(), augno.AIListUsageParams{})\n// Automatically fetches more pages as needed.\nfor iter.Next() {\n\taiListUsageResponse := iter.Current()\n\tfmt.Printf("%+v\\n", aiListUsageResponse)\n}\nif err := iter.Err(); err != nil {\n\tpanic(err.Error())\n}\n```\n\nOr you can use simple `.List()` methods to fetch a single page and receive a standard response object\nwith additional helper methods like `.GetNextPage()`, e.g.:\n\n```go\npage, err := client.AI.ListUsage(context.TODO(), augno.AIListUsageParams{})\nfor page != nil {\n\tfor _, ai := range page.Data {\n\t\tfmt.Printf("%+v\\n", ai)\n\t}\n\tpage, err = page.GetNextPage()\n}\nif err != nil {\n\tpanic(err.Error())\n}\n```\n\n### Errors\n\nWhen the API returns a non-success status code, we return an error with type\n`*SDK_PackageName.Error`. This contains the `StatusCode`, `*http.Request`, and\n`*http.Response` values of the request, as well as the JSON of the error body\n(much like other response objects in the SDK).\n\nTo handle errors, we recommend that you use the `errors.As` pattern:\n\n```go\n_, err := client.AI.ListToolGroups(context.TODO(), augno.AIListToolGroupsParams{})\nif err != nil {\n\tvar apierr *augno.Error\n\tif errors.As(err, &apierr) {\n\t\tprintln(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request\n\t\tprintln(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response\n\t}\n\tpanic(err.Error()) // GET "/v1/ai/tool-groups": 400 Bad Request { ... }\n}\n```\n\nWhen other errors occur, they are returned unwrapped; for example,\nif HTTP transport fails, you might receive `*url.Error` wrapping `*net.OpError`.\n\n### Timeouts\n\nRequests do not time out by default; use context to configure a timeout for a request lifecycle.\n\nNote that if a request is [retried](#retries), the context timeout does not start over.\nTo set a per-retry timeout, use `SDK_PackageOptionName.WithRequestTimeout()`.\n\n```go\n// This sets the timeout for the request, including all the retries.\nctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)\ndefer cancel()\nclient.AI.ListToolGroups(\n\tctx,\n\taugno.AIListToolGroupsParams{},\n\t// This sets the per-retry timeout\n\toption.WithRequestTimeout(20*time.Second),\n)\n```\n\n### File uploads\n\nRequest parameters that correspond to file uploads in multipart requests are typed as\n`param.Field[io.Reader]`. The contents of the `io.Reader` will by default be sent as a multipart form\npart with the file name of "anonymous_file" and content-type of "application/octet-stream".\n\nThe file name and content-type can be customized by implementing `Name() string` or `ContentType()\nstring` on the run-time type of `io.Reader`. Note that `os.File` implements `Name() string`, so a\nfile returned by `os.Open` will be sent with the file name on disk.\n\nWe also provide a helper `SDK_PackageName.FileParam(reader io.Reader, filename string, contentType string)`\nwhich can be used to wrap any `io.Reader` with the appropriate file name and content type.\n\n\n\n### Retries\n\nCertain errors will be automatically retried 2 times by default, with a short exponential backoff.\nWe retry by default all connection errors, 408 Request Timeout, 409 Conflict, 429 Rate Limit,\nand >=500 Internal errors.\n\nYou can use the `WithMaxRetries` option to configure or disable this:\n\n```go\n// Configure the default for all requests:\nclient := augno.NewClient(\n\toption.WithMaxRetries(0), // default is 2\n)\n\n// Override per-request:\nclient.AI.ListToolGroups(\n\tcontext.TODO(),\n\taugno.AIListToolGroupsParams{},\n\toption.WithMaxRetries(5),\n)\n```\n\n\n### Accessing raw response data (e.g. response headers)\n\nYou can access the raw HTTP response data by using the `option.WithResponseInto()` request option. This is useful when\nyou need to examine response headers, status codes, or other details.\n\n```go\n// Create a variable to store the HTTP response\nvar response *http.Response\nresponse, err := client.AI.ListToolGroups(\n\tcontext.TODO(),\n\taugno.AIListToolGroupsParams{},\n\toption.WithResponseInto(&response),\n)\nif err != nil {\n\t// handle error\n}\nfmt.Printf("%+v\\n", response)\n\nfmt.Printf("Status Code: %d\\n", response.StatusCode)\nfmt.Printf("Headers: %+#v\\n", response.Header)\n```\n\n### Making custom/undocumented requests\n\nThis library is typed for convenient access to the documented API. If you need to access undocumented\nendpoints, params, or response properties, the library can still be used.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints, you can use `client.Get`, `client.Post`, and other HTTP verbs.\n`RequestOptions` on the client, such as retries, will be respected when making these requests.\n\n```go\nvar (\n    // params can be an io.Reader, a []byte, an encoding/json serializable object,\n    // or a "…Params" struct defined in this library.\n    params map[string]interface{}\n\n    // result can be an []byte, *http.Response, a encoding/json deserializable object,\n    // or a model defined in this library.\n    result *http.Response\n)\nerr := client.Post(context.Background(), "/unspecified", params, &result)\nif err != nil {\n    …\n}\n```\n\n#### Undocumented request params\n\nTo make requests using undocumented parameters, you may use either the `SDK_PackageOptionName.WithQuerySet()`\nor the `SDK_PackageOptionName.WithJSONSet()` methods.\n\n```go\nparams := FooNewParams{\n    ID:   SDK_PackageName.F("id_xxxx"),\n    Data: SDK_PackageName.F(FooNewParamsData{\n        FirstName: SDK_PackageName.F("John"),\n    }),\n}\nclient.Foo.New(context.Background(), params, SDK_PackageOptionName.WithJSONSet("data.last_name", "Doe"))\n```\n\n#### Undocumented response properties\n\nTo access undocumented response properties, you may either access the raw JSON of the response as a string\nwith `result.JSON.RawJSON()`, or get the raw JSON of a particular field on the result with\n`result.JSON.Foo.Raw()`.\n\nAny fields that are not present on the response struct will be saved and can be accessed by `result.JSON.ExtraFields()` which returns the extra fields as a `map[string]Field`.\n\n### Middleware\n\nWe provide `SDK_PackageOptionName.WithMiddleware` which applies the given\nmiddleware to requests.\n\n```go\nfunc Logger(req *http.Request, next SDK_PackageOptionName.MiddlewareNext) (res *http.Response, err error) {\n\t// Before the request\n\tstart := time.Now()\n\tLogReq(req)\n\n\t// Forward the request to the next handler\n\tres, err = next(req)\n\n\t// Handle stuff after the request\n\tend := time.Now()\n\tLogRes(res, err, start - end)\n\n    return res, err\n}\n\nclient := SDK_PackageName.SDK_ClientInitializerName(\n\tSDK_PackageOptionName.WithMiddleware(Logger),\n)\n```\n\nWhen multiple middlewares are provided as variadic arguments, the middlewares\nare applied left to right. If `SDK_PackageOptionName.WithMiddleware` is given\nmultiple times, for example first in the client then the method, the\nmiddleware in the client will run first and the middleware given in the method\nwill run next.\n\nYou may also replace the default `http.Client` with\n`SDK_PackageOptionName.WithHTTPClient(client)`. Only one http client is\naccepted (this overwrites any previous client) and receives requests after any\nmiddleware has been applied.\n\n## Semantic versioning\n\nThis package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:\n\n1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_\n2. Changes that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\n\nWe are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/augno-go/issues) with questions, bugs, or suggestions.\n\n## Contributing\n\nSee [the contributing documentation](./CONTRIBUTING.md).\n',
+  },
+  {
+    language: 'java',
+    content:
+      '# Augno Client Java API Library\n\n\n[![Maven Central](https://img.shields.io/maven-central/v/com.augno.api/augno-client-java)](https://central.sonatype.com/artifact/com.augno.api/augno-client-java/0.0.1)\n[![javadoc](https://javadoc.io/badge2/com.augno.api/augno-client-java/0.0.1/javadoc.svg)](https://javadoc.io/doc/com.augno.api/augno-client-java/0.0.1)\n\n\nThe Augno Client Java SDK provides convenient access to the [Augno Client REST API](https://www.docs.augno.com)   from applications written in Java.\n\n\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Augno Client MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=augno-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImF1Z25vLW1jcCJdLCJlbnYiOnsiQVVHTk9fQVBJX0tFWSI6Ik15IEFQSSBLZXkifX0)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22augno-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22augno-mcp%22%5D%2C%22env%22%3A%7B%22AUGNO_API_KEY%22%3A%22My%20API%20Key%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\nThe REST API documentation can be found on [www.docs.augno.com](https://www.docs.augno.com). Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.augno.api/augno-client-java/0.0.1).\n\n## Installation\n\n### Gradle\n\n~~~kotlin\nimplementation("com.augno.api:augno-client-java:0.0.1")\n~~~\n\n### Maven\n\n~~~xml\n<dependency>\n  <groupId>com.augno.api</groupId>\n  <artifactId>augno-client-java</artifactId>\n  <version>0.0.1</version>\n</dependency>\n~~~\n\n## Requirements\n\nThis library requires Java 8 or later.\n\n## Usage\n\n```java\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.ai.AiListToolGroupsParams;\nimport com.augno.api.models.ai.AiListToolGroupsResponse;\n\n// Configures using the `augnoclient.augnoApiKey` and `augnoclient.baseUrl` system properties\n// Or configures using the `AUGNO_API_KEY` and `AUGNO_CLIENT_BASE_URL` environment variables\nAugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\nAiListToolGroupsResponse response = client.ai().listToolGroups();\n```\n\n## Client configuration\n\nConfigure the client using system properties or environment variables:\n\n```java\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\n\n// Configures using the `augnoclient.augnoApiKey` and `augnoclient.baseUrl` system properties\n// Or configures using the `AUGNO_API_KEY` and `AUGNO_CLIENT_BASE_URL` environment variables\nAugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n```\n\nOr manually:\n\n```java\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\n\nAugnoClientClient client = AugnoClientOkHttpClient.builder()\n    .apiKey("My API Key")\n    .build();\n```\n\nOr using a combination of the two approaches:\n\n```java\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\n\nAugnoClientClient client = AugnoClientOkHttpClient.builder()\n    // Configures using the `augnoclient.augnoApiKey` and `augnoclient.baseUrl` system properties\n    // Or configures using the `AUGNO_API_KEY` and `AUGNO_CLIENT_BASE_URL` environment variables\n    .fromEnv()\n    .apiKey("My API Key")\n    .build();\n```\n\nSee this table for the available options:\n\n| Setter    | System property           | Environment variable    | Required | Default value             |\n| --------- | ------------------------- | ----------------------- | -------- | ------------------------- |\n| `apiKey`  | `augnoclient.augnoApiKey` | `AUGNO_API_KEY`         | false    | -                         |\n| `baseUrl` | `augnoclient.baseUrl`     | `AUGNO_CLIENT_BASE_URL` | true     | `"https://api.augno.com"` |\n\nSystem properties take precedence over environment variables.\n\n> [!TIP]\n> Don\'t create more than one client in the same application. Each client has a connection pool and\n> thread pools, which are more efficient to share between requests.\n\n### Modifying configuration\n\nTo temporarily use a modified client configuration, while reusing the same connection and thread       pools, call `withOptions()` on any client or service:\n\n```java\nimport com.augno.api.client.AugnoClientClient;\n\nAugnoClientClient clientWithOptions = client.withOptions(optionsBuilder -> {\n    optionsBuilder.baseUrl("https://example.com");\n    optionsBuilder.maxRetries(42);\n});\n```\n\nThe `withOptions()` method does not affect the original client or service.\n\n## Requests and responses\n\nTo send a request to the Augno Client API, build an instance of some `Params` class and pass it to the     corresponding client method. When the response is received, it will be deserialized into an instance of     a Java class.\n\nFor example, `client.ai().listToolGroups(...)` should be called with an instance of `AiListToolGroupsParams`, and it     will return an instance of `AiListToolGroupsResponse`.\n\n## Immutability\n\nEach class in the SDK has an associated   [builder](https://blogs.oracle.com/javamagazine/post/exploring-joshua-blochs-builder-design-pattern-in-java)   or factory method for constructing it.\n\nEach class is [immutable](https://docs.oracle.com/javase/tutorial/essential/concurrency/immutable.html)   once constructed. If the class has an associated builder, then it has a `toBuilder()` method, which can   be used to convert it back to a builder for making a modified copy.\n\nBecause each class is immutable, builder modification will _never_ affect already built class instances.\n\n## Asynchronous execution\n\nThe default client is synchronous. To switch to asynchronous execution, call the `async()` method:\n\n```java\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.models.ai.AiListToolGroupsParams;\nimport com.augno.api.models.ai.AiListToolGroupsResponse;\nimport java.util.concurrent.CompletableFuture;\n\n// Configures using the `augnoclient.augnoApiKey` and `augnoclient.baseUrl` system properties\n// Or configures using the `AUGNO_API_KEY` and `AUGNO_CLIENT_BASE_URL` environment variables\nAugnoClientClient client = AugnoClientOkHttpClient.fromEnv();\n\nCompletableFuture<AiListToolGroupsResponse> response = client.async().ai().listToolGroups();\n```\n\nOr create an asynchronous client from the beginning:\n\n```java\nimport com.augno.api.client.AugnoClientClientAsync;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClientAsync;\nimport com.augno.api.models.ai.AiListToolGroupsParams;\nimport com.augno.api.models.ai.AiListToolGroupsResponse;\nimport java.util.concurrent.CompletableFuture;\n\n// Configures using the `augnoclient.augnoApiKey` and `augnoclient.baseUrl` system properties\n// Or configures using the `AUGNO_API_KEY` and `AUGNO_CLIENT_BASE_URL` environment variables\nAugnoClientClientAsync client = AugnoClientOkHttpClientAsync.fromEnv();\n\nCompletableFuture<AiListToolGroupsResponse> response = client.ai().listToolGroups();\n```\n\nThe asynchronous client supports the same options as the synchronous one, except most methods return `CompletableFuture`s.\n\n\n\n\n\n\n\n## Raw responses\n\nThe SDK defines methods that deserialize responses into instances of Java classes.       However, these methods don\'t provide access to the response headers, status code, or the raw response       body.\n\nTo access this data, prefix any HTTP method call on a client or service with `withRawResponse()`:\n\n```java\nimport com.augno.api.core.http.Headers;\nimport com.augno.api.core.http.HttpResponseFor;\nimport com.augno.api.models.ai.AiListToolGroupsParams;\nimport com.augno.api.models.ai.AiListToolGroupsResponse;\n\nHttpResponseFor<AiListToolGroupsResponse> response = client.ai().withRawResponse().listToolGroups();\n\nint statusCode = response.statusCode();\nHeaders headers = response.headers();\n```\n\nYou can still deserialize the response into an instance of a Java class if needed:\n\n```java\nimport com.augno.api.models.ai.AiListToolGroupsResponse;\n\nAiListToolGroupsResponse parsedResponse = response.parse();\n```\n\n## Error handling\n\nThe SDK throws custom unchecked exception types:\n\n- [`AugnoClientServiceException`](augno-client-java-core/src/main/kotlin/com/augno/api/errors/AugnoClientServiceException.kt): Base class for HTTP errors. See this table for which exception       subclass is thrown for each HTTP status code:\n\n  | Status | Exception                                          |\n  | ------ | -------------------------------------------------- |\n  | 400    | [`BadRequestException`](augno-client-java-core/src/main/kotlin/com/augno/api/errors/BadRequestException.kt)           |\n  | 401    | [`UnauthorizedException`](augno-client-java-core/src/main/kotlin/com/augno/api/errors/UnauthorizedException.kt)         |\n  | 403    | [`PermissionDeniedException`](augno-client-java-core/src/main/kotlin/com/augno/api/errors/PermissionDeniedException.kt)     |\n  | 404    | [`NotFoundException`](augno-client-java-core/src/main/kotlin/com/augno/api/errors/NotFoundException.kt)             |\n  | 422    | [`UnprocessableEntityException`](augno-client-java-core/src/main/kotlin/com/augno/api/errors/UnprocessableEntityException.kt)  |\n  | 429    | [`RateLimitException`](augno-client-java-core/src/main/kotlin/com/augno/api/errors/RateLimitException.kt)            |\n  | 5xx    | [`InternalServerException`](augno-client-java-core/src/main/kotlin/com/augno/api/errors/InternalServerException.kt)       |\n  | others | [`UnexpectedStatusCodeException`](augno-client-java-core/src/main/kotlin/com/augno/api/errors/UnexpectedStatusCodeException.kt) |\n\n- [`AugnoClientIoException`](augno-client-java-core/src/main/kotlin/com/augno/api/errors/AugnoClientIoException.kt): I/O networking errors.\n\n- [`AugnoClientRetryableException`](augno-client-java-core/src/main/kotlin/com/augno/api/errors/AugnoClientRetryableException.kt): Generic error indicating a failure that could be retried by the client.\n\n- [`AugnoClientInvalidDataException`](augno-client-java-core/src/main/kotlin/com/augno/api/errors/AugnoClientInvalidDataException.kt): Failure to interpret successfully parsed data. For example,       when accessing a property that\'s supposed to be required, but the API unexpectedly omitted it from the       response.\n\n- [`AugnoClientException`](augno-client-java-core/src/main/kotlin/com/augno/api/errors/AugnoClientException.kt): Base class for all exceptions. Most errors will result in one of the       previously mentioned ones, but completely generic errors may be thrown using the base class.\n\n## Pagination\n\nThe SDK defines methods that return a paginated lists of results. It provides convenient ways to access     the results either one page at a time or item-by-item across all pages.\n\n### Auto-pagination\n\nTo iterate through all results across all pages, use the `autoPager()` method, which automatically     fetches more pages as needed.\n\nWhen using the synchronous client, the method returns an [`Iterable`](https://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html)\n\n```java\nimport com.augno.api.models.ai.AiListUsagePage;\nimport com.augno.api.models.ai.AiListUsageResponse;\n\nAiListUsagePage page = client.ai().listUsage();\n\n// Process as an Iterable\nfor (AiListUsageResponse ai : page.autoPager()) {\n    System.out.println(ai);\n}\n\n// Process as a Stream\npage.autoPager()\n    .stream()\n    .limit(50)\n    .forEach(ai -> System.out.println(ai));\n```\n\nWhen using the asynchronous client, the method returns an [`AsyncStreamResponse`](augno-client-java-core/src/main/kotlin/com/augno/api/core/http/AsyncStreamResponse.kt):\n\n```java\nimport com.augno.api.core.http.AsyncStreamResponse;\nimport com.augno.api.models.ai.AiListUsagePageAsync;\nimport com.augno.api.models.ai.AiListUsageResponse;\nimport java.util.Optional;\nimport java.util.concurrent.CompletableFuture;\n\nCompletableFuture<AiListUsagePageAsync> pageFuture = client.async().ai().listUsage();\n\npageFuture.thenRun(page -> page.autoPager().subscribe(ai -> {\n    System.out.println(ai);\n}));\n\n// If you need to handle errors or completion of the stream\npageFuture.thenRun(page -> page.autoPager().subscribe(new AsyncStreamResponse.Handler<>() {\n    @Override\n    public void onNext(AiListUsageResponse ai) {\n        System.out.println(ai);\n    }\n\n    @Override\n    public void onComplete(Optional<Throwable> error) {\n        if (error.isPresent()) {\n            System.out.println("Something went wrong!");\n            throw new RuntimeException(error.get());\n        } else {\n            System.out.println("No more!");\n        }\n    }\n}));\n\n// Or use futures\npageFuture.thenRun(page -> page.autoPager()\n    .subscribe(ai -> {\n        System.out.println(ai);\n    })\n    .onCompleteFuture()\n    .whenComplete((unused, error) -> {\n        if (error != null) {\n            System.out.println("Something went wrong!");\n            throw new RuntimeException(error);\n        } else {\n            System.out.println("No more!");\n        }\n    }));\n```\n\n### Manual pagination\n\nTo access individual page items and manually request the next page, use the `items()`,\n`hasNextPage()`, and `nextPage()` methods:\n\n```java\nimport com.augno.api.models.ai.AiListUsagePage;\nimport com.augno.api.models.ai.AiListUsageResponse;\n\nAiListUsagePage page = client.ai().listUsage();\nwhile (true) {\n    for (AiListUsageResponse ai : page.items()) {\n        System.out.println(ai);\n    }\n\n    if (!page.hasNextPage()) {\n        break;\n    }\n\n    page = page.nextPage();\n}\n```\n\n## Logging\n\nEnable logging by setting the `AUGNO_CLIENT_LOG` environment variable to   `info`:\n\n```sh\nexport AUGNO_CLIENT_LOG=info\n```\n\nOr to `debug` for more verbose logging:\n\n```sh\nexport AUGNO_CLIENT_LOG=debug\n```\n\nOr configure the client manually using the `logLevel` method:\n\n```java\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.core.LogLevel;\n\nAugnoClientClient client = AugnoClientOkHttpClient.builder()\n    .fromEnv()\n    .logLevel(LogLevel.INFO)\n    .build();\n```\n\n## ProGuard and R8\n\nAlthough the SDK uses reflection, it is still usable with     [ProGuard](https://github.com/Guardsquare/proguard) and     [R8](https://developer.android.com/topic/performance/app-optimization/enable-app-optimization) because     `augno-client-java-core` is published with a     [configuration file](augno-client-java-core/src/main/resources/META-INF/proguard/augno-client-java-core.pro) containing     [keep rules](https://www.guardsquare.com/manual/configuration/usage).\n\nProGuard and R8 should automatically detect and use the published rules, but you can also manually copy     the keep rules if necessary.\n\n\n\n\n\n## Jackson\n\nThe SDK depends on [Jackson](https://github.com/FasterXML/jackson) for JSON     serialization/deserialization. It is compatible with version 2.13.4 or higher,     but depends on version 2.18.2 by default.\n\nThe SDK throws an exception if it detects an incompatible Jackson version at runtime (e.g. if the     default version was overridden in your Maven or Gradle config).\n\nIf the SDK threw an exception, but you\'re _certain_ the version is compatible, then disable the version     check using the `checkJacksonVersionCompatibility` on [`AugnoClientOkHttpClient`](augno-client-java-client-okhttp/src/main/kotlin/com/augno/api/client/okhttp/AugnoClientOkHttpClient.kt) or     [`AugnoClientOkHttpClientAsync`](augno-client-java-client-okhttp/src/main/kotlin/com/augno/api/client/okhttp/AugnoClientOkHttpClientAsync.kt).\n\n> [!CAUTION]\n> We make no guarantee that the SDK works correctly when the Jackson version check is disabled.\n\nAlso note that there are bugs in older Jackson versions that can affect the SDK. We don\'t work around all     Jackson bugs ([example](https://github.com/FasterXML/jackson-databind/issues/3240)) and expect users to     upgrade Jackson for those instead.\n\n## Network options\n\n### Retries\n\nThe SDK automatically retries 2 times by default, with a short exponential backoff between requests.\n\nOnly the following error types are retried:\n- Connection errors (for example, due to a network connectivity problem)\n- 408 Request Timeout\n- 409 Conflict\n- 429 Rate Limit\n- 5xx Internal\n\nThe API may also explicitly instruct the SDK to retry or not retry a request.\n\nTo set a custom number of retries, configure the client using the `maxRetries` method:\n\n```java\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\n\nAugnoClientClient client = AugnoClientOkHttpClient.builder()\n    .fromEnv()\n    .maxRetries(4)\n    .build();\n```\n\n### Timeouts\n\nRequests time out after 1 minute by default.\n\nTo set a custom timeout, configure the method call using the `timeout` method:\n\n```java\nimport com.augno.api.models.ai.AiListToolGroupsResponse;\n\nAiListToolGroupsResponse response = client.ai().listToolGroups(RequestOptions.builder().timeout(Duration.ofSeconds(30)).build());\n```\n\nOr configure the default for all method calls at the client level:\n\n```java\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport java.time.Duration;\n\nAugnoClientClient client = AugnoClientOkHttpClient.builder()\n    .fromEnv()\n    .timeout(Duration.ofSeconds(30))\n    .build();\n```\n\n### Proxies\n\nTo route requests through a proxy, configure the client using the `proxy` method:\n\n```java\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport java.net.InetSocketAddress;\nimport java.net.Proxy;\n\nAugnoClientClient client = AugnoClientOkHttpClient.builder()\n    .fromEnv()\n    .proxy(new Proxy(\n      Proxy.Type.HTTP, new InetSocketAddress(\n        "https://example.com", 8080\n      )\n    ))\n    .build();\n```\n\nIf the proxy responds with `407 Proxy Authentication Required`, supply credentials by also   configuring `proxyAuthenticator`:\n\n```java\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport com.augno.api.core.http.ProxyAuthenticator;\n\nAugnoClientClient client = AugnoClientOkHttpClient.builder()\n    .fromEnv()\n    .proxy(...)\n    // Or a custom implementation of `ProxyAuthenticator`.\n    .proxyAuthenticator(ProxyAuthenticator.basic("username", "password"))\n    .build();\n```\n\n### Connection pooling\n\nTo customize the underlying OkHttp connection pool, configure the client using the   `maxIdleConnections` and `keepAliveDuration` methods:\n\n```java\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\nimport java.time.Duration;\n\nAugnoClientClient client = AugnoClientOkHttpClient.builder()\n    .fromEnv()\n    // If `maxIdleConnections` is set, then `keepAliveDuration` must be set, and vice versa.\n    .maxIdleConnections(10)\n    .keepAliveDuration(Duration.ofMinutes(2))\n    .build();\n```\n\nIf both options are unset, OkHttp\'s default connection pool settings are used.\n\n### HTTPS\n\n> [!NOTE]\n> Most applications should not call these methods, and instead use the system defaults. The defaults include\n> special optimizations that can be lost if the implementations are modified.\n\nTo configure how HTTPS connections are secured, configure the client using the `sslSocketFactory`,   `trustManager`, and `hostnameVerifier` methods:\n\n```java\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\n\nAugnoClientClient client = AugnoClientOkHttpClient.builder()\n    .fromEnv()\n    // If `sslSocketFactory` is set, then `trustManager` must be set, and vice versa.\n    .sslSocketFactory(yourSSLSocketFactory)\n    .trustManager(yourTrustManager)\n    .hostnameVerifier(yourHostnameVerifier)\n    .build();\n```\n\n### Environments\n\nThe SDK sends requests to the production by default. To send requests to a different     environment, configure the client like so:\n\n```java\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\n\nAugnoClientClient client = AugnoClientOkHttpClient.builder()\n    .fromEnv()\n    .environment1()\n    .build();\n```\n\n### Custom HTTP client\n\nThe SDK consists of three artifacts:\n- `augno-client-java-core`\n  - Contains core SDK logic\n  - Does not depend on [OkHttp](https://square.github.io/okhttp)\n  - Exposes [`AugnoClientClient`](augno-client-java-core/src/main/kotlin/com/augno/api/client/AugnoClientClient.kt), [`AugnoClientClientAsync`](augno-client-java-core/src/main/kotlin/com/augno/api/client/AugnoClientClientAsync.kt),             [`AugnoClientClientImpl`](augno-client-java-core/src/main/kotlin/com/augno/api/client/AugnoClientClientImpl.kt), and [`AugnoClientClientAsyncImpl`](augno-client-java-core/src/main/kotlin/com/augno/api/client/AugnoClientClientAsyncImpl.kt), all of which can             work with any HTTP client\n- `augno-client-java-client-okhttp`\n  - Depends on [OkHttp](https://square.github.io/okhttp)\n  - Exposes [`AugnoClientOkHttpClient`](augno-client-java-client-okhttp/src/main/kotlin/com/augno/api/client/okhttp/AugnoClientOkHttpClient.kt) and [`AugnoClientOkHttpClientAsync`](augno-client-java-client-okhttp/src/main/kotlin/com/augno/api/client/okhttp/AugnoClientOkHttpClientAsync.kt), which             provide a way to construct [`AugnoClientClientImpl`](augno-client-java-core/src/main/kotlin/com/augno/api/client/AugnoClientClientImpl.kt) and             [`AugnoClientClientAsyncImpl`](augno-client-java-core/src/main/kotlin/com/augno/api/client/AugnoClientClientAsyncImpl.kt), respectively, using OkHttp\n- `augno-client-java`\n  - Depends on and exposes the APIs of both `augno-client-java-core` and `augno-client-java-client-okhttp`\n  - Does not have its own logic\n\nThis structure allows replacing the SDK\'s default HTTP client without pulling in unnecessary dependencies.\n\n#### Customized [`OkHttpClient`](https://square.github.io/okhttp/3.x/okhttp/okhttp3/OkHttpClient.html)\n\n> [!TIP]\n> Try the available [network options](#network-options) before replacing the default client.\n\nTo use a customized `OkHttpClient`:\n\n1. Replace your [`augno-client-java` dependency](#installation) with `augno-client-java-core`\n2. Copy `augno-client-java-client-okhttp`\'s [`OkHttpClient`](augno-client-java-client-okhttp/src/main/kotlin/com/augno/api/client/okhttp/OkHttpClient.kt) class into your code and        customize it\n3. Construct [`AugnoClientClientImpl`](augno-client-java-core/src/main/kotlin/com/augno/api/client/AugnoClientClientImpl.kt) or [`AugnoClientClientAsyncImpl`](augno-client-java-core/src/main/kotlin/com/augno/api/client/AugnoClientClientAsyncImpl.kt), similarly to        [`AugnoClientOkHttpClient`](augno-client-java-client-okhttp/src/main/kotlin/com/augno/api/client/okhttp/AugnoClientOkHttpClient.kt) or [`AugnoClientOkHttpClientAsync`](augno-client-java-client-okhttp/src/main/kotlin/com/augno/api/client/okhttp/AugnoClientOkHttpClientAsync.kt), using your        customized client\n\n### Completely custom HTTP client\n\nTo use a completely custom HTTP client:\n\n1. Replace your [`augno-client-java` dependency](#installation) with `augno-client-java-core`\n2. Write a class that implements the [`HttpClient`](augno-client-java-core/src/main/kotlin/com/augno/api/core/http/HttpClient.kt) interface\n3. Construct [`AugnoClientClientImpl`](augno-client-java-core/src/main/kotlin/com/augno/api/client/AugnoClientClientImpl.kt) or [`AugnoClientClientAsyncImpl`](augno-client-java-core/src/main/kotlin/com/augno/api/client/AugnoClientClientAsyncImpl.kt), similarly to        [`AugnoClientOkHttpClient`](augno-client-java-client-okhttp/src/main/kotlin/com/augno/api/client/okhttp/AugnoClientOkHttpClient.kt) or [`AugnoClientOkHttpClientAsync`](augno-client-java-client-okhttp/src/main/kotlin/com/augno/api/client/okhttp/AugnoClientOkHttpClientAsync.kt), using your new        client class\n\n## Undocumented API functionality\n\nThe SDK is typed for convenient usage of the documented API. However, it also supports working with undocumented or not yet supported parts of the API.\n\n### Parameters\n\nTo set undocumented parameters, call the `putAdditionalHeader`, `putAdditionalQueryParam`, or       `putAdditionalBodyProperty` methods on any `Params` class:\n\n```java\nimport com.augno.api.core.JsonValue;\nimport com.augno.api.models.ai.AiListToolGroupsParams;\n\nAiListToolGroupsParams params = AiListToolGroupsParams.builder()\n    .putAdditionalHeader("Secret-Header", "42")\n    .putAdditionalQueryParam("secret_query_param", "42")\n    .putAdditionalBodyProperty("secretProperty", JsonValue.from("42"))\n    .build();\n```\n\nThese can be accessed on the built object later using the `_additionalHeaders()`,       `_additionalQueryParams()`, and `_additionalBodyProperties()` methods.\n\nTo set undocumented parameters on _nested_ headers, query params, or body classes, call the         `putAdditionalProperty` method on the nested class:\n\n```java\nimport com.augno.api.core.JsonValue;\nimport com.augno.api.models.ai.agents.AgentCreateParams;\nimport com.augno.api.models.ai.agents.AgentDefinitionConfig;\n\nAgentCreateParams params = AgentCreateParams.builder()\n    .config(AgentDefinitionConfig.builder()\n        .putAdditionalProperty("secretProperty", JsonValue.from("42"))\n        .build())\n    .build();\n```\n\nThese properties can be accessed on the nested built object later using the         `_additionalProperties()` method.\n\nTo set a documented parameter or property to an undocumented or not yet supported _value_, pass a       [`JsonValue`](augno-client-java-core/src/main/kotlin/com/augno/api/core/Values.kt) object to its setter:\n\n```java\nimport com.augno.api.models.ai.AiListToolGroupsParams;\n\nAiListToolGroupsParams params = AiListToolGroupsParams.builder().build();\n```\n\nThe most straightforward way to create a [`JsonValue`](augno-client-java-core/src/main/kotlin/com/augno/api/core/Values.kt) is using its       `from(...)` method:\n\n```java\nimport com.augno.api.core.JsonValue;\nimport java.util.List;\nimport java.util.Map;\n\n// Create primitive JSON values\nJsonValue nullValue = JsonValue.from(null);\nJsonValue booleanValue = JsonValue.from(true);\nJsonValue numberValue = JsonValue.from(42);\nJsonValue stringValue = JsonValue.from("Hello World!");\n\n// Create a JSON array value equivalent to `["Hello", "World"]`\nJsonValue arrayValue = JsonValue.from(List.of(\n  "Hello", "World"\n));\n\n// Create a JSON object value equivalent to `{ "a": 1, "b": 2 }`\nJsonValue objectValue = JsonValue.from(Map.of(\n  "a", 1,\n  "b", 2\n));\n\n// Create an arbitrarily nested JSON equivalent to:\n// {\n//   "a": [1, 2],\n//   "b": [3, 4]\n// }\nJsonValue complexValue = JsonValue.from(Map.of(\n  "a", List.of(\n    1, 2\n  ),\n  "b", List.of(\n    3, 4\n  )\n));\n```\n\nNormally a `Builder` class\'s `build` method will throw         [`IllegalStateException`](https://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html)         if any required parameter or property is unset.\n\nTo forcibly omit a required parameter or property, pass [`JsonMissing`](augno-client-java-core/src/main/kotlin/com/augno/api/core/Values.kt):\n\n```java\nimport com.augno.api.core.JsonMissing;\nimport com.augno.api.models.ai.AiListToolGroupsParams;\nimport com.augno.api.models.ai.agents.AgentCreateParams;\nimport com.augno.api.models.ai.agents.AgentDefinitionConfig;\nimport com.augno.api.models.ai.agents.ToolInput;\n\nAiListToolGroupsParams params = AgentCreateParams.builder()\n    .config(AgentDefinitionConfig.builder()\n        .model("claude-sonnet-4")\n        .provider("anthropic")\n        .systemPrompt("You are an order processing agent. Parse incoming emails and create draft orders.")\n        .temperature(0.2)\n        .triggerConfig(AgentDefinitionConfig.TriggerConfig.builder()\n            .cronSchedule(null)\n            .addEventFilter("email.received")\n            .timezone(null)\n            .build())\n        .build())\n    .description("Monitors inventory levels and creates restock alerts.")\n    .name("Inventory Monitor")\n    .roleId("rl_01gf7a8200er3ar3pkfrb6kk29")\n    .slug("inventory_monitor")\n    .addTool(ToolInput.builder()\n        .configJson("config_json")\n        .requireReview(true)\n        .sortOrder(1L)\n        .toolId("tdef_01k0b1seed0searchproduct0")\n        .build())\n    .triggerType(AgentCreateParams.TriggerType.EVENT)\n    .categoryCode(JsonMissing.of())\n    .build();\n```\n\n### Response properties\n\nTo access undocumented response properties, call the `_additionalProperties()` method:\n\n```java\nimport com.augno.api.core.JsonValue;\nimport java.util.Map;\n\nMap<String, JsonValue> additionalProperties = client.ai().listToolGroups(params)._additionalProperties();\nJsonValue secretPropertyValue = additionalProperties.get("secretProperty");\n\nString result = secretPropertyValue.accept(new JsonValue.Visitor<>() {\n    @Override\n    public String visitNull() {\n        return "It\'s null!";\n    }\n\n    @Override\n    public String visitBoolean(boolean value) {\n        return "It\'s a boolean!";\n    }\n\n    @Override\n    public String visitNumber(Number value) {\n        return "It\'s a number!";\n    }\n\n    // Other methods include `visitMissing`, `visitString`, `visitArray`, and `visitObject`\n    // The default implementation of each unimplemented method delegates to `visitDefault`, which throws by default, but can also be overridden\n});\n```\n\nTo access a property\'s raw JSON value, which may be undocumented, call its `_` prefixed method:\n\n```java\nimport com.augno.api.core.JsonField;\nimport java.util.Optional;\n\nJsonField<Object> field = client.ai().listToolGroups(params)._field();\n\nif (field.isMissing()) {\n  // The property is absent from the JSON response\n} else if (field.isNull()) {\n  // The property was set to literal null\n} else {\n  // Check if value was provided as a string\n  // Other methods include `asNumber()`, `asBoolean()`, etc.\n  Optional<String> jsonString = field.asString();\n\n  // Try to deserialize into a custom type\n  MyClass myObject = field.asUnknown().orElseThrow().convert(MyClass.class);\n}\n```\n\n### Response validation\n\nIn rare cases, the API may return a response that doesn\'t match the expected type. For example, the SDK     may expect a property to contain a `String`, but the API could return something else.\n\nBy default, the SDK will not throw an exception in this case. It will throw     [`AugnoClientInvalidDataException`](augno-client-java-core/src/main/kotlin/com/augno/api/errors/AugnoClientInvalidDataException.kt) only if you directly access the property.\n\nValidating the response is _not_ forwards compatible with new types from the API for existing fields.\n\nIf you would still prefer to check that the response is completely well-typed upfront, then either call     `validate()`:\n\n```java\nimport com.augno.api.models.ai.AiListToolGroupsResponse;\n\nAiListToolGroupsResponse response = client.ai().listToolGroups(params).validate();\n```\n\nOr configure the method call to validate the response using the `responseValidation` method:\n\n```java\nimport com.augno.api.models.ai.AiListToolGroupsResponse;\n\nAiListToolGroupsResponse response = client.ai().listToolGroups(RequestOptions.builder().responseValidation(true).build());\n```\n\nOr configure the default for all method calls at the client level:\n\n```java\nimport com.augno.api.client.AugnoClientClient;\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient;\n\nAugnoClientClient client = AugnoClientOkHttpClient.builder()\n    .fromEnv()\n    .responseValidation(true)\n    .build();\n```\n\n## FAQ\n\n### Why don\'t you use plain `enum` classes?\n\nJava `enum` classes are not trivially   [forwards compatible](https://www.stainless.com/blog/making-java-enums-forwards-compatible). Using them in   the SDK could cause runtime exceptions if the API is updated to respond with a new enum value.\n\n### Why do you represent fields using `JsonField<T>` instead of just plain `T`?\n\nUsing `JsonField<T>` enables a few features:\n\n- Allowing usage of [undocumented API functionality](#undocumented-api-functionality)\n- Lazily [validating the API response against the expected shape](#response-validation)\n- Representing absent vs explicitly null values\n\n### Why don\'t you use [`data` classes](https://kotlinlang.org/docs/data-classes.html)?\n\nIt is not [backwards compatible to add new fields to a data class](https://kotlinlang.org/docs/api-guidelines-backward-compatibility.html#avoid-using-data-classes-in-your-api)   and we don\'t want to introduce a breaking change every time we add a field to a class.\n\n### Why don\'t you use checked exceptions?\n\nChecked exceptions are widely considered a mistake in the Java programming language. In fact, they were   omitted from Kotlin for this reason.\n\nChecked exceptions:\n\n- Are verbose to handle\n- Encourage error handling at the wrong level of abstraction, where nothing can be done about the error\n- Are tedious to propagate due to the [function coloring problem](https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function)\n- Don\'t play well with lambdas (also due to the function coloring problem)\n\n## Semantic versioning\n\nThis package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:\n\n1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_\n2. Changes that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\n\nWe are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/augno-java/issues) with questions, bugs, or suggestions.\n',
   },
   {
     language: 'kotlin',
