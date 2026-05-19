@@ -98,6 +98,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'ai list_tool_groups',
         example: "augno ai list-tool-groups \\\n  --api-key 'My API Key'",
       },
+      php: {
+        method: 'ai->listToolGroups',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->ai->listToolGroups(include: ['tools']);\n\nvar_dump($response);",
+      },
       csharp: {
         method: 'AI.ListToolGroups',
         example:
@@ -157,6 +162,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'ai list_tools',
         example: "augno ai list-tools \\\n  --api-key 'My API Key'",
       },
+      php: {
+        method: 'ai->listTools',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->ai->listTools(include: ['group']);\n\nvar_dump($response);",
+      },
       csharp: {
         method: 'AI.ListTools',
         example:
@@ -214,6 +224,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'ai list_usage',
         example: "augno ai list-usage \\\n  --api-key 'My API Key'",
+      },
+      php: {
+        method: 'ai->listUsage',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$page = $client->ai->listUsage(cursor: 'cursor', days: 0, limit: 0);\n\nvar_dump($page);",
       },
       csharp: {
         method: 'AI.ListUsage',
@@ -277,6 +292,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'agents list',
         example: "augno ai:agents list \\\n  --api-key 'My API Key'",
+      },
+      php: {
+        method: 'ai->agents->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$agents = $client->ai->agents->list(\n  definitionType: ['string'],\n  include: ['config'],\n  status: ['active'],\n  triggerType: ['string'],\n);\n\nvar_dump($agents);",
       },
       csharp: {
         method: 'AI.Agents.List',
@@ -347,6 +367,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno ai:agents create \\\n  --api-key 'My API Key' \\\n  --category-code inventory \\\n  --config '{model: claude-sonnet-4, provider: anthropic, system_prompt: You are an order processing agent. Parse incoming emails and create draft orders., temperature: 0.2, trigger_config: {cron_schedule: null, event_filters: [email.received], timezone: null}}' \\\n  --description 'Monitors inventory levels and creates restock alerts.' \\\n  --name 'Inventory Monitor' \\\n  --role-id rl_01gf7a8200er3ar3pkfrb6kk29 \\\n  --slug inventory_monitor \\\n  --tool '{config_json: config_json, require_review: true, sort_order: 1, tool_id: tdef_01k0b1seed0searchproduct0}' \\\n  --trigger-type event",
       },
+      php: {
+        method: 'ai->agents->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$agentDefinition = $client->ai->agents->create(\n  categoryCode: 'inventory',\n  config: [\n    'model' => 'claude-sonnet-4',\n    'provider' => 'anthropic',\n    'systemPrompt' => 'You are an order processing agent. Parse incoming emails and create draft orders.',\n    'temperature' => 0.2,\n    'triggerConfig' => [\n      'cronSchedule' => null,\n      'eventFilters' => ['email.received'],\n      'timezone' => null,\n    ],\n  ],\n  description: 'Monitors inventory levels and creates restock alerts.',\n  name: 'Inventory Monitor',\n  roleID: 'rl_01gf7a8200er3ar3pkfrb6kk29',\n  slug: 'inventory_monitor',\n  tools: [\n    [\n      'configJson' => 'config_json',\n      'requireReview' => true,\n      'sortOrder' => 1,\n      'toolID' => 'tdef_01k0b1seed0searchproduct0',\n    ],\n  ],\n  triggerType: 'event',\n  include: ['config'],\n);\n\nvar_dump($agentDefinition);",
+      },
       csharp: {
         method: 'AI.Agents.Create',
         example:
@@ -404,6 +429,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'agents delete',
         example: "augno ai:agents delete \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'ai->agents->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$agent = $client->ai->agents->delete('id');\n\nvar_dump($agent);",
       },
       csharp: {
         method: 'AI.Agents.Delete',
@@ -463,6 +493,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'agents retrieve',
         example: "augno ai:agents retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'ai->agents->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$agentDefinition = $client->ai->agents->retrieve('id', include: ['config']);\n\nvar_dump($agentDefinition);",
       },
       csharp: {
         method: 'AI.Agents.Retrieve',
@@ -535,6 +570,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno ai:agents update \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --category-code inventory \\\n  --config '{model: claude-sonnet-4, provider: anthropic, system_prompt: You are an order processing agent. Parse incoming emails and create draft orders., temperature: 0.2, trigger_config: {cron_schedule: null, event_filters: [email.received], timezone: null}}' \\\n  --description 'Monitors inventory levels and creates restock alerts.' \\\n  --name 'Inventory Monitor' \\\n  --role-id rl_01gf7a8200er3ar3pkfrb6kk29 \\\n  --slug inventory_monitor \\\n  --tool '{config_json: config_json, require_review: true, sort_order: 1, tool_id: tdef_01k0b1seed0searchproduct0}' \\\n  --trigger-type event",
       },
+      php: {
+        method: 'ai->agents->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$agentDefinition = $client->ai->agents->update(\n  'id',\n  categoryCode: 'inventory',\n  config: [\n    'model' => 'claude-sonnet-4',\n    'provider' => 'anthropic',\n    'systemPrompt' => 'You are an order processing agent. Parse incoming emails and create draft orders.',\n    'temperature' => 0.2,\n    'triggerConfig' => [\n      'cronSchedule' => null,\n      'eventFilters' => ['email.received'],\n      'timezone' => null,\n    ],\n  ],\n  description: 'Monitors inventory levels and creates restock alerts.',\n  name: 'Inventory Monitor',\n  roleID: 'rl_01gf7a8200er3ar3pkfrb6kk29',\n  slug: 'inventory_monitor',\n  tools: [\n    [\n      'configJson' => 'config_json',\n      'requireReview' => true,\n      'sortOrder' => 1,\n      'toolID' => 'tdef_01k0b1seed0searchproduct0',\n    ],\n  ],\n  triggerType: 'event',\n  include: ['config'],\n);\n\nvar_dump($agentDefinition);",
+      },
       csharp: {
         method: 'AI.Agents.Update',
         example:
@@ -598,6 +638,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents update_status',
         example:
           "augno ai:agents update-status \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --status-code active",
+      },
+      php: {
+        method: 'ai->agents->updateStatus',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$agentDefinition = $client->ai->agents->updateStatus(\n  'id', statusCode: 'active', include: ['config']\n);\n\nvar_dump($agentDefinition);",
       },
       csharp: {
         method: 'AI.Agents.UpdateStatus',
@@ -664,6 +709,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'alerts list',
         example: "augno ai:alerts list \\\n  --api-key 'My API Key'",
       },
+      php: {
+        method: 'ai->alerts->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$page = $client->ai->alerts->list(\n  cursor: 'cursor', include: ['run'], limit: 0, severity: 'info', status: 'open'\n);\n\nvar_dump($page);",
+      },
       csharp: {
         method: 'AI.Alerts.List',
         example:
@@ -721,6 +771,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'alerts retrieve',
         example: "augno ai:alerts retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'ai->alerts->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$agentAlert = $client->ai->alerts->retrieve('id', include: ['run']);\n\nvar_dump($agentAlert);",
       },
       csharp: {
         method: 'AI.Alerts.Retrieve',
@@ -781,6 +836,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'actions acknowledge',
         example: "augno ai:alerts:actions acknowledge \\\n  --api-key 'My API Key' \\\n  --id id",
       },
+      php: {
+        method: 'ai->alerts->actions->acknowledge',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$agentAlert = $client->ai->alerts->actions->acknowledge('id', include: ['run']);\n\nvar_dump($agentAlert);",
+      },
       csharp: {
         method: 'AI.Alerts.Actions.Acknowledge',
         example:
@@ -839,6 +899,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'memories list',
         example: "augno ai:memories list \\\n  --api-key 'My API Key'",
+      },
+      php: {
+        method: 'ai->memories->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$page = $client->ai->memories->list(\n  category: 'category', cursor: 'cursor', entityType: 'entity_type', limit: 0\n);\n\nvar_dump($page);",
       },
       csharp: {
         method: 'AI.Memories.List',
@@ -908,6 +973,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno ai:memories create \\\n  --api-key 'My API Key' \\\n  --category preference \\\n  --content 'Customer prefers express shipping on all orders.' \\\n  --importance 0.8 \\\n  --metadata '{}'",
       },
+      php: {
+        method: 'ai->memories->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$agentMemory = $client->ai->memories->create(\n  category: 'preference',\n  content: 'Customer prefers express shipping on all orders.',\n  importance: 0.8,\n  metadata: [(object) []],\n  entityID: 'entity_id',\n  entityType: 'entity_type',\n  expiresAt: 'expires_at',\n);\n\nvar_dump($agentMemory);",
+      },
       csharp: {
         method: 'AI.Memories.Create',
         example:
@@ -965,6 +1035,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'memories delete',
         example: "augno ai:memories delete \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'ai->memories->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$memory = $client->ai->memories->delete('id');\n\nvar_dump($memory);",
       },
       csharp: {
         method: 'AI.Memories.Delete',
@@ -1024,6 +1099,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'memories retrieve',
         example: "augno ai:memories retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'ai->memories->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$agentMemory = $client->ai->memories->retrieve('id');\n\nvar_dump($agentMemory);",
       },
       csharp: {
         method: 'AI.Memories.Retrieve',
@@ -1094,6 +1174,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno ai:memories update \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --category category \\\n  --content 'Customer prefers next-day shipping on all orders.' \\\n  --importance 0.9 \\\n  --metadata '{}'",
       },
+      php: {
+        method: 'ai->memories->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$agentMemory = $client->ai->memories->update(\n  'id',\n  category: 'category',\n  content: 'Customer prefers next-day shipping on all orders.',\n  importance: 0.9,\n  metadata: [(object) []],\n  entityID: 'entity_id',\n  entityType: 'entity_type',\n  expiresAt: 'expires_at',\n);\n\nvar_dump($agentMemory);",
+      },
       csharp: {
         method: 'AI.Memories.Update',
         example:
@@ -1159,6 +1244,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'runs list',
         example: "augno ai:runs list \\\n  --api-key 'My API Key'",
       },
+      php: {
+        method: 'ai->runs->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$page = $client->ai->runs->list(\n  agentDefinitionID: 'agent_definition_id',\n  cursor: 'cursor',\n  include: ['definition'],\n  limit: 0,\n  statusCode: 'status_code',\n);\n\nvar_dump($page);",
+      },
       csharp: {
         method: 'AI.Runs.List',
         example:
@@ -1222,6 +1312,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno ai:runs trigger \\\n  --api-key 'My API Key' \\\n  --agent-definition-id agdf_01jm4r6700f8nwq3v5hx2d9ktp \\\n  --input 'Process the latest incoming orders.'",
       },
+      php: {
+        method: 'ai->runs->trigger',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$agentRun = $client->ai->runs->trigger(\n  agentDefinitionID: 'agdf_01jm4r6700f8nwq3v5hx2d9ktp',\n  input: 'Process the latest incoming orders.',\n  include: ['actions'],\n);\n\nvar_dump($agentRun);",
+      },
       csharp: {
         method: 'AI.Runs.Trigger',
         example:
@@ -1284,6 +1379,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'runs retrieve',
         example: "augno ai:runs retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
       },
+      php: {
+        method: 'ai->runs->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$agentRun = $client->ai->runs->retrieve('id', include: ['actions']);\n\nvar_dump($agentRun);",
+      },
       csharp: {
         method: 'AI.Runs.Retrieve',
         example:
@@ -1345,6 +1445,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'actions cancel',
         example: "augno ai:runs:actions cancel \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'ai->runs->actions->cancel',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$agentRun = $client->ai->runs->actions->cancel('id', include: ['actions']);\n\nvar_dump($agentRun);",
       },
       csharp: {
         method: 'AI.Runs.Actions.Cancel',
@@ -1412,6 +1517,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno ai:runs:actions continue \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --allowed-tool-slug string \\\n  --approved-tool-slug string \\\n  --message 'Yes, proceed with creating the order.'",
       },
+      php: {
+        method: 'ai->runs->actions->continue',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$agentRun = $client->ai->runs->actions->continue(\n  'id',\n  allowedToolSlugs: ['string'],\n  approvedToolSlugs: ['string'],\n  message: 'Yes, proceed with creating the order.',\n  include: ['actions'],\n);\n\nvar_dump($agentRun);",
+      },
       csharp: {
         method: 'AI.Runs.Actions.Continue',
         example:
@@ -1471,6 +1581,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'api_keys list',
         example: "augno auth:api-keys list \\\n  --api-key 'My API Key'",
+      },
+      php: {
+        method: 'auth->apiKeys->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$apiKeys = $client->auth->apiKeys->list(include: ['role'], status: ['active']);\n\nvar_dump($apiKeys);",
       },
       csharp: {
         method: 'Auth.ApiKeys.List',
@@ -1538,6 +1653,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno auth:api-keys create \\\n  --api-key 'My API Key' \\\n  --name 'Production API Key' \\\n  --role-id rl_01gf7a8200er3ar3pkfrb6kk29",
       },
+      php: {
+        method: 'auth->apiKeys->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$createdAPIKey = $client->auth->apiKeys->create(\n  name: 'Production API Key',\n  roleID: 'rl_01gf7a8200er3ar3pkfrb6kk29',\n  include: ['role'],\n  expiresAt: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n);\n\nvar_dump($createdAPIKey);",
+      },
       csharp: {
         method: 'Auth.ApiKeys.Create',
         example:
@@ -1597,6 +1717,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'api_keys revoke',
         example: "augno auth:api-keys revoke \\\n  --api-key 'My API Key' \\\n  --id id",
       },
+      php: {
+        method: 'auth->apiKeys->revoke',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->auth->apiKeys->revoke('id');\n\nvar_dump($response);",
+      },
       csharp: {
         method: 'Auth.ApiKeys.Revoke',
         example:
@@ -1655,6 +1780,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'api_keys retrieve',
         example: "augno auth:api-keys retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'auth->apiKeys->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$apiKey = $client->auth->apiKeys->retrieve('id', include: ['role']);\n\nvar_dump($apiKey);",
       },
       csharp: {
         method: 'Auth.ApiKeys.Retrieve',
@@ -1716,6 +1846,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'actions rotate',
         example: "augno auth:api-keys:actions rotate \\\n  --api-key 'My API Key' \\\n  --id id",
       },
+      php: {
+        method: 'auth->apiKeys->actions->rotate',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$createdAPIKey = $client->auth->apiKeys->actions->rotate(\n  'id',\n  include: ['role'],\n  expiresAt: new \\DateTimeImmutable('2026-12-31T23:59:59Z'),\n);\n\nvar_dump($createdAPIKey);",
+      },
       csharp: {
         method: 'Auth.ApiKeys.Actions.Rotate',
         example:
@@ -1774,6 +1909,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'core list_adjustment_types',
         example: "augno core list-adjustment-types \\\n  --api-key 'My API Key'",
+      },
+      php: {
+        method: 'core->listAdjustmentTypes',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->core->listAdjustmentTypes();\n\nvar_dump($response);",
       },
       csharp: {
         method: 'Core.ListAdjustmentTypes',
@@ -1834,6 +1974,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'account_groups list',
         example: "augno core:account-groups list \\\n  --api-key 'My API Key'",
+      },
+      php: {
+        method: 'core->accountGroups->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$accountGroups = $client->core->accountGroups->list(type: 'pricing_group');\n\nvar_dump($accountGroups);",
       },
       csharp: {
         method: 'Core.AccountGroups.List',
@@ -1901,6 +2046,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:account-groups create \\\n  --api-key 'My API Key' \\\n  --commission-status commission_applied \\\n  --freight-status billed_freight \\\n  --name 'Wholesale Customers' \\\n  --type pricing_group",
       },
+      php: {
+        method: 'core->accountGroups->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$accountGroup = $client->core->accountGroups->create(\n  commissionStatus: 'commission_applied',\n  freightStatus: 'billed_freight',\n  name: 'Wholesale Customers',\n  type: 'pricing_group',\n  description: 'description',\n);\n\nvar_dump($accountGroup);",
+      },
       csharp: {
         method: 'Core.AccountGroups.Create',
         example:
@@ -1958,6 +2108,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'account_groups delete',
         example: "augno core:account-groups delete \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->accountGroups->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$accountGroup = $client->core->accountGroups->delete('id');\n\nvar_dump($accountGroup);",
       },
       csharp: {
         method: 'Core.AccountGroups.Delete',
@@ -2017,6 +2172,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'account_groups retrieve',
         example: "augno core:account-groups retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->accountGroups->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$accountGroup = $client->core->accountGroups->retrieve('id');\n\nvar_dump($accountGroup);",
       },
       csharp: {
         method: 'Core.AccountGroups.Retrieve',
@@ -2084,6 +2244,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'account_groups update',
         example: "augno core:account-groups update \\\n  --api-key 'My API Key' \\\n  --id id",
       },
+      php: {
+        method: 'core->accountGroups->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$accountGroup = $client->core->accountGroups->update(\n  'id',\n  commissionStatus: 'commission_applied',\n  description: 'description',\n  freightStatus: 'free_freight',\n  name: 'Updated Wholesale Customers',\n);\n\nvar_dump($accountGroup);",
+      },
       csharp: {
         method: 'Core.AccountGroups.Update',
         example:
@@ -2143,6 +2308,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'account_prices list',
         example: "augno core:account-prices list \\\n  --api-key 'My API Key'",
+      },
+      php: {
+        method: 'core->accountPrices->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$accountPrices = $client->core->accountPrices->list(\n  recipientAccountID: 'recipient_account_id'\n);\n\nvar_dump($accountPrices);",
       },
       csharp: {
         method: 'Core.AccountPrices.List',
@@ -2214,6 +2384,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:account-prices create \\\n  --api-key 'My API Key' \\\n  --attribute-id at_01jm4r6700f8nwq3v5hx2d9ktp \\\n  --category-id ic_01jm4r6700f8nwq3v5hx2d9ktp \\\n  --product-line-id pl_01jm4r6700f8nwq3v5hx2d9ktp \\\n  --rate-denominator-unit-id un_01jm4r6700f8nwq3v5hx2d9ktp \\\n  --rate-numerator-unit-id un_01jm4r6700f8nwq3v5hx2d9ktp \\\n  --rate-value 25.500000000000000000000000000000 \\\n  --recipient-account-id ac_01gf7a8200eaj8fke1xvw4h50x",
       },
+      php: {
+        method: 'core->accountPrices->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$accountPrice = $client->core->accountPrices->create(\n  attributeIDs: ['at_01jm4r6700f8nwq3v5hx2d9ktp'],\n  categoryIDs: ['ic_01jm4r6700f8nwq3v5hx2d9ktp'],\n  productLineID: 'pl_01jm4r6700f8nwq3v5hx2d9ktp',\n  rateDenominatorUnitID: 'un_01jm4r6700f8nwq3v5hx2d9ktp',\n  rateNumeratorUnitID: 'un_01jm4r6700f8nwq3v5hx2d9ktp',\n  rateValue: '25.500000000000000000000000000000',\n  recipientAccountID: 'ac_01gf7a8200eaj8fke1xvw4h50x',\n  include: ['recipient_account'],\n);\n\nvar_dump($accountPrice);",
+      },
       csharp: {
         method: 'Core.AccountPrices.Create',
         example:
@@ -2272,6 +2447,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'account_prices delete',
         example: "augno core:account-prices delete \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->accountPrices->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$accountPrice = $client->core->accountPrices->delete('id');\n\nvar_dump($accountPrice);",
       },
       csharp: {
         method: 'Core.AccountPrices.Delete',
@@ -2332,6 +2512,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'account_prices retrieve',
         example: "augno core:account-prices retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->accountPrices->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$accountPrice = $client->core->accountPrices->retrieve(\n  'id', include: ['recipient_account']\n);\n\nvar_dump($accountPrice);",
       },
       csharp: {
         method: 'Core.AccountPrices.Retrieve',
@@ -2403,6 +2588,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'account_prices update',
         example: "augno core:account-prices update \\\n  --api-key 'My API Key' \\\n  --id id",
       },
+      php: {
+        method: 'core->accountPrices->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$accountPrice = $client->core->accountPrices->update(\n  'id',\n  include: ['recipient_account'],\n  attributeIDs: ['string'],\n  categoryIDs: ['string'],\n  productLineID: 'product_line_id',\n  rateDenominatorUnitID: 'rate_denominator_unit_id',\n  rateNumeratorUnitID: 'rate_numerator_unit_id',\n  rateValue: '30.000000000000000000000000000000',\n  recipientAccountID: 'recipient_account_id',\n);\n\nvar_dump($accountPrice);",
+      },
       csharp: {
         method: 'Core.AccountPrices.Update',
         example:
@@ -2462,6 +2652,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'account_statuses list',
         example: "augno core:account-statuses list \\\n  --api-key 'My API Key'",
       },
+      php: {
+        method: 'core->accountStatuses->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$accountStatuses = $client->core->accountStatuses->list();\n\nvar_dump($accountStatuses);",
+      },
       csharp: {
         method: 'Core.AccountStatuses.List',
         example:
@@ -2520,6 +2715,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'account_statuses retrieve',
         example: "augno core:account-statuses retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->accountStatuses->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$accountStatus = $client->core->accountStatuses->retrieve('id');\n\nvar_dump($accountStatus);",
       },
       csharp: {
         method: 'Core.AccountStatuses.Retrieve',
@@ -2583,6 +2783,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'account_users list',
         example: "augno core:account-users list \\\n  --api-key 'My API Key'",
+      },
+      php: {
+        method: 'core->accountUsers->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$accountUsers = $client->core->accountUsers->list(\n  includeRemoved: true, roleType: 'admin'\n);\n\nvar_dump($accountUsers);",
       },
       csharp: {
         method: 'Core.AccountUsers.List',
@@ -2655,6 +2860,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:account-users create \\\n  --api-key 'My API Key' \\\n  --custom-email custom_email \\\n  --name name \\\n  --password password \\\n  --receives-invoice-notifications \\\n  --receives-order-acknowledgements \\\n  --receives-purchase-order-submission-notifications \\\n  --username username",
       },
+      php: {
+        method: 'core->accountUsers->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$accountUser = $client->core->accountUsers->create(\n  customEmail: 'custom_email',\n  name: 'name',\n  password: 'password',\n  receivesInvoiceNotifications: true,\n  receivesOrderAcknowledgements: true,\n  receivesPurchaseOrderSubmissionNotifications: true,\n  username: 'username',\n  departmentID: 'department_id',\n  isSalesRep: true,\n  roleID: 'role_id',\n);\n\nvar_dump($accountUser);",
+      },
       csharp: {
         method: 'Core.AccountUsers.Create',
         example:
@@ -2712,6 +2922,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'account_users delete',
         example: "augno core:account-users delete \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->accountUsers->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$accountUser = $client->core->accountUsers->delete('id');\n\nvar_dump($accountUser);",
       },
       csharp: {
         method: 'Core.AccountUsers.Delete',
@@ -2771,6 +2986,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'account_users retrieve',
         example: "augno core:account-users retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->accountUsers->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$accountUser = $client->core->accountUsers->retrieve('id', include: ['role']);\n\nvar_dump($accountUser);",
       },
       csharp: {
         method: 'Core.AccountUsers.Retrieve',
@@ -2839,6 +3059,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'account_users update',
         example: "augno core:account-users update \\\n  --api-key 'My API Key' \\\n  --id id",
       },
+      php: {
+        method: 'core->accountUsers->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$accountUser = $client->core->accountUsers->update(\n  'id',\n  customEmail: 'custom_email',\n  departmentID: 'department_id',\n  name: 'name',\n  roleID: 'role_id',\n  username: 'username',\n);\n\nvar_dump($accountUser);",
+      },
       csharp: {
         method: 'Core.AccountUsers.Update',
         example:
@@ -2896,6 +3121,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'account_users lock',
         example: "augno core:account-users lock \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->accountUsers->lock',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->core->accountUsers->lock('id');\n\nvar_dump($response);",
       },
       csharp: {
         method: 'Core.AccountUsers.Lock',
@@ -2958,6 +3188,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:account-users update-notification-preferences \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --preference '{enabled: true, notification_type_code: notification_type_code}'",
       },
+      php: {
+        method: 'core->accountUsers->updateNotificationPreferences',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$accountUser = $client->core->accountUsers->updateNotificationPreferences(\n  'id',\n  preferences: [\n    ['enabled' => true, 'notificationTypeCode' => 'notification_type_code']\n  ],\n);\n\nvar_dump($accountUser);",
+      },
       csharp: {
         method: 'Core.AccountUsers.UpdateNotificationPreferences',
         example:
@@ -3018,6 +3253,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:account-users update-password \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --new-password new_password \\\n  --requester-password requester_password",
       },
+      php: {
+        method: 'core->accountUsers->updatePassword',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->core->accountUsers->updatePassword(\n  'id', newPassword: 'new_password', requesterPassword: 'requester_password'\n);\n\nvar_dump($response);",
+      },
       csharp: {
         method: 'Core.AccountUsers.UpdatePassword',
         example:
@@ -3076,6 +3316,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'account_users restore',
         example: "augno core:account-users restore \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->accountUsers->restore',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->core->accountUsers->restore('id');\n\nvar_dump($response);",
       },
       csharp: {
         method: 'Core.AccountUsers.Restore',
@@ -3136,6 +3381,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'account_users unlock',
         example: "augno core:account-users unlock \\\n  --api-key 'My API Key' \\\n  --id id",
       },
+      php: {
+        method: 'core->accountUsers->unlock',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->core->accountUsers->unlock('id');\n\nvar_dump($response);",
+      },
       csharp: {
         method: 'Core.AccountUsers.Unlock',
         example:
@@ -3195,6 +3445,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'sales_targets list',
         example: "augno core:account-users:sales-targets list \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->accountUsers->salesTargets->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$salesTargets = $client->core->accountUsers->salesTargets->list(\n  'id', limit: 0, offset: 0\n);\n\nvar_dump($salesTargets);",
       },
       csharp: {
         method: 'Core.AccountUsers.SalesTargets.List',
@@ -3261,6 +3516,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'sales_targets create',
         example:
           "augno core:account-users:sales-targets create \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --amount-unit-id amount_unit_id \\\n  --amount-value amount_value \\\n  --end-date \"'2019-12-27T18:11:19.117Z'\" \\\n  --start-date \"'2019-12-27T18:11:19.117Z'\"",
+      },
+      php: {
+        method: 'core->accountUsers->salesTargets->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$salesTarget = $client->core->accountUsers->salesTargets->create(\n  'id',\n  amountUnitID: 'amount_unit_id',\n  amountValue: 'amount_value',\n  endDate: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  startDate: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n);\n\nvar_dump($salesTarget);",
       },
       csharp: {
         method: 'Core.AccountUsers.SalesTargets.Create',
@@ -3330,6 +3590,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:account-users:sales-targets upsert \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --target-id target_id \\\n  --amount-unit-id amount_unit_id \\\n  --amount-value amount_value \\\n  --end-date \"'2019-12-27T18:11:19.117Z'\" \\\n  --start-date \"'2019-12-27T18:11:19.117Z'\"",
       },
+      php: {
+        method: 'core->accountUsers->salesTargets->upsert',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$salesTarget = $client->core->accountUsers->salesTargets->upsert(\n  'target_id',\n  id: 'id',\n  amountUnitID: 'amount_unit_id',\n  amountValue: 'amount_value',\n  endDate: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  startDate: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n);\n\nvar_dump($salesTarget);",
+      },
       csharp: {
         method: 'Core.AccountUsers.SalesTargets.Upsert',
         example:
@@ -3390,6 +3655,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'accounts retrieve_by_slug',
         example: "augno core:accounts retrieve-by-slug \\\n  --api-key 'My API Key' \\\n  --slug slug",
       },
+      php: {
+        method: 'core->accounts->retrieveBySlug',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->core->accounts->retrieveBySlug('slug');\n\nvar_dump($response);",
+      },
       csharp: {
         method: 'Core.Accounts.RetrieveBySlug',
         example:
@@ -3449,6 +3719,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'accounts retrieve',
         example: "augno core:accounts retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->accounts->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$account = $client->core->accounts->retrieve('id', include: ['branding']);\n\nvar_dump($account);",
       },
       csharp: {
         method: 'Core.Accounts.Retrieve',
@@ -3522,6 +3797,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'accounts update',
         example: "augno core:accounts update \\\n  --api-key 'My API Key' \\\n  --id id",
       },
+      php: {
+        method: 'core->accounts->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$account = $client->core->accounts->update(\n  'id',\n  include: ['branding'],\n  facebookHandle: 'facebook_handle',\n  instagramHandle: 'instagram_handle',\n  linkedinHandle: 'linkedin_handle',\n  name: 'Acme Inc.',\n  phoneNumber: 'phone_number',\n  slug: 'slug',\n  supportEmail: 'support_email',\n  twitterHandle: 'twitter_handle',\n  websiteURL: 'website_url',\n);\n\nvar_dump($account);",
+      },
       csharp: {
         method: 'Core.Accounts.Update',
         example:
@@ -3581,6 +3861,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'accounts get_logo_url',
         example: "augno core:accounts get-logo-url \\\n  --api-key 'My API Key' \\\n  --id id",
       },
+      php: {
+        method: 'core->accounts->getLogoURL',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->core->accounts->getLogoURL('id');\n\nvar_dump($response);",
+      },
       csharp: {
         method: 'Core.Accounts.GetLogoUrl',
         example:
@@ -3639,6 +3924,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'accounts upload_photo',
         example: "augno core:accounts upload-photo \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->accounts->uploadPhoto',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->core->accounts->uploadPhoto('id');\n\nvar_dump($response);",
       },
       csharp: {
         method: 'Core.Accounts.UploadPhoto',
@@ -3700,6 +3990,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'addresses list',
         example:
           "augno core:accounts:addresses list \\\n  --api-key 'My API Key' \\\n  --account-id account_id",
+      },
+      php: {
+        method: 'core->accounts->addresses->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$addresses = $client->core->accounts->addresses->list('account_id');\n\nvar_dump($addresses);",
       },
       csharp: {
         method: 'Core.Accounts.Addresses.List',
@@ -3773,6 +4068,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:accounts:addresses create \\\n  --api-key 'My API Key' \\\n  --account-id account_id \\\n  --country US \\\n  --is-drop-ship=false \\\n  --name Headquarters",
       },
+      php: {
+        method: 'core->accounts->addresses->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$address = $client->core->accounts->addresses->create(\n  'account_id',\n  country: 'US',\n  isDropShip: false,\n  name: 'Headquarters',\n  email: 'email',\n  locality: 'Springfield',\n  phone: 'phone',\n  postalCode: '62701',\n  state: 'IL',\n  streetLine1: '123 Main St',\n  streetLine2: 'street_line_2',\n);\n\nvar_dump($address);",
+      },
       csharp: {
         method: 'Core.Accounts.Addresses.Create',
         example:
@@ -3832,6 +4132,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'addresses delete',
         example:
           "augno core:accounts:addresses delete \\\n  --api-key 'My API Key' \\\n  --account-id account_id \\\n  --id id",
+      },
+      php: {
+        method: 'core->accounts->addresses->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$address = $client->core->accounts->addresses->delete(\n  'id', accountID: 'account_id'\n);\n\nvar_dump($address);",
       },
       csharp: {
         method: 'Core.Accounts.Addresses.Delete',
@@ -3893,6 +4198,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'addresses retrieve',
         example:
           "augno core:accounts:addresses retrieve \\\n  --api-key 'My API Key' \\\n  --account-id account_id \\\n  --id id",
+      },
+      php: {
+        method: 'core->accounts->addresses->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$address = $client->core->accounts->addresses->retrieve(\n  'id', accountID: 'account_id'\n);\n\nvar_dump($address);",
       },
       csharp: {
         method: 'Core.Accounts.Addresses.Retrieve',
@@ -3968,6 +4278,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:accounts:addresses update \\\n  --api-key 'My API Key' \\\n  --account-id account_id \\\n  --id id",
       },
+      php: {
+        method: 'core->accounts->addresses->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$address = $client->core->accounts->addresses->update(\n  'id',\n  accountID: 'account_id',\n  country: 'country',\n  email: 'email',\n  isDropShip: true,\n  locality: 'locality',\n  name: 'Warehouse',\n  phone: 'phone',\n  postalCode: 'postal_code',\n  state: 'state',\n  streetLine1: 'street_line_1',\n  streetLine2: 'street_line_2',\n);\n\nvar_dump($address);",
+      },
       csharp: {
         method: 'Core.Accounts.Addresses.Update',
         example:
@@ -4028,6 +4343,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'addresses autocomplete',
         example: "augno core:addresses autocomplete \\\n  --api-key 'My API Key' \\\n  --input input",
       },
+      php: {
+        method: 'core->addresses->autocomplete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->core->addresses->autocomplete(\n  input: 'input', sessionTokenOmitempty: 'session_token,omitempty'\n);\n\nvar_dump($response);",
+      },
       csharp: {
         method: 'Core.Addresses.Autocomplete',
         example:
@@ -4087,6 +4407,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'addresses get_details',
         example: "augno core:addresses get-details \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->addresses->getDetails',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->core->addresses->getDetails(\n  'id', sessionTokenOmitempty: 'session_token,omitempty'\n);\n\nvar_dump($response);",
       },
       csharp: {
         method: 'Core.Addresses.GetDetails',
@@ -4156,6 +4481,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:addresses validate \\\n  --api-key 'My API Key' \\\n  --address-line-1 '123 Main St' \\\n  --city Springfield \\\n  --country US \\\n  --postal-code 62701 \\\n  --state IL",
       },
+      php: {
+        method: 'core->addresses->validate',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->core->addresses->validate(\n  addressLine1: '123 Main St',\n  city: 'Springfield',\n  country: 'US',\n  postalCode: '62701',\n  state: 'IL',\n  addressLine2: 'address_line_2',\n);\n\nvar_dump($response);",
+      },
       csharp: {
         method: 'Core.Addresses.Validate',
         example:
@@ -4215,6 +4545,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'carriers list',
         example: "augno core:carriers list \\\n  --api-key 'My API Key'",
+      },
+      php: {
+        method: 'core->carriers->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$carriers = $client->core->carriers->list(include: ['options']);\n\nvar_dump($carriers);",
       },
       csharp: {
         method: 'Core.Carriers.List',
@@ -4277,6 +4612,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:carriers create \\\n  --api-key 'My API Key' \\\n  --account-number null \\\n  --code fedex \\\n  --is-portal-enabled \\\n  --name FedEx",
       },
+      php: {
+        method: 'core->carriers->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$carrier = $client->core->carriers->create(\n  accountNumber: null, code: 'fedex', isPortalEnabled: true, name: 'FedEx'\n);\n\nvar_dump($carrier);",
+      },
       csharp: {
         method: 'Core.Carriers.Create',
         example:
@@ -4336,6 +4676,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'carriers delete',
         example: "augno core:carriers delete \\\n  --api-key 'My API Key' \\\n  --id id",
       },
+      php: {
+        method: 'core->carriers->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$carrier = $client->core->carriers->delete('id');\n\nvar_dump($carrier);",
+      },
       csharp: {
         method: 'Core.Carriers.Delete',
         example:
@@ -4394,6 +4739,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'carriers retrieve',
         example: "augno core:carriers retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->carriers->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$carrier = $client->core->carriers->retrieve('id', include: ['options']);\n\nvar_dump($carrier);",
       },
       csharp: {
         method: 'Core.Carriers.Retrieve',
@@ -4455,6 +4805,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:carriers update \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --is-portal-enabled=false \\\n  --name 'FedEx Express'",
       },
+      php: {
+        method: 'core->carriers->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$carrier = $client->core->carriers->update(\n  'id', isPortalEnabled: null, name: 'FedEx Express'\n);\n\nvar_dump($carrier);",
+      },
       csharp: {
         method: 'Core.Carriers.Update',
         example:
@@ -4513,6 +4868,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'carriers get_oauth_status',
         example: "augno core:carriers get-oauth-status \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->carriers->getOAuthStatus',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->core->carriers->getOAuthStatus('id');\n\nvar_dump($response);",
       },
       csharp: {
         method: 'Core.Carriers.GetOAuthStatus',
@@ -4574,6 +4934,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'options list',
         example:
           "augno core:carriers:options list \\\n  --api-key 'My API Key' \\\n  --carrier-id carrier_id",
+      },
+      php: {
+        method: 'core->carriers->options->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$options = $client->core->carriers->options->list('carrier_id');\n\nvar_dump($options);",
       },
       csharp: {
         method: 'Core.Carriers.Options.List',
@@ -4642,6 +5007,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:carriers:options create \\\n  --api-key 'My API Key' \\\n  --carrier-id carrier_id \\\n  --code ground \\\n  --is-default=false \\\n  --is-portal-enabled \\\n  --name 'Ground Shipping' \\\n  --service-level-token null",
       },
+      php: {
+        method: 'core->carriers->options->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$carrierOption = $client->core->carriers->options->create(\n  'carrier_id',\n  code: 'ground',\n  isDefault: false,\n  isPortalEnabled: true,\n  name: 'Ground Shipping',\n  serviceLevelToken: null,\n);\n\nvar_dump($carrierOption);",
+      },
       csharp: {
         method: 'Core.Carriers.Options.Create',
         example:
@@ -4702,6 +5072,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:carriers:options delete \\\n  --api-key 'My API Key' \\\n  --carrier-id carrier_id \\\n  --id id",
       },
+      php: {
+        method: 'core->carriers->options->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$option = $client->core->carriers->options->delete(\n  'id', carrierID: 'carrier_id'\n);\n\nvar_dump($option);",
+      },
       csharp: {
         method: 'Core.Carriers.Options.Delete',
         example:
@@ -4761,6 +5136,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'options retrieve',
         example:
           "augno core:carriers:options retrieve \\\n  --api-key 'My API Key' \\\n  --carrier-id carrier_id \\\n  --id id",
+      },
+      php: {
+        method: 'core->carriers->options->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$carrierOption = $client->core->carriers->options->retrieve(\n  'id', carrierID: 'carrier_id'\n);\n\nvar_dump($carrierOption);",
       },
       csharp: {
         method: 'Core.Carriers.Options.Retrieve',
@@ -4829,6 +5209,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:carriers:options update \\\n  --api-key 'My API Key' \\\n  --carrier-id carrier_id \\\n  --id id \\\n  --code null \\\n  --is-default=false \\\n  --is-portal-enabled=false \\\n  --name 'Express Shipping'",
       },
+      php: {
+        method: 'core->carriers->options->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$carrierOption = $client->core->carriers->options->update(\n  'id',\n  carrierID: 'carrier_id',\n  code: null,\n  isDefault: null,\n  isPortalEnabled: null,\n  name: 'Express Shipping',\n);\n\nvar_dump($carrierOption);",
+      },
       csharp: {
         method: 'Core.Carriers.Options.Update',
         example:
@@ -4888,6 +5273,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'actions initiate_oauth',
         example:
           "augno core:carriers:actions initiate-oauth \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --redirect-uri https://app.example.com/carriers/oauth/callback \\\n  --state null",
+      },
+      php: {
+        method: 'core->carriers->actions->initiateOAuth',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->core->carriers->actions->initiateOAuth(\n  'id',\n  redirectUri: 'https://app.example.com/carriers/oauth/callback',\n  state: null,\n);\n\nvar_dump($response);",
       },
       csharp: {
         method: 'Core.Carriers.Actions.InitiateOAuth',
@@ -4949,6 +5339,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'actions sync_options',
         example: "augno core:carriers:actions sync-options \\\n  --api-key 'My API Key' \\\n  --id id",
       },
+      php: {
+        method: 'core->carriers->actions->syncOptions',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$carrier = $client->core->carriers->actions->syncOptions('id');\n\nvar_dump($carrier);",
+      },
       csharp: {
         method: 'Core.Carriers.Actions.SyncOptions',
         example:
@@ -5007,6 +5402,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'child_accounts list',
         example: "augno core:child-accounts list \\\n  --api-key 'My API Key'",
+      },
+      php: {
+        method: 'core->childAccounts->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$childAccounts = $client->core->childAccounts->list();\n\nvar_dump($childAccounts);",
       },
       csharp: {
         method: 'Core.ChildAccounts.List',
@@ -5067,6 +5467,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'child_accounts remove',
         example:
           "augno core:child-accounts remove \\\n  --api-key 'My API Key' \\\n  --child-account-id child_account_id",
+      },
+      php: {
+        method: 'core->childAccounts->remove',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$childAccount = $client->core->childAccounts->remove('child_account_id');\n\nvar_dump($childAccount);",
       },
       csharp: {
         method: 'Core.ChildAccounts.Remove',
@@ -5129,6 +5534,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:child-accounts add \\\n  --api-key 'My API Key' \\\n  --child-account-id child_account_id",
       },
+      php: {
+        method: 'core->childAccounts->add',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$childAccount = $client->core->childAccounts->add('child_account_id');\n\nvar_dump($childAccount);",
+      },
       csharp: {
         method: 'Core.ChildAccounts.Add',
         example:
@@ -5187,6 +5597,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'integrations list',
         example: "augno core:integrations list \\\n  --api-key 'My API Key'",
+      },
+      php: {
+        method: 'core->integrations->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$integrations = $client->core->integrations->list();\n\nvar_dump($integrations);",
       },
       csharp: {
         method: 'Core.Integrations.List',
@@ -5249,6 +5664,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'augno core:integrations create \\\n  --api-key \'My API Key\' \\\n  --credentials \'{"privateKey":"sk_test_...","publishableKey":"pk_test_...","webhookSecret":"whsec_..."}\' \\\n  --integration-code stripe \\\n  --name \'My Stripe Integration\'',
       },
+      php: {
+        method: 'core->integrations->create',
+        example:
+          '<?php\n\nrequire_once dirname(__DIR__) . \'/vendor/autoload.php\';\n\n$client = new Client(apiKey: \'My API Key\', environment: \'environment_1\');\n\n$accountIntegration = $client->core->integrations->create(\n  credentials: \'{"privateKey":"sk_test_...","publishableKey":"pk_test_...","webhookSecret":"whsec_..."}\',\n  integrationCode: \'stripe\',\n  name: \'My Stripe Integration\',\n);\n\nvar_dump($accountIntegration);',
+      },
       csharp: {
         method: 'Core.Integrations.Create',
         example:
@@ -5307,6 +5727,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'integrations delete',
         example: "augno core:integrations delete \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->integrations->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$accountIntegration = $client->core->integrations->delete('id');\n\nvar_dump($accountIntegration);",
       },
       csharp: {
         method: 'Core.Integrations.Delete',
@@ -5368,6 +5793,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'integrations update',
         example: "augno core:integrations update \\\n  --api-key 'My API Key' \\\n  --id id",
       },
+      php: {
+        method: 'core->integrations->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$accountIntegration = $client->core->integrations->update(\n  'id', isActive: true, name: 'Updated Stripe Integration'\n);\n\nvar_dump($accountIntegration);",
+      },
       csharp: {
         method: 'Core.Integrations.Update',
         example:
@@ -5426,6 +5856,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'stripe get_publishable_key',
         example: "augno core:integrations:stripe get-publishable-key \\\n  --api-key 'My API Key'",
       },
+      php: {
+        method: 'core->integrations->stripe->getPublishableKey',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->core->integrations->stripe->getPublishableKey();\n\nvar_dump($response);",
+      },
       csharp: {
         method: 'Core.Integrations.Stripe.GetPublishableKey',
         example:
@@ -5483,6 +5918,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'stripe get_status',
         example: "augno core:integrations:stripe get-status \\\n  --api-key 'My API Key'",
+      },
+      php: {
+        method: 'core->integrations->stripe->getStatus',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->core->integrations->stripe->getStatus();\n\nvar_dump($response);",
       },
       csharp: {
         method: 'Core.Integrations.Stripe.GetStatus',
@@ -5554,6 +5994,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'items list',
         example: "augno core:items list \\\n  --api-key 'My API Key'",
       },
+      php: {
+        method: 'core->items->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$items = $client->core->items->list(\n  attributeIDs: ['string'],\n  categoryIDs: ['string'],\n  endDate: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  include: ['category'],\n  isExactMatch: true,\n  onlyInitialSubassemblies: true,\n  startDate: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  supplierID: 'supplier_id',\n  types: ['string'],\n);\n\nvar_dump($items);",
+      },
       csharp: {
         method: 'Core.Items.List',
         example:
@@ -5611,6 +6056,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'items retrieve',
         example: "augno core:items retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->items->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$item = $client->core->items->retrieve('id', include: ['category']);\n\nvar_dump($item);",
       },
       csharp: {
         method: 'Core.Items.Retrieve',
@@ -5672,6 +6122,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'items get_costs',
         example: "augno core:items get-costs \\\n  --api-key 'My API Key' \\\n  --id id",
       },
+      php: {
+        method: 'core->items->getCosts',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->core->items->getCosts('id');\n\nvar_dump($response);",
+      },
       csharp: {
         method: 'Core.Items.GetCosts',
         example:
@@ -5731,6 +6186,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'items get_inventory',
         example: "augno core:items get-inventory \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->items->getInventory',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->core->items->getInventory('id');\n\nvar_dump($response);",
       },
       csharp: {
         method: 'Core.Items.GetInventory',
@@ -5792,6 +6252,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:items get-trends \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --trend-type trend_type",
       },
+      php: {
+        method: 'core->items->getTrends',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->core->items->getTrends('id', trendType: 'trend_type');\n\nvar_dump($response);",
+      },
       csharp: {
         method: 'Core.Items.GetTrends',
         example:
@@ -5849,6 +6314,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'actions export',
         example: "augno core:items:actions export \\\n  --api-key 'My API Key'",
+      },
+      php: {
+        method: 'core->items->actions->export',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->core->items->actions->export();\n\nvar_dump($response);",
       },
       csharp: {
         method: 'Core.Items.Actions.Export',
@@ -5909,6 +6379,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'payment_terms list',
         example: "augno core:payment-terms list \\\n  --api-key 'My API Key'",
       },
+      php: {
+        method: 'core->paymentTerms->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$paymentTerms = $client->core->paymentTerms->list();\n\nvar_dump($paymentTerms);",
+      },
       csharp: {
         method: 'Core.PaymentTerms.List',
         example:
@@ -5968,6 +6443,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'payment_terms create',
         example: "augno core:payment-terms create \\\n  --api-key 'My API Key' \\\n  --name 'Net 30'",
       },
+      php: {
+        method: 'core->paymentTerms->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$paymentTerm = $client->core->paymentTerms->create(name: 'Net 30');\n\nvar_dump($paymentTerm);",
+      },
       csharp: {
         method: 'Core.PaymentTerms.Create',
         example:
@@ -6026,6 +6506,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'payment_terms delete',
         example: "augno core:payment-terms delete \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->paymentTerms->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$paymentTerm = $client->core->paymentTerms->delete('id');\n\nvar_dump($paymentTerm);",
       },
       csharp: {
         method: 'Core.PaymentTerms.Delete',
@@ -6087,6 +6572,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'payment_terms retrieve',
         example: "augno core:payment-terms retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
       },
+      php: {
+        method: 'core->paymentTerms->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$paymentTerm = $client->core->paymentTerms->retrieve('id');\n\nvar_dump($paymentTerm);",
+      },
       csharp: {
         method: 'Core.PaymentTerms.Retrieve',
         example:
@@ -6147,6 +6637,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'payment_terms update',
         example: "augno core:payment-terms update \\\n  --api-key 'My API Key' \\\n  --id id",
       },
+      php: {
+        method: 'core->paymentTerms->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$paymentTerm = $client->core->paymentTerms->update('id', name: 'Net 60');\n\nvar_dump($paymentTerm);",
+      },
       csharp: {
         method: 'Core.PaymentTerms.Update',
         example:
@@ -6205,6 +6700,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'account_groups list',
         example: "augno core:product-line-access:account-groups list \\\n  --api-key 'My API Key'",
+      },
+      php: {
+        method: 'core->productLineAccess->accountGroups->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$accountGroups = $client->core->productLineAccess->accountGroups->list();\n\nvar_dump($accountGroups);",
       },
       csharp: {
         method: 'Core.ProductLineAccess.AccountGroups.List',
@@ -6266,6 +6766,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:product-line-access:account-groups create \\\n  --api-key 'My API Key' \\\n  --account-group-id acgp_01jm4r6700f8nwq3v5hx2d9ktp \\\n  --product-line-id pl_01jm4r6700f8nwq3v5hx2d9ktp",
       },
+      php: {
+        method: 'core->productLineAccess->accountGroups->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$productLineAccess = $client->core->productLineAccess->accountGroups->create(\n  accountGroupID: 'acgp_01jm4r6700f8nwq3v5hx2d9ktp',\n  productLineIDs: ['pl_01jm4r6700f8nwq3v5hx2d9ktp'],\n);\n\nvar_dump($productLineAccess);",
+      },
       csharp: {
         method: 'Core.ProductLineAccess.AccountGroups.Create',
         example:
@@ -6324,6 +6829,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'account_groups delete',
         example:
           "augno core:product-line-access:account-groups delete \\\n  --api-key 'My API Key' \\\n  --account-group-id account_group_id",
+      },
+      php: {
+        method: 'core->productLineAccess->accountGroups->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$accountGroup = $client->core->productLineAccess->accountGroups->delete(\n  'account_group_id'\n);\n\nvar_dump($accountGroup);",
       },
       csharp: {
         method: 'Core.ProductLineAccess.AccountGroups.Delete',
@@ -6385,6 +6895,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:product-line-access:account-groups retrieve \\\n  --api-key 'My API Key' \\\n  --account-group-id account_group_id",
       },
+      php: {
+        method: 'core->productLineAccess->accountGroups->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$productLineAccess = $client->core->productLineAccess->accountGroups->retrieve(\n  'account_group_id'\n);\n\nvar_dump($productLineAccess);",
+      },
       csharp: {
         method: 'Core.ProductLineAccess.AccountGroups.Retrieve',
         example:
@@ -6445,6 +6960,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:product-line-access:account-groups update \\\n  --api-key 'My API Key' \\\n  --account-group-id account_group_id \\\n  --product-line-id pl_01jm4r6700f8nwq3v5hx2d9ktp",
       },
+      php: {
+        method: 'core->productLineAccess->accountGroups->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$productLineAccess = $client->core->productLineAccess->accountGroups->update(\n  'account_group_id', productLineIDs: ['pl_01jm4r6700f8nwq3v5hx2d9ktp']\n);\n\nvar_dump($productLineAccess);",
+      },
       csharp: {
         method: 'Core.ProductLineAccess.AccountGroups.Update',
         example:
@@ -6504,6 +7024,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'properties list',
         example: "augno core:properties list \\\n  --api-key 'My API Key'",
       },
+      php: {
+        method: 'core->properties->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$properties = $client->core->properties->list();\n\nvar_dump($properties);",
+      },
       csharp: {
         method: 'Core.Properties.List',
         example:
@@ -6561,6 +7086,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'properties create',
         example: "augno core:properties create \\\n  --api-key 'My API Key' \\\n  --name Color",
+      },
+      php: {
+        method: 'core->properties->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$property = $client->core->properties->create(name: 'Color');\n\nvar_dump($property);",
       },
       csharp: {
         method: 'Core.Properties.Create',
@@ -6620,6 +7150,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'properties delete',
         example: "augno core:properties delete \\\n  --api-key 'My API Key' \\\n  --id id",
       },
+      php: {
+        method: 'core->properties->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$property = $client->core->properties->delete('id');\n\nvar_dump($property);",
+      },
       csharp: {
         method: 'Core.Properties.Delete',
         example:
@@ -6678,6 +7213,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'properties retrieve',
         example: "augno core:properties retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
       },
+      php: {
+        method: 'core->properties->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$property = $client->core->properties->retrieve('id');\n\nvar_dump($property);",
+      },
       csharp: {
         method: 'Core.Properties.Retrieve',
         example:
@@ -6735,6 +7275,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'properties update',
         example: "augno core:properties update \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->properties->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$property = $client->core->properties->update('id', name: 'Size');\n\nvar_dump($property);",
       },
       csharp: {
         method: 'Core.Properties.Update',
@@ -6796,6 +7341,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'attributes list',
         example:
           "augno core:properties:attributes list \\\n  --api-key 'My API Key' \\\n  --property-id property_id",
+      },
+      php: {
+        method: 'core->properties->attributes->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$attributes = $client->core->properties->attributes->list(\n  'property_id', include: ['property']\n);\n\nvar_dump($attributes);",
       },
       csharp: {
         method: 'Core.Properties.Attributes.List',
@@ -6863,6 +7413,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:properties:attributes create \\\n  --api-key 'My API Key' \\\n  --property-id property_id \\\n  --color-code red \\\n  --order 1 \\\n  --text Red",
       },
+      php: {
+        method: 'core->properties->attributes->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$attribute = $client->core->properties->attributes->create(\n  'property_id', colorCode: 'red', order: 1, text: 'Red', include: ['property']\n);\n\nvar_dump($attribute);",
+      },
       csharp: {
         method: 'Core.Properties.Attributes.Create',
         example:
@@ -6921,6 +7476,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'attributes delete',
         example:
           "augno core:properties:attributes delete \\\n  --api-key 'My API Key' \\\n  --property-id property_id \\\n  --id id",
+      },
+      php: {
+        method: 'core->properties->attributes->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$attribute = $client->core->properties->attributes->delete(\n  'id', propertyID: 'property_id'\n);\n\nvar_dump($attribute);",
       },
       csharp: {
         method: 'Core.Properties.Attributes.Delete',
@@ -6981,6 +7541,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'attributes retrieve',
         example:
           "augno core:properties:attributes retrieve \\\n  --api-key 'My API Key' \\\n  --property-id property_id \\\n  --id id",
+      },
+      php: {
+        method: 'core->properties->attributes->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$attribute = $client->core->properties->attributes->retrieve(\n  'id', propertyID: 'property_id', include: ['property']\n);\n\nvar_dump($attribute);",
       },
       csharp: {
         method: 'Core.Properties.Attributes.Retrieve',
@@ -7048,6 +7613,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'attributes update',
         example:
           "augno core:properties:attributes update \\\n  --api-key 'My API Key' \\\n  --property-id property_id \\\n  --id id",
+      },
+      php: {
+        method: 'core->properties->attributes->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$attribute = $client->core->properties->attributes->update(\n  'id',\n  propertyID: 'property_id',\n  include: ['property'],\n  colorCode: 'color_code',\n  order: 0,\n  text: 'Blue',\n);\n\nvar_dump($attribute);",
       },
       csharp: {
         method: 'Core.Properties.Attributes.Update',
@@ -7124,6 +7694,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'request_logs list',
         example: "augno core:request-logs list \\\n  --api-key 'My API Key'",
       },
+      php: {
+        method: 'core->requestLogs->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$page = $client->core->requestLogs->list(\n  accountID: 'account_id',\n  actorID: 'actor_id',\n  actorName: 'actor_name',\n  actorType: 'actor_type',\n  cursor: 'cursor',\n  endDate: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  errorCode: 'error_code',\n  exactMatch: true,\n  include: ['account'],\n  limit: 0,\n  method: 'method',\n  q: 'q',\n  startDate: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  statusCode: 0,\n);\n\nvar_dump($page);",
+      },
       csharp: {
         method: 'Core.RequestLogs.List',
         example:
@@ -7182,6 +7757,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'request_logs retrieve',
         example: "augno core:request-logs retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->requestLogs->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$requestLog = $client->core->requestLogs->retrieve('id', include: ['account']);\n\nvar_dump($requestLog);",
       },
       csharp: {
         method: 'Core.RequestLogs.Retrieve',
@@ -7242,6 +7822,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'sandboxes list',
         example: "augno core:sandboxes list \\\n  --api-key 'My API Key'",
+      },
+      php: {
+        method: 'core->sandboxes->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$page = $client->core->sandboxes->list(\n  cursor: 'cursor', include: ['owner_account'], limit: 0, q: 'q'\n);\n\nvar_dump($page);",
       },
       csharp: {
         method: 'Core.Sandboxes.List',
@@ -7304,6 +7889,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:sandboxes create \\\n  --api-key 'My API Key' \\\n  --mode blank \\\n  --name 'Integration Testing'",
       },
+      php: {
+        method: 'core->sandboxes->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$sandbox = $client->core->sandboxes->create(\n  mode: 'blank', name: 'Integration Testing', include: ['owner_account']\n);\n\nvar_dump($sandbox);",
+      },
       csharp: {
         method: 'Core.Sandboxes.Create',
         example:
@@ -7362,6 +7952,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'sandboxes delete',
         example: "augno core:sandboxes delete \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->sandboxes->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$sandbox = $client->core->sandboxes->delete('id');\n\nvar_dump($sandbox);",
       },
       csharp: {
         method: 'Core.Sandboxes.Delete',
@@ -7422,6 +8017,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'sandboxes retrieve',
         example: "augno core:sandboxes retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
       },
+      php: {
+        method: 'core->sandboxes->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$sandbox = $client->core->sandboxes->retrieve('id', include: ['owner_account']);\n\nvar_dump($sandbox);",
+      },
       csharp: {
         method: 'Core.Sandboxes.Retrieve',
         example:
@@ -7481,6 +8081,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'shipping_terms list',
         example: "augno core:shipping-terms list \\\n  --api-key 'My API Key'",
+      },
+      php: {
+        method: 'core->shippingTerms->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$shippingTerms = $client->core->shippingTerms->list(\n  include: ['flat_rate.unit']\n);\n\nvar_dump($shippingTerms);",
       },
       csharp: {
         method: 'Core.ShippingTerms.List',
@@ -7549,6 +8154,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:shipping-terms create \\\n  --api-key 'My API Key' \\\n  --free-shipping-carrier-option-id string \\\n  --name Prepaid \\\n  --type carrier_rate_freight",
       },
+      php: {
+        method: 'core->shippingTerms->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$shippingTerm = $client->core->shippingTerms->create(\n  freeShippingCarrierOptionIDs: ['string'],\n  name: 'Prepaid',\n  type: 'carrier_rate_freight',\n  include: ['flat_rate.unit'],\n  flatRate: ['unitID' => 'unit_id', 'value' => 'value'],\n  minimumOrderValue: ['unitID' => 'unit_id', 'value' => 'value'],\n);\n\nvar_dump($shippingTerm);",
+      },
       csharp: {
         method: 'Core.ShippingTerms.Create',
         example:
@@ -7607,6 +8217,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'shipping_terms delete',
         example: "augno core:shipping-terms delete \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->shippingTerms->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$shippingTerm = $client->core->shippingTerms->delete('id');\n\nvar_dump($shippingTerm);",
       },
       csharp: {
         method: 'Core.ShippingTerms.Delete',
@@ -7667,6 +8282,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'shipping_terms retrieve',
         example: "augno core:shipping-terms retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->shippingTerms->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$shippingTerm = $client->core->shippingTerms->retrieve(\n  'id', include: ['flat_rate.unit']\n);\n\nvar_dump($shippingTerm);",
       },
       csharp: {
         method: 'Core.ShippingTerms.Retrieve',
@@ -7737,6 +8357,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:shipping-terms update \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --free-shipping-carrier-option-id string",
       },
+      php: {
+        method: 'core->shippingTerms->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$shippingTerm = $client->core->shippingTerms->update(\n  'id',\n  freeShippingCarrierOptionIDs: ['string'],\n  include: ['flat_rate.unit'],\n  flatRate: ['unitID' => 'unit_id', 'value' => 'value'],\n  minimumOrderValue: ['unitID' => 'unit_id', 'value' => 'value'],\n  name: 'Collect',\n  type: 'free_freight',\n);\n\nvar_dump($shippingTerm);",
+      },
       csharp: {
         method: 'Core.ShippingTerms.Update',
         example:
@@ -7796,6 +8421,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'units list',
         example: "augno core:units list \\\n  --api-key 'My API Key'",
+      },
+      php: {
+        method: 'core->units->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$units = $client->core->units->list(type: 'type', unitGroupIDs: ['string']);\n\nvar_dump($units);",
       },
       csharp: {
         method: 'Core.Units.List',
@@ -7865,6 +8495,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:units create \\\n  --api-key 'My API Key' \\\n  --abbreviation g \\\n  --is-base-unit \\\n  --name Gram \\\n  --offset-denominator 1.000000000000000000000000000000 \\\n  --offset-numerator 0.000000000000000000000000000000 \\\n  --ratio-denominator 1.000000000000000000000000000000 \\\n  --ratio-numerator 1.000000000000000000000000000000 \\\n  --type mass",
       },
+      php: {
+        method: 'core->units->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$unit = $client->core->units->create(\n  abbreviation: 'g',\n  isBaseUnit: true,\n  name: 'Gram',\n  offsetDenominator: '1.000000000000000000000000000000',\n  offsetNumerator: '0.000000000000000000000000000000',\n  ratioDenominator: '1.000000000000000000000000000000',\n  ratioNumerator: '1.000000000000000000000000000000',\n  type: 'mass',\n);\n\nvar_dump($unit);",
+      },
       csharp: {
         method: 'Core.Units.Create',
         example:
@@ -7923,6 +8558,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'units delete',
         example: "augno core:units delete \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->units->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$unit = $client->core->units->delete('id');\n\nvar_dump($unit);",
       },
       csharp: {
         method: 'Core.Units.Delete',
@@ -7983,6 +8623,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'units retrieve',
         example: "augno core:units retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->units->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$unit = $client->core->units->retrieve('id');\n\nvar_dump($unit);",
       },
       csharp: {
         method: 'Core.Units.Retrieve',
@@ -8052,6 +8697,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'units update',
         example: "augno core:units update \\\n  --api-key 'My API Key' \\\n  --id id",
       },
+      php: {
+        method: 'core->units->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$unit = $client->core->units->update(\n  'id',\n  abbreviation: 'kg',\n  name: 'Kilogram',\n  offsetDenominator: 'offset_denominator',\n  offsetNumerator: 'offset_numerator',\n  ratioDenominator: 'ratio_denominator',\n  ratioNumerator: 'ratio_numerator',\n);\n\nvar_dump($unit);",
+      },
       csharp: {
         method: 'Core.Units.Update',
         example:
@@ -8111,6 +8761,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'item_categories list',
         example: "augno core:item-categories list \\\n  --api-key 'My API Key'",
+      },
+      php: {
+        method: 'core->itemCategories->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$itemCategories = $client->core->itemCategories->list(\n  include: ['properties'], type: 'type'\n);\n\nvar_dump($itemCategories);",
       },
       csharp: {
         method: 'Core.ItemCategories.List',
@@ -8172,6 +8827,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:item-categories create \\\n  --api-key 'My API Key' \\\n  --name Electronics \\\n  --type material_category \\\n  --unit-group-id ug_01jm4r6700f8nwq3v5hx2d9ktp",
       },
+      php: {
+        method: 'core->itemCategories->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$itemCategory = $client->core->itemCategories->create(\n  name: 'Electronics',\n  type: 'material_category',\n  unitGroupID: 'ug_01jm4r6700f8nwq3v5hx2d9ktp',\n);\n\nvar_dump($itemCategory);",
+      },
       csharp: {
         method: 'Core.ItemCategories.Create',
         example:
@@ -8230,6 +8890,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'item_categories delete',
         example: "augno core:item-categories delete \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->itemCategories->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$itemCategory = $client->core->itemCategories->delete('id');\n\nvar_dump($itemCategory);",
       },
       csharp: {
         method: 'Core.ItemCategories.Delete',
@@ -8291,6 +8956,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'item_categories retrieve',
         example: "augno core:item-categories retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
       },
+      php: {
+        method: 'core->itemCategories->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$itemCategory = $client->core->itemCategories->retrieve(\n  'id', include: ['properties']\n);\n\nvar_dump($itemCategory);",
+      },
       csharp: {
         method: 'Core.ItemCategories.Retrieve',
         example:
@@ -8350,6 +9020,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       cli: {
         method: 'item_categories update',
         example: "augno core:item-categories update \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
+      php: {
+        method: 'core->itemCategories->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$itemCategory = $client->core->itemCategories->update(\n  'id', name: 'Updated Electronics', notes: 'notes'\n);\n\nvar_dump($itemCategory);",
       },
       csharp: {
         method: 'Core.ItemCategories.Update',
@@ -8412,6 +9087,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:item-categories change-unit-group \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --unit-group-id unit_group_id",
       },
+      php: {
+        method: 'core->itemCategories->changeUnitGroup',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->core->itemCategories->changeUnitGroup(\n  'unit_group_id', id: 'id'\n);\n\nvar_dump($response);",
+      },
       csharp: {
         method: 'Core.ItemCategories.ChangeUnitGroup',
         example:
@@ -8472,6 +9152,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'properties remove',
         example:
           "augno core:item-categories:properties remove \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --property-id property_id",
+      },
+      php: {
+        method: 'core->itemCategories->properties->remove',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$property = $client->core->itemCategories->properties->remove(\n  'property_id', id: 'id'\n);\n\nvar_dump($property);",
       },
       csharp: {
         method: 'Core.ItemCategories.Properties.Remove',
@@ -8534,6 +9219,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "augno core:item-categories:properties add \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --property-id property_id",
       },
+      php: {
+        method: 'core->itemCategories->properties->add',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(apiKey: 'My API Key', environment: 'environment_1');\n\n$response = $client->core->itemCategories->properties->add(\n  'property_id', id: 'id'\n);\n\nvar_dump($response);",
+      },
       csharp: {
         method: 'Core.ItemCategories.Properties.Add',
         example:
@@ -8572,6 +9262,11 @@ const EMBEDDED_READMES: { language: string; content: string }[] = [
     language: 'kotlin',
     content:
       '# Augno Client Kotlin API Library\n\n\n[![Maven Central](https://img.shields.io/maven-central/v/com.augno.api/augno-client-kotlin)](https://central.sonatype.com/artifact/com.augno.api/augno-client-kotlin/0.0.1)\n[![javadoc](https://javadoc.io/badge2/com.augno.api/augno-client-kotlin/0.0.1/javadoc.svg)](https://javadoc.io/doc/com.augno.api/augno-client-kotlin/0.0.1)\n\n\nThe Augno Client Kotlin SDK provides convenient access to the [Augno Client REST API](https://www.docs.augno.com)   from applications written in Kotlin.\n\n\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Augno Client MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=augno-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImF1Z25vLW1jcCJdLCJlbnYiOnsiQVVHTk9fQVBJX0tFWSI6Ik15IEFQSSBLZXkifX0)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22augno-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22augno-mcp%22%5D%2C%22env%22%3A%7B%22AUGNO_API_KEY%22%3A%22My%20API%20Key%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\nThe REST API documentation can be found on [www.docs.augno.com](https://www.docs.augno.com). KDocs are available on [javadoc.io](https://javadoc.io/doc/com.augno.api/augno-client-kotlin/0.0.1).\n\n## Installation\n\n### Gradle\n\n~~~kotlin\nimplementation("com.augno.api:augno-client-kotlin:0.0.1")\n~~~\n\n### Maven\n\n~~~xml\n<dependency>\n  <groupId>com.augno.api</groupId>\n  <artifactId>augno-client-kotlin</artifactId>\n  <version>0.0.1</version>\n</dependency>\n~~~\n\n## Requirements\n\nThis library requires Java 8 or later.\n\n## Usage\n\n```kotlin\nimport com.augno.api.client.AugnoClientClient\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient\nimport com.augno.api.models.ai.AiListToolGroupsParams\nimport com.augno.api.models.ai.AiListToolGroupsResponse\n\n// Configures using the `augnoclient.augnoApiKey` and `augnoclient.baseUrl` system properties\n// Or configures using the `AUGNO_API_KEY` and `AUGNO_CLIENT_BASE_URL` environment variables\nval client: AugnoClientClient = AugnoClientOkHttpClient.fromEnv()\n\nval response: AiListToolGroupsResponse = client.ai().listToolGroups()\n```\n\n## Client configuration\n\nConfigure the client using system properties or environment variables:\n\n```kotlin\nimport com.augno.api.client.AugnoClientClient\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient\n\n// Configures using the `augnoclient.augnoApiKey` and `augnoclient.baseUrl` system properties\n// Or configures using the `AUGNO_API_KEY` and `AUGNO_CLIENT_BASE_URL` environment variables\nval client: AugnoClientClient = AugnoClientOkHttpClient.fromEnv()\n```\n\nOr manually:\n\n```kotlin\nimport com.augno.api.client.AugnoClientClient\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient\n\nval client: AugnoClientClient = AugnoClientOkHttpClient.builder()\n    .apiKey("My API Key")\n    .build()\n```\n\nOr using a combination of the two approaches:\n\n```kotlin\nimport com.augno.api.client.AugnoClientClient\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient\n\nval client: AugnoClientClient = AugnoClientOkHttpClient.builder()\n    // Configures using the `augnoclient.augnoApiKey` and `augnoclient.baseUrl` system properties\n    // Or configures using the `AUGNO_API_KEY` and `AUGNO_CLIENT_BASE_URL` environment variables\n    .fromEnv()\n    .apiKey("My API Key")\n    .build()\n```\n\nSee this table for the available options:\n\n| Setter    | System property           | Environment variable    | Required | Default value             |\n| --------- | ------------------------- | ----------------------- | -------- | ------------------------- |\n| `apiKey`  | `augnoclient.augnoApiKey` | `AUGNO_API_KEY`         | false    | -                         |\n| `baseUrl` | `augnoclient.baseUrl`     | `AUGNO_CLIENT_BASE_URL` | true     | `"https://api.augno.com"` |\n\nSystem properties take precedence over environment variables.\n\n> [!TIP]\n> Don\'t create more than one client in the same application. Each client has a connection pool and\n> thread pools, which are more efficient to share between requests.\n\n### Modifying configuration\n\nTo temporarily use a modified client configuration, while reusing the same connection and thread       pools, call `withOptions()` on any client or service:\n\n```kotlin\nimport com.augno.api.client.AugnoClientClient\n\nval clientWithOptions: AugnoClientClient = client.withOptions {\n    it.baseUrl("https://example.com")\n    it.maxRetries(42)\n}\n```\n\nThe `withOptions()` method does not affect the original client or service.\n\n## Requests and responses\n\nTo send a request to the Augno Client API, build an instance of some `Params` class and pass it to the     corresponding client method. When the response is received, it will be deserialized into an instance of     a Kotlin class.\n\nFor example, `client.ai().listToolGroups(...)` should be called with an instance of `AiListToolGroupsParams`, and it     will return an instance of `AiListToolGroupsResponse`.\n\n## Immutability\n\nEach class in the SDK has an associated   [builder](https://blogs.oracle.com/javamagazine/post/exploring-joshua-blochs-builder-design-pattern-in-java)   or factory method for constructing it.\n\nEach class is [immutable](https://docs.oracle.com/javase/tutorial/essential/concurrency/immutable.html)   once constructed. If the class has an associated builder, then it has a `toBuilder()` method, which can   be used to convert it back to a builder for making a modified copy.\n\nBecause each class is immutable, builder modification will _never_ affect already built class instances.\n\n## Asynchronous execution\n\nThe default client is synchronous. To switch to asynchronous execution, call the `async()` method:\n\n```kotlin\nimport com.augno.api.client.AugnoClientClient\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient\nimport com.augno.api.models.ai.AiListToolGroupsParams\nimport com.augno.api.models.ai.AiListToolGroupsResponse\n\n// Configures using the `augnoclient.augnoApiKey` and `augnoclient.baseUrl` system properties\n// Or configures using the `AUGNO_API_KEY` and `AUGNO_CLIENT_BASE_URL` environment variables\nval client: AugnoClientClient = AugnoClientOkHttpClient.fromEnv()\n\nval response: AiListToolGroupsResponse = client.async().ai().listToolGroups()\n```\n\nOr create an asynchronous client from the beginning:\n\n```kotlin\nimport com.augno.api.client.AugnoClientClientAsync\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClientAsync\nimport com.augno.api.models.ai.AiListToolGroupsParams\nimport com.augno.api.models.ai.AiListToolGroupsResponse\n\n// Configures using the `augnoclient.augnoApiKey` and `augnoclient.baseUrl` system properties\n// Or configures using the `AUGNO_API_KEY` and `AUGNO_CLIENT_BASE_URL` environment variables\nval client: AugnoClientClientAsync = AugnoClientOkHttpClientAsync.fromEnv()\n\nval response: AiListToolGroupsResponse = client.ai().listToolGroups()\n```\n\nThe asynchronous client supports the same options as the synchronous one, except most methods are [suspending](https://kotlinlang.org/docs/coroutines-guide.html).\n\n\n\n\n\n\n\n## Raw responses\n\nThe SDK defines methods that deserialize responses into instances of Kotlin classes.       However, these methods don\'t provide access to the response headers, status code, or the raw response       body.\n\nTo access this data, prefix any HTTP method call on a client or service with `withRawResponse()`:\n\n```kotlin\nimport com.augno.api.core.http.Headers\nimport com.augno.api.core.http.HttpResponseFor\nimport com.augno.api.models.ai.AiListToolGroupsParams\nimport com.augno.api.models.ai.AiListToolGroupsResponse\n\nval response: HttpResponseFor<AiListToolGroupsResponse> = client.ai().withRawResponse().listToolGroups()\n\nval statusCode: Int = response.statusCode()\nval headers: Headers = response.headers()\n```\n\nYou can still deserialize the response into an instance of a Kotlin class if needed:\n\n```kotlin\nimport com.augno.api.models.ai.AiListToolGroupsResponse\n\nval parsedResponse: AiListToolGroupsResponse = response.parse()\n```\n\n## Error handling\n\nThe SDK throws custom unchecked exception types:\n\n- [`AugnoClientServiceException`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/errors/AugnoClientServiceException.kt): Base class for HTTP errors. See this table for which exception       subclass is thrown for each HTTP status code:\n\n  | Status | Exception                                          |\n  | ------ | -------------------------------------------------- |\n  | 400    | [`BadRequestException`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/errors/BadRequestException.kt)           |\n  | 401    | [`UnauthorizedException`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/errors/UnauthorizedException.kt)         |\n  | 403    | [`PermissionDeniedException`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/errors/PermissionDeniedException.kt)     |\n  | 404    | [`NotFoundException`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/errors/NotFoundException.kt)             |\n  | 422    | [`UnprocessableEntityException`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/errors/UnprocessableEntityException.kt)  |\n  | 429    | [`RateLimitException`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/errors/RateLimitException.kt)            |\n  | 5xx    | [`InternalServerException`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/errors/InternalServerException.kt)       |\n  | others | [`UnexpectedStatusCodeException`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/errors/UnexpectedStatusCodeException.kt) |\n\n- [`AugnoClientIoException`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/errors/AugnoClientIoException.kt): I/O networking errors.\n\n- [`AugnoClientRetryableException`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/errors/AugnoClientRetryableException.kt): Generic error indicating a failure that could be retried by the client.\n\n- [`AugnoClientInvalidDataException`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/errors/AugnoClientInvalidDataException.kt): Failure to interpret successfully parsed data. For example,       when accessing a property that\'s supposed to be required, but the API unexpectedly omitted it from the       response.\n\n- [`AugnoClientException`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/errors/AugnoClientException.kt): Base class for all exceptions. Most errors will result in one of the       previously mentioned ones, but completely generic errors may be thrown using the base class.\n\n## Pagination\n\nThe SDK defines methods that return a paginated lists of results. It provides convenient ways to access     the results either one page at a time or item-by-item across all pages.\n\n### Auto-pagination\n\nTo iterate through all results across all pages, use the `autoPager()` method, which automatically     fetches more pages as needed.\n\nWhen using the synchronous client, the method returns a [`Sequence`](https://kotlinlang.org/docs/sequences.html)\n\n```kotlin\nimport com.augno.api.models.ai.AiListUsagePage\n\nval page: AiListUsagePage = client.ai().listUsage()\npage.autoPager()\n    .take(50)\n    .forEach { ai -> println(ai) }\n```\n\nWhen using the asynchronous client, the method returns a [`Flow`](https://kotlinlang.org/docs/flow.html):\n\n```kotlin\nimport com.augno.api.models.ai.AiListUsagePageAsync\n\nval page: AiListUsagePageAsync = client.async().ai().listUsage()\npage.autoPager()\n    .take(50)\n    .forEach { ai -> println(ai) }\n```\n\n### Manual pagination\n\nTo access individual page items and manually request the next page, use the `items()`,\n`hasNextPage()`, and `nextPage()` methods:\n\n```kotlin\nimport com.augno.api.models.ai.AiListUsagePage\nimport com.augno.api.models.ai.AiListUsageResponse\n\nval page: AiListUsagePage = client.ai().listUsage()\nwhile (true) {\n    for (ai in page.items()) {\n        println(ai)\n    }\n\n    if (!page.hasNextPage()) {\n        break\n    }\n\n    page = page.nextPage()\n}\n```\n\n## Logging\n\nEnable logging by setting the `AUGNO_CLIENT_LOG` environment variable to   `info`:\n\n```sh\nexport AUGNO_CLIENT_LOG=info\n```\n\nOr to `debug` for more verbose logging:\n\n```sh\nexport AUGNO_CLIENT_LOG=debug\n```\n\nOr configure the client manually using the `logLevel` method:\n\n```kotlin\nimport com.augno.api.client.AugnoClientClient\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient\nimport com.augno.api.core.LogLevel\n\nval client: AugnoClientClient = AugnoClientOkHttpClient.builder()\n    .fromEnv()\n    .logLevel(LogLevel.INFO)\n    .build()\n```\n\n## ProGuard and R8\n\nAlthough the SDK uses reflection, it is still usable with     [ProGuard](https://github.com/Guardsquare/proguard) and     [R8](https://developer.android.com/topic/performance/app-optimization/enable-app-optimization) because     `augno-client-kotlin-core` is published with a     [configuration file](augno-client-kotlin-core/src/main/resources/META-INF/proguard/augno-client-kotlin-core.pro) containing     [keep rules](https://www.guardsquare.com/manual/configuration/usage).\n\nProGuard and R8 should automatically detect and use the published rules, but you can also manually copy     the keep rules if necessary.\n\n\n\n\n\n## Jackson\n\nThe SDK depends on [Jackson](https://github.com/FasterXML/jackson) for JSON     serialization/deserialization. It is compatible with version 2.13.4 or higher,     but depends on version 2.18.2 by default.\n\nThe SDK throws an exception if it detects an incompatible Jackson version at runtime (e.g. if the     default version was overridden in your Maven or Gradle config).\n\nIf the SDK threw an exception, but you\'re _certain_ the version is compatible, then disable the version     check using the `checkJacksonVersionCompatibility` on [`AugnoClientOkHttpClient`](augno-client-kotlin-client-okhttp/src/main/kotlin/com/augno/api/client/okhttp/AugnoClientOkHttpClient.kt) or     [`AugnoClientOkHttpClientAsync`](augno-client-kotlin-client-okhttp/src/main/kotlin/com/augno/api/client/okhttp/AugnoClientOkHttpClientAsync.kt).\n\n> [!CAUTION]\n> We make no guarantee that the SDK works correctly when the Jackson version check is disabled.\n\nAlso note that there are bugs in older Jackson versions that can affect the SDK. We don\'t work around all     Jackson bugs ([example](https://github.com/FasterXML/jackson-databind/issues/3240)) and expect users to     upgrade Jackson for those instead.\n\n## Network options\n\n### Retries\n\nThe SDK automatically retries 2 times by default, with a short exponential backoff between requests.\n\nOnly the following error types are retried:\n- Connection errors (for example, due to a network connectivity problem)\n- 408 Request Timeout\n- 409 Conflict\n- 429 Rate Limit\n- 5xx Internal\n\nThe API may also explicitly instruct the SDK to retry or not retry a request.\n\nTo set a custom number of retries, configure the client using the `maxRetries` method:\n\n```kotlin\nimport com.augno.api.client.AugnoClientClient\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient\n\nval client: AugnoClientClient = AugnoClientOkHttpClient.builder()\n    .fromEnv()\n    .maxRetries(4)\n    .build()\n```\n\n### Timeouts\n\nRequests time out after 1 minute by default.\n\nTo set a custom timeout, configure the method call using the `timeout` method:\n\n```kotlin\nimport com.augno.api.models.ai.AiListToolGroupsResponse\n\nval response: AiListToolGroupsResponse = client.ai().listToolGroups(RequestOptions.builder().timeout(Duration.ofSeconds(30)).build())\n```\n\nOr configure the default for all method calls at the client level:\n\n```kotlin\nimport com.augno.api.client.AugnoClientClient\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient\nimport java.time.Duration\n\nval client: AugnoClientClient = AugnoClientOkHttpClient.builder()\n    .fromEnv()\n    .timeout(Duration.ofSeconds(30))\n    .build()\n```\n\n### Proxies\n\nTo route requests through a proxy, configure the client using the `proxy` method:\n\n```kotlin\nimport com.augno.api.client.AugnoClientClient\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient\nimport java.net.InetSocketAddress\nimport java.net.Proxy\n\nval client: AugnoClientClient = AugnoClientOkHttpClient.builder()\n    .fromEnv()\n    .proxy(Proxy(\n      Proxy.Type.HTTP, InetSocketAddress(\n        "https://example.com", 8080\n      )\n    ))\n    .build()\n```\n\nIf the proxy responds with `407 Proxy Authentication Required`, supply credentials by also   configuring `proxyAuthenticator`:\n\n```kotlin\nimport com.augno.api.client.AugnoClientClient\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient\nimport com.augno.api.core.http.ProxyAuthenticator\n\nval client: AugnoClientClient = AugnoClientOkHttpClient.builder()\n    .fromEnv()\n    .proxy(...)\n    // Or a custom implementation of `ProxyAuthenticator`.\n    .proxyAuthenticator(ProxyAuthenticator.basic("username", "password"))\n    .build()\n```\n\n### Connection pooling\n\nTo customize the underlying OkHttp connection pool, configure the client using the   `maxIdleConnections` and `keepAliveDuration` methods:\n\n```kotlin\nimport com.augno.api.client.AugnoClientClient\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient\nimport java.time.Duration\n\nval client: AugnoClientClient = AugnoClientOkHttpClient.builder()\n    .fromEnv()\n    // If `maxIdleConnections` is set, then `keepAliveDuration` must be set, and vice versa.\n    .maxIdleConnections(10)\n    .keepAliveDuration(Duration.ofMinutes(2))\n    .build()\n```\n\nIf both options are unset, OkHttp\'s default connection pool settings are used.\n\n### HTTPS\n\n> [!NOTE]\n> Most applications should not call these methods, and instead use the system defaults. The defaults include\n> special optimizations that can be lost if the implementations are modified.\n\nTo configure how HTTPS connections are secured, configure the client using the `sslSocketFactory`,   `trustManager`, and `hostnameVerifier` methods:\n\n```kotlin\nimport com.augno.api.client.AugnoClientClient\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient\n\nval client: AugnoClientClient = AugnoClientOkHttpClient.builder()\n    .fromEnv()\n    // If `sslSocketFactory` is set, then `trustManager` must be set, and vice versa.\n    .sslSocketFactory(yourSSLSocketFactory)\n    .trustManager(yourTrustManager)\n    .hostnameVerifier(yourHostnameVerifier)\n    .build()\n```\n\n### Environments\n\nThe SDK sends requests to the production by default. To send requests to a different     environment, configure the client like so:\n\n```kotlin\nimport com.augno.api.client.AugnoClientClient\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient\n\nval client: AugnoClientClient = AugnoClientOkHttpClient.builder()\n    .fromEnv()\n    .environment1()\n    .build()\n```\n\n### Custom HTTP client\n\nThe SDK consists of three artifacts:\n- `augno-client-kotlin-core`\n  - Contains core SDK logic\n  - Does not depend on [OkHttp](https://square.github.io/okhttp)\n  - Exposes [`AugnoClientClient`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/client/AugnoClientClient.kt), [`AugnoClientClientAsync`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/client/AugnoClientClientAsync.kt),             [`AugnoClientClientImpl`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/client/AugnoClientClientImpl.kt), and [`AugnoClientClientAsyncImpl`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/client/AugnoClientClientAsyncImpl.kt), all of which can             work with any HTTP client\n- `augno-client-kotlin-client-okhttp`\n  - Depends on [OkHttp](https://square.github.io/okhttp)\n  - Exposes [`AugnoClientOkHttpClient`](augno-client-kotlin-client-okhttp/src/main/kotlin/com/augno/api/client/okhttp/AugnoClientOkHttpClient.kt) and [`AugnoClientOkHttpClientAsync`](augno-client-kotlin-client-okhttp/src/main/kotlin/com/augno/api/client/okhttp/AugnoClientOkHttpClientAsync.kt), which             provide a way to construct [`AugnoClientClientImpl`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/client/AugnoClientClientImpl.kt) and             [`AugnoClientClientAsyncImpl`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/client/AugnoClientClientAsyncImpl.kt), respectively, using OkHttp\n- `augno-client-kotlin`\n  - Depends on and exposes the APIs of both `augno-client-kotlin-core` and `augno-client-kotlin-client-okhttp`\n  - Does not have its own logic\n\nThis structure allows replacing the SDK\'s default HTTP client without pulling in unnecessary dependencies.\n\n#### Customized [`OkHttpClient`](https://square.github.io/okhttp/3.x/okhttp/okhttp3/OkHttpClient.html)\n\n> [!TIP]\n> Try the available [network options](#network-options) before replacing the default client.\n\nTo use a customized `OkHttpClient`:\n\n1. Replace your [`augno-client-kotlin` dependency](#installation) with `augno-client-kotlin-core`\n2. Copy `augno-client-kotlin-client-okhttp`\'s [`OkHttpClient`](augno-client-kotlin-client-okhttp/src/main/kotlin/com/augno/api/client/okhttp/OkHttpClient.kt) class into your code and        customize it\n3. Construct [`AugnoClientClientImpl`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/client/AugnoClientClientImpl.kt) or [`AugnoClientClientAsyncImpl`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/client/AugnoClientClientAsyncImpl.kt), similarly to        [`AugnoClientOkHttpClient`](augno-client-kotlin-client-okhttp/src/main/kotlin/com/augno/api/client/okhttp/AugnoClientOkHttpClient.kt) or [`AugnoClientOkHttpClientAsync`](augno-client-kotlin-client-okhttp/src/main/kotlin/com/augno/api/client/okhttp/AugnoClientOkHttpClientAsync.kt), using your        customized client\n\n### Completely custom HTTP client\n\nTo use a completely custom HTTP client:\n\n1. Replace your [`augno-client-kotlin` dependency](#installation) with `augno-client-kotlin-core`\n2. Write a class that implements the [`HttpClient`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/core/http/HttpClient.kt) interface\n3. Construct [`AugnoClientClientImpl`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/client/AugnoClientClientImpl.kt) or [`AugnoClientClientAsyncImpl`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/client/AugnoClientClientAsyncImpl.kt), similarly to        [`AugnoClientOkHttpClient`](augno-client-kotlin-client-okhttp/src/main/kotlin/com/augno/api/client/okhttp/AugnoClientOkHttpClient.kt) or [`AugnoClientOkHttpClientAsync`](augno-client-kotlin-client-okhttp/src/main/kotlin/com/augno/api/client/okhttp/AugnoClientOkHttpClientAsync.kt), using your new        client class\n\n## Undocumented API functionality\n\nThe SDK is typed for convenient usage of the documented API. However, it also supports working with undocumented or not yet supported parts of the API.\n\n### Parameters\n\nTo set undocumented parameters, call the `putAdditionalHeader`, `putAdditionalQueryParam`, or       `putAdditionalBodyProperty` methods on any `Params` class:\n\n```kotlin\nimport com.augno.api.core.JsonValue\nimport com.augno.api.models.ai.AiListToolGroupsParams\n\nval params: AiListToolGroupsParams = AiListToolGroupsParams.builder()\n    .putAdditionalHeader("Secret-Header", "42")\n    .putAdditionalQueryParam("secret_query_param", "42")\n    .putAdditionalBodyProperty("secretProperty", JsonValue.from("42"))\n    .build()\n```\n\nThese can be accessed on the built object later using the `_additionalHeaders()`,       `_additionalQueryParams()`, and `_additionalBodyProperties()` methods.\n\nTo set undocumented parameters on _nested_ headers, query params, or body classes, call the         `putAdditionalProperty` method on the nested class:\n\n```kotlin\nimport com.augno.api.core.JsonValue\nimport com.augno.api.models.ai.agents.AgentCreateParams\nimport com.augno.api.models.ai.agents.AgentDefinitionConfig\n\nval params: AgentCreateParams = AgentCreateParams.builder()\n    .config(AgentDefinitionConfig.builder()\n        .putAdditionalProperty("secretProperty", JsonValue.from("42"))\n        .build())\n    .build()\n```\n\nThese properties can be accessed on the nested built object later using the         `_additionalProperties()` method.\n\nTo set a documented parameter or property to an undocumented or not yet supported _value_, pass a       [`JsonValue`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/core/Values.kt) object to its setter:\n\n```kotlin\nimport com.augno.api.models.ai.AiListToolGroupsParams\n\nval params: AiListToolGroupsParams = AiListToolGroupsParams.builder().build()\n```\n\nThe most straightforward way to create a [`JsonValue`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/core/Values.kt) is using its       `from(...)` method:\n\n```kotlin\nimport com.augno.api.core.JsonValue\n\n// Create primitive JSON values\nval nullValue: JsonValue = JsonValue.from(null)\nval booleanValue: JsonValue = JsonValue.from(true)\nval numberValue: JsonValue = JsonValue.from(42)\nval stringValue: JsonValue = JsonValue.from("Hello World!")\n\n// Create a JSON array value equivalent to `["Hello", "World"]`\nval arrayValue: JsonValue = JsonValue.from(listOf(\n  "Hello", "World"\n))\n\n// Create a JSON object value equivalent to `{ "a": 1, "b": 2 }`\nval objectValue: JsonValue = JsonValue.from(mapOf(\n  "a" to 1, "b" to 2\n))\n\n// Create an arbitrarily nested JSON equivalent to:\n// {\n//   "a": [1, 2],\n//   "b": [3, 4]\n// }\nval complexValue: JsonValue = JsonValue.from(mapOf(\n  "a" to listOf(\n    1, 2\n  ), "b" to listOf(\n    3, 4\n  )\n))\n```\n\nNormally a `Builder` class\'s `build` method will throw         [`IllegalStateException`](https://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html)         if any required parameter or property is unset.\n\nTo forcibly omit a required parameter or property, pass [`JsonMissing`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/core/Values.kt):\n\n```kotlin\nimport com.augno.api.core.JsonMissing\nimport com.augno.api.models.ai.AiListToolGroupsParams\nimport com.augno.api.models.ai.agents.AgentCreateParams\nimport com.augno.api.models.ai.agents.AgentDefinitionConfig\nimport com.augno.api.models.ai.agents.ToolInput\n\nval params: AiListToolGroupsParams = AgentCreateParams.builder()\n    .config(AgentDefinitionConfig.builder()\n        .model("claude-sonnet-4")\n        .provider("anthropic")\n        .systemPrompt("You are an order processing agent. Parse incoming emails and create draft orders.")\n        .temperature(0.2)\n        .triggerConfig(AgentDefinitionConfig.TriggerConfig.builder()\n            .cronSchedule(null)\n            .addEventFilter("email.received")\n            .timezone(null)\n            .build())\n        .build())\n    .description("Monitors inventory levels and creates restock alerts.")\n    .name("Inventory Monitor")\n    .roleId("rl_01gf7a8200er3ar3pkfrb6kk29")\n    .slug("inventory_monitor")\n    .addTool(ToolInput.builder()\n        .configJson("config_json")\n        .requireReview(true)\n        .sortOrder(1L)\n        .toolId("tdef_01k0b1seed0searchproduct0")\n        .build())\n    .triggerType(AgentCreateParams.TriggerType.EVENT)\n    .categoryCode(JsonMissing.of())\n    .build()\n```\n\n### Response properties\n\nTo access undocumented response properties, call the `_additionalProperties()` method:\n\n```kotlin\nimport com.augno.api.core.JsonBoolean\nimport com.augno.api.core.JsonNull\nimport com.augno.api.core.JsonNumber\nimport com.augno.api.core.JsonValue\n\nval additionalProperties: Map<String, JsonValue> = client.ai().listToolGroups(params)._additionalProperties()\nval secretPropertyValue: JsonValue = additionalProperties.get("secretProperty")\n\nval result = when (secretPropertyValue) {\n    is JsonNull -> "It\'s null!"\n    is JsonBoolean -> "It\'s a boolean!"\n    is JsonNumber -> "It\'s a number!"\n    // Other types include `JsonMissing`, `JsonString`, `JsonArray`, and `JsonObject`\n    else -> "It\'s something else!"\n}\n```\n\nTo access a property\'s raw JSON value, which may be undocumented, call its `_` prefixed method:\n\n```kotlin\nimport com.augno.api.core.JsonField\n\nval field: JsonField<Any> = client.ai().listToolGroups(params)._field()\n\nif (field.isMissing()) {\n  // The property is absent from the JSON response\n} else if (field.isNull()) {\n  // The property was set to literal null\n} else {\n  // Check if value was provided as a string\n  // Other methods include `asNumber()`, `asBoolean()`, etc.\n  val jsonString: String? = field.asString();\n\n  // Try to deserialize into a custom type\n  val myObject: MyClass = field.asUnknown()!!.convert(MyClass::class.java)\n}\n```\n\n### Response validation\n\nIn rare cases, the API may return a response that doesn\'t match the expected type. For example, the SDK     may expect a property to contain a `String`, but the API could return something else.\n\nBy default, the SDK will not throw an exception in this case. It will throw     [`AugnoClientInvalidDataException`](augno-client-kotlin-core/src/main/kotlin/com/augno/api/errors/AugnoClientInvalidDataException.kt) only if you directly access the property.\n\nValidating the response is _not_ forwards compatible with new types from the API for existing fields.\n\nIf you would still prefer to check that the response is completely well-typed upfront, then either call     `validate()`:\n\n```kotlin\nimport com.augno.api.models.ai.AiListToolGroupsResponse\n\nval response: AiListToolGroupsResponse = client.ai().listToolGroups(params).validate()\n```\n\nOr configure the method call to validate the response using the `responseValidation` method:\n\n```kotlin\nimport com.augno.api.models.ai.AiListToolGroupsResponse\n\nval response: AiListToolGroupsResponse = client.ai().listToolGroups(RequestOptions.builder().responseValidation(true).build())\n```\n\nOr configure the default for all method calls at the client level:\n\n```kotlin\nimport com.augno.api.client.AugnoClientClient\nimport com.augno.api.client.okhttp.AugnoClientOkHttpClient\n\nval client: AugnoClientClient = AugnoClientOkHttpClient.builder()\n    .fromEnv()\n    .responseValidation(true)\n    .build()\n```\n\n## FAQ\n\n### Why don\'t you use plain `enum` classes?\n\nKotlin `enum` classes are not trivially   [forwards compatible](https://www.stainless.com/blog/making-java-enums-forwards-compatible). Using them in   the SDK could cause runtime exceptions if the API is updated to respond with a new enum value.\n\n### Why do you represent fields using `JsonField<T>` instead of just plain `T`?\n\nUsing `JsonField<T>` enables a few features:\n\n- Allowing usage of [undocumented API functionality](#undocumented-api-functionality)\n- Lazily [validating the API response against the expected shape](#response-validation)\n- Representing absent vs explicitly null values\n\n### Why don\'t you use [`data` classes](https://kotlinlang.org/docs/data-classes.html)?\n\nIt is not [backwards compatible to add new fields to a data class](https://kotlinlang.org/docs/api-guidelines-backward-compatibility.html#avoid-using-data-classes-in-your-api)   and we don\'t want to introduce a breaking change every time we add a field to a class.\n\n### Why don\'t you use checked exceptions?\n\nChecked exceptions are widely considered a mistake in the Java programming language. In fact, they were   omitted from Kotlin for this reason.\n\nChecked exceptions:\n\n- Are verbose to handle\n- Encourage error handling at the wrong level of abstraction, where nothing can be done about the error\n- Are tedious to propagate due to the [function coloring problem](https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function)\n- Don\'t play well with lambdas (also due to the function coloring problem)\n\n## Semantic versioning\n\nThis package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:\n\n1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_\n2. Changes that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\n\nWe are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/augno-kotlin/issues) with questions, bugs, or suggestions.\n',
+  },
+  {
+    language: 'php',
+    content:
+      '# Augno Client PHP API Library\n\nThe Augno Client PHP library provides convenient access to the Augno Client REST API from any PHP 8.1.0+ application.\n\n## Installation\n\nTo use this package, install via Composer by adding the following to your application\'s `composer.json`:\n\n```json\n{\n  "repositories": [\n    {\n      "type": "vcs",\n      "url": "git@github.com:stainless-sdks/augno-php.git"\n    }\n  ],\n  "require": {\n    "org-placeholder/augno": "dev-main"\n  }\n}\n```\n\n## Usage\n\n```php\n<?php\n\n$client = new Client(\n  apiKey: getenv(\'AUGNO_API_KEY\') ?: \'My API Key\', environment: \'environment_1\'\n);\n\n$response = $client->ai->listToolGroups();\n\nvar_dump($response->data);\n```',
   },
   {
     language: 'python',
