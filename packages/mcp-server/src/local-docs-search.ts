@@ -89,6 +89,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.ai.list_tool_groups\n\nputs(response)',
       },
+      cli: {
+        method: 'ai list_tool_groups',
+        example: "augno ai list-tool-groups \\\n  --api-key 'My API Key'",
+      },
       csharp: {
         method: 'AI.ListToolGroups',
         example:
@@ -139,6 +143,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.ai.list_tools\n\nputs(response)',
       },
+      cli: {
+        method: 'ai list_tools',
+        example: "augno ai list-tools \\\n  --api-key 'My API Key'",
+      },
       csharp: {
         method: 'AI.ListTools',
         example:
@@ -187,6 +195,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'ai.list_usage',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\npage = augno_client.ai.list_usage\n\nputs(page)',
+      },
+      cli: {
+        method: 'ai list_usage',
+        example: "augno ai list-usage \\\n  --api-key 'My API Key'",
       },
       csharp: {
         method: 'AI.ListUsage',
@@ -241,6 +253,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'ai.agents.list',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagents = augno_client.ai.agents.list\n\nputs(agents)',
+      },
+      cli: {
+        method: 'agents list',
+        example: "augno ai:agents list \\\n  --api-key 'My API Key'",
       },
       csharp: {
         method: 'AI.Agents.List',
@@ -301,6 +317,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_definition = augno_client.ai.agents.create(\n  category_code: "inventory",\n  config: {\n    model: "claude-sonnet-4",\n    provider: "anthropic",\n    system_prompt: "You are an order processing agent. Parse incoming emails and create draft orders.",\n    temperature: 0.2,\n    trigger_config: {cron_schedule: nil, event_filters: ["email.received"], timezone: nil}\n  },\n  description: "Monitors inventory levels and creates restock alerts.",\n  name: "Inventory Monitor",\n  role_id: "rl_01gf7a8200er3ar3pkfrb6kk29",\n  slug: "inventory_monitor",\n  tools: [\n    {config_json: "config_json", require_review: true, sort_order: 1, tool_id: "tdef_01k0b1seed0searchproduct0"}\n  ],\n  trigger_type: :event\n)\n\nputs(agent_definition)',
       },
+      cli: {
+        method: 'agents create',
+        example:
+          "augno ai:agents create \\\n  --api-key 'My API Key' \\\n  --category-code inventory \\\n  --config '{model: claude-sonnet-4, provider: anthropic, system_prompt: You are an order processing agent. Parse incoming emails and create draft orders., temperature: 0.2, trigger_config: {cron_schedule: null, event_filters: [email.received], timezone: null}}' \\\n  --description 'Monitors inventory levels and creates restock alerts.' \\\n  --name 'Inventory Monitor' \\\n  --role-id rl_01gf7a8200er3ar3pkfrb6kk29 \\\n  --slug inventory_monitor \\\n  --tool '{config_json: config_json, require_review: true, sort_order: 1, tool_id: tdef_01k0b1seed0searchproduct0}' \\\n  --trigger-type event",
+      },
       csharp: {
         method: 'AI.Agents.Create',
         example:
@@ -349,6 +370,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'ai.agents.delete',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent = augno_client.ai.agents.delete("id")\n\nputs(agent)',
+      },
+      cli: {
+        method: 'agents delete',
+        example: "augno ai:agents delete \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'AI.Agents.Delete',
@@ -399,6 +424,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'ai.agents.retrieve',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_definition = augno_client.ai.agents.retrieve("id")\n\nputs(agent_definition)',
+      },
+      cli: {
+        method: 'agents retrieve',
+        example: "augno ai:agents retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'AI.Agents.Retrieve',
@@ -461,6 +490,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_definition = augno_client.ai.agents.update(\n  "id",\n  category_code: "inventory",\n  config: {\n    model: "claude-sonnet-4",\n    provider: "anthropic",\n    system_prompt: "You are an order processing agent. Parse incoming emails and create draft orders.",\n    temperature: 0.2,\n    trigger_config: {cron_schedule: nil, event_filters: ["email.received"], timezone: nil}\n  },\n  description: "Monitors inventory levels and creates restock alerts.",\n  name: "Inventory Monitor",\n  role_id: "rl_01gf7a8200er3ar3pkfrb6kk29",\n  slug: "inventory_monitor",\n  tools: [\n    {config_json: "config_json", require_review: true, sort_order: 1, tool_id: "tdef_01k0b1seed0searchproduct0"}\n  ],\n  trigger_type: :event\n)\n\nputs(agent_definition)',
       },
+      cli: {
+        method: 'agents update',
+        example:
+          "augno ai:agents update \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --category-code inventory \\\n  --config '{model: claude-sonnet-4, provider: anthropic, system_prompt: You are an order processing agent. Parse incoming emails and create draft orders., temperature: 0.2, trigger_config: {cron_schedule: null, event_filters: [email.received], timezone: null}}' \\\n  --description 'Monitors inventory levels and creates restock alerts.' \\\n  --name 'Inventory Monitor' \\\n  --role-id rl_01gf7a8200er3ar3pkfrb6kk29 \\\n  --slug inventory_monitor \\\n  --tool '{config_json: config_json, require_review: true, sort_order: 1, tool_id: tdef_01k0b1seed0searchproduct0}' \\\n  --trigger-type event",
+      },
       csharp: {
         method: 'AI.Agents.Update',
         example:
@@ -514,6 +548,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'ai.agents.update_status',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_definition = augno_client.ai.agents.update_status("id", status_code: "active")\n\nputs(agent_definition)',
+      },
+      cli: {
+        method: 'agents update_status',
+        example:
+          "augno ai:agents update-status \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --status-code active",
       },
       csharp: {
         method: 'AI.Agents.UpdateStatus',
@@ -571,6 +610,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\npage = augno_client.ai.alerts.list\n\nputs(page)',
       },
+      cli: {
+        method: 'alerts list',
+        example: "augno ai:alerts list \\\n  --api-key 'My API Key'",
+      },
       csharp: {
         method: 'AI.Alerts.List',
         example:
@@ -619,6 +662,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'ai.alerts.retrieve',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_alert = augno_client.ai.alerts.retrieve("id")\n\nputs(agent_alert)',
+      },
+      cli: {
+        method: 'alerts retrieve',
+        example: "augno ai:alerts retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'AI.Alerts.Retrieve',
@@ -670,6 +717,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_alert = augno_client.ai.alerts.actions.acknowledge("id")\n\nputs(agent_alert)',
       },
+      cli: {
+        method: 'actions acknowledge',
+        example: "augno ai:alerts:actions acknowledge \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'AI.Alerts.Actions.Acknowledge',
         example:
@@ -719,6 +770,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'ai.memories.list',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\npage = augno_client.ai.memories.list\n\nputs(page)',
+      },
+      cli: {
+        method: 'memories list',
+        example: "augno ai:memories list \\\n  --api-key 'My API Key'",
       },
       csharp: {
         method: 'AI.Memories.List',
@@ -778,6 +833,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_memory = augno_client.ai.memories.create(\n  category: "preference",\n  content: "Customer prefers express shipping on all orders.",\n  importance: 0.8,\n  metadata: [{}]\n)\n\nputs(agent_memory)',
       },
+      cli: {
+        method: 'memories create',
+        example:
+          "augno ai:memories create \\\n  --api-key 'My API Key' \\\n  --category preference \\\n  --content 'Customer prefers express shipping on all orders.' \\\n  --importance 0.8 \\\n  --metadata '{}'",
+      },
       csharp: {
         method: 'AI.Memories.Create',
         example:
@@ -826,6 +886,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'ai.memories.delete',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nmemory = augno_client.ai.memories.delete("id")\n\nputs(memory)',
+      },
+      cli: {
+        method: 'memories delete',
+        example: "augno ai:memories delete \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'AI.Memories.Delete',
@@ -876,6 +940,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'ai.memories.retrieve',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_memory = augno_client.ai.memories.retrieve("id")\n\nputs(agent_memory)',
+      },
+      cli: {
+        method: 'memories retrieve',
+        example: "augno ai:memories retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'AI.Memories.Retrieve',
@@ -936,6 +1004,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_memory = augno_client.ai.memories.update(\n  "id",\n  category: "category",\n  content: "Customer prefers next-day shipping on all orders.",\n  importance: 0.9,\n  metadata: [{}]\n)\n\nputs(agent_memory)',
       },
+      cli: {
+        method: 'memories update',
+        example:
+          "augno ai:memories update \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --category category \\\n  --content 'Customer prefers next-day shipping on all orders.' \\\n  --importance 0.9 \\\n  --metadata '{}'",
+      },
       csharp: {
         method: 'AI.Memories.Update',
         example:
@@ -992,6 +1065,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\npage = augno_client.ai.runs.list\n\nputs(page)',
       },
+      cli: {
+        method: 'runs list',
+        example: "augno ai:runs list \\\n  --api-key 'My API Key'",
+      },
       csharp: {
         method: 'AI.Runs.List',
         example:
@@ -1044,6 +1121,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'ai.runs.trigger',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_run = augno_client.ai.runs.trigger(\n  agent_definition_id: "agdf_01jm4r6700f8nwq3v5hx2d9ktp",\n  input: "Process the latest incoming orders."\n)\n\nputs(agent_run)',
+      },
+      cli: {
+        method: 'runs trigger',
+        example:
+          "augno ai:runs trigger \\\n  --api-key 'My API Key' \\\n  --agent-definition-id agdf_01jm4r6700f8nwq3v5hx2d9ktp \\\n  --input 'Process the latest incoming orders.'",
       },
       csharp: {
         method: 'AI.Runs.Trigger',
@@ -1098,6 +1180,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_run = augno_client.ai.runs.retrieve("id")\n\nputs(agent_run)',
       },
+      cli: {
+        method: 'runs retrieve',
+        example: "augno ai:runs retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'AI.Runs.Retrieve',
         example:
@@ -1150,6 +1236,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'ai.runs.actions.cancel',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_run = augno_client.ai.runs.actions.cancel("id")\n\nputs(agent_run)',
+      },
+      cli: {
+        method: 'actions cancel',
+        example: "augno ai:runs:actions cancel \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'AI.Runs.Actions.Cancel',
@@ -1207,6 +1297,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nagent_run = augno_client.ai.runs.actions.continue(\n  "id",\n  allowed_tool_slugs: ["string"],\n  approved_tool_slugs: ["string"],\n  message: "Yes, proceed with creating the order."\n)\n\nputs(agent_run)',
       },
+      cli: {
+        method: 'actions continue',
+        example:
+          "augno ai:runs:actions continue \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --allowed-tool-slug string \\\n  --approved-tool-slug string \\\n  --message 'Yes, proceed with creating the order.'",
+      },
       csharp: {
         method: 'AI.Runs.Actions.Continue',
         example:
@@ -1257,6 +1352,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth.api_keys.list',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\napi_keys = augno_client.auth.api_keys.list\n\nputs(api_keys)',
+      },
+      cli: {
+        method: 'api_keys list',
+        example: "augno auth:api-keys list \\\n  --api-key 'My API Key'",
       },
       csharp: {
         method: 'Auth.ApiKeys.List',
@@ -1314,6 +1413,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\ncreated_api_key = augno_client.auth.api_keys.create(name: "Production API Key", role_id: "rl_01gf7a8200er3ar3pkfrb6kk29")\n\nputs(created_api_key)',
       },
+      cli: {
+        method: 'api_keys create',
+        example:
+          "augno auth:api-keys create \\\n  --api-key 'My API Key' \\\n  --name 'Production API Key' \\\n  --role-id rl_01gf7a8200er3ar3pkfrb6kk29",
+      },
       csharp: {
         method: 'Auth.ApiKeys.Create',
         example:
@@ -1364,6 +1468,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.auth.api_keys.revoke("id")\n\nputs(response)',
       },
+      cli: {
+        method: 'api_keys revoke',
+        example: "augno auth:api-keys revoke \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'Auth.ApiKeys.Revoke',
         example:
@@ -1413,6 +1521,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth.api_keys.retrieve',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\napi_key = augno_client.auth.api_keys.retrieve("id")\n\nputs(api_key)',
+      },
+      cli: {
+        method: 'api_keys retrieve',
+        example: "augno auth:api-keys retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Auth.ApiKeys.Retrieve',
@@ -1465,6 +1577,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\ncreated_api_key = augno_client.auth.api_keys.actions.rotate("id")\n\nputs(created_api_key)',
       },
+      cli: {
+        method: 'actions rotate',
+        example: "augno auth:api-keys:actions rotate \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'Auth.ApiKeys.Actions.Rotate',
         example:
@@ -1514,6 +1630,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.list_adjustment_types',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.list_adjustment_types\n\nputs(response)',
+      },
+      cli: {
+        method: 'core list_adjustment_types',
+        example: "augno core list-adjustment-types \\\n  --api-key 'My API Key'",
       },
       csharp: {
         method: 'Core.ListAdjustmentTypes',
@@ -1565,6 +1685,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_groups.list',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_groups = augno_client.core.account_groups.list\n\nputs(account_groups)',
+      },
+      cli: {
+        method: 'account_groups list',
+        example: "augno core:account-groups list \\\n  --api-key 'My API Key'",
       },
       csharp: {
         method: 'Core.AccountGroups.List',
@@ -1622,6 +1746,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_group = augno_client.core.account_groups.create(\n  commission_status: :commission_applied,\n  freight_status: :billed_freight,\n  name: "Wholesale Customers",\n  type: :pricing_group\n)\n\nputs(account_group)',
       },
+      cli: {
+        method: 'account_groups create',
+        example:
+          "augno core:account-groups create \\\n  --api-key 'My API Key' \\\n  --commission-status commission_applied \\\n  --freight-status billed_freight \\\n  --name 'Wholesale Customers' \\\n  --type pricing_group",
+      },
       csharp: {
         method: 'Core.AccountGroups.Create',
         example:
@@ -1670,6 +1799,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_groups.delete',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_group = augno_client.core.account_groups.delete("id")\n\nputs(account_group)',
+      },
+      cli: {
+        method: 'account_groups delete',
+        example: "augno core:account-groups delete \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.AccountGroups.Delete',
@@ -1720,6 +1853,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_groups.retrieve',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_group = augno_client.core.account_groups.retrieve("id")\n\nputs(account_group)',
+      },
+      cli: {
+        method: 'account_groups retrieve',
+        example: "augno core:account-groups retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.AccountGroups.Retrieve',
@@ -1778,6 +1915,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_group = augno_client.core.account_groups.update("id")\n\nputs(account_group)',
       },
+      cli: {
+        method: 'account_groups update',
+        example: "augno core:account-groups update \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'Core.AccountGroups.Update',
         example:
@@ -1828,6 +1969,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_prices.list',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_prices = augno_client.core.account_prices.list\n\nputs(account_prices)',
+      },
+      cli: {
+        method: 'account_prices list',
+        example: "augno core:account-prices list \\\n  --api-key 'My API Key'",
       },
       csharp: {
         method: 'Core.AccountPrices.List',
@@ -1889,6 +2034,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_price = augno_client.core.account_prices.create(\n  attribute_ids: ["at_01jm4r6700f8nwq3v5hx2d9ktp"],\n  category_ids: ["ic_01jm4r6700f8nwq3v5hx2d9ktp"],\n  product_line_id: "pl_01jm4r6700f8nwq3v5hx2d9ktp",\n  rate_denominator_unit_id: "un_01jm4r6700f8nwq3v5hx2d9ktp",\n  rate_numerator_unit_id: "un_01jm4r6700f8nwq3v5hx2d9ktp",\n  rate_value: "25.500000000000000000000000000000",\n  recipient_account_id: "ac_01gf7a8200eaj8fke1xvw4h50x"\n)\n\nputs(account_price)',
       },
+      cli: {
+        method: 'account_prices create',
+        example:
+          "augno core:account-prices create \\\n  --api-key 'My API Key' \\\n  --attribute-id at_01jm4r6700f8nwq3v5hx2d9ktp \\\n  --category-id ic_01jm4r6700f8nwq3v5hx2d9ktp \\\n  --product-line-id pl_01jm4r6700f8nwq3v5hx2d9ktp \\\n  --rate-denominator-unit-id un_01jm4r6700f8nwq3v5hx2d9ktp \\\n  --rate-numerator-unit-id un_01jm4r6700f8nwq3v5hx2d9ktp \\\n  --rate-value 25.500000000000000000000000000000 \\\n  --recipient-account-id ac_01gf7a8200eaj8fke1xvw4h50x",
+      },
       csharp: {
         method: 'Core.AccountPrices.Create',
         example:
@@ -1938,6 +2088,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_prices.delete',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_price = augno_client.core.account_prices.delete("id")\n\nputs(account_price)',
+      },
+      cli: {
+        method: 'account_prices delete',
+        example: "augno core:account-prices delete \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.AccountPrices.Delete',
@@ -1989,6 +2143,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_prices.retrieve',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_price = augno_client.core.account_prices.retrieve("id")\n\nputs(account_price)',
+      },
+      cli: {
+        method: 'account_prices retrieve',
+        example: "augno core:account-prices retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.AccountPrices.Retrieve',
@@ -2051,6 +2209,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_price = augno_client.core.account_prices.update("id")\n\nputs(account_price)',
       },
+      cli: {
+        method: 'account_prices update',
+        example: "augno core:account-prices update \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'Core.AccountPrices.Update',
         example:
@@ -2101,6 +2263,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_statuses = augno_client.core.account_statuses.list\n\nputs(account_statuses)',
       },
+      cli: {
+        method: 'account_statuses list',
+        example: "augno core:account-statuses list \\\n  --api-key 'My API Key'",
+      },
       csharp: {
         method: 'Core.AccountStatuses.List',
         example:
@@ -2150,6 +2316,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_statuses.retrieve',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_status = augno_client.core.account_statuses.retrieve("id")\n\nputs(account_status)',
+      },
+      cli: {
+        method: 'account_statuses retrieve',
+        example: "augno core:account-statuses retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.AccountStatuses.Retrieve',
@@ -2204,6 +2374,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_users.list',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_users = augno_client.core.account_users.list\n\nputs(account_users)',
+      },
+      cli: {
+        method: 'account_users list',
+        example: "augno core:account-users list \\\n  --api-key 'My API Key'",
       },
       csharp: {
         method: 'Core.AccountUsers.List',
@@ -2266,6 +2440,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_user = augno_client.core.account_users.create(\n  custom_email: "custom_email",\n  name: "name",\n  password: "password",\n  receives_invoice_notifications: true,\n  receives_order_acknowledgements: true,\n  receives_purchase_order_submission_notifications: true,\n  username: "username"\n)\n\nputs(account_user)',
       },
+      cli: {
+        method: 'account_users create',
+        example:
+          "augno core:account-users create \\\n  --api-key 'My API Key' \\\n  --custom-email custom_email \\\n  --name name \\\n  --password password \\\n  --receives-invoice-notifications \\\n  --receives-order-acknowledgements \\\n  --receives-purchase-order-submission-notifications \\\n  --username username",
+      },
       csharp: {
         method: 'Core.AccountUsers.Create',
         example:
@@ -2314,6 +2493,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_users.delete',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_user = augno_client.core.account_users.delete("id")\n\nputs(account_user)',
+      },
+      cli: {
+        method: 'account_users delete',
+        example: "augno core:account-users delete \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.AccountUsers.Delete',
@@ -2364,6 +2547,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_users.retrieve',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_user = augno_client.core.account_users.retrieve("id")\n\nputs(account_user)',
+      },
+      cli: {
+        method: 'account_users retrieve',
+        example: "augno core:account-users retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.AccountUsers.Retrieve',
@@ -2423,6 +2610,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_user = augno_client.core.account_users.update("id")\n\nputs(account_user)',
       },
+      cli: {
+        method: 'account_users update',
+        example: "augno core:account-users update \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'Core.AccountUsers.Update',
         example:
@@ -2471,6 +2662,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_users.lock',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.account_users.lock("id")\n\nputs(response)',
+      },
+      cli: {
+        method: 'account_users lock',
+        example: "augno core:account-users lock \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.AccountUsers.Lock',
@@ -2523,6 +2718,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_user = augno_client.core.account_users.update_notification_preferences(\n  "id",\n  preferences: [{enabled: true, notification_type_code: "notification_type_code"}]\n)\n\nputs(account_user)',
       },
+      cli: {
+        method: 'account_users update_notification_preferences',
+        example:
+          "augno core:account-users update-notification-preferences \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --preference '{enabled: true, notification_type_code: notification_type_code}'",
+      },
       csharp: {
         method: 'Core.AccountUsers.UpdateNotificationPreferences',
         example:
@@ -2572,6 +2772,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_users.update_password',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.account_users.update_password(\n  "id",\n  new_password: "new_password",\n  requester_password: "requester_password"\n)\n\nputs(response)',
+      },
+      cli: {
+        method: 'account_users update_password',
+        example:
+          "augno core:account-users update-password \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --new-password new_password \\\n  --requester-password requester_password",
       },
       csharp: {
         method: 'Core.AccountUsers.UpdatePassword',
@@ -2623,6 +2828,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.account_users.restore("id")\n\nputs(response)',
       },
+      cli: {
+        method: 'account_users restore',
+        example: "augno core:account-users restore \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'Core.AccountUsers.Restore',
         example:
@@ -2672,6 +2881,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_users.unlock',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.account_users.unlock("id")\n\nputs(response)',
+      },
+      cli: {
+        method: 'account_users unlock',
+        example: "augno core:account-users unlock \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.AccountUsers.Unlock',
@@ -2723,6 +2936,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_users.sales_targets.list',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nsales_targets = augno_client.core.account_users.sales_targets.list("id")\n\nputs(sales_targets)',
+      },
+      cli: {
+        method: 'sales_targets list',
+        example: "augno core:account-users:sales-targets list \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.AccountUsers.SalesTargets.List',
@@ -2779,6 +2996,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.account_users.sales_targets.create',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nsales_target = augno_client.core.account_users.sales_targets.create(\n  "id",\n  amount_unit_id: "amount_unit_id",\n  amount_value: "amount_value",\n  end_date: "2019-12-27T18:11:19.117Z",\n  start_date: "2019-12-27T18:11:19.117Z"\n)\n\nputs(sales_target)',
+      },
+      cli: {
+        method: 'sales_targets create',
+        example:
+          "augno core:account-users:sales-targets create \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --amount-unit-id amount_unit_id \\\n  --amount-value amount_value \\\n  --end-date \"'2019-12-27T18:11:19.117Z'\" \\\n  --start-date \"'2019-12-27T18:11:19.117Z'\"",
       },
       csharp: {
         method: 'Core.AccountUsers.SalesTargets.Create',
@@ -2838,6 +3060,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nsales_target = augno_client.core.account_users.sales_targets.upsert(\n  "target_id",\n  id: "id",\n  amount_unit_id: "amount_unit_id",\n  amount_value: "amount_value",\n  end_date: "2019-12-27T18:11:19.117Z",\n  start_date: "2019-12-27T18:11:19.117Z"\n)\n\nputs(sales_target)',
       },
+      cli: {
+        method: 'sales_targets upsert',
+        example:
+          "augno core:account-users:sales-targets upsert \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --target-id target_id \\\n  --amount-unit-id amount_unit_id \\\n  --amount-value amount_value \\\n  --end-date \"'2019-12-27T18:11:19.117Z'\" \\\n  --start-date \"'2019-12-27T18:11:19.117Z'\"",
+      },
       csharp: {
         method: 'Core.AccountUsers.SalesTargets.Upsert',
         example:
@@ -2889,6 +3116,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.accounts.retrieve_by_slug("slug")\n\nputs(response)',
       },
+      cli: {
+        method: 'accounts retrieve_by_slug',
+        example: "augno core:accounts retrieve-by-slug \\\n  --api-key 'My API Key' \\\n  --slug slug",
+      },
       csharp: {
         method: 'Core.Accounts.RetrieveBySlug',
         example:
@@ -2939,6 +3170,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.accounts.retrieve',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount = augno_client.core.accounts.retrieve("id")\n\nputs(account)',
+      },
+      cli: {
+        method: 'accounts retrieve',
+        example: "augno core:accounts retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.Accounts.Retrieve',
@@ -3003,6 +3238,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount = augno_client.core.accounts.update("id")\n\nputs(account)',
       },
+      cli: {
+        method: 'accounts update',
+        example: "augno core:accounts update \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'Core.Accounts.Update',
         example:
@@ -3052,6 +3291,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.accounts.get_logo_url',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.accounts.get_logo_url("id")\n\nputs(response)',
+      },
+      cli: {
+        method: 'accounts get_logo_url',
+        example: "augno core:accounts get-logo-url \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.Accounts.GetLogoUrl',
@@ -3103,6 +3346,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.accounts.upload_photo("id")\n\nputs(response)',
       },
+      cli: {
+        method: 'accounts upload_photo',
+        example: "augno core:accounts upload-photo \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'Core.Accounts.UploadPhoto',
         example:
@@ -3153,6 +3400,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.accounts.addresses.list',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naddresses = augno_client.core.accounts.addresses.list("account_id")\n\nputs(addresses)',
+      },
+      cli: {
+        method: 'addresses list',
+        example:
+          "augno core:accounts:addresses list \\\n  --api-key 'My API Key' \\\n  --account-id account_id",
       },
       csharp: {
         method: 'Core.Accounts.Addresses.List',
@@ -3216,6 +3468,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naddress = augno_client.core.accounts.addresses.create(\n  "account_id",\n  country: "US",\n  is_drop_ship: false,\n  name: "Headquarters"\n)\n\nputs(address)',
       },
+      cli: {
+        method: 'addresses create',
+        example:
+          "augno core:accounts:addresses create \\\n  --api-key 'My API Key' \\\n  --account-id account_id \\\n  --country US \\\n  --is-drop-ship=false \\\n  --name Headquarters",
+      },
       csharp: {
         method: 'Core.Accounts.Addresses.Create',
         example:
@@ -3265,6 +3522,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.accounts.addresses.delete',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naddress = augno_client.core.accounts.addresses.delete("id", account_id: "account_id")\n\nputs(address)',
+      },
+      cli: {
+        method: 'addresses delete',
+        example:
+          "augno core:accounts:addresses delete \\\n  --api-key 'My API Key' \\\n  --account-id account_id \\\n  --id id",
       },
       csharp: {
         method: 'Core.Accounts.Addresses.Delete',
@@ -3316,6 +3578,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.accounts.addresses.retrieve',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naddress = augno_client.core.accounts.addresses.retrieve("id", account_id: "account_id")\n\nputs(address)',
+      },
+      cli: {
+        method: 'addresses retrieve',
+        example:
+          "augno core:accounts:addresses retrieve \\\n  --api-key 'My API Key' \\\n  --account-id account_id \\\n  --id id",
       },
       csharp: {
         method: 'Core.Accounts.Addresses.Retrieve',
@@ -3381,6 +3648,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naddress = augno_client.core.accounts.addresses.update("id", account_id: "account_id")\n\nputs(address)',
       },
+      cli: {
+        method: 'addresses update',
+        example:
+          "augno core:accounts:addresses update \\\n  --api-key 'My API Key' \\\n  --account-id account_id \\\n  --id id",
+      },
       csharp: {
         method: 'Core.Accounts.Addresses.Update',
         example:
@@ -3432,6 +3704,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.addresses.autocomplete(input: "input")\n\nputs(response)',
       },
+      cli: {
+        method: 'addresses autocomplete',
+        example: "augno core:addresses autocomplete \\\n  --api-key 'My API Key' \\\n  --input input",
+      },
       csharp: {
         method: 'Core.Addresses.Autocomplete',
         example:
@@ -3482,6 +3758,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.addresses.get_details',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.addresses.get_details("id")\n\nputs(response)',
+      },
+      cli: {
+        method: 'addresses get_details',
+        example: "augno core:addresses get-details \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.Addresses.GetDetails',
@@ -3541,6 +3821,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.addresses.validate(\n  address_line_1: "123 Main St",\n  city: "Springfield",\n  country: "US",\n  postal_code: "62701",\n  state: "IL"\n)\n\nputs(response)',
       },
+      cli: {
+        method: 'addresses validate',
+        example:
+          "augno core:addresses validate \\\n  --api-key 'My API Key' \\\n  --address-line-1 '123 Main St' \\\n  --city Springfield \\\n  --country US \\\n  --postal-code 62701 \\\n  --state IL",
+      },
       csharp: {
         method: 'Core.Addresses.Validate',
         example:
@@ -3591,6 +3876,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.carriers.list',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\ncarriers = augno_client.core.carriers.list\n\nputs(carriers)',
+      },
+      cli: {
+        method: 'carriers list',
+        example: "augno core:carriers list \\\n  --api-key 'My API Key'",
       },
       csharp: {
         method: 'Core.Carriers.List',
@@ -3643,6 +3932,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\ncarrier = augno_client.core.carriers.create(\n  account_number: nil,\n  code: "fedex",\n  is_portal_enabled: true,\n  name: "FedEx"\n)\n\nputs(carrier)',
       },
+      cli: {
+        method: 'carriers create',
+        example:
+          "augno core:carriers create \\\n  --api-key 'My API Key' \\\n  --account-number null \\\n  --code fedex \\\n  --is-portal-enabled \\\n  --name FedEx",
+      },
       csharp: {
         method: 'Core.Carriers.Create',
         example:
@@ -3692,6 +3986,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.carriers.delete',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\ncarrier = augno_client.core.carriers.delete("id")\n\nputs(carrier)',
+      },
+      cli: {
+        method: 'carriers delete',
+        example: "augno core:carriers delete \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.Carriers.Delete',
@@ -3743,6 +4041,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\ncarrier = augno_client.core.carriers.retrieve("id")\n\nputs(carrier)',
       },
+      cli: {
+        method: 'carriers retrieve',
+        example: "augno core:carriers retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'Core.Carriers.Retrieve',
         example:
@@ -3792,6 +4094,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.carriers.update',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\ncarrier = augno_client.core.carriers.update("id", is_portal_enabled: nil, name: "FedEx Express")\n\nputs(carrier)',
+      },
+      cli: {
+        method: 'carriers update',
+        example:
+          "augno core:carriers update \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --is-portal-enabled=false \\\n  --name 'FedEx Express'",
       },
       csharp: {
         method: 'Core.Carriers.Update',
@@ -3843,6 +4150,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.carriers.get_oauth_status("id")\n\nputs(response)',
       },
+      cli: {
+        method: 'carriers get_oauth_status',
+        example: "augno core:carriers get-oauth-status \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'Core.Carriers.GetOAuthStatus',
         example:
@@ -3893,6 +4204,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.carriers.options.list',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\noptions = augno_client.core.carriers.options.list("carrier_id")\n\nputs(options)',
+      },
+      cli: {
+        method: 'options list',
+        example:
+          "augno core:carriers:options list \\\n  --api-key 'My API Key' \\\n  --carrier-id carrier_id",
       },
       csharp: {
         method: 'Core.Carriers.Options.List',
@@ -3951,6 +4267,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\ncarrier_option = augno_client.core.carriers.options.create(\n  "carrier_id",\n  code: "ground",\n  is_default: false,\n  is_portal_enabled: true,\n  name: "Ground Shipping",\n  service_level_token: nil\n)\n\nputs(carrier_option)',
       },
+      cli: {
+        method: 'options create',
+        example:
+          "augno core:carriers:options create \\\n  --api-key 'My API Key' \\\n  --carrier-id carrier_id \\\n  --code ground \\\n  --is-default=false \\\n  --is-portal-enabled \\\n  --name 'Ground Shipping' \\\n  --service-level-token null",
+      },
       csharp: {
         method: 'Core.Carriers.Options.Create',
         example:
@@ -4001,6 +4322,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\noption = augno_client.core.carriers.options.delete("id", carrier_id: "carrier_id")\n\nputs(option)',
       },
+      cli: {
+        method: 'options delete',
+        example:
+          "augno core:carriers:options delete \\\n  --api-key 'My API Key' \\\n  --carrier-id carrier_id \\\n  --id id",
+      },
       csharp: {
         method: 'Core.Carriers.Options.Delete',
         example:
@@ -4050,6 +4376,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.carriers.options.retrieve',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\ncarrier_option = augno_client.core.carriers.options.retrieve("id", carrier_id: "carrier_id")\n\nputs(carrier_option)',
+      },
+      cli: {
+        method: 'options retrieve',
+        example:
+          "augno core:carriers:options retrieve \\\n  --api-key 'My API Key' \\\n  --carrier-id carrier_id \\\n  --id id",
       },
       csharp: {
         method: 'Core.Carriers.Options.Retrieve',
@@ -4108,6 +4439,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\ncarrier_option = augno_client.core.carriers.options.update(\n  "id",\n  carrier_id: "carrier_id",\n  code: nil,\n  is_default: nil,\n  is_portal_enabled: nil,\n  name: "Express Shipping"\n)\n\nputs(carrier_option)',
       },
+      cli: {
+        method: 'options update',
+        example:
+          "augno core:carriers:options update \\\n  --api-key 'My API Key' \\\n  --carrier-id carrier_id \\\n  --id id \\\n  --code null \\\n  --is-default=false \\\n  --is-portal-enabled=false \\\n  --name 'Express Shipping'",
+      },
       csharp: {
         method: 'Core.Carriers.Options.Update',
         example:
@@ -4157,6 +4493,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.carriers.actions.initiate_oauth',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.carriers.actions.initiate_oauth(\n  "id",\n  redirect_uri: "https://app.example.com/carriers/oauth/callback",\n  state: nil\n)\n\nputs(response)',
+      },
+      cli: {
+        method: 'actions initiate_oauth',
+        example:
+          "augno core:carriers:actions initiate-oauth \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --redirect-uri https://app.example.com/carriers/oauth/callback \\\n  --state null",
       },
       csharp: {
         method: 'Core.Carriers.Actions.InitiateOAuth',
@@ -4209,6 +4550,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\ncarrier = augno_client.core.carriers.actions.sync_options("id")\n\nputs(carrier)',
       },
+      cli: {
+        method: 'actions sync_options',
+        example: "augno core:carriers:actions sync-options \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'Core.Carriers.Actions.SyncOptions',
         example:
@@ -4259,6 +4604,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nchild_accounts = augno_client.core.child_accounts.list\n\nputs(child_accounts)',
       },
+      cli: {
+        method: 'child_accounts list',
+        example: "augno core:child-accounts list \\\n  --api-key 'My API Key'",
+      },
       csharp: {
         method: 'Core.ChildAccounts.List',
         example:
@@ -4308,6 +4657,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.child_accounts.remove',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nchild_account = augno_client.core.child_accounts.remove("child_account_id")\n\nputs(child_account)',
+      },
+      cli: {
+        method: 'child_accounts remove',
+        example:
+          "augno core:child-accounts remove \\\n  --api-key 'My API Key' \\\n  --child-account-id child_account_id",
       },
       csharp: {
         method: 'Core.ChildAccounts.Remove',
@@ -4360,6 +4714,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nchild_account = augno_client.core.child_accounts.add("child_account_id")\n\nputs(child_account)',
       },
+      cli: {
+        method: 'child_accounts add',
+        example:
+          "augno core:child-accounts add \\\n  --api-key 'My API Key' \\\n  --child-account-id child_account_id",
+      },
       csharp: {
         method: 'Core.ChildAccounts.Add',
         example:
@@ -4409,6 +4768,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.integrations.list',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nintegrations = augno_client.core.integrations.list\n\nputs(integrations)',
+      },
+      cli: {
+        method: 'integrations list',
+        example: "augno core:integrations list \\\n  --api-key 'My API Key'",
       },
       csharp: {
         method: 'Core.Integrations.List',
@@ -4461,6 +4824,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_integration = augno_client.core.integrations.create(\n  credentials: "{\\"privateKey\\":\\"sk_test_...\\",\\"publishableKey\\":\\"pk_test_...\\",\\"webhookSecret\\":\\"whsec_...\\"}",\n  integration_code: :stripe,\n  name: "My Stripe Integration"\n)\n\nputs(account_integration)',
       },
+      cli: {
+        method: 'integrations create',
+        example:
+          'augno core:integrations create \\\n  --api-key \'My API Key\' \\\n  --credentials \'{"privateKey":"sk_test_...","publishableKey":"pk_test_...","webhookSecret":"whsec_..."}\' \\\n  --integration-code stripe \\\n  --name \'My Stripe Integration\'',
+      },
       csharp: {
         method: 'Core.Integrations.Create',
         example:
@@ -4510,6 +4878,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.integrations.delete',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_integration = augno_client.core.integrations.delete("id")\n\nputs(account_integration)',
+      },
+      cli: {
+        method: 'integrations delete',
+        example: "augno core:integrations delete \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.Integrations.Delete',
@@ -4562,6 +4934,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_integration = augno_client.core.integrations.update("id")\n\nputs(account_integration)',
       },
+      cli: {
+        method: 'integrations update',
+        example: "augno core:integrations update \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'Core.Integrations.Update',
         example:
@@ -4611,6 +4987,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.integrations.stripe.get_publishable_key\n\nputs(response)',
       },
+      cli: {
+        method: 'stripe get_publishable_key',
+        example: "augno core:integrations:stripe get-publishable-key \\\n  --api-key 'My API Key'",
+      },
       csharp: {
         method: 'Core.Integrations.Stripe.GetPublishableKey',
         example:
@@ -4659,6 +5039,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.integrations.stripe.get_status',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.integrations.stripe.get_status\n\nputs(response)',
+      },
+      cli: {
+        method: 'stripe get_status',
+        example: "augno core:integrations:stripe get-status \\\n  --api-key 'My API Key'",
       },
       csharp: {
         method: 'Core.Integrations.Stripe.GetStatus',
@@ -4721,6 +5105,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nitems = augno_client.core.items.list\n\nputs(items)',
       },
+      cli: {
+        method: 'items list',
+        example: "augno core:items list \\\n  --api-key 'My API Key'",
+      },
       csharp: {
         method: 'Core.Items.List',
         example:
@@ -4769,6 +5157,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.items.retrieve',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nitem = augno_client.core.items.retrieve("id")\n\nputs(item)',
+      },
+      cli: {
+        method: 'items retrieve',
+        example: "augno core:items retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.Items.Retrieve',
@@ -4821,6 +5213,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.items.get_costs("id")\n\nputs(response)',
       },
+      cli: {
+        method: 'items get_costs',
+        example: "augno core:items get-costs \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'Core.Items.GetCosts',
         example:
@@ -4872,6 +5268,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.items.get_inventory("id")\n\nputs(response)',
       },
+      cli: {
+        method: 'items get_inventory',
+        example: "augno core:items get-inventory \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'Core.Items.GetInventory',
         example:
@@ -4922,6 +5322,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.items.get_trends("id", trend_type: "trend_type")\n\nputs(response)',
       },
+      cli: {
+        method: 'items get_trends',
+        example:
+          "augno core:items get-trends \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --trend-type trend_type",
+      },
       csharp: {
         method: 'Core.Items.GetTrends',
         example:
@@ -4970,6 +5375,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.items.actions.export',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.items.actions.export\n\nputs(response)',
+      },
+      cli: {
+        method: 'actions export',
+        example: "augno core:items:actions export \\\n  --api-key 'My API Key'",
       },
       csharp: {
         method: 'Core.Items.Actions.Export',
@@ -5021,6 +5430,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\npayment_terms = augno_client.core.payment_terms.list\n\nputs(payment_terms)',
       },
+      cli: {
+        method: 'payment_terms list',
+        example: "augno core:payment-terms list \\\n  --api-key 'My API Key'",
+      },
       csharp: {
         method: 'Core.PaymentTerms.List',
         example:
@@ -5071,6 +5484,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\npayment_term = augno_client.core.payment_terms.create(name: "Net 30")\n\nputs(payment_term)',
       },
+      cli: {
+        method: 'payment_terms create',
+        example: "augno core:payment-terms create \\\n  --api-key 'My API Key' \\\n  --name 'Net 30'",
+      },
       csharp: {
         method: 'Core.PaymentTerms.Create',
         example:
@@ -5120,6 +5537,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.payment_terms.delete',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\npayment_term = augno_client.core.payment_terms.delete("id")\n\nputs(payment_term)',
+      },
+      cli: {
+        method: 'payment_terms delete',
+        example: "augno core:payment-terms delete \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.PaymentTerms.Delete',
@@ -5172,6 +5593,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\npayment_term = augno_client.core.payment_terms.retrieve("id")\n\nputs(payment_term)',
       },
+      cli: {
+        method: 'payment_terms retrieve',
+        example: "augno core:payment-terms retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'Core.PaymentTerms.Retrieve',
         example:
@@ -5223,6 +5648,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\npayment_term = augno_client.core.payment_terms.update("id")\n\nputs(payment_term)',
       },
+      cli: {
+        method: 'payment_terms update',
+        example: "augno core:payment-terms update \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'Core.PaymentTerms.Update',
         example:
@@ -5272,6 +5701,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.product_line_access.account_groups.list',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_groups = augno_client.core.product_line_access.account_groups.list\n\nputs(account_groups)',
+      },
+      cli: {
+        method: 'account_groups list',
+        example: "augno core:product-line-access:account-groups list \\\n  --api-key 'My API Key'",
       },
       csharp: {
         method: 'Core.ProductLineAccess.AccountGroups.List',
@@ -5323,6 +5756,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nproduct_line_access = augno_client.core.product_line_access.account_groups.create(\n  account_group_id: "acgp_01jm4r6700f8nwq3v5hx2d9ktp",\n  product_line_ids: ["pl_01jm4r6700f8nwq3v5hx2d9ktp"]\n)\n\nputs(product_line_access)',
       },
+      cli: {
+        method: 'account_groups create',
+        example:
+          "augno core:product-line-access:account-groups create \\\n  --api-key 'My API Key' \\\n  --account-group-id acgp_01jm4r6700f8nwq3v5hx2d9ktp \\\n  --product-line-id pl_01jm4r6700f8nwq3v5hx2d9ktp",
+      },
       csharp: {
         method: 'Core.ProductLineAccess.AccountGroups.Create',
         example:
@@ -5371,6 +5809,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.product_line_access.account_groups.delete',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\naccount_group = augno_client.core.product_line_access.account_groups.delete("account_group_id")\n\nputs(account_group)',
+      },
+      cli: {
+        method: 'account_groups delete',
+        example:
+          "augno core:product-line-access:account-groups delete \\\n  --api-key 'My API Key' \\\n  --account-group-id account_group_id",
       },
       csharp: {
         method: 'Core.ProductLineAccess.AccountGroups.Delete',
@@ -5422,6 +5865,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nproduct_line_access = augno_client.core.product_line_access.account_groups.retrieve("account_group_id")\n\nputs(product_line_access)',
       },
+      cli: {
+        method: 'account_groups retrieve',
+        example:
+          "augno core:product-line-access:account-groups retrieve \\\n  --api-key 'My API Key' \\\n  --account-group-id account_group_id",
+      },
       csharp: {
         method: 'Core.ProductLineAccess.AccountGroups.Retrieve',
         example:
@@ -5471,6 +5919,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.product_line_access.account_groups.update',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nproduct_line_access = augno_client.core.product_line_access.account_groups.update(\n  "account_group_id",\n  product_line_ids: ["pl_01jm4r6700f8nwq3v5hx2d9ktp"]\n)\n\nputs(product_line_access)',
+      },
+      cli: {
+        method: 'account_groups update',
+        example:
+          "augno core:product-line-access:account-groups update \\\n  --api-key 'My API Key' \\\n  --account-group-id account_group_id \\\n  --product-line-id pl_01jm4r6700f8nwq3v5hx2d9ktp",
       },
       csharp: {
         method: 'Core.ProductLineAccess.AccountGroups.Update',
@@ -5522,6 +5975,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nproperties = augno_client.core.properties.list\n\nputs(properties)',
       },
+      cli: {
+        method: 'properties list',
+        example: "augno core:properties list \\\n  --api-key 'My API Key'",
+      },
       csharp: {
         method: 'Core.Properties.List',
         example:
@@ -5570,6 +6027,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.properties.create',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nproperty = augno_client.core.properties.create(name: "Color")\n\nputs(property)',
+      },
+      cli: {
+        method: 'properties create',
+        example: "augno core:properties create \\\n  --api-key 'My API Key' \\\n  --name Color",
       },
       csharp: {
         method: 'Core.Properties.Create',
@@ -5620,6 +6081,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nproperty = augno_client.core.properties.delete("id")\n\nputs(property)',
       },
+      cli: {
+        method: 'properties delete',
+        example: "augno core:properties delete \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'Core.Properties.Delete',
         example:
@@ -5669,6 +6134,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nproperty = augno_client.core.properties.retrieve("id")\n\nputs(property)',
       },
+      cli: {
+        method: 'properties retrieve',
+        example: "augno core:properties retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'Core.Properties.Retrieve',
         example:
@@ -5717,6 +6186,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.properties.update',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nproperty = augno_client.core.properties.update("id")\n\nputs(property)',
+      },
+      cli: {
+        method: 'properties update',
+        example: "augno core:properties update \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.Properties.Update',
@@ -5768,6 +6241,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.properties.attributes.list',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nattributes = augno_client.core.properties.attributes.list("property_id")\n\nputs(attributes)',
+      },
+      cli: {
+        method: 'attributes list',
+        example:
+          "augno core:properties:attributes list \\\n  --api-key 'My API Key' \\\n  --property-id property_id",
       },
       csharp: {
         method: 'Core.Properties.Attributes.List',
@@ -5825,6 +6303,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nattribute = augno_client.core.properties.attributes.create("property_id", color_code: "red", order: 1, text: "Red")\n\nputs(attribute)',
       },
+      cli: {
+        method: 'attributes create',
+        example:
+          "augno core:properties:attributes create \\\n  --api-key 'My API Key' \\\n  --property-id property_id \\\n  --color-code red \\\n  --order 1 \\\n  --text Red",
+      },
       csharp: {
         method: 'Core.Properties.Attributes.Create',
         example:
@@ -5873,6 +6356,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.properties.attributes.delete',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nattribute = augno_client.core.properties.attributes.delete("id", property_id: "property_id")\n\nputs(attribute)',
+      },
+      cli: {
+        method: 'attributes delete',
+        example:
+          "augno core:properties:attributes delete \\\n  --api-key 'My API Key' \\\n  --property-id property_id \\\n  --id id",
       },
       csharp: {
         method: 'Core.Properties.Attributes.Delete',
@@ -5923,6 +6411,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.properties.attributes.retrieve',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nattribute = augno_client.core.properties.attributes.retrieve("id", property_id: "property_id")\n\nputs(attribute)',
+      },
+      cli: {
+        method: 'attributes retrieve',
+        example:
+          "augno core:properties:attributes retrieve \\\n  --api-key 'My API Key' \\\n  --property-id property_id \\\n  --id id",
       },
       csharp: {
         method: 'Core.Properties.Attributes.Retrieve',
@@ -5980,6 +6473,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.properties.attributes.update',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nattribute = augno_client.core.properties.attributes.update("id", property_id: "property_id")\n\nputs(attribute)',
+      },
+      cli: {
+        method: 'attributes update',
+        example:
+          "augno core:properties:attributes update \\\n  --api-key 'My API Key' \\\n  --property-id property_id \\\n  --id id",
       },
       csharp: {
         method: 'Core.Properties.Attributes.Update',
@@ -6047,6 +6545,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\npage = augno_client.core.request_logs.list\n\nputs(page)',
       },
+      cli: {
+        method: 'request_logs list',
+        example: "augno core:request-logs list \\\n  --api-key 'My API Key'",
+      },
       csharp: {
         method: 'Core.RequestLogs.List',
         example:
@@ -6096,6 +6598,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.request_logs.retrieve',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nrequest_log = augno_client.core.request_logs.retrieve("id")\n\nputs(request_log)',
+      },
+      cli: {
+        method: 'request_logs retrieve',
+        example: "augno core:request-logs retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.RequestLogs.Retrieve',
@@ -6148,6 +6654,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\npage = augno_client.core.sandboxes.list\n\nputs(page)',
       },
+      cli: {
+        method: 'sandboxes list',
+        example: "augno core:sandboxes list \\\n  --api-key 'My API Key'",
+      },
       csharp: {
         method: 'Core.Sandboxes.List',
         example:
@@ -6199,6 +6709,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nsandbox = augno_client.core.sandboxes.create(mode: :blank, name: "Integration Testing")\n\nputs(sandbox)',
       },
+      cli: {
+        method: 'sandboxes create',
+        example:
+          "augno core:sandboxes create \\\n  --api-key 'My API Key' \\\n  --mode blank \\\n  --name 'Integration Testing'",
+      },
       csharp: {
         method: 'Core.Sandboxes.Create',
         example:
@@ -6248,6 +6763,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.sandboxes.delete',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nsandbox = augno_client.core.sandboxes.delete("id")\n\nputs(sandbox)',
+      },
+      cli: {
+        method: 'sandboxes delete',
+        example: "augno core:sandboxes delete \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.Sandboxes.Delete',
@@ -6299,6 +6818,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nsandbox = augno_client.core.sandboxes.retrieve("id")\n\nputs(sandbox)',
       },
+      cli: {
+        method: 'sandboxes retrieve',
+        example: "augno core:sandboxes retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'Core.Sandboxes.Retrieve',
         example:
@@ -6349,6 +6872,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.shipping_terms.list',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nshipping_terms = augno_client.core.shipping_terms.list\n\nputs(shipping_terms)',
+      },
+      cli: {
+        method: 'shipping_terms list',
+        example: "augno core:shipping-terms list \\\n  --api-key 'My API Key'",
       },
       csharp: {
         method: 'Core.ShippingTerms.List',
@@ -6407,6 +6934,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nshipping_term = augno_client.core.shipping_terms.create(\n  free_shipping_carrier_option_ids: ["string"],\n  name: "Prepaid",\n  type: :carrier_rate_freight\n)\n\nputs(shipping_term)',
       },
+      cli: {
+        method: 'shipping_terms create',
+        example:
+          "augno core:shipping-terms create \\\n  --api-key 'My API Key' \\\n  --free-shipping-carrier-option-id string \\\n  --name Prepaid \\\n  --type carrier_rate_freight",
+      },
       csharp: {
         method: 'Core.ShippingTerms.Create',
         example:
@@ -6456,6 +6988,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.shipping_terms.delete',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nshipping_term = augno_client.core.shipping_terms.delete("id")\n\nputs(shipping_term)',
+      },
+      cli: {
+        method: 'shipping_terms delete',
+        example: "augno core:shipping-terms delete \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.ShippingTerms.Delete',
@@ -6507,6 +7043,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.shipping_terms.retrieve',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nshipping_term = augno_client.core.shipping_terms.retrieve("id")\n\nputs(shipping_term)',
+      },
+      cli: {
+        method: 'shipping_terms retrieve',
+        example: "augno core:shipping-terms retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.ShippingTerms.Retrieve',
@@ -6567,6 +7107,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nshipping_term = augno_client.core.shipping_terms.update("id", free_shipping_carrier_option_ids: ["string"])\n\nputs(shipping_term)',
       },
+      cli: {
+        method: 'shipping_terms update',
+        example:
+          "augno core:shipping-terms update \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --free-shipping-carrier-option-id string",
+      },
       csharp: {
         method: 'Core.ShippingTerms.Update',
         example:
@@ -6617,6 +7162,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.units.list',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nunits = augno_client.core.units.list\n\nputs(units)',
+      },
+      cli: {
+        method: 'units list',
+        example: "augno core:units list \\\n  --api-key 'My API Key'",
       },
       csharp: {
         method: 'Core.Units.List',
@@ -6676,6 +7225,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nunit = augno_client.core.units.create(\n  abbreviation: "g",\n  is_base_unit: true,\n  name: "Gram",\n  offset_denominator: "1.000000000000000000000000000000",\n  offset_numerator: "0.000000000000000000000000000000",\n  ratio_denominator: "1.000000000000000000000000000000",\n  ratio_numerator: "1.000000000000000000000000000000",\n  type: :mass\n)\n\nputs(unit)',
       },
+      cli: {
+        method: 'units create',
+        example:
+          "augno core:units create \\\n  --api-key 'My API Key' \\\n  --abbreviation g \\\n  --is-base-unit \\\n  --name Gram \\\n  --offset-denominator 1.000000000000000000000000000000 \\\n  --offset-numerator 0.000000000000000000000000000000 \\\n  --ratio-denominator 1.000000000000000000000000000000 \\\n  --ratio-numerator 1.000000000000000000000000000000 \\\n  --type mass",
+      },
       csharp: {
         method: 'Core.Units.Create',
         example:
@@ -6725,6 +7279,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.units.delete',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nunit = augno_client.core.units.delete("id")\n\nputs(unit)',
+      },
+      cli: {
+        method: 'units delete',
+        example: "augno core:units delete \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.Units.Delete',
@@ -6776,6 +7334,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.units.retrieve',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nunit = augno_client.core.units.retrieve("id")\n\nputs(unit)',
+      },
+      cli: {
+        method: 'units retrieve',
+        example: "augno core:units retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.Units.Retrieve',
@@ -6836,6 +7398,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nunit = augno_client.core.units.update("id")\n\nputs(unit)',
       },
+      cli: {
+        method: 'units update',
+        example: "augno core:units update \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'Core.Units.Update',
         example:
@@ -6887,6 +7453,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nitem_categories = augno_client.core.item_categories.list\n\nputs(item_categories)',
       },
+      cli: {
+        method: 'item_categories list',
+        example: "augno core:item-categories list \\\n  --api-key 'My API Key'",
+      },
       csharp: {
         method: 'Core.ItemCategories.List',
         example:
@@ -6937,6 +7507,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nitem_category = augno_client.core.item_categories.create(\n  name: "Electronics",\n  type: "material_category",\n  unit_group_id: "ug_01jm4r6700f8nwq3v5hx2d9ktp"\n)\n\nputs(item_category)',
       },
+      cli: {
+        method: 'item_categories create',
+        example:
+          "augno core:item-categories create \\\n  --api-key 'My API Key' \\\n  --name Electronics \\\n  --type material_category \\\n  --unit-group-id ug_01jm4r6700f8nwq3v5hx2d9ktp",
+      },
       csharp: {
         method: 'Core.ItemCategories.Create',
         example:
@@ -6986,6 +7561,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.item_categories.delete',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nitem_category = augno_client.core.item_categories.delete("id")\n\nputs(item_category)',
+      },
+      cli: {
+        method: 'item_categories delete',
+        example: "augno core:item-categories delete \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.ItemCategories.Delete',
@@ -7038,6 +7617,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nitem_category = augno_client.core.item_categories.retrieve("id")\n\nputs(item_category)',
       },
+      cli: {
+        method: 'item_categories retrieve',
+        example: "augno core:item-categories retrieve \\\n  --api-key 'My API Key' \\\n  --id id",
+      },
       csharp: {
         method: 'Core.ItemCategories.Retrieve',
         example:
@@ -7088,6 +7671,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.item_categories.update',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nitem_category = augno_client.core.item_categories.update("id")\n\nputs(item_category)',
+      },
+      cli: {
+        method: 'item_categories update',
+        example: "augno core:item-categories update \\\n  --api-key 'My API Key' \\\n  --id id",
       },
       csharp: {
         method: 'Core.ItemCategories.Update',
@@ -7140,6 +7727,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.item_categories.change_unit_group("unit_group_id", id: "id")\n\nputs(response)',
       },
+      cli: {
+        method: 'item_categories change_unit_group',
+        example:
+          "augno core:item-categories change-unit-group \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --unit-group-id unit_group_id",
+      },
       csharp: {
         method: 'Core.ItemCategories.ChangeUnitGroup',
         example:
@@ -7190,6 +7782,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'core.item_categories.properties.remove',
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nproperty = augno_client.core.item_categories.properties.remove("property_id", id: "id")\n\nputs(property)',
+      },
+      cli: {
+        method: 'properties remove',
+        example:
+          "augno core:item-categories:properties remove \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --property-id property_id",
       },
       csharp: {
         method: 'Core.ItemCategories.Properties.Remove',
@@ -7242,6 +7839,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "augno"\n\naugno_client = Augno::Client.new(\n  api_key: "My API Key",\n  environment: "environment_1" # defaults to "production"\n)\n\nresponse = augno_client.core.item_categories.properties.add("property_id", id: "id")\n\nputs(response)',
       },
+      cli: {
+        method: 'properties add',
+        example:
+          "augno core:item-categories:properties add \\\n  --api-key 'My API Key' \\\n  --id id \\\n  --property-id property_id",
+      },
       csharp: {
         method: 'Core.ItemCategories.Properties.Add',
         example:
@@ -7256,6 +7858,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
 ];
 
 const EMBEDDED_READMES: { language: string; content: string }[] = [
+  {
+    language: 'cli',
+    content:
+      "# Augno Client CLI\n\nThe official CLI for the [Augno Client REST API](https://www.docs.augno.com).\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## Installation\n\n### Installing with Go\n\nTo test or install the CLI locally, you need [Go](https://go.dev/doc/install) version 1.22 or later installed.\n\n~~~sh\ngo install 'github.com/stainless-sdks/augno-cli/cmd/augno@latest'\n~~~\n\nOnce you have run `go install`, the binary is placed in your Go bin directory:\n\n- **Default location**: `$HOME/go/bin` (or `$GOPATH/bin` if GOPATH is set)\n- **Check your path**: Run `go env GOPATH` to see the base directory\n\nIf commands aren't found after installation, add the Go bin directory to your PATH:\n\n~~~sh\n# Add to your shell profile (.zshrc, .bashrc, etc.)\nexport PATH=\"$PATH:$(go env GOPATH)/bin\"\n~~~\n\n### Running Locally\n\nAfter cloning the git repository for this project, you can use the\n`scripts/run` script to run the tool locally:\n\n~~~sh\n./scripts/run args...\n~~~\n\n## Usage\n\nThe CLI follows a resource-based command structure:\n\n~~~sh\naugno [resource] <command> [flags...]\n~~~\n\n~~~sh\naugno ai list-tool-groups \\\n  --api-key 'My API Key'\n~~~\n\nFor details about specific commands, use the `--help` flag.\n\n### Environment variables\n\n| Environment variable | Required | Default value |\n| -------------------- | -------- | ------------- |\n| `AUGNO_API_KEY`      | no       | `null`        |\n\n### Global flags\n\n- `--api-key` (can also be set with `AUGNO_API_KEY` env var)\n- `--help` - Show command line usage\n- `--debug` - Enable debug logging (includes HTTP request/response details)\n- `--version`, `-v` - Show the CLI version\n- `--base-url` - Use a custom API backend URL\n- `--format` - Change the output format (`auto`, `explore`, `json`, `jsonl`, `pretty`, `raw`, `yaml`)\n- `--format-error` - Change the output format for errors (`auto`, `explore`, `json`, `jsonl`, `pretty`, `raw`, `yaml`)\n- `--transform` - Transform the data output using [GJSON syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md)\n- `--transform-error` - Transform the error output using [GJSON syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md)\n\n### Passing files as arguments\n\nTo pass files to your API, you can use the `@myfile.ext` syntax:\n\n~~~bash\naugno <command> --arg @abe.jpg\n~~~\n\nFiles can also be passed inside JSON or YAML blobs:\n\n~~~bash\naugno <command> --arg '{image: \"@abe.jpg\"}'\n# Equivalent:\naugno <command> <<YAML\narg:\n  image: \"@abe.jpg\"\nYAML\n~~~\n\nIf you need to pass a string literal that begins with an `@` sign, you can\nescape the `@` sign to avoid accidentally passing a file.\n\n~~~bash\naugno <command> --username '\\@abe'\n~~~\n\n#### Explicit encoding\n\nFor JSON endpoints, the CLI tool does filetype sniffing to determine whether the\nfile contents should be sent as a string literal (for plain text files) or as a\nbase64-encoded string literal (for binary files). If you need to explicitly send\nthe file as either plain text or base64-encoded data, you can use\n`@file://myfile.txt` (for string encoding) or `@data://myfile.dat` (for\nbase64-encoding). Note that absolute paths will begin with `@file://` or\n`@data://`, followed by a third `/` (for example, `@file:///tmp/file.txt`).\n\n~~~bash\naugno <command> --arg @data://file.txt\n~~~\n\n## Linking different Go SDK versions\n\nYou can link the CLI against a different version of the Augno Client Go SDK\nfor development purposes using the `./scripts/link` script.\n\nTo link to a specific version from a repository (version can be a branch,\ngit tag, or commit hash):\n\n~~~bash\n./scripts/link github.com/org/repo@version\n~~~\n\nTo link to a local copy of the SDK:\n\n~~~bash\n./scripts/link ../path/to/augno-go\n~~~\n\nIf you run the link script without any arguments, it will default to `../augno-go`.\n",
+  },
   {
     language: 'csharp',
     content:
