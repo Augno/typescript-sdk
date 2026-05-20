@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../../core/resource';
 import * as AgentsAPI from '../../ai/agents';
+import * as RolesAPI from '../../identity/roles';
 import * as ActionsAPI from './actions';
 import { ActionRotateParams, Actions } from './actions';
 import { APIPromise } from '../../../core/api-promise';
@@ -15,29 +16,13 @@ export class APIKeys extends APIResource {
   actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
 
   /**
-   * This endpoint is used to create an API key. Once completed, the API key object
-   * is returned, and the API key secret is returned. The secret is only returned
-   * once at creation, and is not retrievable after creation.
+   * Returns [API key](https://docs.augno.com/api/api-keys) metadata by ID.
    *
    * @example
    * ```ts
-   * const createdAPIKey = await client.auth.apiKeys.create({
-   *   name: 'Production API Key',
-   *   role_id: 'rl_01gf7a8200er3ar3pkfrb6kk29',
-   * });
-   * ```
-   */
-  create(params: APIKeyCreateParams, options?: RequestOptions): APIPromise<CreatedAPIKey> {
-    const { include, ...body } = params;
-    return this._client.post('/v1/auth/api-keys', { query: { include }, body, ...options });
-  }
-
-  /**
-   * This endpoint returns a single API key's metadata by its ID.
-   *
-   * @example
-   * ```ts
-   * const apiKey = await client.auth.apiKeys.retrieve('id');
+   * const apiKey = await client.auth.apiKeys.retrieve(
+   *   'apke_01jm4r6700e3kxb9w2nqh7g5fp',
+   * );
    * ```
    */
   retrieve(
@@ -49,148 +34,156 @@ export class APIKeys extends APIResource {
   }
 
   /**
-   * This endpoint returns a paginated list of API keys for the target account.
-   * Supports cursor-based pagination and optional search filtering by name.
+   * Revokes an [API key](https://docs.augno.com/api/api-keys).
+   *
+   * Revoked API keys will be unable to be used to authenticate requests.
    *
    * @example
    * ```ts
-   * const apiKeys = await client.auth.apiKeys.list();
+   * const apiKey = await client.auth.apiKeys.delete(
+   *   'apke_01jm4r6700e3kxb9w2nqh7g5fp',
+   * );
    * ```
    */
-  list(
-    query: APIKeyListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<APIKeyListResponse> {
-    return this._client.get('/v1/auth/api-keys', { query, ...options });
+  delete(id: string, options?: RequestOptions): APIPromise<APIKeyDeleteResponse> {
+    return this._client.delete(path`/v1/auth/api-keys/${id}`, options);
   }
 
   /**
-   * This endpoint revokes an API key so it can no longer be used to authenticate
-   * requests. The API key will be marked as revoked and will no longer be usable.
+   * Creates an [API key](https://docs.augno.com/api/api-keys) to authenticate API
+   * requests.
+   *
+   * The secret key is returned once and cannot be retrieved later, so you should
+   * store it securely. We provide some
+   * [recommendations](https://docs.augno.com/api/managing-api-keys) on how you can
+   * manage your API keys.
    *
    * @example
    * ```ts
-   * const response = await client.auth.apiKeys.revoke('id');
+   * const createdAPIKey = await client.auth.apiKeys.apiKeys({
+   *   name: 'Production API Key',
+   *   role_id: 'rl_01gf7a8200er3ar3pkfrb6kk29',
+   * });
    * ```
    */
-  revoke(id: string, options?: RequestOptions): APIPromise<APIKeyRevokeResponse> {
-    return this._client.delete(path`/v1/auth/api-keys/${id}`, options);
+  apiKeys(params: APIKeyAPIKeysParams, options?: RequestOptions): APIPromise<CreatedAPIKey> {
+    const { include, ...body } = params;
+    return this._client.post('/v1/auth/api-keys', { query: { include }, body, ...options });
+  }
+
+  /**
+   * Returns a paginated list of [API keys](https://docs.augno.com/api/api-keys).
+   *
+   * @example
+   * ```ts
+   * const response =
+   *   await client.auth.apiKeys.retrieveAPIKeys();
+   * ```
+   */
+  retrieveAPIKeys(
+    query: APIKeyRetrieveAPIKeysParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<APIKeyRetrieveAPIKeysResponse> {
+    return this._client.get('/v1/auth/api-keys', { query, ...options });
   }
 }
 
 /**
- * APIKey represents an API key for authenticating API requests.
+ * API key resource.
  */
 export interface APIKey {
   /**
-   * The unique identifier for the API key.
+   * API key ID.
    */
   id: string;
 
   /**
-   * The timestamp when the API key was created.
+   * Creation timestamp.
    */
   created_at: string;
 
   /**
-   * The timestamp when the API key expires.
+   * Expiration timestamp.
    */
   expires_at: string | null;
 
   /**
-   * The timestamp when the API key was last used.
+   * Last used timestamp.
    */
   last_used_at: string | null;
 
   /**
-   * The human-readable name for the API key.
+   * Human-readable name for the API key.
    */
   name: string;
 
   /**
-   * The resource type identifier.
+   * Resource type identifier.
    */
   object: 'api_key';
 
   /**
-   * The redacted value of the API key for display purposes.
+   * Redacted key value safe for display.
    */
   redacted_value: string;
 
   /**
-   * The timestamp when the API key was revoked.
+   * Revocation timestamp.
    */
   revoked_at: string | null;
 
   /**
-   * LightRole represents a minimal role reference.
+   * Role resource.
    */
-  role: AgentsAPI.LightRole | null;
+  role: RolesAPI.Role | null;
 
   /**
-   * The timestamp when the API key was last updated.
+   * Last updated timestamp.
    */
   updated_at: string;
 }
 
 /**
- * CreatedAPIKey represents a newly created API key with the full secret value.
+ * Result of creating an API key, with the full secret value.
  */
 export interface CreatedAPIKey {
   /**
-   * APIKey represents an API key for authenticating API requests.
+   * API key resource.
    */
   api_key_info: APIKey;
 
   /**
-   * The full API key secret value (only shown once at creation).
+   * Full secret value. Returned once and cannot be retrieved later. Learn more about
+   * [managing your API keys](https://docs.augno.com/api/managing-api-keys).
    */
   api_key_secret: string;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'created_api_key';
 }
 
+export interface APIKeyDeleteResponse {}
+
 /**
- * A paginated list of APIKey resources
+ * List represents a paginated list of resources.
  */
-export interface APIKeyListResponse {
+export interface APIKeyRetrieveAPIKeysResponse {
   /**
-   * Array of APIKey resources in this page
+   * Resources in this page.
    */
   data: Array<APIKey>;
 
   /**
-   * Object type for APIKey list
+   * Resource type identifier.
    */
   object: 'list';
 
   /**
-   * PageInfo contains cursor-based pagination metadata.
+   * PageInfo contains URL-based pagination metadata.
    */
   page_info: AgentsAPI.PageInfo;
-}
-
-export interface APIKeyRevokeResponse {}
-
-export interface APIKeyCreateParams {
-  /**
-   * Body param: The name for the API key.
-   */
-  name: string;
-
-  /**
-   * Body param: The role ID for the API key.
-   */
-  role_id: string;
-
-  /**
-   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
-   * are returned as `null`.
-   */
-  include?: Array<'role' | 'role.permissions'>;
-
-  /**
-   * Body param: Optional expiration time for the API key.
-   */
-  expires_at?: string | null;
 }
 
 export interface APIKeyRetrieveParams {
@@ -201,7 +194,35 @@ export interface APIKeyRetrieveParams {
   include?: Array<'role' | 'role.permissions'>;
 }
 
-export interface APIKeyListParams {
+export interface APIKeyAPIKeysParams {
+  /**
+   * Body param: Human-readable name for the API key.
+   */
+  name: string;
+
+  /**
+   * Body param: Role ID assigned to the API key.
+   */
+  role_id: string;
+
+  /**
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
+   */
+  include?: Array<'role' | 'role.permissions'>;
+
+  /**
+   * Body param: Expiration timestamp. If not set, the key does not expire.
+   */
+  expires_at?: string;
+}
+
+export interface APIKeyRetrieveAPIKeysParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
   /**
    * Sub-objects to expand in the response. When omitted, sub-objects are returned as
    * `null`.
@@ -209,9 +230,19 @@ export interface APIKeyListParams {
   include?: Array<'role' | 'role.permissions'>;
 
   /**
-   * Filter API keys by status.
+   * Maximum number of results per page (default: 100, max: 1000).
    */
-  status?: Array<'active' | 'expired' | 'revoked'>;
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+
+  /**
+   * API key statuses to filter by.
+   */
+  statuses?: Array<'active' | 'expired' | 'revoked'>;
 }
 
 APIKeys.Actions = Actions;
@@ -220,11 +251,11 @@ export declare namespace APIKeys {
   export {
     type APIKey as APIKey,
     type CreatedAPIKey as CreatedAPIKey,
-    type APIKeyListResponse as APIKeyListResponse,
-    type APIKeyRevokeResponse as APIKeyRevokeResponse,
-    type APIKeyCreateParams as APIKeyCreateParams,
+    type APIKeyDeleteResponse as APIKeyDeleteResponse,
+    type APIKeyRetrieveAPIKeysResponse as APIKeyRetrieveAPIKeysResponse,
     type APIKeyRetrieveParams as APIKeyRetrieveParams,
-    type APIKeyListParams as APIKeyListParams,
+    type APIKeyAPIKeysParams as APIKeyAPIKeysParams,
+    type APIKeyRetrieveAPIKeysParams as APIKeyRetrieveAPIKeysParams,
   };
 
   export { Actions as Actions, type ActionRotateParams as ActionRotateParams };

@@ -11,17 +11,22 @@ import { path } from '../../../internal/utils/path';
  */
 export class Actions extends APIResource {
   /**
-   * This endpoint rotates an API key by revoking the existing key and creating a new
-   * replacement with the same name, role, and owner. The new key inherits the old
-   * key's expiration unless an explicit expires_at override is provided. The new API
-   * key secret is returned once and is not retrievable after creation.
+   * Rotates an [API key](https://docs.augno.com/api/api-keys) by revoking the
+   * existing key and issuing a replacement with the same name, role, and expiration
+   * (unless overridden).
+   *
+   * The secret key is returned once and cannot be retrieved later, so you should
+   * store it securely. We provide some
+   * [recommendations](https://docs.augno.com/api/managing-api-keys) on how you can
+   * manage your API keys.
    *
    * @example
    * ```ts
    * const createdAPIKey =
-   *   await client.auth.apiKeys.actions.rotate('id', {
-   *     expires_at: '2026-12-31T23:59:59Z',
-   *   });
+   *   await client.auth.apiKeys.actions.rotate(
+   *     'apke_01jm4r6700e3kxb9w2nqh7g5fp',
+   *     { expires_at: '2026-12-31T23:59:59Z' },
+   *   );
    * ```
    */
   rotate(
@@ -46,9 +51,10 @@ export interface ActionRotateParams {
   include?: Array<'role' | 'role.permissions'>;
 
   /**
-   * Body param: Optional expiration time override for the new API key.
+   * Body param: Expiration timestamp override. If omitted, the previous key's
+   * expiration is used.
    */
-  expires_at?: string | null;
+  expires_at?: string;
 }
 
 export declare namespace Actions {

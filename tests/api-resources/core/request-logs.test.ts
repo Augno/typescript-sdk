@@ -1,16 +1,15 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import AugnoClient from 'augno';
+import Augno from '@augno/sdk';
 
-const client = new AugnoClient({
-  apiKey: 'My API Key',
+const client = new Augno({
+  bearerToken: 'My Bearer Token',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
 describe('resource requestLogs', () => {
-  // Mock server tests are disabled
-  test.skip('retrieve', async () => {
-    const responsePromise = client.core.requestLogs.retrieve('id');
+  test('retrieve', async () => {
+    const responsePromise = client.core.requestLogs.retrieve('rq_01jm4r6700f8nwq3v5hx2d9ktp');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -20,17 +19,19 @@ describe('resource requestLogs', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Mock server tests are disabled
-  test.skip('retrieve: request options and params are passed correctly', async () => {
+  test('retrieve: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.core.requestLogs.retrieve('id', { include: ['account'] }, { path: '/_stainless_unknown_path' }),
-    ).rejects.toThrow(AugnoClient.NotFoundError);
+      client.core.requestLogs.retrieve(
+        'rq_01jm4r6700f8nwq3v5hx2d9ktp',
+        { include: ['account'] },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Augno.NotFoundError);
   });
 
-  // Mock server tests are disabled
-  test.skip('list', async () => {
-    const responsePromise = client.core.requestLogs.list();
+  test('retrieveRequestLogs', async () => {
+    const responsePromise = client.core.requestLogs.retrieveRequestLogs();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -40,29 +41,30 @@ describe('resource requestLogs', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Mock server tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
+  test('retrieveRequestLogs: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.core.requestLogs.list(
+      client.core.requestLogs.retrieveRequestLogs(
         {
-          account_id: 'account_id',
-          actor_id: 'actor_id',
-          actor_name: 'actor_name',
-          actor_type: 'actor_type',
+          account_ids: ['string'],
+          actor_ids: ['string'],
+          actor_types: ['user'],
           cursor: 'cursor',
           end_date: '2019-12-27T18:11:19.117Z',
-          error_code: 'error_code',
-          exact_match: true,
+          error_codes: ['expired_token'],
+          hosts: ['string'],
+          idempotency_key: 'idempotency_key',
           include: ['account'],
           limit: 0,
-          method: 'method',
+          methods: ['GET'],
+          min_latency_us: 0,
+          normalized_routes: ['string'],
           q: 'q',
           start_date: '2019-12-27T18:11:19.117Z',
-          status_code: 0,
+          status_codes: [0],
         },
         { path: '/_stainless_unknown_path' },
       ),
-    ).rejects.toThrow(AugnoClient.NotFoundError);
+    ).rejects.toThrow(Augno.NotFoundError);
   });
 });
