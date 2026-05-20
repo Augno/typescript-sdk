@@ -1,30 +1,16 @@
-# Augno Client TypeScript API Library
+# Augno TypeScript API Library
 
-[![NPM version](<https://img.shields.io/npm/v/augno.svg?label=npm%20(stable)>)](https://npmjs.org/package/augno) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/augno)
+[![NPM version](<https://img.shields.io/npm/v/@augno/sdk.svg?label=npm%20(stable)>)](https://npmjs.org/package/@augno/sdk) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@augno/sdk)
 
-This library provides convenient access to the Augno Client REST API from server-side TypeScript or JavaScript.
+This library provides convenient access to the Augno REST API from server-side TypeScript or JavaScript.
 
-The REST API documentation can be found on [www.docs.augno.com](https://www.docs.augno.com). The full API of this library can be found in [api.md](api.md).
-
-It is generated with [Stainless](https://www.stainless.com/).
-
-## MCP Server
-
-Use the Augno Client MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.
-
-[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=augno-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImF1Z25vLW1jcCJdLCJlbnYiOnsiQVVHTk9fQVBJX0tFWSI6Ik15IEFQSSBLZXkifX0)
-[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22augno-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22augno-mcp%22%5D%2C%22env%22%3A%7B%22AUGNO_API_KEY%22%3A%22My%20API%20Key%22%7D%7D)
-
-> Note: You may need to set environment variables in your MCP client.
+The full API of this library can be found in [api.md](api.md).
 
 ## Installation
 
 ```sh
-npm install git+ssh://git@github.com:Augno/typescript-sdk.git
+npm install @augno/sdk
 ```
-
-> [!NOTE]
-> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npm install augno`
 
 ## Usage
 
@@ -32,16 +18,16 @@ The full API of this library can be found in [api.md](api.md).
 
 <!-- prettier-ignore -->
 ```js
-import AugnoClient from 'augno';
+import Augno from '@augno/sdk';
 
-const client = new AugnoClient({
-  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted
-  environment: 'environment_1', // defaults to 'production'
+const client = new Augno({
+  bearerToken: 'My Bearer Token',
+  environment: 'local', // defaults to 'production'
 });
 
-const response = await client.ai.listToolGroups();
+const apiKey = await client.auth.apiKeys.retrieve('apke_01jm4r6700e3kxb9w2nqh7g5fp');
 
-console.log(response.data);
+console.log(apiKey.id);
 ```
 
 ### Request & Response types
@@ -50,14 +36,16 @@ This library includes TypeScript definitions for all request params and response
 
 <!-- prettier-ignore -->
 ```ts
-import AugnoClient from 'augno';
+import Augno from '@augno/sdk';
 
-const client = new AugnoClient({
-  apiKey: process.env['AUGNO_API_KEY'], // This is the default and can be omitted
-  environment: 'environment_1', // defaults to 'production'
+const client = new Augno({
+  bearerToken: 'My Bearer Token',
+  environment: 'local', // defaults to 'production'
 });
 
-const response: AugnoClient.AIListToolGroupsResponse = await client.ai.listToolGroups();
+const apiKey: Augno.Auth.APIKey = await client.auth.apiKeys.retrieve(
+  'apke_01jm4r6700e3kxb9w2nqh7g5fp',
+);
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -70,15 +58,17 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const response = await client.ai.listToolGroups().catch(async (err) => {
-  if (err instanceof AugnoClient.APIError) {
-    console.log(err.status); // 400
-    console.log(err.name); // BadRequestError
-    console.log(err.headers); // {server: 'nginx', ...}
-  } else {
-    throw err;
-  }
-});
+const apiKey = await client.auth.apiKeys
+  .retrieve('apke_01jm4r6700e3kxb9w2nqh7g5fp')
+  .catch(async (err) => {
+    if (err instanceof Augno.APIError) {
+      console.log(err.status); // 400
+      console.log(err.name); // BadRequestError
+      console.log(err.headers); // {server: 'nginx', ...}
+    } else {
+      throw err;
+    }
+  });
 ```
 
 Error codes are as follows:
@@ -105,12 +95,12 @@ You can use the `maxRetries` option to configure or disable this:
 <!-- prettier-ignore -->
 ```js
 // Configure the default for all requests:
-const client = new AugnoClient({
+const client = new Augno({
   maxRetries: 0, // default is 2
 });
 
 // Or, configure per-request:
-await client.ai.listToolGroups({
+await client.auth.apiKeys.retrieve('apke_01jm4r6700e3kxb9w2nqh7g5fp', {
   maxRetries: 5,
 });
 ```
@@ -122,12 +112,12 @@ Requests time out after 1 minute by default. You can configure this with a `time
 <!-- prettier-ignore -->
 ```ts
 // Configure the default for all requests:
-const client = new AugnoClient({
+const client = new Augno({
   timeout: 20 * 1000, // 20 seconds (default is 1 minute)
 });
 
 // Override per-request:
-await client.ai.listToolGroups({
+await client.auth.apiKeys.retrieve('apke_01jm4r6700e3kxb9w2nqh7g5fp', {
   timeout: 5 * 1000,
 });
 ```
@@ -135,37 +125,6 @@ await client.ai.listToolGroups({
 On timeout, an `APIConnectionTimeoutError` is thrown.
 
 Note that requests which time out will be [retried twice by default](#retries).
-
-## Auto-pagination
-
-List methods in the AugnoClient API are paginated.
-You can use the `for await … of` syntax to iterate through items across all pages:
-
-```ts
-async function fetchAllAIListUsageResponses(params) {
-  const allAIListUsageResponses = [];
-  // Automatically fetches more pages as needed.
-  for await (const aiListUsageResponse of client.ai.listUsage()) {
-    allAIListUsageResponses.push(aiListUsageResponse);
-  }
-  return allAIListUsageResponses;
-}
-```
-
-Alternatively, you can request a single page at a time:
-
-```ts
-let page = await client.ai.listUsage();
-for (const aiListUsageResponse of page.data) {
-  console.log(aiListUsageResponse);
-}
-
-// Convenience methods are provided for manually paginating:
-while (page.hasNextPage()) {
-  page = await page.getNextPage();
-  // ...
-}
-```
 
 ## Advanced Usage
 
@@ -179,15 +138,17 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 
 <!-- prettier-ignore -->
 ```ts
-const client = new AugnoClient();
+const client = new Augno();
 
-const response = await client.ai.listToolGroups().asResponse();
+const response = await client.auth.apiKeys.retrieve('apke_01jm4r6700e3kxb9w2nqh7g5fp').asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: response, response: raw } = await client.ai.listToolGroups().withResponse();
+const { data: apiKey, response: raw } = await client.auth.apiKeys
+  .retrieve('apke_01jm4r6700e3kxb9w2nqh7g5fp')
+  .withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(response.data);
+console.log(apiKey.id);
 ```
 
 ### Logging
@@ -200,13 +161,13 @@ console.log(response.data);
 
 The log level can be configured in two ways:
 
-1. Via the `AUGNO_CLIENT_LOG` environment variable
+1. Via the `AUGNO_LOG` environment variable
 2. Using the `logLevel` client option (overrides the environment variable if set)
 
 ```ts
-import AugnoClient from 'augno';
+import Augno from '@augno/sdk';
 
-const client = new AugnoClient({
+const client = new Augno({
   logLevel: 'debug', // Show all log messages
 });
 ```
@@ -232,13 +193,13 @@ When providing a custom logger, the `logLevel` option still controls which messa
 below the configured level will not be sent to your logger.
 
 ```ts
-import AugnoClient from 'augno';
+import Augno from '@augno/sdk';
 import pino from 'pino';
 
 const logger = pino();
 
-const client = new AugnoClient({
-  logger: logger.child({ name: 'AugnoClient' }),
+const client = new Augno({
+  logger: logger.child({ name: 'Augno' }),
   logLevel: 'debug', // Send all messages to pino, allowing it to filter
 });
 ```
@@ -267,7 +228,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.ai.listToolGroups({
+client.auth.apiKeys.retrieve({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
@@ -301,10 +262,10 @@ globalThis.fetch = fetch;
 Or pass it to the client:
 
 ```ts
-import AugnoClient from 'augno';
+import Augno from '@augno/sdk';
 import fetch from 'my-fetch';
 
-const client = new AugnoClient({ fetch });
+const client = new Augno({ fetch });
 ```
 
 ### Fetch options
@@ -312,9 +273,9 @@ const client = new AugnoClient({ fetch });
 If you want to set custom `fetch` options without overriding the `fetch` function, you can provide a `fetchOptions` object when instantiating the client or making a request. (Request-specific options override client options.)
 
 ```ts
-import AugnoClient from 'augno';
+import Augno from '@augno/sdk';
 
-const client = new AugnoClient({
+const client = new Augno({
   fetchOptions: {
     // `RequestInit` options
   },
@@ -329,11 +290,11 @@ options to requests:
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/node.svg" align="top" width="18" height="21"> **Node** <sup>[[docs](https://github.com/nodejs/undici/blob/main/docs/docs/api/ProxyAgent.md#example---proxyagent-with-fetch)]</sup>
 
 ```ts
-import AugnoClient from 'augno';
+import Augno from '@augno/sdk';
 import * as undici from 'undici';
 
 const proxyAgent = new undici.ProxyAgent('http://localhost:8888');
-const client = new AugnoClient({
+const client = new Augno({
   fetchOptions: {
     dispatcher: proxyAgent,
   },
@@ -343,9 +304,9 @@ const client = new AugnoClient({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/bun.svg" align="top" width="18" height="21"> **Bun** <sup>[[docs](https://bun.sh/guides/http/proxy)]</sup>
 
 ```ts
-import AugnoClient from 'augno';
+import Augno from '@augno/sdk';
 
-const client = new AugnoClient({
+const client = new Augno({
   fetchOptions: {
     proxy: 'http://localhost:8888',
   },
@@ -355,10 +316,10 @@ const client = new AugnoClient({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/deno.svg" align="top" width="18" height="21"> **Deno** <sup>[[docs](https://docs.deno.com/api/deno/~/Deno.createHttpClient)]</sup>
 
 ```ts
-import AugnoClient from 'npm:augno';
+import Augno from 'npm:@augno/sdk';
 
 const httpClient = Deno.createHttpClient({ proxy: { url: 'http://localhost:8888' } });
-const client = new AugnoClient({
+const client = new Augno({
   fetchOptions: {
     client: httpClient,
   },
@@ -377,7 +338,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/Augno/typescript-sdk/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/augno/typescript-sdk/issues) with questions, bugs, or suggestions.
 
 ## Requirements
 

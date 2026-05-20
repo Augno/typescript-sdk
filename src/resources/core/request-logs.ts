@@ -2,9 +2,9 @@
 
 import { APIResource } from '../../core/resource';
 import * as AgentsAPI from '../ai/agents';
-import * as AccountPricesAPI from './account-prices';
+import * as AccountsAPI from '../identity/accounts';
+import * as AlertsAPI from '../ai/alerts/alerts';
 import { APIPromise } from '../../core/api-promise';
-import { DefaultCursorPage, type DefaultCursorPageParams, PagePromise } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -13,12 +13,12 @@ import { path } from '../../internal/utils/path';
  */
 export class RequestLogs extends APIResource {
   /**
-   * This endpoint returns a single request log by its ID.
+   * Returns a request log by ID.
    *
    * @example
    * ```ts
    * const requestLog = await client.core.requestLogs.retrieve(
-   *   'id',
+   *   'rq_01jm4r6700f8nwq3v5hx2d9ktp',
    * );
    * ```
    */
@@ -26,96 +26,53 @@ export class RequestLogs extends APIResource {
     id: string,
     query: RequestLogRetrieveParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<RequestLogRetrieveResponse> {
+  ): APIPromise<RequestLog> {
     return this._client.get(path`/v1/core/request-logs/${id}`, { query, ...options });
   }
 
   /**
-   * This endpoint returns a paginated, filterable list of request logs for the
-   * target account. Supports cursor-based pagination and various filters.
+   * Returns a paginated list of request logs.
    *
    * @example
    * ```ts
-   * // Automatically fetches more pages as needed.
-   * for await (const requestLogListResponse of client.core.requestLogs.list()) {
-   *   // ...
-   * }
+   * const response =
+   *   await client.core.requestLogs.retrieveRequestLogs();
    * ```
    */
-  list(
-    query: RequestLogListParams | null | undefined = {},
+  retrieveRequestLogs(
+    query: RequestLogRetrieveRequestLogsParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<RequestLogListResponsesDefaultCursorPage, RequestLogListResponse> {
-    return this._client.getAPIList('/v1/core/request-logs', DefaultCursorPage<RequestLogListResponse>, {
-      query,
-      ...options,
-    });
+  ): APIPromise<RequestLogRetrieveRequestLogsResponse> {
+    return this._client.get('/v1/core/request-logs', { query, ...options });
   }
 }
 
-export type RequestLogListResponsesDefaultCursorPage = DefaultCursorPage<RequestLogListResponse>;
-
 /**
- * RequestLogActor contains the resolved actor details for a request log.
+ * RequestLog is an API request log entry.
  */
-export interface RequestLogActor {
+export interface RequestLog {
   /**
-   * The actor's ID (user ID or API key type_id).
+   * Request log ID.
    */
   id: string;
 
   /**
-   * The actor's email (users only).
+   * Account with optional branding and portal sub-resources.
    */
-  email: string | null;
+  account: AccountsAPI.Account | null;
 
   /**
-   * The actor's display name.
+   * Reference to an actor (user, API key, or agent).
    */
-  name: string | null;
+  actor: AlertsAPI.Actor | null;
 
   /**
-   * The resource type identifier.
-   */
-  object: 'user';
-
-  /**
-   * The redacted API key value (API keys only).
-   */
-  redacted_value: string | null;
-
-  /**
-   * LightRole represents a minimal role reference.
-   */
-  role: AgentsAPI.LightRole | null;
-}
-
-/**
- * RequestLog represents a single API request log entry.
- */
-export interface RequestLogRetrieveResponse {
-  /**
-   * The unique identifier for the request log.
-   */
-  id: string;
-
-  /**
-   * LightAccount represents a minimal account reference.
-   */
-  account: AccountPricesAPI.LightAccount | null;
-
-  /**
-   * RequestLogActor contains the resolved actor details for a request log.
-   */
-  actor: RequestLogActor | null;
-
-  /**
-   * The API version used.
+   * API version used.
    */
   api_version: string | null;
 
   /**
-   * The client IP address.
+   * Client IP address.
    */
   client_ip: string | null;
 
@@ -125,47 +82,43 @@ export interface RequestLogRetrieveResponse {
   created_at: string;
 
   /**
-   * The API error code, if any.
+   * API error code.
    */
   error_code: string | null;
 
   /**
-   * The error message, if any.
+   * Error message.
    */
   error_message: string | null;
 
   /**
-   * The request host.
+   * Request host. Usually `api.augno.com`.
    */
   host: string;
 
   /**
-   * The user-provided idempotency key value.
+   * User-provided idempotency key.
    */
   idempotency_key: string | null;
 
   /**
-   * The identity type of the caller.
-   */
-  identity_type: string | null;
-
-  /**
-   * The request latency in microseconds.
+   * Request latency in microseconds.
    */
   latency_us: number;
 
   /**
-   * The HTTP method.
+   * HTTP method.
    */
   method: string;
 
   /**
-   * The normalized route pattern.
+   * _Normalized_ route template. For example `PATCH /v1/sales/customers/{id}` is the
+   * normalized route for a request route `PUT /v1/sales/customers/ac_...`.
    */
   normalized_route: string;
 
   /**
-   * The resource type identifier.
+   * Resource type identifier.
    */
   object: 'request_log';
 
@@ -175,151 +128,62 @@ export interface RequestLogRetrieveResponse {
   occurred_at: string;
 
   /**
-   * The request path.
+   * Non-normalized request path.
    */
   path: string;
 
   /**
-   * The query parameters as JSON.
+   * Query parameters. Encoded as a JSON value (object, array, string, number,
+   * boolean, or null), not a JSON-encoded string.
    */
-  query_json: string | null;
+  query_params: unknown | null;
 
   /**
-   * The referrer header.
+   * Referrer header.
    */
   referrer: string | null;
 
   /**
-   * The JSON request body.
+   * Request body. Encoded as a JSON value (object, array, string, number, boolean,
+   * or null), not a JSON-encoded string.
    */
-  request_body_json: string | null;
+  request_body: unknown | null;
 
   /**
-   * The JSON response body.
+   * Response body. Encoded as a JSON value (object, array, string, number, boolean,
+   * or null), not a JSON-encoded string.
    */
-  response_body_json: string | null;
+  response_body: unknown | null;
 
   /**
-   * The HTTP status code.
+   * HTTP status code.
    */
   status_code: number;
 
   /**
-   * The user agent string.
+   * User agent.
    */
   user_agent: string | null;
 }
 
 /**
- * RequestLogListItem is the list representation of a request log entry. It omits
- * the request and response body JSON fields which are only available when
- * retrieving a single request log by ID.
+ * List represents a paginated list of resources.
  */
-export interface RequestLogListResponse {
+export interface RequestLogRetrieveRequestLogsResponse {
   /**
-   * The unique identifier for the request log.
+   * Resources in this page.
    */
-  id: string;
+  data: Array<RequestLog>;
 
   /**
-   * LightAccount represents a minimal account reference.
+   * Resource type identifier.
    */
-  account: AccountPricesAPI.LightAccount | null;
+  object: 'list';
 
   /**
-   * RequestLogActor contains the resolved actor details for a request log.
+   * PageInfo contains URL-based pagination metadata.
    */
-  actor: RequestLogActor | null;
-
-  /**
-   * The API version used.
-   */
-  api_version: string | null;
-
-  /**
-   * The client IP address.
-   */
-  client_ip: string | null;
-
-  /**
-   * When the log entry was created.
-   */
-  created_at: string;
-
-  /**
-   * The API error code, if any.
-   */
-  error_code: string | null;
-
-  /**
-   * The error message, if any.
-   */
-  error_message: string | null;
-
-  /**
-   * The request host.
-   */
-  host: string;
-
-  /**
-   * The user-provided idempotency key value.
-   */
-  idempotency_key: string | null;
-
-  /**
-   * The identity type of the caller.
-   */
-  identity_type: string | null;
-
-  /**
-   * The request latency in microseconds.
-   */
-  latency_us: number;
-
-  /**
-   * The HTTP method.
-   */
-  method: string;
-
-  /**
-   * The normalized route pattern.
-   */
-  normalized_route: string;
-
-  /**
-   * The resource type identifier.
-   */
-  object: 'request_log';
-
-  /**
-   * When the request occurred.
-   */
-  occurred_at: string;
-
-  /**
-   * The request path.
-   */
-  path: string;
-
-  /**
-   * The query parameters as JSON.
-   */
-  query_json: string | null;
-
-  /**
-   * The referrer header.
-   */
-  referrer: string | null;
-
-  /**
-   * The HTTP status code.
-   */
-  status_code: number;
-
-  /**
-   * The user agent string.
-   */
-  user_agent: string | null;
+  page_info: AgentsAPI.PageInfo;
 }
 
 export interface RequestLogRetrieveParams {
@@ -327,80 +191,142 @@ export interface RequestLogRetrieveParams {
    * Sub-objects to expand in the response. When omitted, sub-objects are returned as
    * `null`.
    */
-  include?: Array<'account' | 'actor' | 'actor.role' | 'actor.role.permissions'>;
+  include?: Array<
+    | 'account'
+    | 'actor'
+    | 'actor.role'
+    | 'actor.role.permissions'
+    | 'query_params'
+    | 'request_body'
+    | 'response_body'
+  >;
 }
 
-export interface RequestLogListParams extends DefaultCursorPageParams {
+export interface RequestLogRetrieveRequestLogsParams {
   /**
-   * Filter: actor's home account ID.
+   * Filter by the account ID _targeted_ by the request. The actor may be operating
+   * on behalf of a separate account.
    */
-  account_id?: string;
+  account_ids?: Array<string>;
 
   /**
-   * Filter: actor ID.
+   * Filter by the actor identifier. `account_user.id` when `identity_type`=`user`,
+   * or an `api_key.id` when `identity_type`=`api_key`.
    */
-  actor_id?: string;
+  actor_ids?: Array<string>;
 
   /**
-   * Filter: actor name (partial or exact match).
+   * Filter by the actor type.
    */
-  actor_name?: string;
+  actor_types?: Array<'user' | 'api_key' | 'agent'>;
 
   /**
-   * Filter: actor type ("user" or "api_key").
+   * Cursor token used to retrieve the next or previous page of results.
    */
-  actor_type?: string;
+  cursor?: string;
 
   /**
-   * Filter: end of date range for occurred_at.
+   * Restricts results to request logs on or before this timestamp.
    */
   end_date?: string;
 
   /**
-   * Filter: API error code.
+   * Filter by API error code.
    */
-  error_code?: string;
+  error_codes?: Array<
+    | 'expired_token'
+    | 'api_key_expired'
+    | 'api_key_revoked'
+    | 'invalid_credentials'
+    | 'insufficient_permissions'
+    | 'payment_required'
+    | 'validation_failed'
+    | 'missing_field'
+    | 'invalid_format'
+    | 'method_not_allowed'
+    | 'resource_not_found'
+    | 'resource_exists'
+    | 'resource_conflict'
+    | 'resource_gone'
+    | 'idempotency_in_progress'
+    | 'limit_exceeded'
+    | 'registration_closed'
+    | 'rate_limit_exceeded'
+    | 'parameter_missing'
+    | 'parameter_invalid'
+    | 'parameter_unknown'
+    | 'parameters_exclusive'
+    | 'internal_error'
+    | 'service_unavailable'
+    | 'external_service_error'
+    | 'timeout'
+    | 'connection_error'
+    | 'request_timeout'
+    | 'client_closed_request'
+    | 'api_version_required'
+    | 'api_version_invalid'
+    | 'api_version_too_old'
+  >;
 
   /**
-   * When true, string filters use exact match instead of partial (LIKE).
+   * Filter by the request host. Typically, `api.augno.com`.
    */
-  exact_match?: boolean;
+  hosts?: Array<string>;
+
+  /**
+   * Filter by the user-provided idempotency key.
+   */
+  idempotency_key?: string;
 
   /**
    * Sub-objects to expand in the response. When omitted, sub-objects are returned as
    * `null`.
    */
-  include?: Array<'account' | 'actor' | 'actor.role' | 'actor.role.permissions'>;
+  include?: Array<'account' | 'actor' | 'actor.role'>;
 
   /**
-   * Filter: HTTP method.
+   * Maximum number of results per page (default: 100, max: 1000).
    */
-  method?: string;
+  limit?: number;
 
   /**
-   * Search query: matches against ID (exact), path (partial), or error message
-   * (partial).
+   * Filter by the HTTP method.
+   */
+  methods?: Array<'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS'>;
+
+  /**
+   * Filter by the minimum latency in microseconds.
+   */
+  min_latency_us?: number;
+
+  /**
+   * Filter by the _normalized_ route template. For example
+   * `PATCH /v1/sales/customers/{id}` is the normalized route for a request route
+   * `PUT /v1/sales/customers/ac_...`.
+   */
+  normalized_routes?: Array<string>;
+
+  /**
+   * Search query used to filter results.
    */
   q?: string;
 
   /**
-   * Filter: start of date range for occurred_at.
+   * Restricts results to request logs on or after this timestamp.
    */
   start_date?: string;
 
   /**
-   * Filter: HTTP status code.
+   * Filter by the HTTP status code.
    */
-  status_code?: number;
+  status_codes?: Array<number>;
 }
 
 export declare namespace RequestLogs {
   export {
-    type RequestLogActor as RequestLogActor,
-    type RequestLogRetrieveResponse as RequestLogRetrieveResponse,
-    type RequestLogListResponse as RequestLogListResponse,
-    type RequestLogListResponsesDefaultCursorPage as RequestLogListResponsesDefaultCursorPage,
+    type RequestLog as RequestLog,
+    type RequestLogRetrieveRequestLogsResponse as RequestLogRetrieveRequestLogsResponse,
     type RequestLogRetrieveParams as RequestLogRetrieveParams,
-    type RequestLogListParams as RequestLogListParams,
+    type RequestLogRetrieveRequestLogsParams as RequestLogRetrieveRequestLogsParams,
   };
 }

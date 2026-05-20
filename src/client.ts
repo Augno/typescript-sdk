@@ -8,31 +8,25 @@ import { sleep } from './internal/utils/sleep';
 export type { Logger, LogLevel } from './internal/utils/log';
 import { castToError, isAbortError } from './internal/errors';
 import type { APIResponseProps } from './internal/parse';
-import { getPlatformHeaders } from './internal/detect-platform';
 import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
 import { stringifyQuery } from './internal/utils/query';
 import { VERSION } from './version';
 import * as Errors from './core/error';
-import * as Pagination from './core/pagination';
-import { AbstractPage, type DefaultCursorPageParams, DefaultCursorPageResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import {
-  AI,
-  AIListToolGroupsParams,
-  AIListToolGroupsResponse,
-  AIListToolsParams,
-  AIListToolsResponse,
-  AIListUsageParams,
-  AIListUsageResponse,
-  AIListUsageResponsesDefaultCursorPage,
-  AvailableTool,
-  ToolGroup,
-} from './resources/ai/ai';
+import { Healthz } from './resources/healthz';
+import { Webhooks } from './resources/webhooks';
+import { AI } from './resources/ai/ai';
 import { Auth } from './resources/auth/auth';
-import { Core, CoreListAdjustmentTypesResponse } from './resources/core/core';
+import { Billing } from './resources/billing/billing';
+import { Catalog } from './resources/catalog/catalog';
+import { Core } from './resources/core/core';
+import { Finance } from './resources/finance/finance';
+import { Identity } from './resources/identity/identity';
+import { Operations, Rate } from './resources/operations/operations';
+import { Sales } from './resources/sales/sales';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -48,29 +42,39 @@ import { isEmptyObj } from './internal/utils/values';
 
 const environments = {
   production: 'https://api.augno.com',
-  environment_1: 'http://localhost:8080',
+  local: 'http://localhost:8081',
 };
 type Environment = keyof typeof environments;
 
 export interface ClientOptions {
   /**
-   * Defaults to process.env['AUGNO_API_KEY'].
+   * Bearer access token from session authentication
    */
-  apiKey?: string | null | undefined;
+  bearerToken?: string | null | undefined;
+
+  /**
+   * API key (X-Augno-API-Key)
+   */
+  augnoAPIKey?: string | null | undefined;
+
+  /**
+   * Current account UUID (Augno-Account). Update when switching accounts.
+   */
+  augnoAccountID?: string | null | undefined;
 
   /**
    * Specifies the environment to use for the API.
    *
    * Each environment maps to a different base URL:
    * - `production` corresponds to `https://api.augno.com`
-   * - `environment_1` corresponds to `http://localhost:8080`
+   * - `local` corresponds to `http://localhost:8081`
    */
   environment?: Environment | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
-   * Defaults to process.env['AUGNO_CLIENT_BASE_URL'].
+   * Defaults to process.env['AUGNO_BASE_URL'].
    */
   baseURL?: string | null | undefined;
 
@@ -124,7 +128,7 @@ export interface ClientOptions {
   /**
    * Set the log level.
    *
-   * Defaults to process.env['AUGNO_CLIENT_LOG'] or 'warn' if it isn't set.
+   * Defaults to process.env['AUGNO_LOG'] or 'warn' if it isn't set.
    */
   logLevel?: LogLevel | undefined;
 
@@ -137,10 +141,12 @@ export interface ClientOptions {
 }
 
 /**
- * API Client for interfacing with the Augno Client API.
+ * API Client for interfacing with the Augno API.
  */
-export class AugnoClient {
-  apiKey: string | null;
+export class Augno {
+  bearerToken: string | null;
+  augnoAPIKey: string | null;
+  augnoAccountID: string | null;
 
   baseURL: string;
   maxRetries: number;
@@ -155,11 +161,13 @@ export class AugnoClient {
   private _options: ClientOptions;
 
   /**
-   * API Client for interfacing with the Augno Client API.
+   * API Client for interfacing with the Augno API.
    *
-   * @param {string | null | undefined} [opts.apiKey=process.env['AUGNO_API_KEY'] ?? null]
+   * @param {string | null | undefined} [opts.bearerToken]
+   * @param {string | null | undefined} [opts.augnoAPIKey=process.env['AUGNO_API_KEY'] ?? null]
+   * @param {string | null | undefined} [opts.augnoAccountID]
    * @param {Environment} [opts.environment=production] - Specifies the environment URL to use for the API.
-   * @param {string} [opts.baseURL=process.env['AUGNO_CLIENT_BASE_URL'] ?? https://api.augno.com] - Override the default base URL for the API.
+   * @param {string} [opts.baseURL=process.env['AUGNO_BASE_URL'] ?? https://api.augno.com] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -168,39 +176,43 @@ export class AugnoClient {
    * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
    */
   constructor({
-    baseURL = readEnv('AUGNO_CLIENT_BASE_URL'),
-    apiKey = readEnv('AUGNO_API_KEY') ?? null,
+    baseURL = readEnv('AUGNO_BASE_URL'),
+    bearerToken = null,
+    augnoAPIKey = readEnv('AUGNO_API_KEY') ?? null,
+    augnoAccountID = null,
     ...opts
   }: ClientOptions = {}) {
     const options: ClientOptions = {
-      apiKey,
+      bearerToken,
+      augnoAPIKey,
+      augnoAccountID,
       ...opts,
       baseURL,
       environment: opts.environment ?? 'production',
     };
 
     if (baseURL && opts.environment) {
-      throw new Errors.AugnoClientError(
-        'Ambiguous URL; The `baseURL` option (or AUGNO_CLIENT_BASE_URL env var) and the `environment` option are given. If you want to use the environment you must pass baseURL: null',
+      throw new Errors.AugnoError(
+        'Ambiguous URL; The `baseURL` option (or AUGNO_BASE_URL env var) and the `environment` option are given. If you want to use the environment you must pass baseURL: null',
       );
     }
 
     this.baseURL = options.baseURL || environments[options.environment || 'production'];
-    this.timeout = options.timeout ?? AugnoClient.DEFAULT_TIMEOUT /* 1 minute */;
+    this.timeout = options.timeout ?? Augno.DEFAULT_TIMEOUT /* 1 minute */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
     this.logLevel = defaultLogLevel;
     this.logLevel =
       parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this) ??
-      parseLogLevel(readEnv('AUGNO_CLIENT_LOG'), "process.env['AUGNO_CLIENT_LOG']", this) ??
+      parseLogLevel(readEnv('AUGNO_LOG'), "process.env['AUGNO_LOG']", this) ??
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
     this.maxRetries = options.maxRetries ?? 2;
     this.fetch = options.fetch ?? Shims.getDefaultFetch();
     this.#encoder = Opts.FallbackEncoder;
 
-    const customHeadersEnv = readEnv('AUGNO_CLIENT_CUSTOM_HEADERS');
+    const customHeadersEnv = readEnv('AUGNO_CUSTOM_HEADERS');
     if (customHeadersEnv) {
       const parsed: Record<string, string> = {};
       for (const line of customHeadersEnv.split('\n')) {
@@ -214,7 +226,9 @@ export class AugnoClient {
 
     this._options = options;
 
-    this.apiKey = apiKey;
+    this.bearerToken = bearerToken;
+    this.augnoAPIKey = augnoAPIKey;
+    this.augnoAccountID = augnoAccountID;
   }
 
   /**
@@ -231,7 +245,9 @@ export class AugnoClient {
       logLevel: this.logLevel,
       fetch: this.fetch,
       fetchOptions: this.fetchOptions,
-      apiKey: this.apiKey,
+      bearerToken: this.bearerToken,
+      augnoAPIKey: this.augnoAPIKey,
+      augnoAccountID: this.augnoAccountID,
       ...options,
     });
     return client;
@@ -249,7 +265,14 @@ export class AugnoClient {
   }
 
   protected validateHeaders({ values, nulls }: NullableHeaders) {
-    if (this.apiKey && values.get('authorization')) {
+    if (this.augnoAPIKey && values.get('x-augno-api-key')) {
+      return;
+    }
+    if (nulls.has('x-augno-api-key')) {
+      return;
+    }
+
+    if (this.bearerToken && values.get('authorization')) {
       return;
     }
     if (nulls.has('authorization')) {
@@ -257,15 +280,26 @@ export class AugnoClient {
     }
 
     throw new Error(
-      'Could not resolve authentication method. Expected the apiKey to be set. Or for the "Authorization" headers to be explicitly omitted',
+      'Could not resolve authentication method. Expected either augnoAPIKey or bearerToken to be set. Or for one of the "X-Augno-API-Key" or "Authorization" headers to be explicitly omitted',
     );
   }
 
   protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
-    if (this.apiKey == null) {
+    return buildHeaders([await this.augnoAPIKeyAuth(opts), await this.bearerAuth(opts)]);
+  }
+
+  protected async augnoAPIKeyAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
+    if (this.augnoAPIKey == null) {
       return undefined;
     }
-    return buildHeaders([{ Authorization: `Bearer ${this.apiKey}` }]);
+    return buildHeaders([{ 'X-Augno-API-Key': this.augnoAPIKey }]);
+  }
+
+  protected async bearerAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
+    if (this.bearerToken == null) {
+      return undefined;
+    }
+    return buildHeaders([{ Authorization: `Bearer ${this.bearerToken}` }]);
   }
 
   protected stringifyQuery(query: object | Record<string, unknown>): string {
@@ -525,30 +559,6 @@ export class AugnoClient {
     return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
   }
 
-  getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
-    path: string,
-    Page: new (...args: any[]) => PageClass,
-    opts?: PromiseOrValue<RequestOptions>,
-  ): Pagination.PagePromise<PageClass, Item> {
-    return this.requestAPIList(
-      Page,
-      opts && 'then' in opts ?
-        opts.then((opts) => ({ method: 'get', path, ...opts }))
-      : { method: 'get', path, ...opts },
-    );
-  }
-
-  requestAPIList<
-    Item = unknown,
-    PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
-  >(
-    Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
-    options: PromiseOrValue<FinalRequestOptions>,
-  ): Pagination.PagePromise<PageClass, Item> {
-    const request = this.makeRequest(options, null, undefined);
-    return new Pagination.PagePromise<PageClass, Item>(this as any as AugnoClient, request, Page);
-  }
-
   async fetchWithTimeout(
     url: RequestInfo,
     init: RequestInit | undefined,
@@ -708,13 +718,7 @@ export class AugnoClient {
 
     const headers = buildHeaders([
       idempotencyHeaders,
-      {
-        Accept: 'application/json',
-        'User-Agent': this.getUserAgent(),
-        'X-Stainless-Retry-Count': String(retryCount),
-        ...(options.timeout ? { 'X-Stainless-Timeout': String(Math.trunc(options.timeout / 1000)) } : {}),
-        ...getPlatformHeaders(),
-      },
+      { Accept: 'application/json', 'User-Agent': this.getUserAgent(), 'Augno-Account': this.augnoAccountID },
       await this.authHeaders(options),
       this._options.defaultHeaders,
       bodyHeaders,
@@ -777,10 +781,10 @@ export class AugnoClient {
     }
   }
 
-  static AugnoClient = this;
+  static Augno = this;
   static DEFAULT_TIMEOUT = 60000; // 1 minute
 
-  static AugnoClientError = Errors.AugnoClientError;
+  static AugnoError = Errors.AugnoError;
   static APIError = Errors.APIError;
   static APIConnectionError = Errors.APIConnectionError;
   static APIConnectionTimeoutError = Errors.APIConnectionTimeoutError;
@@ -796,41 +800,53 @@ export class AugnoClient {
 
   static toFile = Uploads.toFile;
 
+  healthz: API.Healthz = new API.Healthz(this);
   ai: API.AI = new API.AI(this);
   auth: API.Auth = new API.Auth(this);
-  /**
-   * List adjustment types.
-   */
+  billing: API.Billing = new API.Billing(this);
+  catalog: API.Catalog = new API.Catalog(this);
   core: API.Core = new API.Core(this);
+  finance: API.Finance = new API.Finance(this);
+  identity: API.Identity = new API.Identity(this);
+  operations: API.Operations = new API.Operations(this);
+  sales: API.Sales = new API.Sales(this);
+  webhooks: API.Webhooks = new API.Webhooks(this);
 }
 
-AugnoClient.AI = AI;
-AugnoClient.Auth = Auth;
-AugnoClient.Core = Core;
+Augno.Healthz = Healthz;
+Augno.AI = AI;
+Augno.Auth = Auth;
+Augno.Billing = Billing;
+Augno.Catalog = Catalog;
+Augno.Core = Core;
+Augno.Finance = Finance;
+Augno.Identity = Identity;
+Augno.Operations = Operations;
+Augno.Sales = Sales;
+Augno.Webhooks = Webhooks;
 
-export declare namespace AugnoClient {
+export declare namespace Augno {
   export type RequestOptions = Opts.RequestOptions;
 
-  export import DefaultCursorPage = Pagination.DefaultCursorPage;
-  export {
-    type DefaultCursorPageParams as DefaultCursorPageParams,
-    type DefaultCursorPageResponse as DefaultCursorPageResponse,
-  };
+  export { Healthz as Healthz };
 
-  export {
-    AI as AI,
-    type AvailableTool as AvailableTool,
-    type ToolGroup as ToolGroup,
-    type AIListToolGroupsResponse as AIListToolGroupsResponse,
-    type AIListToolsResponse as AIListToolsResponse,
-    type AIListUsageResponse as AIListUsageResponse,
-    type AIListUsageResponsesDefaultCursorPage as AIListUsageResponsesDefaultCursorPage,
-    type AIListToolGroupsParams as AIListToolGroupsParams,
-    type AIListToolsParams as AIListToolsParams,
-    type AIListUsageParams as AIListUsageParams,
-  };
+  export { AI as AI };
 
   export { Auth as Auth };
 
-  export { Core as Core, type CoreListAdjustmentTypesResponse as CoreListAdjustmentTypesResponse };
+  export { Billing as Billing };
+
+  export { Catalog as Catalog };
+
+  export { Core as Core };
+
+  export { Finance as Finance };
+
+  export { Identity as Identity };
+
+  export { Operations as Operations, type Rate as Rate };
+
+  export { Sales as Sales };
+
+  export { Webhooks as Webhooks };
 }
