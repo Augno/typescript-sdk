@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.1 (2026-05-20)
+
+Full Changelog: [v0.1.0...v0.1.1](https://github.com/Augno/typescript-sdk/compare/v0.1.0...v0.1.1)
+
+### Chores
+
+* add publishConfig.directory for pnpm lockfile parity ([7b9e86f](https://github.com/Augno/typescript-sdk/commit/7b9e86ffca1c30a9476dea56e0ebfa5cd686f419))
+* sync pnpm lockfile with stlc-generated devDependencies ([46a71e2](https://github.com/Augno/typescript-sdk/commit/46a71e21fab9f3b3bdcc6470d698d8749e4dcb85))
+* sync repo ([c6db6f7](https://github.com/Augno/typescript-sdk/commit/c6db6f7138282ecbed5cb4a3b4d2b9f2bd4d026e))
+
 ## 0.1.0 (2026-05-19)
 
 Full Changelog: [v0.0.1...v0.1.0](https://github.com/Augno/typescript-sdk/compare/v0.0.1...v0.1.0)
