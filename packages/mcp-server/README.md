@@ -1,4 +1,4 @@
-# Augno TypeScript MCP Server
+# Augno Client TypeScript MCP Server
 
 It is generated with [Stainless](https://www.stainless.com/).
 
@@ -9,8 +9,8 @@ It is generated with [Stainless](https://www.stainless.com/).
 Because it's not published yet, clone the repo and build it:
 
 ```sh
-git clone git@github.com:stainless-sdks/augno-typescript.git
-cd augno-typescript
+git clone git@github.com:Augno/typescript-sdk.git
+cd typescript-sdk
 ./scripts/bootstrap
 ./scripts/build
 ```
@@ -20,6 +20,7 @@ cd augno-typescript
 ```sh
 # set env vars as needed
 export AUGNO_API_KEY="My API Key"
+export AUGNO_CLIENT_ENVIRONMENT="production"
 node ./packages/mcp-server/dist/index.js
 ```
 
@@ -40,9 +41,10 @@ For clients with a configuration JSON, it might look something like this:
   "mcpServers": {
     "augno_api": {
       "command": "node",
-      "args": ["/path/to/local/augno-typescript/packages/mcp-server"],
+      "args": ["/path/to/local/typescript-sdk/packages/mcp-server"],
       "env": {
-        "AUGNO_API_KEY": "My API Key"
+        "AUGNO_API_KEY": "My API Key",
+        "AUGNO_CLIENT_ENVIRONMENT": "production"
       }
     }
   }

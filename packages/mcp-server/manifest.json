@@ -1,24 +1,26 @@
 {
   "dxt_version": "0.2",
   "name": "augno-mcp",
-  "version": "0.0.1",
-  "description": "The official MCP Server for the Augno API",
+  "version": "0.1.0",
+  "description": "The official MCP Server for the Augno Client API",
   "author": {
-    "name": "Augno",
-    "email": "dev-platform@augno.com"
+    "name": "Augno Client",
+    "email": "support@augno.com"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stainless-sdks/augno-typescript.git"
+    "url": "git+https://github.com/Augno/typescript-sdk.git"
   },
-  "homepage": "https://github.com/stainless-sdks/augno-typescript/tree/main/packages/mcp-server#readme",
-  "documentation": "https://augno.com",
+  "homepage": "https://github.com/Augno/typescript-sdk/tree/main/packages/mcp-server#readme",
+  "documentation": "https://www.docs.augno.com",
   "server": {
     "type": "node",
     "entry_point": "index.js",
     "mcp_config": {
       "command": "node",
-      "args": ["${__dirname}/index.js"],
+      "args": [
+        "${__dirname}/index.js"
+      ],
       "env": {
         "AUGNO_API_KEY": "${user_config.AUGNO_API_KEY}"
       }
@@ -27,8 +29,8 @@
   "user_config": {
     "AUGNO_API_KEY": {
       "title": "api_key",
-      "description": "Bearer HTTP authentication. Allowed headers-- Authorization: Bearer <api_key>",
-      "required": true,
+      "description": "",
+      "required": false,
       "type": "string"
     }
   },
@@ -39,5 +41,7 @@
       "node": ">=18.0.0"
     }
   },
-  "keywords": ["api"]
+  "keywords": [
+    "api"
+  ]
 }

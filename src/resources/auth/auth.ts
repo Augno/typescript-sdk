@@ -1,53 +1,33 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as ActionsAPI from './actions';
-import { ActionLoginUserParams, ActionLoginUserResponse, Actions } from './actions';
-import { APIPromise } from '../../core/api-promise';
-import { RequestOptions } from '../../internal/request-options';
+import * as APIKeysAPI from './api-keys/api-keys';
+import {
+  APIKey,
+  APIKeyCreateParams,
+  APIKeyListParams,
+  APIKeyListResponse,
+  APIKeyRetrieveParams,
+  APIKeyRevokeResponse,
+  APIKeys,
+  CreatedAPIKey,
+} from './api-keys/api-keys';
 
 export class Auth extends APIResource {
-  actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
-
-  /**
-   * Refresh an access token using a refresh token.
-   *
-   * @example
-   * ```ts
-   * const emptyResource = await client.auth.refreshToken();
-   * ```
-   */
-  refreshToken(options?: RequestOptions): APIPromise<EmptyResource> {
-    return this._client.post('/v2/auth/access-tokens', options);
-  }
-
-  /**
-   * Revoke a refresh token.
-   *
-   * @example
-   * ```ts
-   * const emptyResource =
-   *   await client.auth.revokeRefreshToken();
-   * ```
-   */
-  revokeRefreshToken(options?: RequestOptions): APIPromise<EmptyResource> {
-    return this._client.delete('/v2/auth/refresh-tokens', options);
-  }
+  apiKeys: APIKeysAPI.APIKeys = new APIKeysAPI.APIKeys(this._client);
 }
 
-/**
- * Request schema for EmptyResource
- */
-export interface EmptyResource {}
-
-Auth.Actions = Actions;
+Auth.APIKeys = APIKeys;
 
 export declare namespace Auth {
-  export { type EmptyResource as EmptyResource };
-
   export {
-    Actions as Actions,
-    type ActionLoginUserResponse as ActionLoginUserResponse,
-    type ActionLoginUserParams as ActionLoginUserParams,
+    APIKeys as APIKeys,
+    type APIKey as APIKey,
+    type CreatedAPIKey as CreatedAPIKey,
+    type APIKeyListResponse as APIKeyListResponse,
+    type APIKeyRevokeResponse as APIKeyRevokeResponse,
+    type APIKeyCreateParams as APIKeyCreateParams,
+    type APIKeyRetrieveParams as APIKeyRetrieveParams,
+    type APIKeyListParams as APIKeyListParams,
   };
 }

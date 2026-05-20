@@ -11,13 +11,28 @@ import type { APIResponseProps } from './internal/parse';
 import { getPlatformHeaders } from './internal/detect-platform';
 import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
+import { stringifyQuery } from './internal/utils/query';
 import { VERSION } from './version';
 import * as Errors from './core/error';
+import * as Pagination from './core/pagination';
+import { AbstractPage, type DefaultCursorPageParams, DefaultCursorPageResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Healthz, HealthzCheckResponse } from './resources/healthz';
-import { Auth, EmptyResource } from './resources/auth/auth';
+import {
+  AI,
+  AIListToolGroupsParams,
+  AIListToolGroupsResponse,
+  AIListToolsParams,
+  AIListToolsResponse,
+  AIListUsageParams,
+  AIListUsageResponse,
+  AIListUsageResponsesDefaultCursorPage,
+  AvailableTool,
+  ToolGroup,
+} from './resources/ai/ai';
+import { Auth } from './resources/auth/auth';
+import { Core, CoreListAdjustmentTypesResponse } from './resources/core/core';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -31,16 +46,31 @@ import {
 } from './internal/utils/log';
 import { isEmptyObj } from './internal/utils/values';
 
+const environments = {
+  production: 'https://api.augno.com',
+  environment_1: 'http://localhost:8080',
+};
+type Environment = keyof typeof environments;
+
 export interface ClientOptions {
   /**
-   * Bearer HTTP authentication. Allowed headers-- Authorization: Bearer <api_key>
+   * Defaults to process.env['AUGNO_API_KEY'].
    */
-  apiKey?: string | undefined;
+  apiKey?: string | null | undefined;
+
+  /**
+   * Specifies the environment to use for the API.
+   *
+   * Each environment maps to a different base URL:
+   * - `production` corresponds to `https://api.augno.com`
+   * - `environment_1` corresponds to `http://localhost:8080`
+   */
+  environment?: Environment | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
-   * Defaults to process.env['AUGNO_BASE_URL'].
+   * Defaults to process.env['AUGNO_CLIENT_BASE_URL'].
    */
   baseURL?: string | null | undefined;
 
@@ -94,7 +124,7 @@ export interface ClientOptions {
   /**
    * Set the log level.
    *
-   * Defaults to process.env['AUGNO_LOG'] or 'warn' if it isn't set.
+   * Defaults to process.env['AUGNO_CLIENT_LOG'] or 'warn' if it isn't set.
    */
   logLevel?: LogLevel | undefined;
 
@@ -107,10 +137,10 @@ export interface ClientOptions {
 }
 
 /**
- * API Client for interfacing with the Augno API.
+ * API Client for interfacing with the Augno Client API.
  */
-export class Augno {
-  apiKey: string;
+export class AugnoClient {
+  apiKey: string | null;
 
   baseURL: string;
   maxRetries: number;
@@ -125,10 +155,11 @@ export class Augno {
   private _options: ClientOptions;
 
   /**
-   * API Client for interfacing with the Augno API.
+   * API Client for interfacing with the Augno Client API.
    *
-   * @param {string | undefined} [opts.apiKey=process.env['AUGNO_API_KEY'] ?? undefined]
-   * @param {string} [opts.baseURL=process.env['AUGNO_BASE_URL'] ?? https://api.augno.com/] - Override the default base URL for the API.
+   * @param {string | null | undefined} [opts.apiKey=process.env['AUGNO_API_KEY'] ?? null]
+   * @param {Environment} [opts.environment=production] - Specifies the environment URL to use for the API.
+   * @param {string} [opts.baseURL=process.env['AUGNO_CLIENT_BASE_URL'] ?? https://api.augno.com] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -137,36 +168,49 @@ export class Augno {
    * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
    */
   constructor({
-    baseURL = readEnv('AUGNO_BASE_URL'),
-    apiKey = readEnv('AUGNO_API_KEY'),
+    baseURL = readEnv('AUGNO_CLIENT_BASE_URL'),
+    apiKey = readEnv('AUGNO_API_KEY') ?? null,
     ...opts
   }: ClientOptions = {}) {
-    if (apiKey === undefined) {
-      throw new Errors.AugnoError(
-        "The AUGNO_API_KEY environment variable is missing or empty; either provide it, or instantiate the Augno client with an apiKey option, like new Augno({ apiKey: 'My API Key' }).",
-      );
-    }
-
     const options: ClientOptions = {
       apiKey,
       ...opts,
-      baseURL: baseURL || `https://api.augno.com/`,
+      baseURL,
+      environment: opts.environment ?? 'production',
     };
 
-    this.baseURL = options.baseURL!;
-    this.timeout = options.timeout ?? Augno.DEFAULT_TIMEOUT /* 1 minute */;
+    if (baseURL && opts.environment) {
+      throw new Errors.AugnoClientError(
+        'Ambiguous URL; The `baseURL` option (or AUGNO_CLIENT_BASE_URL env var) and the `environment` option are given. If you want to use the environment you must pass baseURL: null',
+      );
+    }
+
+    this.baseURL = options.baseURL || environments[options.environment || 'production'];
+    this.timeout = options.timeout ?? AugnoClient.DEFAULT_TIMEOUT /* 1 minute */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
     this.logLevel = defaultLogLevel;
     this.logLevel =
       parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this) ??
-      parseLogLevel(readEnv('AUGNO_LOG'), "process.env['AUGNO_LOG']", this) ??
+      parseLogLevel(readEnv('AUGNO_CLIENT_LOG'), "process.env['AUGNO_CLIENT_LOG']", this) ??
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
     this.maxRetries = options.maxRetries ?? 2;
     this.fetch = options.fetch ?? Shims.getDefaultFetch();
     this.#encoder = Opts.FallbackEncoder;
+
+    const customHeadersEnv = readEnv('AUGNO_CLIENT_CUSTOM_HEADERS');
+    if (customHeadersEnv) {
+      const parsed: Record<string, string> = {};
+      for (const line of customHeadersEnv.split('\n')) {
+        const colon = line.indexOf(':');
+        if (colon >= 0) {
+          parsed[line.substring(0, colon).trim()] = line.substring(colon + 1).trim();
+        }
+      }
+      options.defaultHeaders = { ...parsed, ...options.defaultHeaders };
+    }
 
     this._options = options;
 
@@ -179,7 +223,8 @@ export class Augno {
   withOptions(options: Partial<ClientOptions>): this {
     const client = new (this.constructor as any as new (props: ClientOptions) => typeof this)({
       ...this._options,
-      baseURL: this.baseURL,
+      environment: options.environment ? options.environment : undefined,
+      baseURL: options.environment ? undefined : this.baseURL,
       maxRetries: this.maxRetries,
       timeout: this.timeout,
       logger: this.logger,
@@ -196,7 +241,7 @@ export class Augno {
    * Check whether the base URL is set to its default.
    */
   #baseURLOverridden(): boolean {
-    return this.baseURL !== 'https://api.augno.com/';
+    return this.baseURL !== environments[this._options.environment || 'production'];
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
@@ -204,31 +249,27 @@ export class Augno {
   }
 
   protected validateHeaders({ values, nulls }: NullableHeaders) {
-    return;
+    if (this.apiKey && values.get('authorization')) {
+      return;
+    }
+    if (nulls.has('authorization')) {
+      return;
+    }
+
+    throw new Error(
+      'Could not resolve authentication method. Expected the apiKey to be set. Or for the "Authorization" headers to be explicitly omitted',
+    );
   }
 
   protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
+    if (this.apiKey == null) {
+      return undefined;
+    }
     return buildHeaders([{ Authorization: `Bearer ${this.apiKey}` }]);
   }
 
-  /**
-   * Basic re-implementation of `qs.stringify` for primitive types.
-   */
-  protected stringifyQuery(query: Record<string, unknown>): string {
-    return Object.entries(query)
-      .filter(([_, value]) => typeof value !== 'undefined')
-      .map(([key, value]) => {
-        if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-          return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
-        }
-        if (value === null) {
-          return `${encodeURIComponent(key)}=`;
-        }
-        throw new Errors.AugnoError(
-          `Cannot stringify type ${typeof value}; Expected string, number, boolean, or null. If you need to pass nested query parameters, you can manually encode them, e.g. { query: { 'foo[key1]': value1, 'foo[key2]': value2 } }, and please open a GitHub issue requesting better support for your use case.`,
-        );
-      })
-      .join('&');
+  protected stringifyQuery(query: object | Record<string, unknown>): string {
+    return stringifyQuery(query);
   }
 
   private getUserAgent(): string {
@@ -260,12 +301,13 @@ export class Augno {
       : new URL(baseURL + (baseURL.endsWith('/') && path.startsWith('/') ? path.slice(1) : path));
 
     const defaultQuery = this.defaultQuery();
-    if (!isEmptyObj(defaultQuery)) {
-      query = { ...defaultQuery, ...query };
+    const pathQuery = Object.fromEntries(url.searchParams);
+    if (!isEmptyObj(defaultQuery) || !isEmptyObj(pathQuery)) {
+      query = { ...pathQuery, ...defaultQuery, ...query };
     }
 
     if (typeof query === 'object' && query && !Array.isArray(query)) {
-      url.search = this.stringifyQuery(query as Record<string, unknown>);
+      url.search = this.stringifyQuery(query);
     }
 
     return url.toString();
@@ -449,7 +491,7 @@ export class Augno {
       loggerFor(this).info(`${responseInfo} - ${retryMessage}`);
 
       const errText = await response.text().catch((err: any) => castToError(err).message);
-      const errJSON = safeJSON(errText);
+      const errJSON = safeJSON(errText) as any;
       const errMessage = errJSON ? undefined : errText;
 
       loggerFor(this).debug(
@@ -483,6 +525,30 @@ export class Augno {
     return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
   }
 
+  getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
+    path: string,
+    Page: new (...args: any[]) => PageClass,
+    opts?: PromiseOrValue<RequestOptions>,
+  ): Pagination.PagePromise<PageClass, Item> {
+    return this.requestAPIList(
+      Page,
+      opts && 'then' in opts ?
+        opts.then((opts) => ({ method: 'get', path, ...opts }))
+      : { method: 'get', path, ...opts },
+    );
+  }
+
+  requestAPIList<
+    Item = unknown,
+    PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
+  >(
+    Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
+    options: PromiseOrValue<FinalRequestOptions>,
+  ): Pagination.PagePromise<PageClass, Item> {
+    const request = this.makeRequest(options, null, undefined);
+    return new Pagination.PagePromise<PageClass, Item>(this as any as AugnoClient, request, Page);
+  }
+
   async fetchWithTimeout(
     url: RequestInfo,
     init: RequestInit | undefined,
@@ -490,9 +556,10 @@ export class Augno {
     controller: AbortController,
   ): Promise<Response> {
     const { signal, method, ...options } = init || {};
-    if (signal) signal.addEventListener('abort', () => controller.abort());
+    const abort = this._makeAbort(controller);
+    if (signal) signal.addEventListener('abort', abort, { once: true });
 
-    const timeout = setTimeout(() => controller.abort(), ms);
+    const timeout = setTimeout(abort, ms);
 
     const isReadableBody =
       ((globalThis as any).ReadableStream && options.body instanceof (globalThis as any).ReadableStream) ||
@@ -569,9 +636,9 @@ export class Augno {
       }
     }
 
-    // If the API asks us to wait a certain amount of time (and it's a reasonable amount),
-    // just do what it says, but otherwise calculate a default
-    if (!(timeoutMillis && 0 <= timeoutMillis && timeoutMillis < 60 * 1000)) {
+    // If the API asks us to wait a certain amount of time, just do what it
+    // says, but otherwise calculate a default
+    if (timeoutMillis === undefined) {
       const maxRetries = options.maxRetries ?? this.maxRetries;
       timeoutMillis = this.calculateDefaultRetryTimeoutMillis(retriesRemaining, maxRetries);
     }
@@ -659,6 +726,12 @@ export class Augno {
     return headers.values;
   }
 
+  private _makeAbort(controller: AbortController) {
+    // note: we can't just inline this method inside `fetchWithTimeout()` because then the closure
+    //       would capture all request options, and cause a memory leak.
+    return () => controller.abort();
+  }
+
   private buildBody({ options: { body, headers: rawHeaders } }: { options: FinalRequestOptions }): {
     bodyHeaders: HeadersLike;
     body: BodyInit | undefined;
@@ -691,15 +764,23 @@ export class Augno {
         (Symbol.iterator in body && 'next' in body && typeof body.next === 'function'))
     ) {
       return { bodyHeaders: undefined, body: Shims.ReadableStreamFrom(body as AsyncIterable<Uint8Array>) };
+    } else if (
+      typeof body === 'object' &&
+      headers.values.get('content-type') === 'application/x-www-form-urlencoded'
+    ) {
+      return {
+        bodyHeaders: { 'content-type': 'application/x-www-form-urlencoded' },
+        body: this.stringifyQuery(body),
+      };
     } else {
       return this.#encoder({ body, headers });
     }
   }
 
-  static Augno = this;
+  static AugnoClient = this;
   static DEFAULT_TIMEOUT = 60000; // 1 minute
 
-  static AugnoError = Errors.AugnoError;
+  static AugnoClientError = Errors.AugnoClientError;
   static APIError = Errors.APIError;
   static APIConnectionError = Errors.APIConnectionError;
   static APIConnectionTimeoutError = Errors.APIConnectionTimeoutError;
@@ -715,17 +796,41 @@ export class Augno {
 
   static toFile = Uploads.toFile;
 
-  healthz: API.Healthz = new API.Healthz(this);
+  ai: API.AI = new API.AI(this);
   auth: API.Auth = new API.Auth(this);
+  /**
+   * List adjustment types.
+   */
+  core: API.Core = new API.Core(this);
 }
 
-Augno.Healthz = Healthz;
-Augno.Auth = Auth;
+AugnoClient.AI = AI;
+AugnoClient.Auth = Auth;
+AugnoClient.Core = Core;
 
-export declare namespace Augno {
+export declare namespace AugnoClient {
   export type RequestOptions = Opts.RequestOptions;
 
-  export { Healthz as Healthz, type HealthzCheckResponse as HealthzCheckResponse };
+  export import DefaultCursorPage = Pagination.DefaultCursorPage;
+  export {
+    type DefaultCursorPageParams as DefaultCursorPageParams,
+    type DefaultCursorPageResponse as DefaultCursorPageResponse,
+  };
 
-  export { Auth as Auth, type EmptyResource as EmptyResource };
+  export {
+    AI as AI,
+    type AvailableTool as AvailableTool,
+    type ToolGroup as ToolGroup,
+    type AIListToolGroupsResponse as AIListToolGroupsResponse,
+    type AIListToolsResponse as AIListToolsResponse,
+    type AIListUsageResponse as AIListUsageResponse,
+    type AIListUsageResponsesDefaultCursorPage as AIListUsageResponsesDefaultCursorPage,
+    type AIListToolGroupsParams as AIListToolGroupsParams,
+    type AIListToolsParams as AIListToolsParams,
+    type AIListUsageParams as AIListUsageParams,
+  };
+
+  export { Auth as Auth };
+
+  export { Core as Core, type CoreListAdjustmentTypesResponse as CoreListAdjustmentTypesResponse };
 }
