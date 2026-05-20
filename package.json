@@ -1,6 +1,6 @@
 {
   "name": "augno",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "The official TypeScript library for the Augno Client API",
   "author": "Augno Client <support@augno.com>",
   "types": "dist/index.d.ts",
@@ -30,7 +30,6 @@
   "dependencies": {},
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.0",
-    "@changesets/cli": "^2.31.0",
     "@swc/core": "^1.3.102",
     "@swc/jest": "^0.2.29",
     "@types/jest": "^29.4.0",
