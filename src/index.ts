@@ -1,13 +1,12 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { AugnoClient as default } from './client';
+export { Augno as default } from './client';
 
 export { type Uploadable, toFile } from './core/uploads';
 export { APIPromise } from './core/api-promise';
-export { AugnoClient, type ClientOptions } from './client';
-export { PagePromise } from './core/pagination';
+export { Augno, type ClientOptions } from './client';
 export {
-  AugnoClientError,
+  AugnoError,
   APIError,
   APIConnectionError,
   APIConnectionTimeoutError,

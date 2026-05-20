@@ -4,10 +4,13 @@ export {
   APIKeys,
   type APIKey,
   type CreatedAPIKey,
-  type APIKeyListResponse,
-  type APIKeyRevokeResponse,
-  type APIKeyCreateParams,
+  type APIKeyDeleteResponse,
+  type APIKeyRetrieveAPIKeysResponse,
   type APIKeyRetrieveParams,
-  type APIKeyListParams,
+  type APIKeyAPIKeysParams,
+  type APIKeyRetrieveAPIKeysParams,
 } from './api-keys/index';
+export { Actions } from './actions';
 export { Auth } from './auth';
+export { Passwords } from './passwords/index';
+export { RegistrationSessions } from './registration-sessions/index';

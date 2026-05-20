@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as AccountPricesAPI from './account-prices';
+import * as AgentsAPI from '../ai/agents';
+import * as AccountsAPI from '../identity/accounts';
 import { APIPromise } from '../../core/api-promise';
-import { DefaultCursorPage, type DefaultCursorPageParams, PagePromise } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -12,13 +12,11 @@ import { path } from '../../internal/utils/path';
  */
 export class Sandboxes extends APIResource {
   /**
-   * This endpoint creates a new sandbox account for the target account. Enforces a
-   * per-account sandbox limit. Requires admin permissions.
+   * Creates a sandbox account.
    *
    * @example
    * ```ts
    * const sandbox = await client.core.sandboxes.create({
-   *   mode: 'blank',
    *   name: 'Integration Testing',
    * });
    * ```
@@ -29,11 +27,13 @@ export class Sandboxes extends APIResource {
   }
 
   /**
-   * This endpoint returns a single sandbox account by its ID.
+   * Returns a sandbox by ID.
    *
    * @example
    * ```ts
-   * const sandbox = await client.core.sandboxes.retrieve('id');
+   * const sandbox = await client.core.sandboxes.retrieve(
+   *   'sbac_01jm4r6700f8nwq3v5hx2d9ktp',
+   * );
    * ```
    */
   retrieve(
@@ -45,32 +45,29 @@ export class Sandboxes extends APIResource {
   }
 
   /**
-   * This endpoint returns a paginated list of sandbox accounts for the target
-   * account. Supports cursor-based pagination.
+   * Returns a paginated list of sandboxes.
    *
    * @example
    * ```ts
-   * // Automatically fetches more pages as needed.
-   * for await (const sandbox of client.core.sandboxes.list()) {
-   *   // ...
-   * }
+   * const sandboxes = await client.core.sandboxes.list();
    * ```
    */
   list(
     query: SandboxListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<SandboxesDefaultCursorPage, Sandbox> {
-    return this._client.getAPIList('/v1/core/sandboxes', DefaultCursorPage<Sandbox>, { query, ...options });
+  ): APIPromise<SandboxListResponse> {
+    return this._client.get('/v1/core/sandboxes', { query, ...options });
   }
 
   /**
-   * This endpoint deletes a sandbox account. At least one sandbox must remain per
-   * production account. The sandbox and its account record are removed
-   * synchronously, and all account-scoped data is purged asynchronously.
+   * Deletes a sandbox account. At least one sandbox must remain per production
+   * account.
    *
    * @example
    * ```ts
-   * const sandbox = await client.core.sandboxes.delete('id');
+   * const sandbox = await client.core.sandboxes.delete(
+   *   'sbac_01jm4r6700f8nwq3v5hx2d9ktp',
+   * );
    * ```
    */
   delete(id: string, options?: RequestOptions): APIPromise<SandboxDeleteResponse> {
@@ -78,14 +75,12 @@ export class Sandboxes extends APIResource {
   }
 }
 
-export type SandboxesDefaultCursorPage = DefaultCursorPage<Sandbox>;
-
 /**
- * Sandbox represents an isolated testing environment for an account.
+ * Sandbox account for isolated testing.
  */
 export interface Sandbox {
   /**
-   * The unique identifier for the sandbox.
+   * Sandbox ID.
    */
   id: string;
 
@@ -95,19 +90,19 @@ export interface Sandbox {
   created_at: string;
 
   /**
-   * The display name of the sandbox.
+   * Display name.
    */
   name: string;
 
   /**
-   * The resource type identifier.
+   * Resource type identifier.
    */
   object: 'sandbox';
 
   /**
-   * LightAccount represents a minimal account reference.
+   * Account with optional branding and portal sub-resources.
    */
-  owner_account: AccountPricesAPI.LightAccount | null;
+  owner_account: AccountsAPI.Account | null;
 
   /**
    * When this sandbox was last updated.
@@ -115,16 +110,31 @@ export interface Sandbox {
   updated_at: string;
 }
 
+/**
+ * List represents a paginated list of resources.
+ */
+export interface SandboxListResponse {
+  /**
+   * Resources in this page.
+   */
+  data: Array<Sandbox>;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'list';
+
+  /**
+   * PageInfo contains URL-based pagination metadata.
+   */
+  page_info: AgentsAPI.PageInfo;
+}
+
 export interface SandboxDeleteResponse {}
 
 export interface SandboxCreateParams {
   /**
-   * Body param: Controls whether the sandbox is blank or seeded with tutorial data.
-   */
-  mode: 'blank' | 'seeded';
-
-  /**
-   * Body param: The display name for the sandbox.
+   * Body param: Display name.
    */
   name: string;
 
@@ -133,6 +143,11 @@ export interface SandboxCreateParams {
    * are returned as `null`.
    */
   include?: Array<'owner_account'>;
+
+  /**
+   * Body param: Controls whether the sandbox is blank or seeded with sample data.
+   */
+  mode?: 'blank' | 'seeded' | null;
 }
 
 export interface SandboxRetrieveParams {
@@ -143,7 +158,12 @@ export interface SandboxRetrieveParams {
   include?: Array<'owner_account'>;
 }
 
-export interface SandboxListParams extends DefaultCursorPageParams {
+export interface SandboxListParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
   /**
    * Sub-objects to expand in the response. When omitted, sub-objects are returned as
    * `null`.
@@ -151,7 +171,12 @@ export interface SandboxListParams extends DefaultCursorPageParams {
   include?: Array<'owner_account'>;
 
   /**
-   * Optional search query to filter results.
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
    */
   q?: string;
 }
@@ -159,8 +184,8 @@ export interface SandboxListParams extends DefaultCursorPageParams {
 export declare namespace Sandboxes {
   export {
     type Sandbox as Sandbox,
+    type SandboxListResponse as SandboxListResponse,
     type SandboxDeleteResponse as SandboxDeleteResponse,
-    type SandboxesDefaultCursorPage as SandboxesDefaultCursorPage,
     type SandboxCreateParams as SandboxCreateParams,
     type SandboxRetrieveParams as SandboxRetrieveParams,
     type SandboxListParams as SandboxListParams,

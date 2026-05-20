@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "augno/*": ["./dist/src/*"],
-      "augno": ["./dist/src/index.ts"]
+      "@augno/sdk/*": ["./dist/src/*"],
+      "@augno/sdk": ["./dist/src/index.ts"]
     },
     "noEmit": false,
     "declaration": true,

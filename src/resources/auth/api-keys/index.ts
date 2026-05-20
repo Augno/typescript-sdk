@@ -4,10 +4,10 @@ export {
   APIKeys,
   type APIKey,
   type CreatedAPIKey,
-  type APIKeyListResponse,
-  type APIKeyRevokeResponse,
-  type APIKeyCreateParams,
+  type APIKeyDeleteResponse,
+  type APIKeyRetrieveAPIKeysResponse,
   type APIKeyRetrieveParams,
-  type APIKeyListParams,
+  type APIKeyAPIKeysParams,
+  type APIKeyRetrieveAPIKeysParams,
 } from './api-keys';
 export { Actions, type ActionRotateParams } from './actions';
