@@ -74,6 +74,7 @@ importers:
       typescript-eslint:
         specifier: 8.31.1
         version: 8.31.1(eslint@9.39.1)(typescript@5.8.3)
+    publishDirectory: dist
 
   packages/mcp-server:
     dependencies:
@@ -94,7 +95,7 @@ importers:
         version: 8.18.0
       augno:
         specifier: workspace:*
-        version: link:../..
+        version: link:../../dist
       cookie-parser:
         specifier: ^1.4.6
         version: 1.4.7
