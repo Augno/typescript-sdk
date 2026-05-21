@@ -23,6 +23,7 @@
     "build": "./scripts/build",
     "release": "./scripts/release",
     "sync-version": "node scripts/sync-version.mjs",
+    "version-packages": "changeset version && pnpm run sync-version",
     "format": "./scripts/format",
     "prepare": "if ./scripts/utils/check-is-in-git-install.sh; then ./scripts/build && ./scripts/utils/git-swap.sh; fi",
     "tsn": "ts-node -r tsconfig-paths/register",

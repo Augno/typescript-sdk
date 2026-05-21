@@ -105,3 +105,5 @@ This repo uses [changesets](https://github.com/changesets/changesets). A release
    - `feat!(...)` / breaking → `major` (until 1.0, prefer `minor` for breaking; see https://github.com/changesets/changesets/blob/main/docs/prereleases.md)
 3. Commit the generated `.changeset/<name>.md`, push, merge the PR.
 4. `release.yml` opens a `chore: version packages` PR. Review the bumped `package.json`, `CHANGELOG.md`, and auto-synced `src/version.ts`, then merge it. That publish run pushes `@augno/sdk` to GitHub Packages.
+
+The versioning step uses `pnpm run version-packages`, which runs `changeset version` and then updates `src/version.ts` from `package.json`.
