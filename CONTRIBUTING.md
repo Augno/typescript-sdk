@@ -94,14 +94,14 @@ $ pnpm fix
 
 ## Publishing and releases
 
-Changes made to this repository via the automated release PR pipeline should publish to npm automatically. If
-the changes aren't made through the automated pipeline, you may want to make releases manually.
+This repo uses [changesets](https://github.com/changesets/changesets). A release only ships when a `.changeset/*.md` file lands on `main`. **Stainless sync PRs do not generate changesets**, so a maintainer must add one before merging any `fix(sdk): sync ...` / `feat(sdk): ...` PR.
 
-### Publish with a GitHub workflow
+### Releasing a Stainless sync PR
 
-You can release to package managers by using [the `Publish NPM` GitHub action](https://www.github.com/augno/typescript-sdk/actions/workflows/publish-npm.yml). This requires a setup organization or repository secret to be set up.
-
-### Publish manually
-
-If you need to manually release a package, you can run the `bin/publish-npm` script with an `NPM_TOKEN` set on
-the environment.
+1. Check out the Stainless PR branch locally (`gh pr checkout <number>`).
+2. Run `pnpm exec changeset` and pick a bump matching the conventional-commit prefix:
+   - `fix(...)` → `patch`
+   - `feat(...)` → `minor`
+   - `feat!(...)` / breaking → `major` (until 1.0, prefer `minor` for breaking; see https://github.com/changesets/changesets/blob/main/docs/prereleases.md)
+3. Commit the generated `.changeset/<name>.md`, push, merge the PR.
+4. `release.yml` opens a `chore: version packages` PR. Review the bumped `package.json`, `CHANGELOG.md`, and auto-synced `src/version.ts`, then merge it. That publish run pushes `@augno/sdk` to GitHub Packages.
