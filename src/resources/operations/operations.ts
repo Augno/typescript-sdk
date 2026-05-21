@@ -83,7 +83,7 @@ import { ProductionRuns } from './production-runs/production-runs';
 import * as ProductionStepsAPI from './production-steps/production-steps';
 import { ListProductionStep, ProductionStep, ProductionSteps } from './production-steps/production-steps';
 import * as PurchaseOrdersAPI from './purchase-orders/purchase-orders';
-import { PurchaseOrders } from './purchase-orders/purchase-orders';
+import { ListSalesOrderStatus, PurchaseOrders } from './purchase-orders/purchase-orders';
 import * as ReceivingOrdersAPI from './receiving-orders/receiving-orders';
 import { ReceivingOrders } from './receiving-orders/receiving-orders';
 import * as ShipmentsAPI from './shipments/shipments';
@@ -251,7 +251,7 @@ export declare namespace Operations {
     type ProductionStep as ProductionStep,
   };
 
-  export { PurchaseOrders as PurchaseOrders };
+  export { PurchaseOrders as PurchaseOrders, type ListSalesOrderStatus as ListSalesOrderStatus };
 
   export { ReceivingOrders as ReceivingOrders };
 

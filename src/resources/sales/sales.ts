@@ -64,7 +64,7 @@ import { OrderDiscounts } from './order-discounts/order-discounts';
 import * as ProductLineAccessAPI from './product-line-access/product-line-access';
 import { ProductLineAccess } from './product-line-access/product-line-access';
 import * as SalesOrdersAPI from './sales-orders/sales-orders';
-import { SalesOrders } from './sales-orders/sales-orders';
+import { SalesOrderRetrieveStatusesParams, SalesOrders } from './sales-orders/sales-orders';
 
 export class Sales extends APIResource {
   accountGroups: AccountGroupsAPI.AccountGroups = new AccountGroupsAPI.AccountGroups(this._client);
@@ -161,7 +161,10 @@ export declare namespace Sales {
 
   export { RegistrationFlows as RegistrationFlows };
 
-  export { SalesOrders as SalesOrders };
+  export {
+    SalesOrders as SalesOrders,
+    type SalesOrderRetrieveStatusesParams as SalesOrderRetrieveStatusesParams,
+  };
 
   export { VolumeDiscounts as VolumeDiscounts };
 }

@@ -40,7 +40,7 @@ export { Picks } from './picks/index';
 export { ProductionFlows } from './production-flows/index';
 export { ProductionRuns } from './production-runs/index';
 export { ProductionSteps, type ListProductionStep, type ProductionStep } from './production-steps/index';
-export { PurchaseOrders } from './purchase-orders/index';
+export { PurchaseOrders, type ListSalesOrderStatus } from './purchase-orders/index';
 export { ReceivingOrders } from './receiving-orders/index';
 export {
   ScanningStations,
