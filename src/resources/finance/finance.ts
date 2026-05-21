@@ -59,6 +59,22 @@ export class Finance extends APIResource {
   }
 
   /**
+   * Returns a paginated list of transaction methods.
+   *
+   * @example
+   * ```ts
+   * const response =
+   *   await client.finance.retrieveTransactionMethods();
+   * ```
+   */
+  retrieveTransactionMethods(
+    query: FinanceRetrieveTransactionMethodsParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<FinanceRetrieveTransactionMethodsResponse> {
+    return this._client.get('/v1/finance/transaction-methods', { query, ...options });
+  }
+
+  /**
    * Returns a paginated list of transaction types.
    *
    * @example
@@ -116,6 +132,31 @@ export interface AdjustmentType {
 }
 
 /**
+ * Transaction method resource.
+ */
+export interface TransactionMethod {
+  /**
+   * Transaction method ID.
+   */
+  id: string;
+
+  /**
+   * Machine-readable code.
+   */
+  code: 'cash' | 'check' | 'credit_card' | 'gift_card' | 'ach';
+
+  /**
+   * Display name.
+   */
+  name: string;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'transaction_method';
+}
+
+/**
  * Transaction type resource.
  */
 export interface TransactionType {
@@ -148,6 +189,26 @@ export interface FinanceRetrieveAdjustmentTypesResponse {
    * Resources in this page.
    */
   data: Array<AdjustmentType>;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'list';
+
+  /**
+   * PageInfo contains URL-based pagination metadata.
+   */
+  page_info: AgentsAPI.PageInfo;
+}
+
+/**
+ * List represents a paginated list of resources.
+ */
+export interface FinanceRetrieveTransactionMethodsResponse {
+  /**
+   * Resources in this page.
+   */
+  data: Array<TransactionMethod>;
 
   /**
    * Resource type identifier.
@@ -203,6 +264,23 @@ export interface FinanceRetrieveAdjustmentTypesParams {
   q?: string;
 }
 
+export interface FinanceRetrieveTransactionMethodsParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+}
+
 export interface FinanceRetrieveTransactionTypesParams {
   /**
    * Cursor token used to retrieve the next or previous page of results.
@@ -231,10 +309,13 @@ Finance.Transactions = Transactions;
 export declare namespace Finance {
   export {
     type AdjustmentType as AdjustmentType,
+    type TransactionMethod as TransactionMethod,
     type TransactionType as TransactionType,
     type FinanceRetrieveAdjustmentTypesResponse as FinanceRetrieveAdjustmentTypesResponse,
+    type FinanceRetrieveTransactionMethodsResponse as FinanceRetrieveTransactionMethodsResponse,
     type FinanceRetrieveTransactionTypesResponse as FinanceRetrieveTransactionTypesResponse,
     type FinanceRetrieveAdjustmentTypesParams as FinanceRetrieveAdjustmentTypesParams,
+    type FinanceRetrieveTransactionMethodsParams as FinanceRetrieveTransactionMethodsParams,
     type FinanceRetrieveTransactionTypesParams as FinanceRetrieveTransactionTypesParams,
   };
 
