@@ -1,7 +1,15 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export { Accounts } from './accounts/index';
-export { Finance } from './finance';
+export {
+  Finance,
+  type AdjustmentType,
+  type TransactionType,
+  type FinanceRetrieveAdjustmentTypesResponse,
+  type FinanceRetrieveTransactionTypesResponse,
+  type FinanceRetrieveAdjustmentTypesParams,
+  type FinanceRetrieveTransactionTypesParams,
+} from './finance';
 export { Invoices } from './invoices';
 export {
   PaymentTerms,

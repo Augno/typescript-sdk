@@ -23,7 +23,15 @@ import { Auth } from './resources/auth/auth';
 import { Billing } from './resources/billing/billing';
 import { Catalog } from './resources/catalog/catalog';
 import { Core } from './resources/core/core';
-import { Finance } from './resources/finance/finance';
+import {
+  AdjustmentType,
+  Finance,
+  FinanceRetrieveAdjustmentTypesParams,
+  FinanceRetrieveAdjustmentTypesResponse,
+  FinanceRetrieveTransactionTypesParams,
+  FinanceRetrieveTransactionTypesResponse,
+  TransactionType,
+} from './resources/finance/finance';
 import { Identity } from './resources/identity/identity';
 import { Operations, Rate } from './resources/operations/operations';
 import { Sales } from './resources/sales/sales';
@@ -806,6 +814,9 @@ export class Augno {
   billing: API.Billing = new API.Billing(this);
   catalog: API.Catalog = new API.Catalog(this);
   core: API.Core = new API.Core(this);
+  /**
+   * Create, view, update, and delete transactions.
+   */
   finance: API.Finance = new API.Finance(this);
   identity: API.Identity = new API.Identity(this);
   operations: API.Operations = new API.Operations(this);
@@ -840,7 +851,15 @@ export declare namespace Augno {
 
   export { Core as Core };
 
-  export { Finance as Finance };
+  export {
+    Finance as Finance,
+    type AdjustmentType as AdjustmentType,
+    type TransactionType as TransactionType,
+    type FinanceRetrieveAdjustmentTypesResponse as FinanceRetrieveAdjustmentTypesResponse,
+    type FinanceRetrieveTransactionTypesResponse as FinanceRetrieveTransactionTypesResponse,
+    type FinanceRetrieveAdjustmentTypesParams as FinanceRetrieveAdjustmentTypesParams,
+    type FinanceRetrieveTransactionTypesParams as FinanceRetrieveTransactionTypesParams,
+  };
 
   export { Identity as Identity };
 

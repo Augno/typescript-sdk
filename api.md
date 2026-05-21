@@ -371,6 +371,18 @@ Methods:
 
 # Finance
 
+Types:
+
+- <code><a href="./src/resources/finance/finance.ts">AdjustmentType</a></code>
+- <code><a href="./src/resources/finance/finance.ts">TransactionType</a></code>
+- <code><a href="./src/resources/finance/finance.ts">FinanceRetrieveAdjustmentTypesResponse</a></code>
+- <code><a href="./src/resources/finance/finance.ts">FinanceRetrieveTransactionTypesResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/finance/adjustment-types">client.finance.<a href="./src/resources/finance/finance.ts">retrieveAdjustmentTypes</a>({ ...params }) -> FinanceRetrieveAdjustmentTypesResponse</code>
+- <code title="get /v1/finance/transaction-types">client.finance.<a href="./src/resources/finance/finance.ts">retrieveTransactionTypes</a>({ ...params }) -> FinanceRetrieveTransactionTypesResponse</code>
+
 ## Accounts
 
 ### Actions
@@ -616,6 +628,10 @@ Types:
 
 ## PurchaseOrders
 
+Types:
+
+- <code><a href="./src/resources/operations/purchase-orders/purchase-orders.ts">ListSalesOrderStatus</a></code>
+
 ### Actions
 
 ### Lines
@@ -779,6 +795,10 @@ Methods:
 ## RegistrationFlows
 
 ## SalesOrders
+
+Methods:
+
+- <code title="get /v1/sales/sales-orders/statuses">client.sales.salesOrders.<a href="./src/resources/sales/sales-orders/sales-orders.ts">retrieveStatuses</a>({ ...params }) -> ListSalesOrderStatus</code>
 
 ### Actions
 

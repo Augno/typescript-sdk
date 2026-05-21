@@ -50,5 +50,5 @@ export {
 export { ProductLineAccess } from './product-line-access/index';
 export { RegistrationFlows } from './registration-flows';
 export { Sales } from './sales';
-export { SalesOrders } from './sales-orders/index';
+export { SalesOrders, type SalesOrderRetrieveStatusesParams } from './sales-orders/index';
 export { VolumeDiscounts } from './volume-discounts';

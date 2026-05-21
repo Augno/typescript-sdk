@@ -5,7 +5,15 @@ export { Auth } from './auth/auth';
 export { Billing } from './billing/billing';
 export { Catalog } from './catalog/catalog';
 export { Core } from './core/core';
-export { Finance } from './finance/finance';
+export {
+  Finance,
+  type AdjustmentType,
+  type TransactionType,
+  type FinanceRetrieveAdjustmentTypesResponse,
+  type FinanceRetrieveTransactionTypesResponse,
+  type FinanceRetrieveAdjustmentTypesParams,
+  type FinanceRetrieveTransactionTypesParams,
+} from './finance/finance';
 export { Healthz } from './healthz';
 export { Identity } from './identity/identity';
 export { Operations, type Rate } from './operations/operations';

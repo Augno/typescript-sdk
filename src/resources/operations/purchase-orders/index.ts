@@ -2,4 +2,4 @@
 
 export { Actions } from './actions';
 export { Lines } from './lines';
-export { PurchaseOrders } from './purchase-orders';
+export { PurchaseOrders, type ListSalesOrderStatus } from './purchase-orders';
