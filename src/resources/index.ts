@@ -8,10 +8,13 @@ export { Core } from './core/core';
 export {
   Finance,
   type AdjustmentType,
+  type TransactionMethod,
   type TransactionType,
   type FinanceRetrieveAdjustmentTypesResponse,
+  type FinanceRetrieveTransactionMethodsResponse,
   type FinanceRetrieveTransactionTypesResponse,
   type FinanceRetrieveAdjustmentTypesParams,
+  type FinanceRetrieveTransactionMethodsParams,
   type FinanceRetrieveTransactionTypesParams,
 } from './finance/finance';
 export { Healthz } from './healthz';

@@ -374,13 +374,16 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/finance/finance.ts">AdjustmentType</a></code>
+- <code><a href="./src/resources/finance/finance.ts">TransactionMethod</a></code>
 - <code><a href="./src/resources/finance/finance.ts">TransactionType</a></code>
 - <code><a href="./src/resources/finance/finance.ts">FinanceRetrieveAdjustmentTypesResponse</a></code>
+- <code><a href="./src/resources/finance/finance.ts">FinanceRetrieveTransactionMethodsResponse</a></code>
 - <code><a href="./src/resources/finance/finance.ts">FinanceRetrieveTransactionTypesResponse</a></code>
 
 Methods:
 
 - <code title="get /v1/finance/adjustment-types">client.finance.<a href="./src/resources/finance/finance.ts">retrieveAdjustmentTypes</a>({ ...params }) -> FinanceRetrieveAdjustmentTypesResponse</code>
+- <code title="get /v1/finance/transaction-methods">client.finance.<a href="./src/resources/finance/finance.ts">retrieveTransactionMethods</a>({ ...params }) -> FinanceRetrieveTransactionMethodsResponse</code>
 - <code title="get /v1/finance/transaction-types">client.finance.<a href="./src/resources/finance/finance.ts">retrieveTransactionTypes</a>({ ...params }) -> FinanceRetrieveTransactionTypesResponse</code>
 
 ## Accounts
