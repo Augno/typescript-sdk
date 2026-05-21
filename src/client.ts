@@ -28,8 +28,11 @@ import {
   Finance,
   FinanceRetrieveAdjustmentTypesParams,
   FinanceRetrieveAdjustmentTypesResponse,
+  FinanceRetrieveTransactionMethodsParams,
+  FinanceRetrieveTransactionMethodsResponse,
   FinanceRetrieveTransactionTypesParams,
   FinanceRetrieveTransactionTypesResponse,
+  TransactionMethod,
   TransactionType,
 } from './resources/finance/finance';
 import { Identity } from './resources/identity/identity';
@@ -854,10 +857,13 @@ export declare namespace Augno {
   export {
     Finance as Finance,
     type AdjustmentType as AdjustmentType,
+    type TransactionMethod as TransactionMethod,
     type TransactionType as TransactionType,
     type FinanceRetrieveAdjustmentTypesResponse as FinanceRetrieveAdjustmentTypesResponse,
+    type FinanceRetrieveTransactionMethodsResponse as FinanceRetrieveTransactionMethodsResponse,
     type FinanceRetrieveTransactionTypesResponse as FinanceRetrieveTransactionTypesResponse,
     type FinanceRetrieveAdjustmentTypesParams as FinanceRetrieveAdjustmentTypesParams,
+    type FinanceRetrieveTransactionMethodsParams as FinanceRetrieveTransactionMethodsParams,
     type FinanceRetrieveTransactionTypesParams as FinanceRetrieveTransactionTypesParams,
   };
 
