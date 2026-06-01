@@ -11,6 +11,5 @@ export {
   Addresses,
   type AddressSuggestion,
   type ListAddressSuggestion,
-  type PageInfo,
   type AddressRetrieveSuggestionsParams,
 } from './addresses';

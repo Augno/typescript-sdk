@@ -1,8 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as RolesAPI from '../identity/roles';
-import * as ActionsAPI from './customers/actions';
+import * as APIKeysAPI from '../auth/api-keys/api-keys';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -23,7 +22,7 @@ export class AccountGroups extends APIResource {
    *   });
    * ```
    */
-  create(body: AccountGroupCreateParams, options?: RequestOptions): APIPromise<ActionsAPI.AccountGroup> {
+  create(body: AccountGroupCreateParams, options?: RequestOptions): APIPromise<AccountGroup> {
     return this._client.post('/v1/sales/account-groups', { body, ...options });
   }
 
@@ -38,7 +37,7 @@ export class AccountGroups extends APIResource {
    *   );
    * ```
    */
-  retrieve(id: string, options?: RequestOptions): APIPromise<ActionsAPI.AccountGroup> {
+  retrieve(id: string, options?: RequestOptions): APIPromise<AccountGroup> {
     return this._client.get(path`/v1/sales/account-groups/${id}`, options);
   }
 
@@ -58,7 +57,7 @@ export class AccountGroups extends APIResource {
     id: string,
     body: AccountGroupUpdateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ActionsAPI.AccountGroup> {
+  ): APIPromise<AccountGroup> {
     return this._client.patch(path`/v1/sales/account-groups/${id}`, { body, ...options });
   }
 
@@ -74,7 +73,7 @@ export class AccountGroups extends APIResource {
   list(
     query: AccountGroupListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ActionsAPI.ListAccountGroup> {
+  ): APIPromise<ListAccountGroup> {
     return this._client.get('/v1/sales/account-groups', { query, ...options });
   }
 
@@ -136,6 +135,12 @@ export interface AccountGroup {
 
   /**
    * Account group type.
+   *
+   * The type `pricing_group` indicates this account group is utilized for pricing
+   * rules. For example, you may have a 'Preferred' price group that receives a
+   * special discount rate. The type `type_group` indicates the account group is
+   * utilized to categorize a set of accounts. For example, you may have a group of
+   * accounts that are 'Consumers' or 'Distributors'.
    */
   type: 'pricing_group' | 'type_group';
 
@@ -182,7 +187,7 @@ export interface ListAccountGroup {
   /**
    * Resources in this page.
    */
-  data: Array<ActionsAPI.AccountGroup>;
+  data: Array<AccountGroup>;
 
   /**
    * Resource type identifier.
@@ -192,32 +197,7 @@ export interface ListAccountGroup {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: RolesAPI.PageInfo;
-}
-
-/**
- * PageInfo contains URL-based pagination metadata.
- */
-export interface PageInfo {
-  /**
-   * Whether more results exist after this page.
-   */
-  has_next_page: boolean;
-
-  /**
-   * Whether results exist before this page.
-   */
-  has_prev_page: boolean;
-
-  /**
-   * URL to fetch the next page, `null` if no more pages.
-   */
-  next_page_url: string | null;
-
-  /**
-   * URL to fetch the previous page, `null` if on the first page.
-   */
-  previous_page_url: string | null;
+  page_info: APIKeysAPI.PageInfo;
 }
 
 /**
@@ -323,7 +303,6 @@ export declare namespace AccountGroups {
     type AccountGroup as AccountGroup,
     type CreateAccountGroupRequest as CreateAccountGroupRequest,
     type ListAccountGroup as ListAccountGroup,
-    type PageInfo as PageInfo,
     type UpdateAccountGroupRequest as UpdateAccountGroupRequest,
     type AccountGroupDeleteResponse as AccountGroupDeleteResponse,
     type AccountGroupCreateParams as AccountGroupCreateParams,

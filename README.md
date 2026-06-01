@@ -25,12 +25,9 @@ const client = new Augno({
   environment: 'local', // defaults to 'production'
 });
 
-const createdAPIKey = await client.auth.apiKeys.create({
-  name: 'Production API Key',
-  role_id: 'rl_01c16d2eb637c0d1f3a372937c',
-});
+const listItem = await client.catalog.items.list();
 
-console.log(createdAPIKey.api_key_info);
+console.log(listItem.data);
 ```
 
 ### Request & Response types
@@ -46,11 +43,7 @@ const client = new Augno({
   environment: 'local', // defaults to 'production'
 });
 
-const params: Augno.Auth.APIKeyCreateParams = {
-  name: 'Production API Key',
-  role_id: 'rl_01c16d2eb637c0d1f3a372937c',
-};
-const createdAPIKey: Augno.Auth.APIKeys.CreatedAPIKey = await client.auth.apiKeys.create(params);
+const listItem: Augno.Catalog.ListItem = await client.catalog.items.list();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -63,17 +56,15 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const createdAPIKey = await client.auth.apiKeys
-  .create({ name: 'Production API Key', role_id: 'rl_01c16d2eb637c0d1f3a372937c' })
-  .catch(async (err) => {
-    if (err instanceof Augno.APIError) {
-      console.log(err.status); // 400
-      console.log(err.name); // BadRequestError
-      console.log(err.headers); // {server: 'nginx', ...}
-    } else {
-      throw err;
-    }
-  });
+const listItem = await client.catalog.items.list().catch(async (err) => {
+  if (err instanceof Augno.APIError) {
+    console.log(err.status); // 400
+    console.log(err.name); // BadRequestError
+    console.log(err.headers); // {server: 'nginx', ...}
+  } else {
+    throw err;
+  }
+});
 ```
 
 Error codes are as follows:
@@ -105,7 +96,7 @@ const client = new Augno({
 });
 
 // Or, configure per-request:
-await client.auth.apiKeys.create({ name: 'Production API Key', role_id: 'rl_01c16d2eb637c0d1f3a372937c' }, {
+await client.catalog.items.list({
   maxRetries: 5,
 });
 ```
@@ -122,7 +113,7 @@ const client = new Augno({
 });
 
 // Override per-request:
-await client.auth.apiKeys.create({ name: 'Production API Key', role_id: 'rl_01c16d2eb637c0d1f3a372937c' }, {
+await client.catalog.items.list({
   timeout: 5 * 1000,
 });
 ```
@@ -145,17 +136,13 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Augno();
 
-const response = await client.auth.apiKeys
-  .create({ name: 'Production API Key', role_id: 'rl_01c16d2eb637c0d1f3a372937c' })
-  .asResponse();
+const response = await client.catalog.items.list().asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: createdAPIKey, response: raw } = await client.auth.apiKeys
-  .create({ name: 'Production API Key', role_id: 'rl_01c16d2eb637c0d1f3a372937c' })
-  .withResponse();
+const { data: listItem, response: raw } = await client.catalog.items.list().withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(createdAPIKey.api_key_info);
+console.log(listItem.data);
 ```
 
 ### Logging
@@ -235,7 +222,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.auth.apiKeys.create({
+client.catalog.items.list({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',

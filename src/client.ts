@@ -20,21 +20,14 @@ import { Auth } from './resources/auth/auth';
 import { Catalog } from './resources/catalog/catalog';
 import { Core } from './resources/core/core';
 import {
-  Account,
-  AccountBranding,
-  AccountPortal,
-  Address,
   AdjustmentType,
   Finance,
   FinanceRetrieveAdjustmentTypesParams,
   FinanceRetrieveTransactionMethodsParams,
   FinanceRetrieveTransactionTypesParams,
-  Geolocation,
   ListAdjustmentType,
   ListTransactionMethod,
   ListTransactionType,
-  Owner,
-  PageInfo,
   TransactionMethod,
   TransactionType,
 } from './resources/finance/finance';
@@ -809,17 +802,10 @@ export declare namespace Augno {
 
   export {
     Finance as Finance,
-    type Account as Account,
-    type AccountBranding as AccountBranding,
-    type AccountPortal as AccountPortal,
-    type Address as Address,
     type AdjustmentType as AdjustmentType,
-    type Geolocation as Geolocation,
     type ListAdjustmentType as ListAdjustmentType,
     type ListTransactionMethod as ListTransactionMethod,
     type ListTransactionType as ListTransactionType,
-    type Owner as Owner,
-    type PageInfo as PageInfo,
     type TransactionMethod as TransactionMethod,
     type TransactionType as TransactionType,
     type FinanceRetrieveAdjustmentTypesParams as FinanceRetrieveAdjustmentTypesParams,

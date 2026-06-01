@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as RolesAPI from '../identity/roles';
+import * as APIKeysAPI from '../auth/api-keys/api-keys';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -21,7 +21,7 @@ export class Addresses extends APIResource {
    * });
    * ```
    */
-  create(body: AddressCreateParams, options?: RequestOptions): APIPromise<RolesAPI.Address> {
+  create(body: AddressCreateParams, options?: RequestOptions): APIPromise<APIKeysAPI.Address> {
     return this._client.post('/v1/sales/addresses', { body, ...options });
   }
 
@@ -35,7 +35,7 @@ export class Addresses extends APIResource {
    * );
    * ```
    */
-  retrieve(id: string, options?: RequestOptions): APIPromise<RolesAPI.Address> {
+  retrieve(id: string, options?: RequestOptions): APIPromise<APIKeysAPI.Address> {
     return this._client.get(path`/v1/sales/addresses/${id}`, options);
   }
 
@@ -54,7 +54,7 @@ export class Addresses extends APIResource {
     id: string,
     body: AddressUpdateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<RolesAPI.Address> {
+  ): APIPromise<APIKeysAPI.Address> {
     return this._client.patch(path`/v1/sales/addresses/${id}`, { body, ...options });
   }
 
@@ -84,56 +84,6 @@ export class Addresses extends APIResource {
   delete(id: string, options?: RequestOptions): APIPromise<AddressDeleteResponse> {
     return this._client.delete(path`/v1/sales/addresses/${id}`, options);
   }
-}
-
-/**
- * Address with associated geolocation.
- */
-export interface Address {
-  /**
-   * Address ID.
-   */
-  id: string;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Email address associated with the address.
-   */
-  email: string | null;
-
-  /**
-   * Geolocation sub-resource.
-   */
-  geolocation: RolesAPI.Geolocation | null;
-
-  /**
-   * Display name of the address.
-   */
-  name: string;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'address';
-
-  /**
-   * Phone number associated with the address.
-   */
-  phone: string | null;
-
-  /**
-   * Address type.
-   */
-  type: 'standard' | 'drop_ship';
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
 }
 
 /**
@@ -192,58 +142,13 @@ export interface AddressInput {
 }
 
 /**
- * Geolocation sub-resource.
- */
-export interface Geolocation {
-  /**
-   * Geolocation ID.
-   */
-  id: string;
-
-  /**
-   * Two-letter country code.
-   */
-  country: string;
-
-  /**
-   * City or locality.
-   */
-  locality: string | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'geolocation';
-
-  /**
-   * Postal or ZIP code.
-   */
-  postal_code: string | null;
-
-  /**
-   * State or administrative area.
-   */
-  state: string | null;
-
-  /**
-   * First line of the street address.
-   */
-  street_line_1: string | null;
-
-  /**
-   * Second line of the street address.
-   */
-  street_line_2: string | null;
-}
-
-/**
  * List represents a paginated list of resources.
  */
 export interface ListAddress {
   /**
    * Resources in this page.
    */
-  data: Array<RolesAPI.Address>;
+  data: Array<APIKeysAPI.Address>;
 
   /**
    * Resource type identifier.
@@ -253,32 +158,7 @@ export interface ListAddress {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: RolesAPI.PageInfo;
-}
-
-/**
- * PageInfo contains URL-based pagination metadata.
- */
-export interface PageInfo {
-  /**
-   * Whether more results exist after this page.
-   */
-  has_next_page: boolean;
-
-  /**
-   * Whether results exist before this page.
-   */
-  has_prev_page: boolean;
-
-  /**
-   * URL to fetch the next page, `null` if no more pages.
-   */
-  next_page_url: string | null;
-
-  /**
-   * URL to fetch the previous page, `null` if on the first page.
-   */
-  previous_page_url: string | null;
+  page_info: APIKeysAPI.PageInfo;
 }
 
 /**
@@ -466,11 +346,8 @@ export interface AddressListParams {
 
 export declare namespace Addresses {
   export {
-    type Address as Address,
     type AddressInput as AddressInput,
-    type Geolocation as Geolocation,
     type ListAddress as ListAddress,
-    type PageInfo as PageInfo,
     type UpdateAddressRequest as UpdateAddressRequest,
     type AddressDeleteResponse as AddressDeleteResponse,
     type AddressCreateParams as AddressCreateParams,

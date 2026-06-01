@@ -29,15 +29,6 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/auth/api-keys/actions.ts">Account</a></code>
-- <code><a href="./src/resources/auth/api-keys/actions.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/auth/api-keys/actions.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/auth/api-keys/actions.ts">Address</a></code>
-- <code><a href="./src/resources/auth/api-keys/actions.ts">APIKey</a></code>
-- <code><a href="./src/resources/auth/api-keys/actions.ts">CreatedAPIKey</a></code>
-- <code><a href="./src/resources/auth/api-keys/actions.ts">Geolocation</a></code>
-- <code><a href="./src/resources/auth/api-keys/actions.ts">Owner</a></code>
-- <code><a href="./src/resources/auth/api-keys/actions.ts">Role</a></code>
 - <code><a href="./src/resources/auth/api-keys/actions.ts">RotateAPIKeyRequest</a></code>
 
 Methods:
@@ -50,14 +41,8 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/core/sandboxes.ts">Account</a></code>
-- <code><a href="./src/resources/core/sandboxes.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/core/sandboxes.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/core/sandboxes.ts">Address</a></code>
 - <code><a href="./src/resources/core/sandboxes.ts">CreateSandboxRequest</a></code>
-- <code><a href="./src/resources/core/sandboxes.ts">Geolocation</a></code>
 - <code><a href="./src/resources/core/sandboxes.ts">ListSandbox</a></code>
-- <code><a href="./src/resources/core/sandboxes.ts">PageInfo</a></code>
 - <code><a href="./src/resources/core/sandboxes.ts">Sandbox</a></code>
 - <code><a href="./src/resources/core/sandboxes.ts">SandboxDeleteResponse</a></code>
 
@@ -72,17 +57,9 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/core/request-logs.ts">Account</a></code>
-- <code><a href="./src/resources/core/request-logs.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/core/request-logs.ts">AccountPortal</a></code>
 - <code><a href="./src/resources/core/request-logs.ts">Actor</a></code>
-- <code><a href="./src/resources/core/request-logs.ts">Address</a></code>
-- <code><a href="./src/resources/core/request-logs.ts">Geolocation</a></code>
 - <code><a href="./src/resources/core/request-logs.ts">ListRequestLog</a></code>
-- <code><a href="./src/resources/core/request-logs.ts">Owner</a></code>
-- <code><a href="./src/resources/core/request-logs.ts">PageInfo</a></code>
 - <code><a href="./src/resources/core/request-logs.ts">RequestLog</a></code>
-- <code><a href="./src/resources/core/request-logs.ts">Role</a></code>
 
 Methods:
 
@@ -93,21 +70,11 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/core/audit-events.ts">Account</a></code>
-- <code><a href="./src/resources/core/audit-events.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/core/audit-events.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/core/audit-events.ts">Actor</a></code>
-- <code><a href="./src/resources/core/audit-events.ts">Address</a></code>
 - <code><a href="./src/resources/core/audit-events.ts">AuditEvent</a></code>
 - <code><a href="./src/resources/core/audit-events.ts">AuditFieldChange</a></code>
-- <code><a href="./src/resources/core/audit-events.ts">Geolocation</a></code>
 - <code><a href="./src/resources/core/audit-events.ts">ListAuditEvent</a></code>
 - <code><a href="./src/resources/core/audit-events.ts">ListAuditFieldChange</a></code>
 - <code><a href="./src/resources/core/audit-events.ts">ListObjectType</a></code>
-- <code><a href="./src/resources/core/audit-events.ts">Owner</a></code>
-- <code><a href="./src/resources/core/audit-events.ts">PageInfo</a></code>
-- <code><a href="./src/resources/core/audit-events.ts">RequestLog</a></code>
-- <code><a href="./src/resources/core/audit-events.ts">Role</a></code>
 
 Methods:
 
@@ -121,7 +88,6 @@ Types:
 
 - <code><a href="./src/resources/core/addresses/addresses.ts">AddressSuggestion</a></code>
 - <code><a href="./src/resources/core/addresses/addresses.ts">ListAddressSuggestion</a></code>
-- <code><a href="./src/resources/core/addresses/addresses.ts">PageInfo</a></code>
 
 Methods:
 
@@ -143,17 +109,8 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/core/email-logs.ts">Account</a></code>
-- <code><a href="./src/resources/core/email-logs.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/core/email-logs.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/core/email-logs.ts">Actor</a></code>
-- <code><a href="./src/resources/core/email-logs.ts">Address</a></code>
 - <code><a href="./src/resources/core/email-logs.ts">EmailLog</a></code>
-- <code><a href="./src/resources/core/email-logs.ts">Geolocation</a></code>
 - <code><a href="./src/resources/core/email-logs.ts">ListEmailLog</a></code>
-- <code><a href="./src/resources/core/email-logs.ts">Owner</a></code>
-- <code><a href="./src/resources/core/email-logs.ts">PageInfo</a></code>
-- <code><a href="./src/resources/core/email-logs.ts">Role</a></code>
 
 Methods:
 
@@ -166,15 +123,8 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/catalog/units.ts">Account</a></code>
-- <code><a href="./src/resources/catalog/units.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/catalog/units.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/catalog/units.ts">Address</a></code>
 - <code><a href="./src/resources/catalog/units.ts">CreateUnitRequest</a></code>
-- <code><a href="./src/resources/catalog/units.ts">Geolocation</a></code>
 - <code><a href="./src/resources/catalog/units.ts">ListUnit</a></code>
-- <code><a href="./src/resources/catalog/units.ts">Owner</a></code>
-- <code><a href="./src/resources/catalog/units.ts">PageInfo</a></code>
 - <code><a href="./src/resources/catalog/units.ts">Unit</a></code>
 - <code><a href="./src/resources/catalog/units.ts">UpdateUnitRequest</a></code>
 - <code><a href="./src/resources/catalog/units.ts">UnitDeleteResponse</a></code>
@@ -191,18 +141,10 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/catalog/unit-groups/unit-groups.ts">Account</a></code>
-- <code><a href="./src/resources/catalog/unit-groups/unit-groups.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/catalog/unit-groups/unit-groups.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/catalog/unit-groups/unit-groups.ts">Address</a></code>
 - <code><a href="./src/resources/catalog/unit-groups/unit-groups.ts">CreateUnitGroupRequest</a></code>
 - <code><a href="./src/resources/catalog/unit-groups/unit-groups.ts">CreateUnitGroupUnitParam</a></code>
-- <code><a href="./src/resources/catalog/unit-groups/unit-groups.ts">Geolocation</a></code>
 - <code><a href="./src/resources/catalog/unit-groups/unit-groups.ts">ListUnitGroup</a></code>
 - <code><a href="./src/resources/catalog/unit-groups/unit-groups.ts">ListUnitGroupUnit</a></code>
-- <code><a href="./src/resources/catalog/unit-groups/unit-groups.ts">Owner</a></code>
-- <code><a href="./src/resources/catalog/unit-groups/unit-groups.ts">PageInfo</a></code>
-- <code><a href="./src/resources/catalog/unit-groups/unit-groups.ts">Unit</a></code>
 - <code><a href="./src/resources/catalog/unit-groups/unit-groups.ts">UnitGroup</a></code>
 - <code><a href="./src/resources/catalog/unit-groups/unit-groups.ts">UnitGroupUnit</a></code>
 - <code><a href="./src/resources/catalog/unit-groups/unit-groups.ts">UpdateUnitGroupRequest</a></code>
@@ -220,17 +162,7 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/catalog/unit-groups/units.ts">Account</a></code>
-- <code><a href="./src/resources/catalog/unit-groups/units.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/catalog/unit-groups/units.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/catalog/unit-groups/units.ts">Address</a></code>
 - <code><a href="./src/resources/catalog/unit-groups/units.ts">CreateUnitGroupUnitRequest</a></code>
-- <code><a href="./src/resources/catalog/unit-groups/units.ts">Geolocation</a></code>
-- <code><a href="./src/resources/catalog/unit-groups/units.ts">ListUnitGroupUnit</a></code>
-- <code><a href="./src/resources/catalog/unit-groups/units.ts">Owner</a></code>
-- <code><a href="./src/resources/catalog/unit-groups/units.ts">PageInfo</a></code>
-- <code><a href="./src/resources/catalog/unit-groups/units.ts">Unit</a></code>
-- <code><a href="./src/resources/catalog/unit-groups/units.ts">UnitGroupUnit</a></code>
 - <code><a href="./src/resources/catalog/unit-groups/units.ts">UpdateUnitGroupUnitRequest</a></code>
 - <code><a href="./src/resources/catalog/unit-groups/units.ts">UnitDeleteResponse</a></code>
 
@@ -250,7 +182,6 @@ Types:
 - <code><a href="./src/resources/catalog/properties/properties.ts">CreatePropertyRequest</a></code>
 - <code><a href="./src/resources/catalog/properties/properties.ts">ListAttribute</a></code>
 - <code><a href="./src/resources/catalog/properties/properties.ts">ListProperty</a></code>
-- <code><a href="./src/resources/catalog/properties/properties.ts">PageInfo</a></code>
 - <code><a href="./src/resources/catalog/properties/properties.ts">Property</a></code>
 - <code><a href="./src/resources/catalog/properties/properties.ts">UpdatePropertyRequest</a></code>
 - <code><a href="./src/resources/catalog/properties/properties.ts">PropertyDeleteResponse</a></code>
@@ -267,11 +198,7 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/catalog/properties/attributes.ts">Attribute</a></code>
 - <code><a href="./src/resources/catalog/properties/attributes.ts">CreateAttributeRequest</a></code>
-- <code><a href="./src/resources/catalog/properties/attributes.ts">ListAttribute</a></code>
-- <code><a href="./src/resources/catalog/properties/attributes.ts">PageInfo</a></code>
-- <code><a href="./src/resources/catalog/properties/attributes.ts">Property</a></code>
 - <code><a href="./src/resources/catalog/properties/attributes.ts">UpdateAttributeRequest</a></code>
 - <code><a href="./src/resources/catalog/properties/attributes.ts">AttributeDeleteResponse</a></code>
 
@@ -287,27 +214,12 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/catalog/items/items.ts">Account</a></code>
-- <code><a href="./src/resources/catalog/items/items.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/catalog/items/items.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/catalog/items/items.ts">Address</a></code>
-- <code><a href="./src/resources/catalog/items/items.ts">Attribute</a></code>
-- <code><a href="./src/resources/catalog/items/items.ts">Geolocation</a></code>
 - <code><a href="./src/resources/catalog/items/items.ts">Item</a></code>
 - <code><a href="./src/resources/catalog/items/items.ts">ItemCategory</a></code>
 - <code><a href="./src/resources/catalog/items/items.ts">ItemInventory</a></code>
-- <code><a href="./src/resources/catalog/items/items.ts">ListAttribute</a></code>
 - <code><a href="./src/resources/catalog/items/items.ts">ListItem</a></code>
-- <code><a href="./src/resources/catalog/items/items.ts">ListProperty</a></code>
-- <code><a href="./src/resources/catalog/items/items.ts">ListUnitGroupUnit</a></code>
-- <code><a href="./src/resources/catalog/items/items.ts">Owner</a></code>
-- <code><a href="./src/resources/catalog/items/items.ts">PageInfo</a></code>
-- <code><a href="./src/resources/catalog/items/items.ts">Property</a></code>
 - <code><a href="./src/resources/catalog/items/items.ts">Quantity</a></code>
 - <code><a href="./src/resources/catalog/items/items.ts">Rate</a></code>
-- <code><a href="./src/resources/catalog/items/items.ts">Unit</a></code>
-- <code><a href="./src/resources/catalog/items/items.ts">UnitGroup</a></code>
-- <code><a href="./src/resources/catalog/items/items.ts">UnitGroupUnit</a></code>
 
 Methods:
 
@@ -318,27 +230,6 @@ Methods:
 
 ### Attributes
 
-Types:
-
-- <code><a href="./src/resources/catalog/items/attributes.ts">Account</a></code>
-- <code><a href="./src/resources/catalog/items/attributes.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/catalog/items/attributes.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/catalog/items/attributes.ts">Address</a></code>
-- <code><a href="./src/resources/catalog/items/attributes.ts">Attribute</a></code>
-- <code><a href="./src/resources/catalog/items/attributes.ts">Geolocation</a></code>
-- <code><a href="./src/resources/catalog/items/attributes.ts">Item</a></code>
-- <code><a href="./src/resources/catalog/items/attributes.ts">ItemCategory</a></code>
-- <code><a href="./src/resources/catalog/items/attributes.ts">ListAttribute</a></code>
-- <code><a href="./src/resources/catalog/items/attributes.ts">ListProperty</a></code>
-- <code><a href="./src/resources/catalog/items/attributes.ts">ListUnitGroupUnit</a></code>
-- <code><a href="./src/resources/catalog/items/attributes.ts">Owner</a></code>
-- <code><a href="./src/resources/catalog/items/attributes.ts">PageInfo</a></code>
-- <code><a href="./src/resources/catalog/items/attributes.ts">Property</a></code>
-- <code><a href="./src/resources/catalog/items/attributes.ts">Rate</a></code>
-- <code><a href="./src/resources/catalog/items/attributes.ts">Unit</a></code>
-- <code><a href="./src/resources/catalog/items/attributes.ts">UnitGroup</a></code>
-- <code><a href="./src/resources/catalog/items/attributes.ts">UnitGroupUnit</a></code>
-
 Methods:
 
 - <code title="put /v1/catalog/items/{id}/attributes/{attribute_id}">client.catalog.items.attributes.<a href="./src/resources/catalog/items/attributes.ts">update</a>(attributeID, { ...params }) -> Item</code>
@@ -348,24 +239,8 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/catalog/item-categories/item-categories.ts">Account</a></code>
-- <code><a href="./src/resources/catalog/item-categories/item-categories.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/catalog/item-categories/item-categories.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/catalog/item-categories/item-categories.ts">Address</a></code>
-- <code><a href="./src/resources/catalog/item-categories/item-categories.ts">Attribute</a></code>
 - <code><a href="./src/resources/catalog/item-categories/item-categories.ts">CreateItemCategoryRequest</a></code>
-- <code><a href="./src/resources/catalog/item-categories/item-categories.ts">Geolocation</a></code>
-- <code><a href="./src/resources/catalog/item-categories/item-categories.ts">ItemCategory</a></code>
-- <code><a href="./src/resources/catalog/item-categories/item-categories.ts">ListAttribute</a></code>
 - <code><a href="./src/resources/catalog/item-categories/item-categories.ts">ListItemCategory</a></code>
-- <code><a href="./src/resources/catalog/item-categories/item-categories.ts">ListProperty</a></code>
-- <code><a href="./src/resources/catalog/item-categories/item-categories.ts">ListUnitGroupUnit</a></code>
-- <code><a href="./src/resources/catalog/item-categories/item-categories.ts">Owner</a></code>
-- <code><a href="./src/resources/catalog/item-categories/item-categories.ts">PageInfo</a></code>
-- <code><a href="./src/resources/catalog/item-categories/item-categories.ts">Property</a></code>
-- <code><a href="./src/resources/catalog/item-categories/item-categories.ts">Unit</a></code>
-- <code><a href="./src/resources/catalog/item-categories/item-categories.ts">UnitGroup</a></code>
-- <code><a href="./src/resources/catalog/item-categories/item-categories.ts">UnitGroupUnit</a></code>
 - <code><a href="./src/resources/catalog/item-categories/item-categories.ts">UpdateItemCategoryRequest</a></code>
 - <code><a href="./src/resources/catalog/item-categories/item-categories.ts">ItemCategoryDeleteResponse</a></code>
 - <code><a href="./src/resources/catalog/item-categories/item-categories.ts">ItemCategoryChangeUnitGroupResponse</a></code>
@@ -395,30 +270,11 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/catalog/materials.ts">Account</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">Address</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">Attribute</a></code>
 - <code><a href="./src/resources/catalog/materials.ts">CreateMaterialRequest</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">Geolocation</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">Item</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">ItemCategory</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">ListAttribute</a></code>
 - <code><a href="./src/resources/catalog/materials.ts">ListMaterial</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">ListProperty</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">ListUnitGroupUnit</a></code>
 - <code><a href="./src/resources/catalog/materials.ts">Material</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">Owner</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">PageInfo</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">Property</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">Quantity</a></code>
 - <code><a href="./src/resources/catalog/materials.ts">QuantityInputRequest</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">Rate</a></code>
 - <code><a href="./src/resources/catalog/materials.ts">RateInput</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">Unit</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">UnitGroup</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">UnitGroupUnit</a></code>
 - <code><a href="./src/resources/catalog/materials.ts">UpdateMaterialRequest</a></code>
 
 Methods:
@@ -433,28 +289,9 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/catalog/parts.ts">Account</a></code>
-- <code><a href="./src/resources/catalog/parts.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/catalog/parts.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/catalog/parts.ts">Address</a></code>
-- <code><a href="./src/resources/catalog/parts.ts">Attribute</a></code>
 - <code><a href="./src/resources/catalog/parts.ts">CreatePartRequest</a></code>
-- <code><a href="./src/resources/catalog/parts.ts">Geolocation</a></code>
-- <code><a href="./src/resources/catalog/parts.ts">Item</a></code>
-- <code><a href="./src/resources/catalog/parts.ts">ItemCategory</a></code>
-- <code><a href="./src/resources/catalog/parts.ts">ListAttribute</a></code>
 - <code><a href="./src/resources/catalog/parts.ts">ListPart</a></code>
-- <code><a href="./src/resources/catalog/parts.ts">ListProperty</a></code>
-- <code><a href="./src/resources/catalog/parts.ts">ListUnitGroupUnit</a></code>
-- <code><a href="./src/resources/catalog/parts.ts">Owner</a></code>
-- <code><a href="./src/resources/catalog/parts.ts">PageInfo</a></code>
 - <code><a href="./src/resources/catalog/parts.ts">Part</a></code>
-- <code><a href="./src/resources/catalog/parts.ts">Property</a></code>
-- <code><a href="./src/resources/catalog/parts.ts">Rate</a></code>
-- <code><a href="./src/resources/catalog/parts.ts">RateInput</a></code>
-- <code><a href="./src/resources/catalog/parts.ts">Unit</a></code>
-- <code><a href="./src/resources/catalog/parts.ts">UnitGroup</a></code>
-- <code><a href="./src/resources/catalog/parts.ts">UnitGroupUnit</a></code>
 - <code><a href="./src/resources/catalog/parts.ts">UpdatePartRequest</a></code>
 
 Methods:
@@ -469,20 +306,9 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/catalog/product-lines.ts">Account</a></code>
-- <code><a href="./src/resources/catalog/product-lines.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/catalog/product-lines.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/catalog/product-lines.ts">Address</a></code>
 - <code><a href="./src/resources/catalog/product-lines.ts">CreateProductLineRequest</a></code>
-- <code><a href="./src/resources/catalog/product-lines.ts">Geolocation</a></code>
 - <code><a href="./src/resources/catalog/product-lines.ts">ListProductLine</a></code>
-- <code><a href="./src/resources/catalog/product-lines.ts">ListUnitGroupUnit</a></code>
-- <code><a href="./src/resources/catalog/product-lines.ts">Owner</a></code>
-- <code><a href="./src/resources/catalog/product-lines.ts">PageInfo</a></code>
 - <code><a href="./src/resources/catalog/product-lines.ts">ProductLine</a></code>
-- <code><a href="./src/resources/catalog/product-lines.ts">Unit</a></code>
-- <code><a href="./src/resources/catalog/product-lines.ts">UnitGroup</a></code>
-- <code><a href="./src/resources/catalog/product-lines.ts">UnitGroupUnit</a></code>
 - <code><a href="./src/resources/catalog/product-lines.ts">UpdateProductLineRequest</a></code>
 - <code><a href="./src/resources/catalog/product-lines.ts">ProductLineDeleteResponse</a></code>
 
@@ -498,29 +324,9 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/catalog/products.ts">Account</a></code>
-- <code><a href="./src/resources/catalog/products.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/catalog/products.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/catalog/products.ts">Address</a></code>
-- <code><a href="./src/resources/catalog/products.ts">Attribute</a></code>
 - <code><a href="./src/resources/catalog/products.ts">CreateProductRequest</a></code>
-- <code><a href="./src/resources/catalog/products.ts">Geolocation</a></code>
-- <code><a href="./src/resources/catalog/products.ts">Item</a></code>
-- <code><a href="./src/resources/catalog/products.ts">ItemCategory</a></code>
-- <code><a href="./src/resources/catalog/products.ts">ListAttribute</a></code>
 - <code><a href="./src/resources/catalog/products.ts">ListProduct</a></code>
-- <code><a href="./src/resources/catalog/products.ts">ListProperty</a></code>
-- <code><a href="./src/resources/catalog/products.ts">ListUnitGroupUnit</a></code>
-- <code><a href="./src/resources/catalog/products.ts">Owner</a></code>
-- <code><a href="./src/resources/catalog/products.ts">PageInfo</a></code>
 - <code><a href="./src/resources/catalog/products.ts">Product</a></code>
-- <code><a href="./src/resources/catalog/products.ts">ProductLine</a></code>
-- <code><a href="./src/resources/catalog/products.ts">Property</a></code>
-- <code><a href="./src/resources/catalog/products.ts">Rate</a></code>
-- <code><a href="./src/resources/catalog/products.ts">RateInput</a></code>
-- <code><a href="./src/resources/catalog/products.ts">Unit</a></code>
-- <code><a href="./src/resources/catalog/products.ts">UnitGroup</a></code>
-- <code><a href="./src/resources/catalog/products.ts">UnitGroupUnit</a></code>
 - <code><a href="./src/resources/catalog/products.ts">UpdateProductRequest</a></code>
 
 Methods:
@@ -541,7 +347,6 @@ Types:
 - <code><a href="./src/resources/sales/account-groups.ts">AccountGroup</a></code>
 - <code><a href="./src/resources/sales/account-groups.ts">CreateAccountGroupRequest</a></code>
 - <code><a href="./src/resources/sales/account-groups.ts">ListAccountGroup</a></code>
-- <code><a href="./src/resources/sales/account-groups.ts">PageInfo</a></code>
 - <code><a href="./src/resources/sales/account-groups.ts">UpdateAccountGroupRequest</a></code>
 - <code><a href="./src/resources/sales/account-groups.ts">AccountGroupDeleteResponse</a></code>
 
@@ -557,11 +362,8 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/sales/addresses.ts">Address</a></code>
 - <code><a href="./src/resources/sales/addresses.ts">AddressInput</a></code>
-- <code><a href="./src/resources/sales/addresses.ts">Geolocation</a></code>
 - <code><a href="./src/resources/sales/addresses.ts">ListAddress</a></code>
-- <code><a href="./src/resources/sales/addresses.ts">PageInfo</a></code>
 - <code><a href="./src/resources/sales/addresses.ts">UpdateAddressRequest</a></code>
 - <code><a href="./src/resources/sales/addresses.ts">AddressDeleteResponse</a></code>
 
@@ -577,15 +379,8 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/sales/account-statuses.ts">Account</a></code>
-- <code><a href="./src/resources/sales/account-statuses.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/sales/account-statuses.ts">AccountPortal</a></code>
 - <code><a href="./src/resources/sales/account-statuses.ts">AccountStatus</a></code>
-- <code><a href="./src/resources/sales/account-statuses.ts">Address</a></code>
-- <code><a href="./src/resources/sales/account-statuses.ts">Geolocation</a></code>
 - <code><a href="./src/resources/sales/account-statuses.ts">ListAccountStatus</a></code>
-- <code><a href="./src/resources/sales/account-statuses.ts">Owner</a></code>
-- <code><a href="./src/resources/sales/account-statuses.ts">PageInfo</a></code>
 
 Methods:
 
@@ -596,14 +391,7 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/sales/priorities.ts">Account</a></code>
-- <code><a href="./src/resources/sales/priorities.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/sales/priorities.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/sales/priorities.ts">Address</a></code>
-- <code><a href="./src/resources/sales/priorities.ts">Geolocation</a></code>
 - <code><a href="./src/resources/sales/priorities.ts">ListPriority</a></code>
-- <code><a href="./src/resources/sales/priorities.ts">Owner</a></code>
-- <code><a href="./src/resources/sales/priorities.ts">PageInfo</a></code>
 - <code><a href="./src/resources/sales/priorities.ts">Priority</a></code>
 
 Methods:
@@ -615,14 +403,7 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/sales/customers/customers.ts">Account</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">AccountGroup</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">AccountPortal</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">AccountUser</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">Address</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">AddressInput</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">Attribute</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">Carrier</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">Consumption</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">CreateCustomerRequest</a></code>
@@ -632,39 +413,22 @@ Types:
 - <code><a href="./src/resources/sales/customers/customers.ts">CustomerFreightPreferences</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">CustomerNotificationPreferences</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">Department</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">Geolocation</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">Item</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">ItemCategory</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">ListAccountGroup</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">ListAttribute</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">ListConsumption</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">ListCustomer</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">ListLocation</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">ListMachine</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">ListProductionStep</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">ListProperty</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">ListScanningStation</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">ListServiceLevel</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">ListUnitGroupUnit</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">Location</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">Machine</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">Owner</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">PageInfo</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">PaymentTerm</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">Priority</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">ProductionOutput</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">ProductionStep</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">Property</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">Quantity</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">QuantityInput</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">Rate</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">Role</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">ScanningStation</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">ServiceLevel</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">ShippingTerm</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">Unit</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">UnitGroup</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">UnitGroupUnit</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">UpdateCustomerRequest</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">CustomerDeleteResponse</a></code>
 
@@ -680,54 +444,7 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/sales/customers/actions.ts">Account</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">AccountGroup</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">AccountUser</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">Address</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">Attribute</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">Carrier</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">Consumption</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">Customer</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">CustomerContactInfo</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">CustomerDefaults</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">CustomerFreightPreferences</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">CustomerNotificationPreferences</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">Department</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">Geolocation</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">Item</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">ItemCategory</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">ListAccountGroup</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">ListAttribute</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">ListConsumption</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">ListCustomer</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">ListLocation</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">ListMachine</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">ListProductionStep</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">ListProperty</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">ListScanningStation</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">ListServiceLevel</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">ListUnitGroupUnit</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">Location</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">Machine</a></code>
 - <code><a href="./src/resources/sales/customers/actions.ts">MergeCustomersRequest</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">Owner</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">PageInfo</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">PaymentTerm</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">Priority</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">ProductionOutput</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">ProductionStep</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">Property</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">Quantity</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">Rate</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">Role</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">ScanningStation</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">ServiceLevel</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">ShippingTerm</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">Unit</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">UnitGroup</a></code>
-- <code><a href="./src/resources/sales/customers/actions.ts">UnitGroupUnit</a></code>
 
 Methods:
 
@@ -737,14 +454,7 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/sales/sales-orders.ts">Account</a></code>
-- <code><a href="./src/resources/sales/sales-orders.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/sales/sales-orders.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/sales/sales-orders.ts">Address</a></code>
-- <code><a href="./src/resources/sales/sales-orders.ts">Geolocation</a></code>
 - <code><a href="./src/resources/sales/sales-orders.ts">ListSalesOrderStatus</a></code>
-- <code><a href="./src/resources/sales/sales-orders.ts">Owner</a></code>
-- <code><a href="./src/resources/sales/sales-orders.ts">PageInfo</a></code>
 - <code><a href="./src/resources/sales/sales-orders.ts">SalesOrderStatus</a></code>
 
 Methods:
@@ -755,17 +465,10 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/finance/finance.ts">Account</a></code>
-- <code><a href="./src/resources/finance/finance.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/finance/finance.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/finance/finance.ts">Address</a></code>
 - <code><a href="./src/resources/finance/finance.ts">AdjustmentType</a></code>
-- <code><a href="./src/resources/finance/finance.ts">Geolocation</a></code>
 - <code><a href="./src/resources/finance/finance.ts">ListAdjustmentType</a></code>
 - <code><a href="./src/resources/finance/finance.ts">ListTransactionMethod</a></code>
 - <code><a href="./src/resources/finance/finance.ts">ListTransactionType</a></code>
-- <code><a href="./src/resources/finance/finance.ts">Owner</a></code>
-- <code><a href="./src/resources/finance/finance.ts">PageInfo</a></code>
 - <code><a href="./src/resources/finance/finance.ts">TransactionMethod</a></code>
 - <code><a href="./src/resources/finance/finance.ts">TransactionType</a></code>
 
@@ -779,16 +482,8 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/finance/payment-terms.ts">Account</a></code>
-- <code><a href="./src/resources/finance/payment-terms.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/finance/payment-terms.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/finance/payment-terms.ts">Address</a></code>
 - <code><a href="./src/resources/finance/payment-terms.ts">CreatePaymentTermRequest</a></code>
-- <code><a href="./src/resources/finance/payment-terms.ts">Geolocation</a></code>
 - <code><a href="./src/resources/finance/payment-terms.ts">ListPaymentTerm</a></code>
-- <code><a href="./src/resources/finance/payment-terms.ts">Owner</a></code>
-- <code><a href="./src/resources/finance/payment-terms.ts">PageInfo</a></code>
-- <code><a href="./src/resources/finance/payment-terms.ts">PaymentTerm</a></code>
 - <code><a href="./src/resources/finance/payment-terms.ts">UpdatePaymentTermRequest</a></code>
 - <code><a href="./src/resources/finance/payment-terms.ts">PaymentTermDeleteResponse</a></code>
 
@@ -806,21 +501,8 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/operations/shipping-terms.ts">Account</a></code>
-- <code><a href="./src/resources/operations/shipping-terms.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/operations/shipping-terms.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/operations/shipping-terms.ts">Address</a></code>
 - <code><a href="./src/resources/operations/shipping-terms.ts">CreateShippingTermRequest</a></code>
-- <code><a href="./src/resources/operations/shipping-terms.ts">Geolocation</a></code>
-- <code><a href="./src/resources/operations/shipping-terms.ts">ListServiceLevel</a></code>
 - <code><a href="./src/resources/operations/shipping-terms.ts">ListShippingTerm</a></code>
-- <code><a href="./src/resources/operations/shipping-terms.ts">Owner</a></code>
-- <code><a href="./src/resources/operations/shipping-terms.ts">PageInfo</a></code>
-- <code><a href="./src/resources/operations/shipping-terms.ts">Quantity</a></code>
-- <code><a href="./src/resources/operations/shipping-terms.ts">QuantityInput</a></code>
-- <code><a href="./src/resources/operations/shipping-terms.ts">ServiceLevel</a></code>
-- <code><a href="./src/resources/operations/shipping-terms.ts">ShippingTerm</a></code>
-- <code><a href="./src/resources/operations/shipping-terms.ts">Unit</a></code>
 - <code><a href="./src/resources/operations/shipping-terms.ts">UpdateShippingTermRequest</a></code>
 - <code><a href="./src/resources/operations/shipping-terms.ts">ShippingTermDeleteResponse</a></code>
 
@@ -836,18 +518,8 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/operations/carriers/carriers.ts">Account</a></code>
-- <code><a href="./src/resources/operations/carriers/carriers.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/operations/carriers/carriers.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/operations/carriers/carriers.ts">Address</a></code>
-- <code><a href="./src/resources/operations/carriers/carriers.ts">Carrier</a></code>
 - <code><a href="./src/resources/operations/carriers/carriers.ts">CreateCarrierRequest</a></code>
-- <code><a href="./src/resources/operations/carriers/carriers.ts">Geolocation</a></code>
 - <code><a href="./src/resources/operations/carriers/carriers.ts">ListCarrier</a></code>
-- <code><a href="./src/resources/operations/carriers/carriers.ts">ListServiceLevel</a></code>
-- <code><a href="./src/resources/operations/carriers/carriers.ts">Owner</a></code>
-- <code><a href="./src/resources/operations/carriers/carriers.ts">PageInfo</a></code>
-- <code><a href="./src/resources/operations/carriers/carriers.ts">ServiceLevel</a></code>
 - <code><a href="./src/resources/operations/carriers/carriers.ts">UpdateCarrierRequest</a></code>
 - <code><a href="./src/resources/operations/carriers/carriers.ts">CarrierDeleteResponse</a></code>
 
@@ -863,16 +535,7 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/operations/carriers/service-levels.ts">Account</a></code>
-- <code><a href="./src/resources/operations/carriers/service-levels.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/operations/carriers/service-levels.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/operations/carriers/service-levels.ts">Address</a></code>
 - <code><a href="./src/resources/operations/carriers/service-levels.ts">CreateServiceLevelRequest</a></code>
-- <code><a href="./src/resources/operations/carriers/service-levels.ts">Geolocation</a></code>
-- <code><a href="./src/resources/operations/carriers/service-levels.ts">ListServiceLevel</a></code>
-- <code><a href="./src/resources/operations/carriers/service-levels.ts">Owner</a></code>
-- <code><a href="./src/resources/operations/carriers/service-levels.ts">PageInfo</a></code>
-- <code><a href="./src/resources/operations/carriers/service-levels.ts">ServiceLevel</a></code>
 - <code><a href="./src/resources/operations/carriers/service-levels.ts">UpdateServiceLevelRequest</a></code>
 - <code><a href="./src/resources/operations/carriers/service-levels.ts">ServiceLevelDeleteResponse</a></code>
 
@@ -889,9 +552,6 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/operations/locations.ts">CreateLocationRequest</a></code>
-- <code><a href="./src/resources/operations/locations.ts">ListLocation</a></code>
-- <code><a href="./src/resources/operations/locations.ts">Location</a></code>
-- <code><a href="./src/resources/operations/locations.ts">PageInfo</a></code>
 - <code><a href="./src/resources/operations/locations.ts">UpdateLocationRequest</a></code>
 - <code><a href="./src/resources/operations/locations.ts">LocationDeleteResponse</a></code>
 
@@ -909,7 +569,6 @@ Types:
 
 - <code><a href="./src/resources/operations/location-types.ts">ListLocationType</a></code>
 - <code><a href="./src/resources/operations/location-types.ts">LocationType</a></code>
-- <code><a href="./src/resources/operations/location-types.ts">PageInfo</a></code>
 
 Methods:
 
@@ -920,38 +579,7 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/operations/scanning-stations.ts">Account</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">Address</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">Attribute</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">Consumption</a></code>
 - <code><a href="./src/resources/operations/scanning-stations.ts">CreateScanningStationRequest</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">Department</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">Geolocation</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">Item</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">ItemCategory</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">ListAttribute</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">ListConsumption</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">ListLocation</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">ListMachine</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">ListProductionStep</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">ListProperty</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">ListScanningStation</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">ListUnitGroupUnit</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">Location</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">Machine</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">Owner</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">PageInfo</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">ProductionOutput</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">ProductionStep</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">Property</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">Quantity</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">Rate</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">ScanningStation</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">Unit</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">UnitGroup</a></code>
-- <code><a href="./src/resources/operations/scanning-stations.ts">UnitGroupUnit</a></code>
 - <code><a href="./src/resources/operations/scanning-stations.ts">UpdateScanningStationRequest</a></code>
 - <code><a href="./src/resources/operations/scanning-stations.ts">ScanningStationDeleteResponse</a></code>
 
@@ -969,42 +597,9 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/identity/account-users/account-users.ts">Account</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">AccountUser</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">Address</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">Attribute</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">Consumption</a></code>
 - <code><a href="./src/resources/identity/account-users/account-users.ts">CreateAccountUserRequest</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">Department</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">Geolocation</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">Item</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">ItemCategory</a></code>
 - <code><a href="./src/resources/identity/account-users/account-users.ts">ListAccountUser</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">ListAttribute</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">ListConsumption</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">ListLocation</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">ListMachine</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">ListProductionStep</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">ListProperty</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">ListScanningStation</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">ListUnitGroupUnit</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">Location</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">Machine</a></code>
 - <code><a href="./src/resources/identity/account-users/account-users.ts">NotificationPreferenceItem</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">Owner</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">PageInfo</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">ProductionOutput</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">ProductionStep</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">Property</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">Quantity</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">Rate</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">Role</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">ScanningStation</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">Unit</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">UnitGroup</a></code>
-- <code><a href="./src/resources/identity/account-users/account-users.ts">UnitGroupUnit</a></code>
 - <code><a href="./src/resources/identity/account-users/account-users.ts">UpdateAccountUserRequest</a></code>
 
 Methods:
@@ -1032,16 +627,8 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/identity/roles.ts">Account</a></code>
-- <code><a href="./src/resources/identity/roles.ts">AccountBranding</a></code>
-- <code><a href="./src/resources/identity/roles.ts">AccountPortal</a></code>
-- <code><a href="./src/resources/identity/roles.ts">Address</a></code>
 - <code><a href="./src/resources/identity/roles.ts">CreateRoleRequest</a></code>
-- <code><a href="./src/resources/identity/roles.ts">Geolocation</a></code>
 - <code><a href="./src/resources/identity/roles.ts">ListRole</a></code>
-- <code><a href="./src/resources/identity/roles.ts">Owner</a></code>
-- <code><a href="./src/resources/identity/roles.ts">PageInfo</a></code>
-- <code><a href="./src/resources/identity/roles.ts">Role</a></code>
 - <code><a href="./src/resources/identity/roles.ts">UpdateRoleRequest</a></code>
 - <code><a href="./src/resources/identity/roles.ts">RoleDeleteResponse</a></code>
 

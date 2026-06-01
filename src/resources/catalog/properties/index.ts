@@ -17,7 +17,6 @@ export {
   type CreatePropertyRequest,
   type ListAttribute,
   type ListProperty,
-  type PageInfo,
   type Property,
   type UpdatePropertyRequest,
   type PropertyDeleteResponse,

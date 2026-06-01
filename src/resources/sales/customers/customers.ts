@@ -1,12 +1,11 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as PaymentTermsAPI from '../../finance/payment-terms';
-import * as RolesAPI from '../../identity/roles';
-import * as ShippingTermsAPI from '../../operations/shipping-terms';
-import * as AccountUsersAPI from '../../identity/account-users/account-users';
-import * as CarriersAPI from '../../operations/carriers/carriers';
-import * as ServiceLevelsAPI from '../../operations/carriers/service-levels';
+import * as AccountGroupsAPI from '../account-groups';
+import * as AddressesAPI from '../addresses';
+import * as PrioritiesAPI from '../priorities';
+import * as APIKeysAPI from '../../auth/api-keys/api-keys';
+import * as ItemsAPI from '../../catalog/items/items';
 import * as ActionsAPI from './actions';
 import { ActionMergeParams, Actions, MergeCustomersRequest } from './actions';
 import { APIPromise } from '../../../core/api-promise';
@@ -39,7 +38,7 @@ export class Customers extends APIResource {
    * });
    * ```
    */
-  create(params: CustomerCreateParams, options?: RequestOptions): APIPromise<ActionsAPI.Customer> {
+  create(params: CustomerCreateParams, options?: RequestOptions): APIPromise<Customer> {
     const { include, ...body } = params;
     return this._client.post('/v1/sales/customers', { query: { include }, body, ...options });
   }
@@ -58,7 +57,7 @@ export class Customers extends APIResource {
     id: string,
     query: CustomerRetrieveParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ActionsAPI.Customer> {
+  ): APIPromise<Customer> {
     return this._client.get(path`/v1/sales/customers/${id}`, { query, ...options });
   }
 
@@ -82,7 +81,7 @@ export class Customers extends APIResource {
     id: string,
     params: CustomerUpdateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ActionsAPI.Customer> {
+  ): APIPromise<Customer> {
     const { include, ...body } = params ?? {};
     return this._client.patch(path`/v1/sales/customers/${id}`, { query: { include }, body, ...options });
   }
@@ -98,7 +97,7 @@ export class Customers extends APIResource {
   list(
     query: CustomerListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ActionsAPI.ListCustomer> {
+  ): APIPromise<ListCustomer> {
     return this._client.get('/v1/sales/customers', { query, ...options });
   }
 
@@ -119,201 +118,6 @@ export class Customers extends APIResource {
 }
 
 /**
- * Account with optional branding and portal sub-resources.
- */
-export interface Account {
-  /**
-   * Account ID.
-   */
-  id: string;
-
-  /**
-   * Branding metadata for an account.
-   */
-  branding: RolesAPI.AccountBranding | null;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Address with associated geolocation.
-   */
-  default_billing_address: RolesAPI.Address | null;
-
-  /**
-   * Address with associated geolocation.
-   */
-  default_shipping_address: RolesAPI.Address | null;
-
-  /**
-   * Display name.
-   */
-  name: string;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'account';
-
-  /**
-   * Portal metadata for an account.
-   */
-  portal: RolesAPI.AccountPortal | null;
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
-}
-
-/**
- * Branding metadata for an account.
- */
-export interface AccountBranding {
-  /**
-   * Branding ID.
-   */
-  id: string;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Facebook handle.
-   */
-  facebook_handle: string | null;
-
-  /**
-   * Instagram handle.
-   */
-  instagram_handle: string | null;
-
-  /**
-   * LinkedIn handle.
-   */
-  linkedin_handle: string | null;
-
-  /**
-   * Logo URL.
-   */
-  logo_url: string | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'account_branding';
-
-  /**
-   * Support phone number.
-   */
-  phone_number: string | null;
-
-  /**
-   * Support email address.
-   */
-  support_email: string | null;
-
-  /**
-   * Twitter handle.
-   */
-  twitter_handle: string | null;
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
-
-  /**
-   * Website URL.
-   */
-  website_url: string | null;
-}
-
-/**
- * Account group resource.
- */
-export interface AccountGroup {
-  /**
-   * Account group ID.
-   */
-  id: string;
-
-  /**
-   * Commission policy.
-   */
-  commission_policy: 'commission_applied' | 'commission_exempt';
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Description.
-   */
-  description: string | null;
-
-  /**
-   * Freight policy.
-   */
-  freight_policy: 'free_freight' | 'billed_freight';
-
-  /**
-   * Display name.
-   */
-  name: string;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'account_group';
-
-  /**
-   * Account group type.
-   */
-  type: 'pricing_group' | 'type_group';
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
-}
-
-/**
- * Portal metadata for an account.
- */
-export interface AccountPortal {
-  /**
-   * Portal ID.
-   */
-  id: string;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'account_portal';
-
-  /**
-   * Portal slug.
-   */
-  slug: string;
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
-}
-
-/**
  * Account user with profile, role, and department.
  */
 export interface AccountUser {
@@ -330,7 +134,7 @@ export interface AccountUser {
   /**
    * Department resource.
    */
-  department: AccountUsersAPI.Department | null;
+  department: Department | null;
 
   /**
    * Email address.
@@ -360,7 +164,7 @@ export interface AccountUser {
   /**
    * Role resource.
    */
-  role: RolesAPI.Role | null;
+  role: APIKeysAPI.Role | null;
 
   /**
    * Account user status.
@@ -376,156 +180,6 @@ export interface AccountUser {
    * Username.
    */
   username: string | null;
-}
-
-/**
- * Address with associated geolocation.
- */
-export interface Address {
-  /**
-   * Address ID.
-   */
-  id: string;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Email address associated with the address.
-   */
-  email: string | null;
-
-  /**
-   * Geolocation sub-resource.
-   */
-  geolocation: RolesAPI.Geolocation | null;
-
-  /**
-   * Display name of the address.
-   */
-  name: string;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'address';
-
-  /**
-   * Phone number associated with the address.
-   */
-  phone: string | null;
-
-  /**
-   * Address type.
-   */
-  type: 'standard' | 'drop_ship';
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
-}
-
-/**
- * Request to create an address.
- */
-export interface AddressInput {
-  /**
-   * Two-letter country code.
-   */
-  country: string;
-
-  /**
-   * Display name of the address.
-   */
-  name: string;
-
-  /**
-   * Email address associated with the address.
-   */
-  email?: string | null;
-
-  /**
-   * City or locality.
-   */
-  locality?: string | null;
-
-  /**
-   * Phone number associated with the address.
-   */
-  phone?: string | null;
-
-  /**
-   * Postal or ZIP code.
-   */
-  postal_code?: string | null;
-
-  /**
-   * State or administrative area.
-   */
-  state?: string | null;
-
-  /**
-   * First line of the street address.
-   */
-  street_line_1?: string | null;
-
-  /**
-   * Second line of the street address.
-   */
-  street_line_2?: string | null;
-
-  /**
-   * Address type.
-   */
-  type?: 'standard' | 'drop_ship';
-}
-
-/**
- * Value option within a property.
- */
-export interface Attribute {
-  /**
-   * Attribute ID.
-   */
-  id: string;
-
-  /**
-   * Color code.
-   */
-  color: 'blue' | 'brown' | 'default' | 'gray' | 'green' | 'orange' | 'pink' | 'purple' | 'red' | 'yellow';
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'attribute';
-
-  /**
-   * Property that groups attributes.
-   */
-  property: AccountUsersAPI.Property | null;
-
-  /**
-   * Display order.
-   */
-  sort_order: number;
-
-  /**
-   * Last update timestamp.
-   */
-  updated_at: string;
-
-  /**
-   * Attribute value.
-   */
-  value: string;
 }
 
 /**
@@ -575,12 +229,12 @@ export interface Carrier {
   /**
    * Owner describes the provenance of a resource.
    */
-  owner: RolesAPI.Owner | null;
+  owner: APIKeysAPI.Owner | null;
 
   /**
    * List represents a paginated list of resources.
    */
-  service_levels: ServiceLevelsAPI.ListServiceLevel | null;
+  service_levels: ListServiceLevel | null;
 
   /**
    * Last updated timestamp.
@@ -600,7 +254,7 @@ export interface Consumption {
   /**
    * Item is an inventory item (product, material, or part).
    */
-  consumed_item: AccountUsersAPI.Item | null;
+  consumed_item: ItemsAPI.Item | null;
 
   /**
    * Creation timestamp.
@@ -620,7 +274,7 @@ export interface Consumption {
   /**
    * Value with an associated unit.
    */
-  quantity: AccountUsersAPI.Quantity | null;
+  quantity: ItemsAPI.Quantity | null;
 
   /**
    * Last updated timestamp.
@@ -630,7 +284,7 @@ export interface Consumption {
   /**
    * Value with an associated unit.
    */
-  waste_quantity: AccountUsersAPI.Quantity | null;
+  waste_quantity: ItemsAPI.Quantity | null;
 }
 
 /**
@@ -640,7 +294,7 @@ export interface CreateCustomerRequest {
   /**
    * Request to create an address.
    */
-  bill_to_address: AddressInput;
+  bill_to_address: AddressesAPI.AddressInput;
 
   /**
    * Customer type group ID.
@@ -670,7 +324,7 @@ export interface CreateCustomerRequest {
   /**
    * Request to create an address.
    */
-  ship_to_address: AddressInput;
+  ship_to_address: AddressesAPI.AddressInput;
 
   /**
    * Carrier billing account number.
@@ -691,7 +345,7 @@ export interface CreateCustomerRequest {
    * QuantityInput represents a value with an associated unit for create/update
    * requests.
    */
-  credit_limit?: ShippingTermsAPI.QuantityInput;
+  credit_limit?: QuantityInput;
 
   /**
    * Price group IDs.
@@ -766,12 +420,12 @@ export interface Customer {
   /**
    * Address with associated geolocation.
    */
-  bill_to_address: RolesAPI.Address | null;
+  bill_to_address: APIKeysAPI.Address | null;
 
   /**
    * List represents a paginated list of resources.
    */
-  child_accounts: ActionsAPI.ListCustomer | null;
+  child_accounts: ListCustomer | null;
 
   /**
    * Commission policy.
@@ -781,7 +435,7 @@ export interface Customer {
   /**
    * Customer contact information.
    */
-  contact_info: ActionsAPI.CustomerContactInfo | null;
+  contact_info: CustomerContactInfo | null;
 
   /**
    * Creation timestamp.
@@ -791,12 +445,12 @@ export interface Customer {
   /**
    * Value with an associated unit.
    */
-  credit_limit: AccountUsersAPI.Quantity | null;
+  credit_limit: ItemsAPI.Quantity | null;
 
   /**
    * Customer default configuration.
    */
-  defaults: ActionsAPI.CustomerDefaults | null;
+  defaults: CustomerDefaults | null;
 
   /**
    * EDI status.
@@ -806,7 +460,7 @@ export interface Customer {
   /**
    * Customer freight and carrier settings.
    */
-  freight_preferences: ActionsAPI.CustomerFreightPreferences | null;
+  freight_preferences: CustomerFreightPreferences | null;
 
   /**
    * Display name.
@@ -821,7 +475,7 @@ export interface Customer {
   /**
    * Customer notification settings.
    */
-  notification_preferences: ActionsAPI.CustomerNotificationPreferences | null;
+  notification_preferences: CustomerNotificationPreferences | null;
 
   /**
    * Customer number.
@@ -836,12 +490,12 @@ export interface Customer {
   /**
    * Customer account.
    */
-  parent_account: ActionsAPI.Customer | null;
+  parent_account: Customer | null;
 
   /**
    * List represents a paginated list of resources.
    */
-  price_groups: ActionsAPI.ListAccountGroup | null;
+  price_groups: AccountGroupsAPI.ListAccountGroup | null;
 
   /**
    * Customer relationship type.
@@ -851,7 +505,7 @@ export interface Customer {
   /**
    * Address with associated geolocation.
    */
-  ship_to_address: RolesAPI.Address | null;
+  ship_to_address: APIKeysAPI.Address | null;
 
   /**
    * Account status code.
@@ -861,7 +515,7 @@ export interface Customer {
   /**
    * Account group resource.
    */
-  type: ActionsAPI.AccountGroup | null;
+  type: AccountGroupsAPI.AccountGroup | null;
 
   /**
    * Last updated timestamp.
@@ -906,22 +560,22 @@ export interface CustomerDefaults {
   /**
    * Payment term resource.
    */
-  payment_term: PaymentTermsAPI.PaymentTerm | null;
+  payment_term: PaymentTerm | null;
 
   /**
    * Priority level used by sales orders and picks.
    */
-  priority: ActionsAPI.Priority | null;
+  priority: PrioritiesAPI.Priority | null;
 
   /**
    * Account user with profile, role, and department.
    */
-  sales_rep: AccountUsersAPI.AccountUser | null;
+  sales_rep: AccountUser | null;
 
   /**
    * ShippingTerm resource.
    */
-  shipping_term: ShippingTermsAPI.ShippingTerm | null;
+  shipping_term: ShippingTerm | null;
 }
 
 /**
@@ -941,7 +595,7 @@ export interface CustomerFreightPreferences {
   /**
    * Carrier resource.
    */
-  carrier: CarriersAPI.Carrier | null;
+  carrier: Carrier | null;
 
   /**
    * Resource type identifier.
@@ -951,7 +605,7 @@ export interface CustomerFreightPreferences {
   /**
    * Shipping service level for a carrier.
    */
-  service_level: ServiceLevelsAPI.ServiceLevel | null;
+  service_level: ServiceLevel | null;
 
   /**
    * Freight policy.
@@ -991,12 +645,12 @@ export interface Department {
   /**
    * Location resource.
    */
-  location: AccountUsersAPI.Location | null;
+  location: Location | null;
 
   /**
    * List represents a paginated list of resources.
    */
-  machines: AccountUsersAPI.ListMachine | null;
+  machines: ListMachine | null;
 
   /**
    * Display name.
@@ -1016,222 +670,12 @@ export interface Department {
   /**
    * List represents a paginated list of resources.
    */
-  scanning_stations: AccountUsersAPI.ListScanningStation | null;
+  scanning_stations: ListScanningStation | null;
 
   /**
    * Last update timestamp.
    */
   updated_at: string;
-}
-
-/**
- * Geolocation sub-resource.
- */
-export interface Geolocation {
-  /**
-   * Geolocation ID.
-   */
-  id: string;
-
-  /**
-   * Two-letter country code.
-   */
-  country: string;
-
-  /**
-   * City or locality.
-   */
-  locality: string | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'geolocation';
-
-  /**
-   * Postal or ZIP code.
-   */
-  postal_code: string | null;
-
-  /**
-   * State or administrative area.
-   */
-  state: string | null;
-
-  /**
-   * First line of the street address.
-   */
-  street_line_1: string | null;
-
-  /**
-   * Second line of the street address.
-   */
-  street_line_2: string | null;
-}
-
-/**
- * Item is an inventory item (product, material, or part).
- */
-export interface Item {
-  /**
-   * Item ID.
-   */
-  id: string;
-
-  /**
-   * List represents a paginated list of resources.
-   */
-  attributes: AccountUsersAPI.ListAttribute | null;
-
-  /**
-   * Rate resource.
-   */
-  burn_rate: AccountUsersAPI.Rate | null;
-
-  /**
-   * ItemCategory resource.
-   */
-  category: AccountUsersAPI.ItemCategory | null;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Item description.
-   */
-  description: string | null;
-
-  /**
-   * Notes.
-   */
-  notes: string | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'item';
-
-  /**
-   * Stock keeping unit code.
-   */
-  sku: string;
-
-  /**
-   * Item type code.
-   */
-  type: 'product' | 'material' | 'part';
-
-  /**
-   * Rate resource.
-   */
-  unit_cost: AccountUsersAPI.Rate | null;
-
-  /**
-   * Rate resource.
-   */
-  unit_value: AccountUsersAPI.Rate | null;
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
-}
-
-/**
- * ItemCategory resource.
- */
-export interface ItemCategory {
-  /**
-   * Item category ID.
-   */
-  id: string;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Display name.
-   */
-  name: string;
-
-  /**
-   * Notes.
-   */
-  notes: string | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'item_category';
-
-  /**
-   * Owner describes the provenance of a resource.
-   */
-  owner: RolesAPI.Owner | null;
-
-  /**
-   * List represents a paginated list of resources.
-   */
-  properties: AccountUsersAPI.ListProperty | null;
-
-  /**
-   * Item category type.
-   */
-  type: 'material_category' | 'product_category';
-
-  /**
-   * UnitGroup is a unit group resource.
-   */
-  unit_group: AccountUsersAPI.UnitGroup | null;
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
-}
-
-/**
- * List represents a paginated list of resources.
- */
-export interface ListAccountGroup {
-  /**
-   * Resources in this page.
-   */
-  data: Array<ActionsAPI.AccountGroup>;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'list';
-
-  /**
-   * PageInfo contains URL-based pagination metadata.
-   */
-  page_info: RolesAPI.PageInfo;
-}
-
-/**
- * List represents a paginated list of resources.
- */
-export interface ListAttribute {
-  /**
-   * Resources in this page.
-   */
-  data: Array<AccountUsersAPI.Attribute>;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'list';
-
-  /**
-   * PageInfo contains URL-based pagination metadata.
-   */
-  page_info: RolesAPI.PageInfo;
 }
 
 /**
@@ -1241,7 +685,7 @@ export interface ListConsumption {
   /**
    * Resources in this page.
    */
-  data: Array<AccountUsersAPI.Consumption>;
+  data: Array<Consumption>;
 
   /**
    * Resource type identifier.
@@ -1251,7 +695,7 @@ export interface ListConsumption {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: RolesAPI.PageInfo;
+  page_info: APIKeysAPI.PageInfo;
 }
 
 /**
@@ -1261,7 +705,7 @@ export interface ListCustomer {
   /**
    * Resources in this page.
    */
-  data: Array<ActionsAPI.Customer>;
+  data: Array<Customer>;
 
   /**
    * Resource type identifier.
@@ -1271,7 +715,7 @@ export interface ListCustomer {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: RolesAPI.PageInfo;
+  page_info: APIKeysAPI.PageInfo;
 }
 
 /**
@@ -1281,7 +725,7 @@ export interface ListLocation {
   /**
    * Resources in this page.
    */
-  data: Array<AccountUsersAPI.Location>;
+  data: Array<Location>;
 
   /**
    * Resource type identifier.
@@ -1291,7 +735,7 @@ export interface ListLocation {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: RolesAPI.PageInfo;
+  page_info: APIKeysAPI.PageInfo;
 }
 
 /**
@@ -1301,7 +745,7 @@ export interface ListMachine {
   /**
    * Resources in this page.
    */
-  data: Array<AccountUsersAPI.Machine>;
+  data: Array<Machine>;
 
   /**
    * Resource type identifier.
@@ -1311,7 +755,7 @@ export interface ListMachine {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: RolesAPI.PageInfo;
+  page_info: APIKeysAPI.PageInfo;
 }
 
 /**
@@ -1321,7 +765,7 @@ export interface ListProductionStep {
   /**
    * Resources in this page.
    */
-  data: Array<AccountUsersAPI.ProductionStep>;
+  data: Array<ProductionStep>;
 
   /**
    * Resource type identifier.
@@ -1331,27 +775,7 @@ export interface ListProductionStep {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: RolesAPI.PageInfo;
-}
-
-/**
- * List represents a paginated list of resources.
- */
-export interface ListProperty {
-  /**
-   * Resources in this page.
-   */
-  data: Array<AccountUsersAPI.Property>;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'list';
-
-  /**
-   * PageInfo contains URL-based pagination metadata.
-   */
-  page_info: RolesAPI.PageInfo;
+  page_info: APIKeysAPI.PageInfo;
 }
 
 /**
@@ -1361,7 +785,7 @@ export interface ListScanningStation {
   /**
    * Resources in this page.
    */
-  data: Array<AccountUsersAPI.ScanningStation>;
+  data: Array<ScanningStation>;
 
   /**
    * Resource type identifier.
@@ -1371,7 +795,7 @@ export interface ListScanningStation {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: RolesAPI.PageInfo;
+  page_info: APIKeysAPI.PageInfo;
 }
 
 /**
@@ -1381,7 +805,7 @@ export interface ListServiceLevel {
   /**
    * Resources in this page.
    */
-  data: Array<ServiceLevelsAPI.ServiceLevel>;
+  data: Array<ServiceLevel>;
 
   /**
    * Resource type identifier.
@@ -1391,27 +815,7 @@ export interface ListServiceLevel {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: RolesAPI.PageInfo;
-}
-
-/**
- * List represents a paginated list of resources.
- */
-export interface ListUnitGroupUnit {
-  /**
-   * Resources in this page.
-   */
-  data: Array<AccountUsersAPI.UnitGroupUnit>;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'list';
-
-  /**
-   * PageInfo contains URL-based pagination metadata.
-   */
-  page_info: RolesAPI.PageInfo;
+  page_info: APIKeysAPI.PageInfo;
 }
 
 /**
@@ -1426,7 +830,7 @@ export interface Location {
   /**
    * List represents a paginated list of resources.
    */
-  children: AccountUsersAPI.ListLocation | null;
+  children: ListLocation | null;
 
   /**
    * Creation timestamp.
@@ -1446,7 +850,7 @@ export interface Location {
   /**
    * Location resource.
    */
-  parent: AccountUsersAPI.Location | null;
+  parent: Location | null;
 
   /**
    * Location type code.
@@ -1476,7 +880,7 @@ export interface Machine {
   /**
    * Department resource.
    */
-  department: AccountUsersAPI.Department | null;
+  department: Department | null;
 
   /**
    * Display name.
@@ -1502,52 +906,6 @@ export interface Machine {
    * Last updated timestamp.
    */
   updated_at: string;
-}
-
-/**
- * Owner describes the provenance of a resource.
- */
-export interface Owner {
-  /**
-   * Account with optional branding and portal sub-resources.
-   */
-  account: RolesAPI.Account | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'owner';
-
-  /**
-   * The owner type: "system" for platform defaults, "account" for account-owned
-   * resources.
-   */
-  type: 'system' | 'account';
-}
-
-/**
- * PageInfo contains URL-based pagination metadata.
- */
-export interface PageInfo {
-  /**
-   * Whether more results exist after this page.
-   */
-  has_next_page: boolean;
-
-  /**
-   * Whether results exist before this page.
-   */
-  has_prev_page: boolean;
-
-  /**
-   * URL to fetch the next page, `null` if no more pages.
-   */
-  next_page_url: string | null;
-
-  /**
-   * URL to fetch the previous page, `null` if on the first page.
-   */
-  previous_page_url: string | null;
 }
 
 /**
@@ -1577,7 +935,7 @@ export interface PaymentTerm {
   /**
    * Owner describes the provenance of a resource.
    */
-  owner: RolesAPI.Owner | null;
+  owner: APIKeysAPI.Owner | null;
 
   /**
    * Payment term status.
@@ -1586,46 +944,6 @@ export interface PaymentTerm {
 
   /**
    * Last-updated timestamp.
-   */
-  updated_at: string;
-}
-
-/**
- * Priority level used by sales orders and picks.
- */
-export interface Priority {
-  /**
-   * Priority ID.
-   */
-  id: string;
-
-  /**
-   * Machine-readable code.
-   */
-  code: 'low' | 'normal' | 'high';
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Display name.
-   */
-  name: string;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'priority';
-
-  /**
-   * Owner describes the provenance of a resource.
-   */
-  owner: RolesAPI.Owner | null;
-
-  /**
-   * Last updated timestamp.
    */
   updated_at: string;
 }
@@ -1652,12 +970,12 @@ export interface ProductionOutput {
   /**
    * Item is an inventory item (product, material, or part).
    */
-  produced_item: AccountUsersAPI.Item | null;
+  produced_item: ItemsAPI.Item | null;
 
   /**
    * Value with an associated unit.
    */
-  quantity: AccountUsersAPI.Quantity | null;
+  quantity: ItemsAPI.Quantity | null;
 
   /**
    * Last updated timestamp.
@@ -1682,7 +1000,7 @@ export interface ProductionStep {
   /**
    * List represents a paginated list of resources.
    */
-  consumptions: AccountUsersAPI.ListConsumption | null;
+  consumptions: ListConsumption | null;
 
   /**
    * Creation timestamp.
@@ -1692,22 +1010,22 @@ export interface ProductionStep {
   /**
    * Department resource.
    */
-  department: AccountUsersAPI.Department | null;
+  department: Department | null;
 
   /**
    * List represents a paginated list of resources.
    */
-  in_steps: AccountUsersAPI.ListProductionStep | null;
+  in_steps: ListProductionStep | null;
 
   /**
    * Rate resource.
    */
-  labor_rate: AccountUsersAPI.Rate | null;
+  labor_rate: ItemsAPI.Rate | null;
 
   /**
    * Rate resource.
    */
-  labor_time: AccountUsersAPI.Rate | null;
+  labor_time: ItemsAPI.Rate | null;
 
   /**
    * Leveling factor as a decimal string.
@@ -1717,7 +1035,7 @@ export interface ProductionStep {
   /**
    * List represents a paginated list of resources.
    */
-  machines: AccountUsersAPI.ListMachine | null;
+  machines: ListMachine | null;
 
   /**
    * Display name.
@@ -1737,92 +1055,27 @@ export interface ProductionStep {
   /**
    * List represents a paginated list of resources.
    */
-  out_steps: AccountUsersAPI.ListProductionStep | null;
+  out_steps: ListProductionStep | null;
 
   /**
    * Rate resource.
    */
-  overhead_rate: AccountUsersAPI.Rate | null;
+  overhead_rate: ItemsAPI.Rate | null;
 
   /**
    * Production output of a production step.
    */
-  production: AccountUsersAPI.ProductionOutput | null;
+  production: ProductionOutput | null;
 
   /**
    * Scanning station resource.
    */
-  scanning_station: AccountUsersAPI.ScanningStation | null;
+  scanning_station: ScanningStation | null;
 
   /**
    * Last updated timestamp.
    */
   updated_at: string;
-}
-
-/**
- * Property that groups attributes.
- */
-export interface Property {
-  /**
-   * Property ID.
-   */
-  id: string;
-
-  /**
-   * List represents a paginated list of resources.
-   */
-  attributes: AccountUsersAPI.ListAttribute | null;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Display name.
-   */
-  name: string;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'property';
-
-  /**
-   * Last update timestamp.
-   */
-  updated_at: string;
-}
-
-/**
- * Value with an associated unit.
- */
-export interface Quantity {
-  /**
-   * Quantity ID.
-   */
-  id: string;
-
-  /**
-   * Formatted value with unit abbreviation (e.g. "$1,234.56" or "100 kg").
-   */
-  display_value: string;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'quantity';
-
-  /**
-   * Unit of measurement used for conversions and product quantities.
-   */
-  unit: AccountUsersAPI.Unit | null;
-
-  /**
-   * Decimal value.
-   */
-  value: string;
 }
 
 /**
@@ -1842,100 +1095,6 @@ export interface QuantityInput {
 }
 
 /**
- * Rate resource.
- */
-export interface Rate {
-  /**
-   * Rate ID.
-   */
-  id: string;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Unit of measurement used for conversions and product quantities.
-   */
-  denominator_unit: AccountUsersAPI.Unit | null;
-
-  /**
-   * Human-readable formatted value (e.g. "$25.50 / kg" or "100 kg / hr").
-   */
-  display_value: string;
-
-  /**
-   * Unit of measurement used for conversions and product quantities.
-   */
-  numerator_unit: AccountUsersAPI.Unit | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'rate';
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
-
-  /**
-   * Rate value as a decimal string.
-   */
-  value: string;
-}
-
-/**
- * Role resource.
- */
-export interface Role {
-  /**
-   * Role ID.
-   */
-  id: string;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Display name.
-   */
-  name: string;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'role';
-
-  /**
-   * Owner describes the provenance of a resource.
-   */
-  owner: RolesAPI.Owner | null;
-
-  /**
-   * Permissions in `{domain}:{action}` format.
-   */
-  permissions: Array<string> | null;
-
-  /**
-   * Role type code.
-   *
-   * The role's type is sometimes used to gate special behaviors in the frontend and
-   * to restrict some actions to only certain types of roles. For example, only roles
-   * with the type `admin` can create and manage API keys.
-   */
-  type: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent';
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
-}
-
-/**
  * Scanning station resource.
  */
 export interface ScanningStation {
@@ -1952,7 +1111,7 @@ export interface ScanningStation {
   /**
    * Department resource.
    */
-  department: AccountUsersAPI.Department | null;
+  department: Department | null;
 
   /**
    * Label size code.
@@ -1987,7 +1146,7 @@ export interface ScanningStation {
   /**
    * List represents a paginated list of resources.
    */
-  production_steps: AccountUsersAPI.ListProductionStep | null;
+  production_steps: ListProductionStep | null;
 
   /**
    * Scanning station type.
@@ -2037,7 +1196,7 @@ export interface ServiceLevel {
   /**
    * Owner describes the provenance of a resource.
    */
-  owner: RolesAPI.Owner | null;
+  owner: APIKeysAPI.Owner | null;
 
   /**
    * Service level token.
@@ -2067,17 +1226,17 @@ export interface ShippingTerm {
   /**
    * Value with an associated unit.
    */
-  flat_rate: AccountUsersAPI.Quantity | null;
+  flat_rate: ItemsAPI.Quantity | null;
 
   /**
    * List represents a paginated list of resources.
    */
-  free_shipping_service_levels: ServiceLevelsAPI.ListServiceLevel | null;
+  free_shipping_service_levels: ListServiceLevel | null;
 
   /**
    * Value with an associated unit.
    */
-  minimum_order_value: AccountUsersAPI.Quantity | null;
+  minimum_order_value: ItemsAPI.Quantity | null;
 
   /**
    * Display name.
@@ -2092,7 +1251,7 @@ export interface ShippingTerm {
   /**
    * Owner describes the provenance of a resource.
    */
-  owner: RolesAPI.Owner | null;
+  owner: APIKeysAPI.Owner | null;
 
   /**
    * Shipping term type.
@@ -2101,179 +1260,6 @@ export interface ShippingTerm {
 
   /**
    * When this shipping term was last updated.
-   */
-  updated_at: string;
-}
-
-/**
- * Unit of measurement used for conversions and product quantities.
- */
-export interface Unit {
-  /**
-   * Unit ID.
-   */
-  id: string;
-
-  /**
-   * Short abbreviation for the unit (e.g. "g", "kg").
-   */
-  abbreviation: string;
-
-  /**
-   * When this unit was created.
-   */
-  created_at: string;
-
-  /**
-   * Whether this is the base unit for its dimension. Conversion ratios are relative
-   * to this unit.
-   */
-  is_base_unit: boolean;
-
-  /**
-   * Display name of the unit (e.g. "Gram", "Kilogram").
-   */
-  name: string;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'unit';
-
-  /**
-   * Conversion offset denominator. Typically 1. Cannot be zero.
-   */
-  offset_denominator: string;
-
-  /**
-   * Conversion offset numerator, used for temperature-like conversions. Zero for
-   * most unit types.
-   */
-  offset_numerator: string;
-
-  /**
-   * Owner describes the provenance of a resource.
-   */
-  owner: RolesAPI.Owner | null;
-
-  /**
-   * Conversion ratio denominator relative to the base unit in the same dimension.
-   * Cannot be zero.
-   */
-  ratio_denominator: string;
-
-  /**
-   * Conversion ratio numerator relative to the base unit in the same dimension.
-   */
-  ratio_numerator: string;
-
-  /**
-   * Unit dimension.
-   */
-  type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area';
-
-  /**
-   * When this unit was last updated.
-   */
-  updated_at: string;
-}
-
-/**
- * UnitGroup is a unit group resource.
- */
-export interface UnitGroup {
-  /**
-   * Unit group ID.
-   */
-  id: string;
-
-  /**
-   * List represents a paginated list of resources.
-   */
-  associated_units: AccountUsersAPI.ListUnitGroupUnit | null;
-
-  /**
-   * Unit of measurement used for conversions and product quantities.
-   */
-  base_unit: AccountUsersAPI.Unit | null;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Display name.
-   */
-  name: string;
-
-  /**
-   * Notes.
-   */
-  notes: string | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'unit_group';
-
-  /**
-   * Owner describes the provenance of a resource.
-   */
-  owner: RolesAPI.Owner | null;
-
-  /**
-   * Unit type.
-   */
-  type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area';
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
-}
-
-/**
- * UnitGroupUnit is an associated unit within a unit group.
- */
-export interface UnitGroupUnit {
-  /**
-   * Unit group unit ID.
-   */
-  id: string;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Customer portal visibility.
-   */
-  customer_portal_visibility: 'visible' | 'hidden';
-
-  /**
-   * Fixed discount amount.
-   */
-  discount_fixed: number;
-
-  /**
-   * Discount percentage.
-   */
-  discount_percentage: number;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'unit_group_unit';
-
-  /**
-   * Unit of measurement used for conversions and product quantities.
-   */
-  unit: AccountUsersAPI.Unit | null;
-
-  /**
-   * Last updated timestamp.
    */
   updated_at: string;
 }
@@ -2306,7 +1292,7 @@ export interface UpdateCustomerRequest {
    * QuantityInput represents a value with an associated unit for create/update
    * requests.
    */
-  credit_limit?: ShippingTermsAPI.QuantityInput | null;
+  credit_limit?: QuantityInput | null;
 
   /**
    * Price group IDs. Replaces all existing price groups when provided.
@@ -2405,7 +1391,7 @@ export interface CustomerCreateParams {
   /**
    * Body param: Request to create an address.
    */
-  bill_to_address: AddressInput;
+  bill_to_address: AddressesAPI.AddressInput;
 
   /**
    * Body param: Customer type group ID.
@@ -2435,7 +1421,7 @@ export interface CustomerCreateParams {
   /**
    * Body param: Request to create an address.
    */
-  ship_to_address: AddressInput;
+  ship_to_address: AddressesAPI.AddressInput;
 
   /**
    * Query param: Sub-objects to expand in the response. When omitted, sub-objects
@@ -2480,7 +1466,7 @@ export interface CustomerCreateParams {
    * Body param: QuantityInput represents a value with an associated unit for
    * create/update requests.
    */
-  credit_limit?: ShippingTermsAPI.QuantityInput;
+  credit_limit?: QuantityInput;
 
   /**
    * Body param: Price group IDs.
@@ -2618,7 +1604,7 @@ export interface CustomerUpdateParams {
    * Body param: QuantityInput represents a value with an associated unit for
    * create/update requests.
    */
-  credit_limit?: ShippingTermsAPI.QuantityInput | null;
+  credit_limit?: QuantityInput | null;
 
   /**
    * Body param: Price group IDs. Replaces all existing price groups when provided.
@@ -2836,14 +1822,7 @@ Customers.Actions = Actions;
 
 export declare namespace Customers {
   export {
-    type Account as Account,
-    type AccountBranding as AccountBranding,
-    type AccountGroup as AccountGroup,
-    type AccountPortal as AccountPortal,
     type AccountUser as AccountUser,
-    type Address as Address,
-    type AddressInput as AddressInput,
-    type Attribute as Attribute,
     type Carrier as Carrier,
     type Consumption as Consumption,
     type CreateCustomerRequest as CreateCustomerRequest,
@@ -2853,39 +1832,22 @@ export declare namespace Customers {
     type CustomerFreightPreferences as CustomerFreightPreferences,
     type CustomerNotificationPreferences as CustomerNotificationPreferences,
     type Department as Department,
-    type Geolocation as Geolocation,
-    type Item as Item,
-    type ItemCategory as ItemCategory,
-    type ListAccountGroup as ListAccountGroup,
-    type ListAttribute as ListAttribute,
     type ListConsumption as ListConsumption,
     type ListCustomer as ListCustomer,
     type ListLocation as ListLocation,
     type ListMachine as ListMachine,
     type ListProductionStep as ListProductionStep,
-    type ListProperty as ListProperty,
     type ListScanningStation as ListScanningStation,
     type ListServiceLevel as ListServiceLevel,
-    type ListUnitGroupUnit as ListUnitGroupUnit,
     type Location as Location,
     type Machine as Machine,
-    type Owner as Owner,
-    type PageInfo as PageInfo,
     type PaymentTerm as PaymentTerm,
-    type Priority as Priority,
     type ProductionOutput as ProductionOutput,
     type ProductionStep as ProductionStep,
-    type Property as Property,
-    type Quantity as Quantity,
     type QuantityInput as QuantityInput,
-    type Rate as Rate,
-    type Role as Role,
     type ScanningStation as ScanningStation,
     type ServiceLevel as ServiceLevel,
     type ShippingTerm as ShippingTerm,
-    type Unit as Unit,
-    type UnitGroup as UnitGroup,
-    type UnitGroupUnit as UnitGroupUnit,
     type UpdateCustomerRequest as UpdateCustomerRequest,
     type CustomerDeleteResponse as CustomerDeleteResponse,
     type CustomerCreateParams as CustomerCreateParams,

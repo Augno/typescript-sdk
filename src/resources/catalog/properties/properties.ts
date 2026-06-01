@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as RolesAPI from '../../identity/roles';
+import * as APIKeysAPI from '../../auth/api-keys/api-keys';
 import * as AttributesAPI from './attributes';
 import {
   AttributeCreateParams,
@@ -14,7 +14,6 @@ import {
   CreateAttributeRequest,
   UpdateAttributeRequest,
 } from './attributes';
-import * as AccountUsersAPI from '../../identity/account-users/account-users';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
@@ -35,7 +34,7 @@ export class Properties extends APIResource {
    * });
    * ```
    */
-  create(params: PropertyCreateParams, options?: RequestOptions): APIPromise<AccountUsersAPI.Property> {
+  create(params: PropertyCreateParams, options?: RequestOptions): APIPromise<Property> {
     const { include, ...body } = params;
     return this._client.post('/v1/catalog/properties', { query: { include }, body, ...options });
   }
@@ -54,7 +53,7 @@ export class Properties extends APIResource {
     id: string,
     query: PropertyRetrieveParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<AccountUsersAPI.Property> {
+  ): APIPromise<Property> {
     return this._client.get(path`/v1/catalog/properties/${id}`, { query, ...options });
   }
 
@@ -73,7 +72,7 @@ export class Properties extends APIResource {
     id: string,
     params: PropertyUpdateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<AccountUsersAPI.Property> {
+  ): APIPromise<Property> {
     const { include, ...body } = params ?? {};
     return this._client.patch(path`/v1/catalog/properties/${id}`, { query: { include }, body, ...options });
   }
@@ -89,7 +88,7 @@ export class Properties extends APIResource {
   list(
     query: PropertyListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<AccountUsersAPI.ListProperty> {
+  ): APIPromise<ListProperty> {
     return this._client.get('/v1/catalog/properties', { query, ...options });
   }
 
@@ -135,7 +134,7 @@ export interface Attribute {
   /**
    * Property that groups attributes.
    */
-  property: AccountUsersAPI.Property | null;
+  property: Property | null;
 
   /**
    * Display order.
@@ -170,7 +169,7 @@ export interface ListAttribute {
   /**
    * Resources in this page.
    */
-  data: Array<AccountUsersAPI.Attribute>;
+  data: Array<Attribute>;
 
   /**
    * Resource type identifier.
@@ -180,7 +179,7 @@ export interface ListAttribute {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: RolesAPI.PageInfo;
+  page_info: APIKeysAPI.PageInfo;
 }
 
 /**
@@ -190,7 +189,7 @@ export interface ListProperty {
   /**
    * Resources in this page.
    */
-  data: Array<AccountUsersAPI.Property>;
+  data: Array<Property>;
 
   /**
    * Resource type identifier.
@@ -200,32 +199,7 @@ export interface ListProperty {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: RolesAPI.PageInfo;
-}
-
-/**
- * PageInfo contains URL-based pagination metadata.
- */
-export interface PageInfo {
-  /**
-   * Whether more results exist after this page.
-   */
-  has_next_page: boolean;
-
-  /**
-   * Whether results exist before this page.
-   */
-  has_prev_page: boolean;
-
-  /**
-   * URL to fetch the next page, `null` if no more pages.
-   */
-  next_page_url: string | null;
-
-  /**
-   * URL to fetch the previous page, `null` if on the first page.
-   */
-  previous_page_url: string | null;
+  page_info: APIKeysAPI.PageInfo;
 }
 
 /**
@@ -240,7 +214,7 @@ export interface Property {
   /**
    * List represents a paginated list of resources.
    */
-  attributes: AccountUsersAPI.ListAttribute | null;
+  attributes: ListAttribute | null;
 
   /**
    * Creation timestamp.
@@ -340,7 +314,6 @@ export declare namespace Properties {
     type CreatePropertyRequest as CreatePropertyRequest,
     type ListAttribute as ListAttribute,
     type ListProperty as ListProperty,
-    type PageInfo as PageInfo,
     type Property as Property,
     type UpdatePropertyRequest as UpdatePropertyRequest,
     type PropertyDeleteResponse as PropertyDeleteResponse,

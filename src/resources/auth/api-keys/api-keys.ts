@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as RolesAPI from '../../identity/roles';
 import * as ActionsAPI from './actions';
 import { ActionRotateParams, Actions, RotateAPIKeyRequest } from './actions';
 import { APIPromise } from '../../../core/api-promise';
@@ -31,7 +30,7 @@ export class APIKeys extends APIResource {
    * });
    * ```
    */
-  create(params: APIKeyCreateParams, options?: RequestOptions): APIPromise<ActionsAPI.CreatedAPIKey> {
+  create(params: APIKeyCreateParams, options?: RequestOptions): APIPromise<CreatedAPIKey> {
     const { include, ...body } = params;
     return this._client.post('/v1/auth/api-keys', { query: { include }, body, ...options });
   }
@@ -50,7 +49,7 @@ export class APIKeys extends APIResource {
     id: string,
     query: APIKeyRetrieveParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ActionsAPI.APIKey> {
+  ): APIPromise<APIKey> {
     return this._client.get(path`/v1/auth/api-keys/${id}`, { query, ...options });
   }
 
@@ -95,7 +94,7 @@ export interface Account {
   /**
    * Branding metadata for an account.
    */
-  branding: RolesAPI.AccountBranding | null;
+  branding: AccountBranding | null;
 
   /**
    * Creation timestamp.
@@ -105,12 +104,12 @@ export interface Account {
   /**
    * Address with associated geolocation.
    */
-  default_billing_address: RolesAPI.Address | null;
+  default_billing_address: Address | null;
 
   /**
    * Address with associated geolocation.
    */
-  default_shipping_address: RolesAPI.Address | null;
+  default_shipping_address: Address | null;
 
   /**
    * Display name.
@@ -125,7 +124,7 @@ export interface Account {
   /**
    * Portal metadata for an account.
    */
-  portal: RolesAPI.AccountPortal | null;
+  portal: AccountPortal | null;
 
   /**
    * Last updated timestamp.
@@ -250,7 +249,7 @@ export interface Address {
   /**
    * Geolocation sub-resource.
    */
-  geolocation: RolesAPI.Geolocation | null;
+  geolocation: Geolocation | null;
 
   /**
    * Display name of the address.
@@ -325,7 +324,7 @@ export interface APIKey {
   /**
    * Role resource.
    */
-  role: RolesAPI.Role | null;
+  role: Role | null;
 
   /**
    * Last updated timestamp.
@@ -360,7 +359,7 @@ export interface CreatedAPIKey {
   /**
    * API key resource.
    */
-  api_key_info: ActionsAPI.APIKey;
+  api_key_info: APIKey;
 
   /**
    * Full secret value. Returned once and cannot be retrieved later. Learn more about
@@ -426,7 +425,7 @@ export interface ListAPIKey {
   /**
    * Resources in this page.
    */
-  data: Array<ActionsAPI.APIKey>;
+  data: Array<APIKey>;
 
   /**
    * Resource type identifier.
@@ -436,7 +435,7 @@ export interface ListAPIKey {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: RolesAPI.PageInfo;
+  page_info: PageInfo;
 }
 
 /**
@@ -446,7 +445,7 @@ export interface Owner {
   /**
    * Account with optional branding and portal sub-resources.
    */
-  account: RolesAPI.Account | null;
+  account: Account | null;
 
   /**
    * Resource type identifier.
@@ -512,7 +511,7 @@ export interface Role {
   /**
    * Owner describes the provenance of a resource.
    */
-  owner: RolesAPI.Owner | null;
+  owner: Owner | null;
 
   /**
    * Permissions in `{domain}:{action}` format.

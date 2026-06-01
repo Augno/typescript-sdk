@@ -2,18 +2,10 @@
 
 export {
   UnitGroups,
-  type Account,
-  type AccountBranding,
-  type AccountPortal,
-  type Address,
   type CreateUnitGroupRequest,
   type CreateUnitGroupUnitParam,
-  type Geolocation,
   type ListUnitGroup,
   type ListUnitGroupUnit,
-  type Owner,
-  type PageInfo,
-  type Unit,
   type UnitGroup,
   type UnitGroupUnit,
   type UpdateUnitGroupRequest,

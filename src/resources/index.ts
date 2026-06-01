@@ -5,17 +5,10 @@ export { Catalog } from './catalog/catalog';
 export { Core } from './core/core';
 export {
   Finance,
-  type Account,
-  type AccountBranding,
-  type AccountPortal,
-  type Address,
   type AdjustmentType,
-  type Geolocation,
   type ListAdjustmentType,
   type ListTransactionMethod,
   type ListTransactionType,
-  type Owner,
-  type PageInfo,
   type TransactionMethod,
   type TransactionType,
   type FinanceRetrieveAdjustmentTypesParams,

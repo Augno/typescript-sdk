@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as RolesAPI from '../../identity/roles';
+import * as APIKeysAPI from '../../auth/api-keys/api-keys';
 import * as ActionsAPI from './actions';
 import {
   ActionValidateParams,
@@ -85,32 +85,7 @@ export interface ListAddressSuggestion {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: RolesAPI.PageInfo;
-}
-
-/**
- * PageInfo contains URL-based pagination metadata.
- */
-export interface PageInfo {
-  /**
-   * Whether more results exist after this page.
-   */
-  has_next_page: boolean;
-
-  /**
-   * Whether results exist before this page.
-   */
-  has_prev_page: boolean;
-
-  /**
-   * URL to fetch the next page, `null` if no more pages.
-   */
-  next_page_url: string | null;
-
-  /**
-   * URL to fetch the previous page, `null` if on the first page.
-   */
-  previous_page_url: string | null;
+  page_info: APIKeysAPI.PageInfo;
 }
 
 export interface AddressRetrieveSuggestionsParams {
@@ -131,7 +106,6 @@ export declare namespace Addresses {
   export {
     type AddressSuggestion as AddressSuggestion,
     type ListAddressSuggestion as ListAddressSuggestion,
-    type PageInfo as PageInfo,
     type AddressRetrieveSuggestionsParams as AddressRetrieveSuggestionsParams,
   };
 
