@@ -155,11 +155,6 @@ export interface CreateProductRequest {
   attribute_ids?: Array<string>;
 
   /**
-   * Initial burn rate (waste / scrap). No currency requirement.
-   */
-  burn_rate?: MaterialsAPI.RateInput | null;
-
-  /**
    * Description.
    */
   description?: string | null;
@@ -329,11 +324,6 @@ export interface ProductCreateParams {
    * Body param: Attribute IDs to connect to the product at creation time.
    */
   attribute_ids?: Array<string>;
-
-  /**
-   * Body param: Initial burn rate (waste / scrap). No currency requirement.
-   */
-  burn_rate?: MaterialsAPI.RateInput | null;
 
   /**
    * Body param: Description.

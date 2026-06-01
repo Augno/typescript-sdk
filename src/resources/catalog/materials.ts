@@ -115,11 +115,6 @@ export interface CreateMaterialRequest {
   attribute_ids?: Array<string>;
 
   /**
-   * Initial burn rate (waste / scrap). No currency requirement.
-   */
-  burn_rate?: RateInput | null;
-
-  /**
    * Description.
    */
   description?: string | null;
@@ -308,11 +303,6 @@ export interface MaterialCreateParams {
    * Body param: Attribute IDs to connect to the material at creation time.
    */
   attribute_ids?: Array<string>;
-
-  /**
-   * Body param: Initial burn rate (waste / scrap). No currency requirement.
-   */
-  burn_rate?: RateInput | null;
 
   /**
    * Body param: Description.
