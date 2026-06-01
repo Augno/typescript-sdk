@@ -29,6 +29,7 @@ fi
 # this converts the export map paths for the dist directory
 # and does a few other minor things
 node scripts/utils/make-dist-package-json.cjs > dist/package.json
+cp .npmrc dist/.npmrc
 
 # build to .js/.mjs/.d.ts files
 ./node_modules/.bin/tsc-multi
