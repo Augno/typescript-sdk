@@ -24,7 +24,4 @@ if (pkgJson.publishConfig) {
   delete pkgJson.publishConfig.directory;
 }
 
-// The dist tarball is published from dist/, so include all built artifacts.
-pkgJson.files = ['**/*', '!.npmrc'];
-
 console.log(JSON.stringify(pkgJson, null, 2));
