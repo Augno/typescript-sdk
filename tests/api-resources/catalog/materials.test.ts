@@ -7,11 +7,11 @@ const client = new Augno({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource parts', () => {
+describe('resource materials', () => {
   test('create: only required params', async () => {
-    const responsePromise = client.catalog.parts.create({
-      category_id: 'ic_01jm4r6700f8nwq3v5hx2d9ktp',
-      sku: 'BRG-6204-2RS',
+    const responsePromise = client.catalog.materials.create({
+      category_id: 'ic_01ae7bd7bfd21ca0ab81e1357e',
+      sku: 'MAT-001',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -23,9 +23,9 @@ describe('resource parts', () => {
   });
 
   test('create: required and optional params', async () => {
-    const response = await client.catalog.parts.create({
-      category_id: 'ic_01jm4r6700f8nwq3v5hx2d9ktp',
-      sku: 'BRG-6204-2RS',
+    const response = await client.catalog.materials.create({
+      category_id: 'ic_01ae7bd7bfd21ca0ab81e1357e',
+      sku: 'MAT-001',
       include: ['item'],
       attribute_ids: ['string'],
       burn_rate: {
@@ -34,7 +34,9 @@ describe('resource parts', () => {
         value: 'value',
       },
       description: 'description',
+      lead_time: { unit_id: 'unit_id', value: 'value' },
       notes: 'notes',
+      order_point: { unit_id: 'unit_id', value: 'value' },
       unit_cost: {
         denominator_unit_id: 'denominator_unit_id',
         numerator_unit_id: 'numerator_unit_id',
@@ -49,7 +51,7 @@ describe('resource parts', () => {
   });
 
   test('retrieve', async () => {
-    const responsePromise = client.catalog.parts.retrieve('pt_02kn5s7811g9qwce7cizr4e0mq');
+    const responsePromise = client.catalog.materials.retrieve('ml_014613b8f7959a091d8cc0cef4');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -62,8 +64,8 @@ describe('resource parts', () => {
   test('retrieve: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.catalog.parts.retrieve(
-        'pt_02kn5s7811g9qwce7cizr4e0mq',
+      client.catalog.materials.retrieve(
+        'ml_014613b8f7959a091d8cc0cef4',
         { include: ['item'] },
         { path: '/_stainless_unknown_path' },
       ),
@@ -71,7 +73,7 @@ describe('resource parts', () => {
   });
 
   test('update', async () => {
-    const responsePromise = client.catalog.parts.update('pt_02kn5s7811g9qwce7cizr4e0mq');
+    const responsePromise = client.catalog.materials.update('ml_014613b8f7959a091d8cc0cef4');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -84,13 +86,20 @@ describe('resource parts', () => {
   test('update: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.catalog.parts.update(
-        'pt_02kn5s7811g9qwce7cizr4e0mq',
+      client.catalog.materials.update(
+        'ml_014613b8f7959a091d8cc0cef4',
         {
           include: ['item'],
           description: 'description',
+          lead_time: { unit_id: 'unit_id', value: 'value' },
           notes: 'notes',
-          sku: 'BRG-6204-2RS',
+          order_point: { unit_id: 'unit_id', value: 'value' },
+          sku: 'MAT-001-UPDATED',
+          unit_cost: {
+            denominator_unit_id: 'denominator_unit_id',
+            numerator_unit_id: 'numerator_unit_id',
+            value: 'value',
+          },
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -98,7 +107,7 @@ describe('resource parts', () => {
   });
 
   test('list', async () => {
-    const responsePromise = client.catalog.parts.list();
+    const responsePromise = client.catalog.materials.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -111,7 +120,7 @@ describe('resource parts', () => {
   test('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.catalog.parts.list(
+      client.catalog.materials.list(
         {
           attribute_ids: ['string'],
           category_ids: ['string'],
@@ -128,7 +137,7 @@ describe('resource parts', () => {
   });
 
   test('delete', async () => {
-    const responsePromise = client.catalog.parts.delete('pt_02kn5s7811g9qwce7cizr4e0mq');
+    const responsePromise = client.catalog.materials.delete('ml_014613b8f7959a091d8cc0cef4');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

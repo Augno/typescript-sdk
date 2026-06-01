@@ -1,13 +1,14 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as AgentsAPI from '../../ai/agents';
+import * as RolesAPI from '../../identity/roles';
 import * as ActionsAPI from './actions';
 import {
-  ActionUpdateValidateParams,
-  ActionUpdateValidateResponse,
+  ActionValidateParams,
   Actions,
   AddressComponents,
+  ValidateAddressRequest,
+  ValidatedAddress,
 } from './actions';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
@@ -23,7 +24,7 @@ export class Addresses extends APIResource {
    *
    * @example
    * ```ts
-   * const response =
+   * const listAddressSuggestion =
    *   await client.core.addresses.retrieveSuggestions({
    *     input: 'input',
    *   });
@@ -32,19 +33,49 @@ export class Addresses extends APIResource {
   retrieveSuggestions(
     query: AddressRetrieveSuggestionsParams,
     options?: RequestOptions,
-  ): APIPromise<AddressRetrieveSuggestionsResponse> {
+  ): APIPromise<ListAddressSuggestion> {
     return this._client.get('/v1/core/addresses/suggestions', { query, ...options });
   }
 }
 
 /**
+ * Autocomplete address suggestion.
+ */
+export interface AddressSuggestion {
+  /**
+   * Address suggestion ID.
+   */
+  id: string;
+
+  /**
+   * Full description of the address.
+   */
+  description: string;
+
+  /**
+   * Main text (typically the street address).
+   */
+  main_text: string;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'address_suggestion';
+
+  /**
+   * Secondary text (typically city, state, country).
+   */
+  secondary_text: string;
+}
+
+/**
  * List represents a paginated list of resources.
  */
-export interface AddressRetrieveSuggestionsResponse {
+export interface ListAddressSuggestion {
   /**
    * Resources in this page.
    */
-  data: Array<AddressRetrieveSuggestionsResponse.Data>;
+  data: Array<AddressSuggestion>;
 
   /**
    * Resource type identifier.
@@ -54,39 +85,32 @@ export interface AddressRetrieveSuggestionsResponse {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: AgentsAPI.PageInfo;
+  page_info: RolesAPI.PageInfo;
 }
 
-export namespace AddressRetrieveSuggestionsResponse {
+/**
+ * PageInfo contains URL-based pagination metadata.
+ */
+export interface PageInfo {
   /**
-   * Autocomplete address suggestion.
+   * Whether more results exist after this page.
    */
-  export interface Data {
-    /**
-     * Address suggestion ID.
-     */
-    id: string;
+  has_next_page: boolean;
 
-    /**
-     * Full description of the address.
-     */
-    description: string;
+  /**
+   * Whether results exist before this page.
+   */
+  has_prev_page: boolean;
 
-    /**
-     * Main text (typically the street address).
-     */
-    main_text: string;
+  /**
+   * URL to fetch the next page, `null` if no more pages.
+   */
+  next_page_url: string | null;
 
-    /**
-     * Resource type identifier.
-     */
-    object: 'address_suggestion';
-
-    /**
-     * Secondary text (typically city, state, country).
-     */
-    secondary_text: string;
-  }
+  /**
+   * URL to fetch the previous page, `null` if on the first page.
+   */
+  previous_page_url: string | null;
 }
 
 export interface AddressRetrieveSuggestionsParams {
@@ -105,14 +129,17 @@ Addresses.Actions = Actions;
 
 export declare namespace Addresses {
   export {
-    type AddressRetrieveSuggestionsResponse as AddressRetrieveSuggestionsResponse,
+    type AddressSuggestion as AddressSuggestion,
+    type ListAddressSuggestion as ListAddressSuggestion,
+    type PageInfo as PageInfo,
     type AddressRetrieveSuggestionsParams as AddressRetrieveSuggestionsParams,
   };
 
   export {
     Actions as Actions,
     type AddressComponents as AddressComponents,
-    type ActionUpdateValidateResponse as ActionUpdateValidateResponse,
-    type ActionUpdateValidateParams as ActionUpdateValidateParams,
+    type ValidateAddressRequest as ValidateAddressRequest,
+    type ValidatedAddress as ValidatedAddress,
+    type ActionValidateParams as ActionValidateParams,
   };
 }

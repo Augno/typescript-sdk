@@ -16,27 +16,30 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Healthz } from './resources/healthz';
-import { Webhooks } from './resources/webhooks';
-import { AI } from './resources/ai/ai';
 import { Auth } from './resources/auth/auth';
-import { Billing } from './resources/billing/billing';
 import { Catalog } from './resources/catalog/catalog';
 import { Core } from './resources/core/core';
 import {
+  Account,
+  AccountBranding,
+  AccountPortal,
+  Address,
   AdjustmentType,
   Finance,
   FinanceRetrieveAdjustmentTypesParams,
-  FinanceRetrieveAdjustmentTypesResponse,
   FinanceRetrieveTransactionMethodsParams,
-  FinanceRetrieveTransactionMethodsResponse,
   FinanceRetrieveTransactionTypesParams,
-  FinanceRetrieveTransactionTypesResponse,
+  Geolocation,
+  ListAdjustmentType,
+  ListTransactionMethod,
+  ListTransactionType,
+  Owner,
+  PageInfo,
   TransactionMethod,
   TransactionType,
 } from './resources/finance/finance';
 import { Identity } from './resources/identity/identity';
-import { Operations, Rate } from './resources/operations/operations';
+import { Operations } from './resources/operations/operations';
 import { Sales } from './resources/sales/sales';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -773,67 +776,58 @@ export class Augno {
 
   static toFile = Uploads.toFile;
 
-  healthz: API.Healthz = new API.Healthz(this);
-  ai: API.AI = new API.AI(this);
   auth: API.Auth = new API.Auth(this);
-  billing: API.Billing = new API.Billing(this);
-  catalog: API.Catalog = new API.Catalog(this);
   core: API.Core = new API.Core(this);
+  catalog: API.Catalog = new API.Catalog(this);
+  sales: API.Sales = new API.Sales(this);
   /**
    * Create, view, update, and delete transactions.
    */
   finance: API.Finance = new API.Finance(this);
-  identity: API.Identity = new API.Identity(this);
   operations: API.Operations = new API.Operations(this);
-  sales: API.Sales = new API.Sales(this);
-  webhooks: API.Webhooks = new API.Webhooks(this);
+  identity: API.Identity = new API.Identity(this);
 }
 
-Augno.Healthz = Healthz;
-Augno.AI = AI;
 Augno.Auth = Auth;
-Augno.Billing = Billing;
-Augno.Catalog = Catalog;
 Augno.Core = Core;
-Augno.Finance = Finance;
-Augno.Identity = Identity;
-Augno.Operations = Operations;
+Augno.Catalog = Catalog;
 Augno.Sales = Sales;
-Augno.Webhooks = Webhooks;
+Augno.Finance = Finance;
+Augno.Operations = Operations;
+Augno.Identity = Identity;
 
 export declare namespace Augno {
   export type RequestOptions = Opts.RequestOptions;
 
-  export { Healthz as Healthz };
-
-  export { AI as AI };
-
   export { Auth as Auth };
-
-  export { Billing as Billing };
-
-  export { Catalog as Catalog };
 
   export { Core as Core };
 
+  export { Catalog as Catalog };
+
+  export { Sales as Sales };
+
   export {
     Finance as Finance,
+    type Account as Account,
+    type AccountBranding as AccountBranding,
+    type AccountPortal as AccountPortal,
+    type Address as Address,
     type AdjustmentType as AdjustmentType,
+    type Geolocation as Geolocation,
+    type ListAdjustmentType as ListAdjustmentType,
+    type ListTransactionMethod as ListTransactionMethod,
+    type ListTransactionType as ListTransactionType,
+    type Owner as Owner,
+    type PageInfo as PageInfo,
     type TransactionMethod as TransactionMethod,
     type TransactionType as TransactionType,
-    type FinanceRetrieveAdjustmentTypesResponse as FinanceRetrieveAdjustmentTypesResponse,
-    type FinanceRetrieveTransactionMethodsResponse as FinanceRetrieveTransactionMethodsResponse,
-    type FinanceRetrieveTransactionTypesResponse as FinanceRetrieveTransactionTypesResponse,
     type FinanceRetrieveAdjustmentTypesParams as FinanceRetrieveAdjustmentTypesParams,
     type FinanceRetrieveTransactionMethodsParams as FinanceRetrieveTransactionMethodsParams,
     type FinanceRetrieveTransactionTypesParams as FinanceRetrieveTransactionTypesParams,
   };
 
+  export { Operations as Operations };
+
   export { Identity as Identity };
-
-  export { Operations as Operations, type Rate as Rate };
-
-  export { Sales as Sales };
-
-  export { Webhooks as Webhooks };
 }

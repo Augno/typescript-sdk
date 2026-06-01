@@ -7,16 +7,11 @@ const client = new Augno({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource units', () => {
+describe('resource parts', () => {
   test('create: only required params', async () => {
-    const responsePromise = client.catalog.units.create({
-      abbreviation: 'g',
-      name: 'Gram',
-      offset_denominator: '1',
-      offset_numerator: '0',
-      ratio_denominator: '1',
-      ratio_numerator: '1',
-      type: 'mass',
+    const responsePromise = client.catalog.parts.create({
+      category_id: 'ic_01ae7bd7bfd21ca0ab81e1357e',
+      sku: 'BRG-6204-2RS',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -28,20 +23,33 @@ describe('resource units', () => {
   });
 
   test('create: required and optional params', async () => {
-    const response = await client.catalog.units.create({
-      abbreviation: 'g',
-      name: 'Gram',
-      offset_denominator: '1',
-      offset_numerator: '0',
-      ratio_denominator: '1',
-      ratio_numerator: '1',
-      type: 'mass',
-      include: ['owner'],
+    const response = await client.catalog.parts.create({
+      category_id: 'ic_01ae7bd7bfd21ca0ab81e1357e',
+      sku: 'BRG-6204-2RS',
+      include: ['item'],
+      attribute_ids: ['string'],
+      burn_rate: {
+        denominator_unit_id: 'denominator_unit_id',
+        numerator_unit_id: 'numerator_unit_id',
+        value: 'value',
+      },
+      description: 'description',
+      notes: 'notes',
+      unit_cost: {
+        denominator_unit_id: 'denominator_unit_id',
+        numerator_unit_id: 'numerator_unit_id',
+        value: 'value',
+      },
+      unit_price: {
+        denominator_unit_id: 'denominator_unit_id',
+        numerator_unit_id: 'numerator_unit_id',
+        value: 'value',
+      },
     });
   });
 
   test('retrieve', async () => {
-    const responsePromise = client.catalog.units.retrieve('un_01jm4r6700f8nwq3v5hx2d9ktp');
+    const responsePromise = client.catalog.parts.retrieve('pt_018d7bab53e864351f4c693a21');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -54,16 +62,16 @@ describe('resource units', () => {
   test('retrieve: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.catalog.units.retrieve(
-        'un_01jm4r6700f8nwq3v5hx2d9ktp',
-        { include: ['owner'] },
+      client.catalog.parts.retrieve(
+        'pt_018d7bab53e864351f4c693a21',
+        { include: ['item'] },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Augno.NotFoundError);
   });
 
   test('update', async () => {
-    const responsePromise = client.catalog.units.update('un_01jm4r6700f8nwq3v5hx2d9ktp');
+    const responsePromise = client.catalog.parts.update('pt_018d7bab53e864351f4c693a21');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -76,16 +84,13 @@ describe('resource units', () => {
   test('update: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.catalog.units.update(
-        'un_01jm4r6700f8nwq3v5hx2d9ktp',
+      client.catalog.parts.update(
+        'pt_018d7bab53e864351f4c693a21',
         {
-          include: ['owner'],
-          abbreviation: 'kg',
-          name: 'Kilogram',
-          offset_denominator: 'offset_denominator',
-          offset_numerator: 'offset_numerator',
-          ratio_denominator: 'ratio_denominator',
-          ratio_numerator: 'ratio_numerator',
+          include: ['item'],
+          description: 'description',
+          notes: 'notes',
+          sku: 'BRG-6204-2RS',
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -93,7 +98,7 @@ describe('resource units', () => {
   });
 
   test('list', async () => {
-    const responsePromise = client.catalog.units.list();
+    const responsePromise = client.catalog.parts.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -106,14 +111,16 @@ describe('resource units', () => {
   test('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.catalog.units.list(
+      client.catalog.parts.list(
         {
+          attribute_ids: ['string'],
+          category_ids: ['string'],
           cursor: 'cursor',
-          include: ['owner'],
+          end_date: '2019-12-27T18:11:19.117Z',
+          include: ['item'],
           limit: 0,
           q: 'q',
-          type: 'currency',
-          unit_group_ids: ['string'],
+          start_date: '2019-12-27T18:11:19.117Z',
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -121,7 +128,7 @@ describe('resource units', () => {
   });
 
   test('delete', async () => {
-    const responsePromise = client.catalog.units.delete('un_01jm4r6700f8nwq3v5hx2d9ktp');
+    const responsePromise = client.catalog.parts.delete('pt_018d7bab53e864351f4c693a21');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

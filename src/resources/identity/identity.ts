@@ -1,87 +1,143 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as AccountsAPI from './accounts';
-import { Account, Accounts } from './accounts';
-import * as ChildAccountsAPI from './child-accounts';
-import { ChildAccounts } from './child-accounts';
 import * as RolesAPI from './roles';
 import {
+  Account,
+  AccountBranding,
+  AccountPortal,
+  Address,
+  CreateRoleRequest,
+  Geolocation,
+  ListRole,
+  Owner,
+  PageInfo,
   Role,
   RoleCreateParams,
   RoleDeleteResponse,
   RoleListParams,
-  RoleListResponse,
   RoleRetrieveParams,
   RoleUpdateParams,
   Roles,
+  UpdateRoleRequest,
 } from './roles';
 import * as AccountUsersAPI from './account-users/account-users';
 import {
+  Account as AccountUsersAPIAccount,
+  AccountBranding as AccountUsersAPIAccountBranding,
+  AccountPortal as AccountUsersAPIAccountPortal,
   AccountUser,
-  AccountUserAccountUsersParams,
-  AccountUserRetrieveAccountUsersParams,
-  AccountUserRetrieveAccountUsersResponse,
+  AccountUserCreateParams,
+  AccountUserListParams,
   AccountUserRetrieveParams,
   AccountUserUpdateParams,
   AccountUsers,
+  Address as AccountUsersAPIAddress,
+  Attribute,
+  Consumption,
+  CreateAccountUserRequest,
+  Department,
+  Geolocation as AccountUsersAPIGeolocation,
+  Item,
+  ItemCategory,
+  ListAccountUser,
+  ListAttribute,
+  ListConsumption,
+  ListLocation,
+  ListMachine,
+  ListProductionStep,
+  ListProperty,
+  ListScanningStation,
+  ListUnitGroupUnit,
+  Location,
+  Machine,
   NotificationPreferenceItem,
+  Owner as AccountUsersAPIOwner,
+  PageInfo as AccountUsersAPIPageInfo,
+  ProductionOutput,
+  ProductionStep,
+  Property,
+  Quantity,
+  Rate,
+  Role as AccountUsersAPIRole,
+  ScanningStation,
+  Unit,
+  UnitGroup,
+  UnitGroupUnit,
+  UpdateAccountUserRequest,
 } from './account-users/account-users';
-import * as IntegrationsAPI from './integrations/integrations';
-import { Integrations } from './integrations/integrations';
-import * as MeAPI from './me/me';
-import { Me } from './me/me';
-import * as UsersAPI from './users/users';
-import { Users } from './users/users';
 
 export class Identity extends APIResource {
   accountUsers: AccountUsersAPI.AccountUsers = new AccountUsersAPI.AccountUsers(this._client);
-  accounts: AccountsAPI.Accounts = new AccountsAPI.Accounts(this._client);
-  childAccounts: ChildAccountsAPI.ChildAccounts = new ChildAccountsAPI.ChildAccounts(this._client);
-  integrations: IntegrationsAPI.Integrations = new IntegrationsAPI.Integrations(this._client);
-  me: MeAPI.Me = new MeAPI.Me(this._client);
   roles: RolesAPI.Roles = new RolesAPI.Roles(this._client);
-  users: UsersAPI.Users = new UsersAPI.Users(this._client);
 }
 
 Identity.AccountUsers = AccountUsers;
-Identity.Accounts = Accounts;
-Identity.ChildAccounts = ChildAccounts;
-Identity.Integrations = Integrations;
-Identity.Me = Me;
 Identity.Roles = Roles;
-Identity.Users = Users;
 
 export declare namespace Identity {
   export {
     AccountUsers as AccountUsers,
+    type AccountUsersAPIAccount as Account,
+    type AccountUsersAPIAccountBranding as AccountBranding,
+    type AccountUsersAPIAccountPortal as AccountPortal,
     type AccountUser as AccountUser,
+    type AccountUsersAPIAddress as Address,
+    type Attribute as Attribute,
+    type Consumption as Consumption,
+    type CreateAccountUserRequest as CreateAccountUserRequest,
+    type Department as Department,
+    type AccountUsersAPIGeolocation as Geolocation,
+    type Item as Item,
+    type ItemCategory as ItemCategory,
+    type ListAccountUser as ListAccountUser,
+    type ListAttribute as ListAttribute,
+    type ListConsumption as ListConsumption,
+    type ListLocation as ListLocation,
+    type ListMachine as ListMachine,
+    type ListProductionStep as ListProductionStep,
+    type ListProperty as ListProperty,
+    type ListScanningStation as ListScanningStation,
+    type ListUnitGroupUnit as ListUnitGroupUnit,
+    type Location as Location,
+    type Machine as Machine,
     type NotificationPreferenceItem as NotificationPreferenceItem,
-    type AccountUserRetrieveAccountUsersResponse as AccountUserRetrieveAccountUsersResponse,
+    type AccountUsersAPIOwner as Owner,
+    type AccountUsersAPIPageInfo as PageInfo,
+    type ProductionOutput as ProductionOutput,
+    type ProductionStep as ProductionStep,
+    type Property as Property,
+    type Quantity as Quantity,
+    type Rate as Rate,
+    type AccountUsersAPIRole as Role,
+    type ScanningStation as ScanningStation,
+    type Unit as Unit,
+    type UnitGroup as UnitGroup,
+    type UnitGroupUnit as UnitGroupUnit,
+    type UpdateAccountUserRequest as UpdateAccountUserRequest,
+    type AccountUserCreateParams as AccountUserCreateParams,
     type AccountUserRetrieveParams as AccountUserRetrieveParams,
     type AccountUserUpdateParams as AccountUserUpdateParams,
-    type AccountUserAccountUsersParams as AccountUserAccountUsersParams,
-    type AccountUserRetrieveAccountUsersParams as AccountUserRetrieveAccountUsersParams,
+    type AccountUserListParams as AccountUserListParams,
   };
-
-  export { Accounts as Accounts, type Account as Account };
-
-  export { ChildAccounts as ChildAccounts };
-
-  export { Integrations as Integrations };
-
-  export { Me as Me };
 
   export {
     Roles as Roles,
+    type Account as Account,
+    type AccountBranding as AccountBranding,
+    type AccountPortal as AccountPortal,
+    type Address as Address,
+    type CreateRoleRequest as CreateRoleRequest,
+    type Geolocation as Geolocation,
+    type ListRole as ListRole,
+    type Owner as Owner,
+    type PageInfo as PageInfo,
     type Role as Role,
-    type RoleListResponse as RoleListResponse,
+    type UpdateRoleRequest as UpdateRoleRequest,
     type RoleDeleteResponse as RoleDeleteResponse,
     type RoleCreateParams as RoleCreateParams,
     type RoleRetrieveParams as RoleRetrieveParams,
     type RoleUpdateParams as RoleUpdateParams,
     type RoleListParams as RoleListParams,
   };
-
-  export { Users as Users };
 }

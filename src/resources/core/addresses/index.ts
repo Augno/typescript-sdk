@@ -3,11 +3,14 @@
 export {
   Actions,
   type AddressComponents,
-  type ActionUpdateValidateResponse,
-  type ActionUpdateValidateParams,
+  type ValidateAddressRequest,
+  type ValidatedAddress,
+  type ActionValidateParams,
 } from './actions';
 export {
   Addresses,
-  type AddressRetrieveSuggestionsResponse,
+  type AddressSuggestion,
+  type ListAddressSuggestion,
+  type PageInfo,
   type AddressRetrieveSuggestionsParams,
 } from './addresses';

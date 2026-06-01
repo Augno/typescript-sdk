@@ -1,13 +1,31 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { Actions } from './actions';
 export { Attributes, type AttributeUpdateParams, type AttributeDeleteParams } from './attributes';
-export { Inventory, type InventoryListResponse, type InventoryListParams } from './inventory';
 export {
   Items,
+  type Account,
+  type AccountBranding,
+  type AccountPortal,
+  type Address,
+  type Attribute,
+  type Geolocation,
   type Item,
-  type ItemListResponse,
+  type ItemCategory,
+  type ItemInventory,
+  type ListAttribute,
+  type ListItem,
+  type ListProperty,
+  type ListUnitGroupUnit,
+  type Owner,
+  type PageInfo,
+  type Property,
+  type Quantity,
+  type Rate,
+  type Unit,
+  type UnitGroup,
+  type UnitGroupUnit,
   type ItemRetrieveParams,
-  type ItemUpdateParams,
   type ItemListParams,
+  type ItemChangeCategoryParams,
+  type ItemRetrieveInventoryParams,
 } from './items';

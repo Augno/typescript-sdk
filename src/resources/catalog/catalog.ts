@@ -1,210 +1,324 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as ProductLinesAPI from './product-lines';
+import * as MaterialsAPI from './materials';
 import {
-  ListProductLine,
-  ProductLine,
-  ProductLineDeleteResponse,
-  ProductLineProductLinesParams,
-  ProductLineRetrieveParams,
-  ProductLineRetrieveProductLinesParams,
-  ProductLineUpdateParams,
-  ProductLines,
-} from './product-lines';
-import * as ProductTypesAPI from './product-types';
-import { ProductTypes } from './product-types';
-import * as CatalogAPI from './catalog_/catalog_';
-import { Catalog as CatalogAPICatalog } from './catalog_/catalog_';
-import * as ItemCategoriesAPI from './item-categories/item-categories';
-import {
-  ItemCategories,
-  ItemCategory,
-  ItemCategoryDeleteResponse,
-  ItemCategoryItemCategoriesParams,
-  ItemCategoryRetrieveItemCategoriesParams,
-  ItemCategoryRetrieveParams,
-  ItemCategoryUpdateParams,
-  ListItemCategory,
-  Owner,
-} from './item-categories/item-categories';
-import * as ItemsAPI from './items/items';
-import {
+  Account,
+  AccountBranding,
+  AccountPortal,
+  Address,
+  Attribute,
+  CreateMaterialRequest,
+  Geolocation,
   Item,
-  ItemListParams,
-  ItemListResponse,
-  ItemRetrieveParams,
-  ItemUpdateParams,
-  Items,
-} from './items/items';
-import * as MaterialsAPI from './materials/materials';
-import {
+  ItemCategory,
+  ListAttribute,
+  ListMaterial,
+  ListProperty,
+  ListUnitGroupUnit,
   Material,
   MaterialCreateParams,
   MaterialListParams,
-  MaterialListResponse,
   MaterialRetrieveParams,
   MaterialUpdateParams,
   Materials,
+  Owner,
+  PageInfo,
+  Property,
+  Quantity,
   QuantityInputRequest,
+  Rate,
   RateInput,
-} from './materials/materials';
-import * as PartsAPI from './parts/parts';
+  Unit,
+  UnitGroup,
+  UnitGroupUnit,
+  UpdateMaterialRequest,
+} from './materials';
+import * as PartsAPI from './parts';
 import {
+  Account as PartsAPIAccount,
+  AccountBranding as PartsAPIAccountBranding,
+  AccountPortal as PartsAPIAccountPortal,
+  Address as PartsAPIAddress,
+  Attribute as PartsAPIAttribute,
+  CreatePartRequest,
+  Geolocation as PartsAPIGeolocation,
+  Item as PartsAPIItem,
+  ItemCategory as PartsAPIItemCategory,
+  ListAttribute as PartsAPIListAttribute,
+  ListPart,
+  ListProperty as PartsAPIListProperty,
+  ListUnitGroupUnit as PartsAPIListUnitGroupUnit,
+  Owner as PartsAPIOwner,
+  PageInfo as PartsAPIPageInfo,
   Part,
   PartCreateParams,
   PartListParams,
-  PartListResponse,
   PartRetrieveParams,
   PartUpdateParams,
   Parts,
-} from './parts/parts';
-import * as ProductsAPI from './products/products';
+  Property as PartsAPIProperty,
+  Rate as PartsAPIRate,
+  RateInput as PartsAPIRateInput,
+  Unit as PartsAPIUnit,
+  UnitGroup as PartsAPIUnitGroup,
+  UnitGroupUnit as PartsAPIUnitGroupUnit,
+  UpdatePartRequest,
+} from './parts';
+import * as ProductLinesAPI from './product-lines';
 import {
+  Account as ProductLinesAPIAccount,
+  AccountBranding as ProductLinesAPIAccountBranding,
+  AccountPortal as ProductLinesAPIAccountPortal,
+  Address as ProductLinesAPIAddress,
+  CreateProductLineRequest,
+  Geolocation as ProductLinesAPIGeolocation,
+  ListProductLine,
+  ListUnitGroupUnit as ProductLinesAPIListUnitGroupUnit,
+  Owner as ProductLinesAPIOwner,
+  PageInfo as ProductLinesAPIPageInfo,
+  ProductLine,
+  ProductLineCreateParams,
+  ProductLineDeleteResponse,
+  ProductLineListParams,
+  ProductLineRetrieveParams,
+  ProductLineUpdateParams,
+  ProductLines,
+  Unit as ProductLinesAPIUnit,
+  UnitGroup as ProductLinesAPIUnitGroup,
+  UnitGroupUnit as ProductLinesAPIUnitGroupUnit,
+  UpdateProductLineRequest,
+} from './product-lines';
+import * as ProductsAPI from './products';
+import {
+  Account as ProductsAPIAccount,
+  AccountBranding as ProductsAPIAccountBranding,
+  AccountPortal as ProductsAPIAccountPortal,
+  Address as ProductsAPIAddress,
+  Attribute as ProductsAPIAttribute,
+  CreateProductRequest,
+  Geolocation as ProductsAPIGeolocation,
+  Item as ProductsAPIItem,
+  ItemCategory as ProductsAPIItemCategory,
+  ListAttribute as ProductsAPIListAttribute,
+  ListProduct,
+  ListProperty as ProductsAPIListProperty,
+  ListUnitGroupUnit as ProductsAPIListUnitGroupUnit,
+  Owner as ProductsAPIOwner,
+  PageInfo as ProductsAPIPageInfo,
   Product,
+  ProductChangeProductLineParams,
   ProductCreateParams,
   ProductDeleteParams,
+  ProductLine as ProductsAPIProductLine,
   ProductListParams,
-  ProductListResponse,
   ProductRetrieveParams,
   ProductUpdateParams,
   Products,
-} from './products/products';
-import * as PropertiesAPI from './properties/properties';
+  Property as ProductsAPIProperty,
+  Rate as ProductsAPIRate,
+  RateInput as ProductsAPIRateInput,
+  Unit as ProductsAPIUnit,
+  UnitGroup as ProductsAPIUnitGroup,
+  UnitGroupUnit as ProductsAPIUnitGroupUnit,
+  UpdateProductRequest,
+} from './products';
+import * as UnitsAPI from './units';
 import {
-  ListProperty,
-  Properties,
-  Property,
-  PropertyCreateParams,
-  PropertyDeleteResponse,
-  PropertyListParams,
-  PropertyRetrieveParams,
-  PropertyUpdateParams,
-} from './properties/properties';
-import * as UnitGroupsAPI from './unit-groups/unit-groups';
-import {
-  CreateUnitGroupUnitParam,
-  UnitGroup,
-  UnitGroupDeleteResponse,
-  UnitGroupRetrieveParams,
-  UnitGroupRetrieveUnitGroupsParams,
-  UnitGroupRetrieveUnitGroupsResponse,
-  UnitGroupUnitGroupsParams,
-  UnitGroupUpdateParams,
-  UnitGroups,
-} from './unit-groups/unit-groups';
-import * as UnitsAPI from './units/units';
-import {
+  Account as UnitsAPIAccount,
+  AccountBranding as UnitsAPIAccountBranding,
+  AccountPortal as UnitsAPIAccountPortal,
+  Address as UnitsAPIAddress,
+  CreateUnitRequest,
+  Geolocation as UnitsAPIGeolocation,
   ListUnit,
-  Unit,
+  Owner as UnitsAPIOwner,
+  PageInfo as UnitsAPIPageInfo,
+  Unit as UnitsAPIUnit,
   UnitCreateParams,
   UnitDeleteResponse,
   UnitListParams,
   UnitRetrieveParams,
   UnitUpdateParams,
   Units,
-} from './units/units';
+  UpdateUnitRequest,
+} from './units';
+import * as ItemCategoriesAPI from './item-categories/item-categories';
+import {
+  Account as ItemCategoriesAPIAccount,
+  AccountBranding as ItemCategoriesAPIAccountBranding,
+  AccountPortal as ItemCategoriesAPIAccountPortal,
+  Address as ItemCategoriesAPIAddress,
+  Attribute as ItemCategoriesAPIAttribute,
+  CreateItemCategoryRequest,
+  Geolocation as ItemCategoriesAPIGeolocation,
+  ItemCategories,
+  ItemCategory as ItemCategoriesAPIItemCategory,
+  ItemCategoryChangeUnitGroupParams,
+  ItemCategoryChangeUnitGroupResponse,
+  ItemCategoryCreateParams,
+  ItemCategoryDeleteResponse,
+  ItemCategoryListParams,
+  ItemCategoryRetrieveParams,
+  ItemCategoryUpdateParams,
+  ListAttribute as ItemCategoriesAPIListAttribute,
+  ListItemCategory,
+  ListProperty as ItemCategoriesAPIListProperty,
+  ListUnitGroupUnit as ItemCategoriesAPIListUnitGroupUnit,
+  Owner as ItemCategoriesAPIOwner,
+  PageInfo as ItemCategoriesAPIPageInfo,
+  Property as ItemCategoriesAPIProperty,
+  Unit as ItemCategoriesAPIUnit,
+  UnitGroup as ItemCategoriesAPIUnitGroup,
+  UnitGroupUnit as ItemCategoriesAPIUnitGroupUnit,
+  UpdateItemCategoryRequest,
+} from './item-categories/item-categories';
+import * as ItemsAPI from './items/items';
+import {
+  Account as ItemsAPIAccount,
+  AccountBranding as ItemsAPIAccountBranding,
+  AccountPortal as ItemsAPIAccountPortal,
+  Address as ItemsAPIAddress,
+  Attribute as ItemsAPIAttribute,
+  Geolocation as ItemsAPIGeolocation,
+  Item as ItemsAPIItem,
+  ItemCategory as ItemsAPIItemCategory,
+  ItemChangeCategoryParams,
+  ItemInventory,
+  ItemListParams,
+  ItemRetrieveInventoryParams,
+  ItemRetrieveParams,
+  Items,
+  ListAttribute as ItemsAPIListAttribute,
+  ListItem,
+  ListProperty as ItemsAPIListProperty,
+  ListUnitGroupUnit as ItemsAPIListUnitGroupUnit,
+  Owner as ItemsAPIOwner,
+  PageInfo as ItemsAPIPageInfo,
+  Property as ItemsAPIProperty,
+  Quantity as ItemsAPIQuantity,
+  Rate as ItemsAPIRate,
+  Unit as ItemsAPIUnit,
+  UnitGroup as ItemsAPIUnitGroup,
+  UnitGroupUnit as ItemsAPIUnitGroupUnit,
+} from './items/items';
+import * as PropertiesAPI from './properties/properties';
+import {
+  Attribute as PropertiesAPIAttribute,
+  CreatePropertyRequest,
+  ListAttribute as PropertiesAPIListAttribute,
+  ListProperty as PropertiesAPIListProperty,
+  PageInfo as PropertiesAPIPageInfo,
+  Properties,
+  Property as PropertiesAPIProperty,
+  PropertyCreateParams,
+  PropertyDeleteResponse,
+  PropertyListParams,
+  PropertyRetrieveParams,
+  PropertyUpdateParams,
+  UpdatePropertyRequest,
+} from './properties/properties';
+import * as UnitGroupsAPI from './unit-groups/unit-groups';
+import {
+  Account as UnitGroupsAPIAccount,
+  AccountBranding as UnitGroupsAPIAccountBranding,
+  AccountPortal as UnitGroupsAPIAccountPortal,
+  Address as UnitGroupsAPIAddress,
+  CreateUnitGroupRequest,
+  CreateUnitGroupUnitParam,
+  Geolocation as UnitGroupsAPIGeolocation,
+  ListUnitGroup,
+  ListUnitGroupUnit as UnitGroupsAPIListUnitGroupUnit,
+  Owner as UnitGroupsAPIOwner,
+  PageInfo as UnitGroupsAPIPageInfo,
+  Unit as UnitGroupsAPIUnit,
+  UnitGroup as UnitGroupsAPIUnitGroup,
+  UnitGroupCreateParams,
+  UnitGroupDeleteResponse,
+  UnitGroupListParams,
+  UnitGroupRetrieveParams,
+  UnitGroupUnit as UnitGroupsAPIUnitGroupUnit,
+  UnitGroupUpdateParams,
+  UnitGroups,
+  UpdateUnitGroupRequest,
+} from './unit-groups/unit-groups';
 
 export class Catalog extends APIResource {
-  catalog: CatalogAPI.Catalog = new CatalogAPI.Catalog(this._client);
-  itemCategories: ItemCategoriesAPI.ItemCategories = new ItemCategoriesAPI.ItemCategories(this._client);
+  units: UnitsAPI.Units = new UnitsAPI.Units(this._client);
+  unitGroups: UnitGroupsAPI.UnitGroups = new UnitGroupsAPI.UnitGroups(this._client);
+  properties: PropertiesAPI.Properties = new PropertiesAPI.Properties(this._client);
   items: ItemsAPI.Items = new ItemsAPI.Items(this._client);
+  itemCategories: ItemCategoriesAPI.ItemCategories = new ItemCategoriesAPI.ItemCategories(this._client);
   materials: MaterialsAPI.Materials = new MaterialsAPI.Materials(this._client);
   parts: PartsAPI.Parts = new PartsAPI.Parts(this._client);
   productLines: ProductLinesAPI.ProductLines = new ProductLinesAPI.ProductLines(this._client);
-  productTypes: ProductTypesAPI.ProductTypes = new ProductTypesAPI.ProductTypes(this._client);
   products: ProductsAPI.Products = new ProductsAPI.Products(this._client);
-  properties: PropertiesAPI.Properties = new PropertiesAPI.Properties(this._client);
-  unitGroups: UnitGroupsAPI.UnitGroups = new UnitGroupsAPI.UnitGroups(this._client);
-  units: UnitsAPI.Units = new UnitsAPI.Units(this._client);
 }
 
-Catalog.Catalog = CatalogAPICatalog;
-Catalog.ItemCategories = ItemCategories;
+Catalog.Units = Units;
+Catalog.UnitGroups = UnitGroups;
+Catalog.Properties = Properties;
 Catalog.Items = Items;
+Catalog.ItemCategories = ItemCategories;
 Catalog.Materials = Materials;
 Catalog.Parts = Parts;
 Catalog.ProductLines = ProductLines;
-Catalog.ProductTypes = ProductTypes;
 Catalog.Products = Products;
-Catalog.Properties = Properties;
-Catalog.UnitGroups = UnitGroups;
-Catalog.Units = Units;
 
 export declare namespace Catalog {
-  export { CatalogAPICatalog as Catalog };
-
   export {
-    ItemCategories as ItemCategories,
-    type ItemCategory as ItemCategory,
-    type ListItemCategory as ListItemCategory,
-    type Owner as Owner,
-    type ItemCategoryDeleteResponse as ItemCategoryDeleteResponse,
-    type ItemCategoryRetrieveParams as ItemCategoryRetrieveParams,
-    type ItemCategoryUpdateParams as ItemCategoryUpdateParams,
-    type ItemCategoryItemCategoriesParams as ItemCategoryItemCategoriesParams,
-    type ItemCategoryRetrieveItemCategoriesParams as ItemCategoryRetrieveItemCategoriesParams,
+    Units as Units,
+    type UnitsAPIAccount as Account,
+    type UnitsAPIAccountBranding as AccountBranding,
+    type UnitsAPIAccountPortal as AccountPortal,
+    type UnitsAPIAddress as Address,
+    type CreateUnitRequest as CreateUnitRequest,
+    type UnitsAPIGeolocation as Geolocation,
+    type ListUnit as ListUnit,
+    type UnitsAPIOwner as Owner,
+    type UnitsAPIPageInfo as PageInfo,
+    type UnitsAPIUnit as Unit,
+    type UpdateUnitRequest as UpdateUnitRequest,
+    type UnitDeleteResponse as UnitDeleteResponse,
+    type UnitCreateParams as UnitCreateParams,
+    type UnitRetrieveParams as UnitRetrieveParams,
+    type UnitUpdateParams as UnitUpdateParams,
+    type UnitListParams as UnitListParams,
   };
 
   export {
-    Items as Items,
-    type Item as Item,
-    type ItemListResponse as ItemListResponse,
-    type ItemRetrieveParams as ItemRetrieveParams,
-    type ItemUpdateParams as ItemUpdateParams,
-    type ItemListParams as ItemListParams,
-  };
-
-  export {
-    Materials as Materials,
-    type Material as Material,
-    type QuantityInputRequest as QuantityInputRequest,
-    type RateInput as RateInput,
-    type MaterialListResponse as MaterialListResponse,
-    type MaterialCreateParams as MaterialCreateParams,
-    type MaterialRetrieveParams as MaterialRetrieveParams,
-    type MaterialUpdateParams as MaterialUpdateParams,
-    type MaterialListParams as MaterialListParams,
-  };
-
-  export {
-    Parts as Parts,
-    type Part as Part,
-    type PartListResponse as PartListResponse,
-    type PartCreateParams as PartCreateParams,
-    type PartRetrieveParams as PartRetrieveParams,
-    type PartUpdateParams as PartUpdateParams,
-    type PartListParams as PartListParams,
-  };
-
-  export {
-    ProductLines as ProductLines,
-    type ListProductLine as ListProductLine,
-    type ProductLine as ProductLine,
-    type ProductLineDeleteResponse as ProductLineDeleteResponse,
-    type ProductLineRetrieveParams as ProductLineRetrieveParams,
-    type ProductLineUpdateParams as ProductLineUpdateParams,
-    type ProductLineProductLinesParams as ProductLineProductLinesParams,
-    type ProductLineRetrieveProductLinesParams as ProductLineRetrieveProductLinesParams,
-  };
-
-  export { ProductTypes as ProductTypes };
-
-  export {
-    Products as Products,
-    type Product as Product,
-    type ProductListResponse as ProductListResponse,
-    type ProductCreateParams as ProductCreateParams,
-    type ProductRetrieveParams as ProductRetrieveParams,
-    type ProductUpdateParams as ProductUpdateParams,
-    type ProductListParams as ProductListParams,
-    type ProductDeleteParams as ProductDeleteParams,
+    UnitGroups as UnitGroups,
+    type UnitGroupsAPIAccount as Account,
+    type UnitGroupsAPIAccountBranding as AccountBranding,
+    type UnitGroupsAPIAccountPortal as AccountPortal,
+    type UnitGroupsAPIAddress as Address,
+    type CreateUnitGroupRequest as CreateUnitGroupRequest,
+    type CreateUnitGroupUnitParam as CreateUnitGroupUnitParam,
+    type UnitGroupsAPIGeolocation as Geolocation,
+    type ListUnitGroup as ListUnitGroup,
+    type UnitGroupsAPIListUnitGroupUnit as ListUnitGroupUnit,
+    type UnitGroupsAPIOwner as Owner,
+    type UnitGroupsAPIPageInfo as PageInfo,
+    type UnitGroupsAPIUnit as Unit,
+    type UnitGroupsAPIUnitGroup as UnitGroup,
+    type UnitGroupsAPIUnitGroupUnit as UnitGroupUnit,
+    type UpdateUnitGroupRequest as UpdateUnitGroupRequest,
+    type UnitGroupDeleteResponse as UnitGroupDeleteResponse,
+    type UnitGroupCreateParams as UnitGroupCreateParams,
+    type UnitGroupRetrieveParams as UnitGroupRetrieveParams,
+    type UnitGroupUpdateParams as UnitGroupUpdateParams,
+    type UnitGroupListParams as UnitGroupListParams,
   };
 
   export {
     Properties as Properties,
-    type ListProperty as ListProperty,
-    type Property as Property,
+    type PropertiesAPIAttribute as Attribute,
+    type CreatePropertyRequest as CreatePropertyRequest,
+    type PropertiesAPIListAttribute as ListAttribute,
+    type PropertiesAPIListProperty as ListProperty,
+    type PropertiesAPIPageInfo as PageInfo,
+    type PropertiesAPIProperty as Property,
+    type UpdatePropertyRequest as UpdatePropertyRequest,
     type PropertyDeleteResponse as PropertyDeleteResponse,
     type PropertyCreateParams as PropertyCreateParams,
     type PropertyRetrieveParams as PropertyRetrieveParams,
@@ -213,25 +327,183 @@ export declare namespace Catalog {
   };
 
   export {
-    UnitGroups as UnitGroups,
-    type CreateUnitGroupUnitParam as CreateUnitGroupUnitParam,
-    type UnitGroup as UnitGroup,
-    type UnitGroupDeleteResponse as UnitGroupDeleteResponse,
-    type UnitGroupRetrieveUnitGroupsResponse as UnitGroupRetrieveUnitGroupsResponse,
-    type UnitGroupRetrieveParams as UnitGroupRetrieveParams,
-    type UnitGroupUpdateParams as UnitGroupUpdateParams,
-    type UnitGroupRetrieveUnitGroupsParams as UnitGroupRetrieveUnitGroupsParams,
-    type UnitGroupUnitGroupsParams as UnitGroupUnitGroupsParams,
+    Items as Items,
+    type ItemsAPIAccount as Account,
+    type ItemsAPIAccountBranding as AccountBranding,
+    type ItemsAPIAccountPortal as AccountPortal,
+    type ItemsAPIAddress as Address,
+    type ItemsAPIAttribute as Attribute,
+    type ItemsAPIGeolocation as Geolocation,
+    type ItemsAPIItem as Item,
+    type ItemsAPIItemCategory as ItemCategory,
+    type ItemInventory as ItemInventory,
+    type ItemsAPIListAttribute as ListAttribute,
+    type ListItem as ListItem,
+    type ItemsAPIListProperty as ListProperty,
+    type ItemsAPIListUnitGroupUnit as ListUnitGroupUnit,
+    type ItemsAPIOwner as Owner,
+    type ItemsAPIPageInfo as PageInfo,
+    type ItemsAPIProperty as Property,
+    type ItemsAPIQuantity as Quantity,
+    type ItemsAPIRate as Rate,
+    type ItemsAPIUnit as Unit,
+    type ItemsAPIUnitGroup as UnitGroup,
+    type ItemsAPIUnitGroupUnit as UnitGroupUnit,
+    type ItemRetrieveParams as ItemRetrieveParams,
+    type ItemListParams as ItemListParams,
+    type ItemChangeCategoryParams as ItemChangeCategoryParams,
+    type ItemRetrieveInventoryParams as ItemRetrieveInventoryParams,
   };
 
   export {
-    Units as Units,
-    type ListUnit as ListUnit,
+    ItemCategories as ItemCategories,
+    type ItemCategoriesAPIAccount as Account,
+    type ItemCategoriesAPIAccountBranding as AccountBranding,
+    type ItemCategoriesAPIAccountPortal as AccountPortal,
+    type ItemCategoriesAPIAddress as Address,
+    type ItemCategoriesAPIAttribute as Attribute,
+    type CreateItemCategoryRequest as CreateItemCategoryRequest,
+    type ItemCategoriesAPIGeolocation as Geolocation,
+    type ItemCategoriesAPIItemCategory as ItemCategory,
+    type ItemCategoriesAPIListAttribute as ListAttribute,
+    type ListItemCategory as ListItemCategory,
+    type ItemCategoriesAPIListProperty as ListProperty,
+    type ItemCategoriesAPIListUnitGroupUnit as ListUnitGroupUnit,
+    type ItemCategoriesAPIOwner as Owner,
+    type ItemCategoriesAPIPageInfo as PageInfo,
+    type ItemCategoriesAPIProperty as Property,
+    type ItemCategoriesAPIUnit as Unit,
+    type ItemCategoriesAPIUnitGroup as UnitGroup,
+    type ItemCategoriesAPIUnitGroupUnit as UnitGroupUnit,
+    type UpdateItemCategoryRequest as UpdateItemCategoryRequest,
+    type ItemCategoryDeleteResponse as ItemCategoryDeleteResponse,
+    type ItemCategoryChangeUnitGroupResponse as ItemCategoryChangeUnitGroupResponse,
+    type ItemCategoryCreateParams as ItemCategoryCreateParams,
+    type ItemCategoryRetrieveParams as ItemCategoryRetrieveParams,
+    type ItemCategoryUpdateParams as ItemCategoryUpdateParams,
+    type ItemCategoryListParams as ItemCategoryListParams,
+    type ItemCategoryChangeUnitGroupParams as ItemCategoryChangeUnitGroupParams,
+  };
+
+  export {
+    Materials as Materials,
+    type Account as Account,
+    type AccountBranding as AccountBranding,
+    type AccountPortal as AccountPortal,
+    type Address as Address,
+    type Attribute as Attribute,
+    type CreateMaterialRequest as CreateMaterialRequest,
+    type Geolocation as Geolocation,
+    type Item as Item,
+    type ItemCategory as ItemCategory,
+    type ListAttribute as ListAttribute,
+    type ListMaterial as ListMaterial,
+    type ListProperty as ListProperty,
+    type ListUnitGroupUnit as ListUnitGroupUnit,
+    type Material as Material,
+    type Owner as Owner,
+    type PageInfo as PageInfo,
+    type Property as Property,
+    type Quantity as Quantity,
+    type QuantityInputRequest as QuantityInputRequest,
+    type Rate as Rate,
+    type RateInput as RateInput,
     type Unit as Unit,
-    type UnitDeleteResponse as UnitDeleteResponse,
-    type UnitCreateParams as UnitCreateParams,
-    type UnitRetrieveParams as UnitRetrieveParams,
-    type UnitUpdateParams as UnitUpdateParams,
-    type UnitListParams as UnitListParams,
+    type UnitGroup as UnitGroup,
+    type UnitGroupUnit as UnitGroupUnit,
+    type UpdateMaterialRequest as UpdateMaterialRequest,
+    type MaterialCreateParams as MaterialCreateParams,
+    type MaterialRetrieveParams as MaterialRetrieveParams,
+    type MaterialUpdateParams as MaterialUpdateParams,
+    type MaterialListParams as MaterialListParams,
+  };
+
+  export {
+    Parts as Parts,
+    type PartsAPIAccount as Account,
+    type PartsAPIAccountBranding as AccountBranding,
+    type PartsAPIAccountPortal as AccountPortal,
+    type PartsAPIAddress as Address,
+    type PartsAPIAttribute as Attribute,
+    type CreatePartRequest as CreatePartRequest,
+    type PartsAPIGeolocation as Geolocation,
+    type PartsAPIItem as Item,
+    type PartsAPIItemCategory as ItemCategory,
+    type PartsAPIListAttribute as ListAttribute,
+    type ListPart as ListPart,
+    type PartsAPIListProperty as ListProperty,
+    type PartsAPIListUnitGroupUnit as ListUnitGroupUnit,
+    type PartsAPIOwner as Owner,
+    type PartsAPIPageInfo as PageInfo,
+    type Part as Part,
+    type PartsAPIProperty as Property,
+    type PartsAPIRate as Rate,
+    type PartsAPIRateInput as RateInput,
+    type PartsAPIUnit as Unit,
+    type PartsAPIUnitGroup as UnitGroup,
+    type PartsAPIUnitGroupUnit as UnitGroupUnit,
+    type UpdatePartRequest as UpdatePartRequest,
+    type PartCreateParams as PartCreateParams,
+    type PartRetrieveParams as PartRetrieveParams,
+    type PartUpdateParams as PartUpdateParams,
+    type PartListParams as PartListParams,
+  };
+
+  export {
+    ProductLines as ProductLines,
+    type ProductLinesAPIAccount as Account,
+    type ProductLinesAPIAccountBranding as AccountBranding,
+    type ProductLinesAPIAccountPortal as AccountPortal,
+    type ProductLinesAPIAddress as Address,
+    type CreateProductLineRequest as CreateProductLineRequest,
+    type ProductLinesAPIGeolocation as Geolocation,
+    type ListProductLine as ListProductLine,
+    type ProductLinesAPIListUnitGroupUnit as ListUnitGroupUnit,
+    type ProductLinesAPIOwner as Owner,
+    type ProductLinesAPIPageInfo as PageInfo,
+    type ProductLine as ProductLine,
+    type ProductLinesAPIUnit as Unit,
+    type ProductLinesAPIUnitGroup as UnitGroup,
+    type ProductLinesAPIUnitGroupUnit as UnitGroupUnit,
+    type UpdateProductLineRequest as UpdateProductLineRequest,
+    type ProductLineDeleteResponse as ProductLineDeleteResponse,
+    type ProductLineCreateParams as ProductLineCreateParams,
+    type ProductLineRetrieveParams as ProductLineRetrieveParams,
+    type ProductLineUpdateParams as ProductLineUpdateParams,
+    type ProductLineListParams as ProductLineListParams,
+  };
+
+  export {
+    Products as Products,
+    type ProductsAPIAccount as Account,
+    type ProductsAPIAccountBranding as AccountBranding,
+    type ProductsAPIAccountPortal as AccountPortal,
+    type ProductsAPIAddress as Address,
+    type ProductsAPIAttribute as Attribute,
+    type CreateProductRequest as CreateProductRequest,
+    type ProductsAPIGeolocation as Geolocation,
+    type ProductsAPIItem as Item,
+    type ProductsAPIItemCategory as ItemCategory,
+    type ProductsAPIListAttribute as ListAttribute,
+    type ListProduct as ListProduct,
+    type ProductsAPIListProperty as ListProperty,
+    type ProductsAPIListUnitGroupUnit as ListUnitGroupUnit,
+    type ProductsAPIOwner as Owner,
+    type ProductsAPIPageInfo as PageInfo,
+    type Product as Product,
+    type ProductsAPIProductLine as ProductLine,
+    type ProductsAPIProperty as Property,
+    type ProductsAPIRate as Rate,
+    type ProductsAPIRateInput as RateInput,
+    type ProductsAPIUnit as Unit,
+    type ProductsAPIUnitGroup as UnitGroup,
+    type ProductsAPIUnitGroupUnit as UnitGroupUnit,
+    type UpdateProductRequest as UpdateProductRequest,
+    type ProductCreateParams as ProductCreateParams,
+    type ProductRetrieveParams as ProductRetrieveParams,
+    type ProductUpdateParams as ProductUpdateParams,
+    type ProductListParams as ProductListParams,
+    type ProductDeleteParams as ProductDeleteParams,
+    type ProductChangeProductLineParams as ProductChangeProductLineParams,
   };
 }

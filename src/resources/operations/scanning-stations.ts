@@ -1,9 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as AgentsAPI from '../ai/agents';
-import * as DepartmentsAPI from './departments';
-import * as ProductionStepsAPI from './production-steps/production-steps';
+import * as RolesAPI from '../identity/roles';
+import * as AccountUsersAPI from '../identity/account-users/account-users';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -13,13 +12,37 @@ import { path } from '../../internal/utils/path';
  */
 export class ScanningStations extends APIResource {
   /**
+   * Creates a scanning station associated with a department.
+   *
+   * @example
+   * ```ts
+   * const scanningStation =
+   *   await client.operations.scanningStations.create({
+   *     department_id: 'dp_01791c25ab59da4704cba61874',
+   *     name: 'Packaging Line 1',
+   *     operator_requirement: 'none',
+   *     type: 'init_batch',
+   *     label_size: '1x1',
+   *     label_type: 'tag',
+   *   });
+   * ```
+   */
+  create(
+    params: ScanningStationCreateParams,
+    options?: RequestOptions,
+  ): APIPromise<AccountUsersAPI.ScanningStation> {
+    const { include, ...body } = params;
+    return this._client.post('/v1/operations/scanning-stations', { query: { include }, body, ...options });
+  }
+
+  /**
    * Returns a scanning station by ID.
    *
    * @example
    * ```ts
    * const scanningStation =
    *   await client.operations.scanningStations.retrieve(
-   *     'scst_01jm4r6700f8nwq3v5hx2d9ktp',
+   *     'scst_0129335dd6286056a97024fcc1',
    *   );
    * ```
    */
@@ -27,7 +50,7 @@ export class ScanningStations extends APIResource {
     id: string,
     query: ScanningStationRetrieveParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ScanningStation> {
+  ): APIPromise<AccountUsersAPI.ScanningStation> {
     return this._client.get(path`/v1/operations/scanning-stations/${id}`, { query, ...options });
   }
 
@@ -38,7 +61,7 @@ export class ScanningStations extends APIResource {
    * ```ts
    * const scanningStation =
    *   await client.operations.scanningStations.update(
-   *     'scst_01jm4r6700f8nwq3v5hx2d9ktp',
+   *     'scst_0129335dd6286056a97024fcc1',
    *     { name: 'Station B' },
    *   );
    * ```
@@ -47,7 +70,7 @@ export class ScanningStations extends APIResource {
     id: string,
     params: ScanningStationUpdateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ScanningStation> {
+  ): APIPromise<AccountUsersAPI.ScanningStation> {
     const { include, ...body } = params ?? {};
     return this._client.patch(path`/v1/operations/scanning-stations/${id}`, {
       query: { include },
@@ -57,71 +80,590 @@ export class ScanningStations extends APIResource {
   }
 
   /**
+   * Returns a paginated list of scanning stations for the current account.
+   *
+   * @example
+   * ```ts
+   * const listScanningStation =
+   *   await client.operations.scanningStations.list();
+   * ```
+   */
+  list(
+    query: ScanningStationListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<AccountUsersAPI.ListScanningStation> {
+    return this._client.get('/v1/operations/scanning-stations', { query, ...options });
+  }
+
+  /**
    * Deletes a scanning station.
    *
    * @example
    * ```ts
    * const scanningStation =
    *   await client.operations.scanningStations.delete(
-   *     'scst_01jm4r6700f8nwq3v5hx2d9ktp',
+   *     'scst_0129335dd6286056a97024fcc1',
    *   );
    * ```
    */
   delete(id: string, options?: RequestOptions): APIPromise<ScanningStationDeleteResponse> {
     return this._client.delete(path`/v1/operations/scanning-stations/${id}`, options);
   }
+}
+
+/**
+ * Account with optional branding and portal sub-resources.
+ */
+export interface Account {
+  /**
+   * Account ID.
+   */
+  id: string;
 
   /**
-   * Returns a paginated list of scanning stations for the current account.
-   *
-   * @example
-   * ```ts
-   * const listScanningStation =
-   *   await client.operations.scanningStations.retrieveScanningStations();
-   * ```
+   * Branding metadata for an account.
    */
-  retrieveScanningStations(
-    query: ScanningStationRetrieveScanningStationsParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListScanningStation> {
-    return this._client.get('/v1/operations/scanning-stations', { query, ...options });
-  }
+  branding: RolesAPI.AccountBranding | null;
 
   /**
-   * Creates a scanning station associated with a department.
-   *
-   * @example
-   * ```ts
-   * const scanningStation =
-   *   await client.operations.scanningStations.scanningStations(
-   *     {
-   *       department_id: 'dp_01gf7a8200er3ar3pkfrb6kk30',
-   *       name: 'Packaging Line 1',
-   *       operator_requirement: 'none',
-   *       type: 'init_batch',
-   *       label_size: '1x1',
-   *       label_type: 'tag',
-   *     },
-   *   );
-   * ```
+   * Creation timestamp.
    */
-  scanningStations(
-    params: ScanningStationScanningStationsParams,
-    options?: RequestOptions,
-  ): APIPromise<ScanningStation> {
-    const { include, ...body } = params;
-    return this._client.post('/v1/operations/scanning-stations', { query: { include }, body, ...options });
-  }
+  created_at: string;
+
+  /**
+   * Address with associated geolocation.
+   */
+  default_billing_address: RolesAPI.Address | null;
+
+  /**
+   * Address with associated geolocation.
+   */
+  default_shipping_address: RolesAPI.Address | null;
+
+  /**
+   * Display name.
+   */
+  name: string;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'account';
+
+  /**
+   * Portal metadata for an account.
+   */
+  portal: RolesAPI.AccountPortal | null;
+
+  /**
+   * Last updated timestamp.
+   */
+  updated_at: string;
+}
+
+/**
+ * Branding metadata for an account.
+ */
+export interface AccountBranding {
+  /**
+   * Branding ID.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Facebook handle.
+   */
+  facebook_handle: string | null;
+
+  /**
+   * Instagram handle.
+   */
+  instagram_handle: string | null;
+
+  /**
+   * LinkedIn handle.
+   */
+  linkedin_handle: string | null;
+
+  /**
+   * Logo URL.
+   */
+  logo_url: string | null;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'account_branding';
+
+  /**
+   * Support phone number.
+   */
+  phone_number: string | null;
+
+  /**
+   * Support email address.
+   */
+  support_email: string | null;
+
+  /**
+   * Twitter handle.
+   */
+  twitter_handle: string | null;
+
+  /**
+   * Last updated timestamp.
+   */
+  updated_at: string;
+
+  /**
+   * Website URL.
+   */
+  website_url: string | null;
+}
+
+/**
+ * Portal metadata for an account.
+ */
+export interface AccountPortal {
+  /**
+   * Portal ID.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'account_portal';
+
+  /**
+   * Portal slug.
+   */
+  slug: string;
+
+  /**
+   * Last updated timestamp.
+   */
+  updated_at: string;
+}
+
+/**
+ * Address with associated geolocation.
+ */
+export interface Address {
+  /**
+   * Address ID.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Email address associated with the address.
+   */
+  email: string | null;
+
+  /**
+   * Geolocation sub-resource.
+   */
+  geolocation: RolesAPI.Geolocation | null;
+
+  /**
+   * Display name of the address.
+   */
+  name: string;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'address';
+
+  /**
+   * Phone number associated with the address.
+   */
+  phone: string | null;
+
+  /**
+   * Address type.
+   */
+  type: 'standard' | 'drop_ship';
+
+  /**
+   * Last updated timestamp.
+   */
+  updated_at: string;
+}
+
+/**
+ * Value option within a property.
+ */
+export interface Attribute {
+  /**
+   * Attribute ID.
+   */
+  id: string;
+
+  /**
+   * Color code.
+   */
+  color: 'blue' | 'brown' | 'default' | 'gray' | 'green' | 'orange' | 'pink' | 'purple' | 'red' | 'yellow';
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'attribute';
+
+  /**
+   * Property that groups attributes.
+   */
+  property: AccountUsersAPI.Property | null;
+
+  /**
+   * Display order.
+   */
+  sort_order: number;
+
+  /**
+   * Last update timestamp.
+   */
+  updated_at: string;
+
+  /**
+   * Attribute value.
+   */
+  value: string;
+}
+
+/**
+ * Material consumed by a production step.
+ */
+export interface Consumption {
+  /**
+   * Consumption ID.
+   */
+  id: string;
+
+  /**
+   * Item is an inventory item (product, material, or part).
+   */
+  consumed_item: AccountUsersAPI.Item | null;
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Instructions for how this material is consumed.
+   */
+  instructions: string | null;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'consumption';
+
+  /**
+   * Value with an associated unit.
+   */
+  quantity: AccountUsersAPI.Quantity | null;
+
+  /**
+   * Last updated timestamp.
+   */
+  updated_at: string;
+
+  /**
+   * Value with an associated unit.
+   */
+  waste_quantity: AccountUsersAPI.Quantity | null;
+}
+
+/**
+ * Request to create a scanning station.
+ */
+export interface CreateScanningStationRequest {
+  /**
+   * Department ID.
+   */
+  department_id: string;
+
+  /**
+   * Display name.
+   */
+  name: string;
+
+  /**
+   * Operator requirement behavior for this station.
+   */
+  operator_requirement: 'none' | 'material_check';
+
+  /**
+   * Scanning station type.
+   */
+  type: 'init_batch' | 'merge_batch' | 'move_batch' | 'split_batch';
+
+  /**
+   * Label size code.
+   */
+  label_size?: '1x1' | '1x3' | '1x4' | '2x4';
+
+  /**
+   * Label type code.
+   */
+  label_type?: 'tag' | 'traveler';
+
+  /**
+   * Notes.
+   */
+  notes?: string;
+}
+
+/**
+ * Department resource.
+ */
+export interface Department {
+  /**
+   * Department ID.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Location resource.
+   */
+  location: AccountUsersAPI.Location | null;
+
+  /**
+   * List represents a paginated list of resources.
+   */
+  machines: AccountUsersAPI.ListMachine | null;
+
+  /**
+   * Display name.
+   */
+  name: string;
+
+  /**
+   * Notes about the department.
+   */
+  notes: string | null;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'department';
+
+  /**
+   * List represents a paginated list of resources.
+   */
+  scanning_stations: AccountUsersAPI.ListScanningStation | null;
+
+  /**
+   * Last update timestamp.
+   */
+  updated_at: string;
+}
+
+/**
+ * Geolocation sub-resource.
+ */
+export interface Geolocation {
+  /**
+   * Geolocation ID.
+   */
+  id: string;
+
+  /**
+   * Two-letter country code.
+   */
+  country: string;
+
+  /**
+   * City or locality.
+   */
+  locality: string | null;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'geolocation';
+
+  /**
+   * Postal or ZIP code.
+   */
+  postal_code: string | null;
+
+  /**
+   * State or administrative area.
+   */
+  state: string | null;
+
+  /**
+   * First line of the street address.
+   */
+  street_line_1: string | null;
+
+  /**
+   * Second line of the street address.
+   */
+  street_line_2: string | null;
+}
+
+/**
+ * Item is an inventory item (product, material, or part).
+ */
+export interface Item {
+  /**
+   * Item ID.
+   */
+  id: string;
+
+  /**
+   * List represents a paginated list of resources.
+   */
+  attributes: AccountUsersAPI.ListAttribute | null;
+
+  /**
+   * Rate resource.
+   */
+  burn_rate: AccountUsersAPI.Rate | null;
+
+  /**
+   * ItemCategory resource.
+   */
+  category: AccountUsersAPI.ItemCategory | null;
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Item description.
+   */
+  description: string | null;
+
+  /**
+   * Notes.
+   */
+  notes: string | null;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'item';
+
+  /**
+   * Stock keeping unit code.
+   */
+  sku: string;
+
+  /**
+   * Item type code.
+   */
+  type: 'product' | 'material' | 'part';
+
+  /**
+   * Rate resource.
+   */
+  unit_cost: AccountUsersAPI.Rate | null;
+
+  /**
+   * Rate resource.
+   */
+  unit_value: AccountUsersAPI.Rate | null;
+
+  /**
+   * Last updated timestamp.
+   */
+  updated_at: string;
+}
+
+/**
+ * ItemCategory resource.
+ */
+export interface ItemCategory {
+  /**
+   * Item category ID.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Display name.
+   */
+  name: string;
+
+  /**
+   * Notes.
+   */
+  notes: string | null;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'item_category';
+
+  /**
+   * Owner describes the provenance of a resource.
+   */
+  owner: RolesAPI.Owner | null;
+
+  /**
+   * List represents a paginated list of resources.
+   */
+  properties: AccountUsersAPI.ListProperty | null;
+
+  /**
+   * Item category type.
+   */
+  type: 'material_category' | 'product_category';
+
+  /**
+   * UnitGroup is a unit group resource.
+   */
+  unit_group: AccountUsersAPI.UnitGroup | null;
+
+  /**
+   * Last updated timestamp.
+   */
+  updated_at: string;
 }
 
 /**
  * List represents a paginated list of resources.
  */
-export interface ListScanningStation {
+export interface ListAttribute {
   /**
    * Resources in this page.
    */
-  data: Array<ScanningStation>;
+  data: Array<AccountUsersAPI.Attribute>;
 
   /**
    * Resource type identifier.
@@ -131,7 +673,523 @@ export interface ListScanningStation {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: AgentsAPI.PageInfo;
+  page_info: RolesAPI.PageInfo;
+}
+
+/**
+ * List represents a paginated list of resources.
+ */
+export interface ListConsumption {
+  /**
+   * Resources in this page.
+   */
+  data: Array<AccountUsersAPI.Consumption>;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'list';
+
+  /**
+   * PageInfo contains URL-based pagination metadata.
+   */
+  page_info: RolesAPI.PageInfo;
+}
+
+/**
+ * List represents a paginated list of resources.
+ */
+export interface ListLocation {
+  /**
+   * Resources in this page.
+   */
+  data: Array<AccountUsersAPI.Location>;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'list';
+
+  /**
+   * PageInfo contains URL-based pagination metadata.
+   */
+  page_info: RolesAPI.PageInfo;
+}
+
+/**
+ * List represents a paginated list of resources.
+ */
+export interface ListMachine {
+  /**
+   * Resources in this page.
+   */
+  data: Array<AccountUsersAPI.Machine>;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'list';
+
+  /**
+   * PageInfo contains URL-based pagination metadata.
+   */
+  page_info: RolesAPI.PageInfo;
+}
+
+/**
+ * List represents a paginated list of resources.
+ */
+export interface ListProductionStep {
+  /**
+   * Resources in this page.
+   */
+  data: Array<AccountUsersAPI.ProductionStep>;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'list';
+
+  /**
+   * PageInfo contains URL-based pagination metadata.
+   */
+  page_info: RolesAPI.PageInfo;
+}
+
+/**
+ * List represents a paginated list of resources.
+ */
+export interface ListProperty {
+  /**
+   * Resources in this page.
+   */
+  data: Array<AccountUsersAPI.Property>;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'list';
+
+  /**
+   * PageInfo contains URL-based pagination metadata.
+   */
+  page_info: RolesAPI.PageInfo;
+}
+
+/**
+ * List represents a paginated list of resources.
+ */
+export interface ListScanningStation {
+  /**
+   * Resources in this page.
+   */
+  data: Array<AccountUsersAPI.ScanningStation>;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'list';
+
+  /**
+   * PageInfo contains URL-based pagination metadata.
+   */
+  page_info: RolesAPI.PageInfo;
+}
+
+/**
+ * List represents a paginated list of resources.
+ */
+export interface ListUnitGroupUnit {
+  /**
+   * Resources in this page.
+   */
+  data: Array<AccountUsersAPI.UnitGroupUnit>;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'list';
+
+  /**
+   * PageInfo contains URL-based pagination metadata.
+   */
+  page_info: RolesAPI.PageInfo;
+}
+
+/**
+ * Location resource.
+ */
+export interface Location {
+  /**
+   * Location ID.
+   */
+  id: string;
+
+  /**
+   * List represents a paginated list of resources.
+   */
+  children: AccountUsersAPI.ListLocation | null;
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Display name.
+   */
+  name: string;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'location';
+
+  /**
+   * Location resource.
+   */
+  parent: AccountUsersAPI.Location | null;
+
+  /**
+   * Location type code.
+   */
+  type: 'building' | 'section' | 'aisle' | 'rack' | 'shelf' | 'bin';
+
+  /**
+   * Last-updated timestamp.
+   */
+  updated_at: string;
+}
+
+/**
+ * Machine within an account.
+ */
+export interface Machine {
+  /**
+   * Machine ID.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Department resource.
+   */
+  department: AccountUsersAPI.Department | null;
+
+  /**
+   * Display name.
+   */
+  name: string;
+
+  /**
+   * Notes.
+   */
+  notes: string | null;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'machine';
+
+  /**
+   * Serial number.
+   */
+  serial_number: string;
+
+  /**
+   * Last updated timestamp.
+   */
+  updated_at: string;
+}
+
+/**
+ * Owner describes the provenance of a resource.
+ */
+export interface Owner {
+  /**
+   * Account with optional branding and portal sub-resources.
+   */
+  account: RolesAPI.Account | null;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'owner';
+
+  /**
+   * The owner type: "system" for platform defaults, "account" for account-owned
+   * resources.
+   */
+  type: 'system' | 'account';
+}
+
+/**
+ * PageInfo contains URL-based pagination metadata.
+ */
+export interface PageInfo {
+  /**
+   * Whether more results exist after this page.
+   */
+  has_next_page: boolean;
+
+  /**
+   * Whether results exist before this page.
+   */
+  has_prev_page: boolean;
+
+  /**
+   * URL to fetch the next page, `null` if no more pages.
+   */
+  next_page_url: string | null;
+
+  /**
+   * URL to fetch the previous page, `null` if on the first page.
+   */
+  previous_page_url: string | null;
+}
+
+/**
+ * Production output of a production step.
+ */
+export interface ProductionOutput {
+  /**
+   * Production ID.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'production';
+
+  /**
+   * Item is an inventory item (product, material, or part).
+   */
+  produced_item: AccountUsersAPI.Item | null;
+
+  /**
+   * Value with an associated unit.
+   */
+  quantity: AccountUsersAPI.Quantity | null;
+
+  /**
+   * Last updated timestamp.
+   */
+  updated_at: string;
+}
+
+/**
+ * Production step with all nested data.
+ */
+export interface ProductionStep {
+  /**
+   * Production step ID.
+   */
+  id: string;
+
+  /**
+   * Allowances as a decimal string.
+   */
+  allowances: string;
+
+  /**
+   * List represents a paginated list of resources.
+   */
+  consumptions: AccountUsersAPI.ListConsumption | null;
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Department resource.
+   */
+  department: AccountUsersAPI.Department | null;
+
+  /**
+   * List represents a paginated list of resources.
+   */
+  in_steps: AccountUsersAPI.ListProductionStep | null;
+
+  /**
+   * Rate resource.
+   */
+  labor_rate: AccountUsersAPI.Rate | null;
+
+  /**
+   * Rate resource.
+   */
+  labor_time: AccountUsersAPI.Rate | null;
+
+  /**
+   * Leveling factor as a decimal string.
+   */
+  leveling_factor: string;
+
+  /**
+   * List represents a paginated list of resources.
+   */
+  machines: AccountUsersAPI.ListMachine | null;
+
+  /**
+   * Display name.
+   */
+  name: string;
+
+  /**
+   * Notes.
+   */
+  notes: string | null;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'production_step';
+
+  /**
+   * List represents a paginated list of resources.
+   */
+  out_steps: AccountUsersAPI.ListProductionStep | null;
+
+  /**
+   * Rate resource.
+   */
+  overhead_rate: AccountUsersAPI.Rate | null;
+
+  /**
+   * Production output of a production step.
+   */
+  production: AccountUsersAPI.ProductionOutput | null;
+
+  /**
+   * Scanning station resource.
+   */
+  scanning_station: AccountUsersAPI.ScanningStation | null;
+
+  /**
+   * Last updated timestamp.
+   */
+  updated_at: string;
+}
+
+/**
+ * Property that groups attributes.
+ */
+export interface Property {
+  /**
+   * Property ID.
+   */
+  id: string;
+
+  /**
+   * List represents a paginated list of resources.
+   */
+  attributes: AccountUsersAPI.ListAttribute | null;
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Display name.
+   */
+  name: string;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'property';
+
+  /**
+   * Last update timestamp.
+   */
+  updated_at: string;
+}
+
+/**
+ * Value with an associated unit.
+ */
+export interface Quantity {
+  /**
+   * Quantity ID.
+   */
+  id: string;
+
+  /**
+   * Formatted value with unit abbreviation (e.g. "$1,234.56" or "100 kg").
+   */
+  display_value: string;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'quantity';
+
+  /**
+   * Unit of measurement used for conversions and product quantities.
+   */
+  unit: AccountUsersAPI.Unit | null;
+
+  /**
+   * Decimal value.
+   */
+  value: string;
+}
+
+/**
+ * Rate resource.
+ */
+export interface Rate {
+  /**
+   * Rate ID.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Unit of measurement used for conversions and product quantities.
+   */
+  denominator_unit: AccountUsersAPI.Unit | null;
+
+  /**
+   * Human-readable formatted value (e.g. "$25.50 / kg" or "100 kg / hr").
+   */
+  display_value: string;
+
+  /**
+   * Unit of measurement used for conversions and product quantities.
+   */
+  numerator_unit: AccountUsersAPI.Unit | null;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'rate';
+
+  /**
+   * Last updated timestamp.
+   */
+  updated_at: string;
+
+  /**
+   * Rate value as a decimal string.
+   */
+  value: string;
 }
 
 /**
@@ -151,7 +1209,7 @@ export interface ScanningStation {
   /**
    * Department resource.
    */
-  department: DepartmentsAPI.Department | null;
+  department: AccountUsersAPI.Department | null;
 
   /**
    * Label size code.
@@ -186,7 +1244,7 @@ export interface ScanningStation {
   /**
    * List represents a paginated list of resources.
    */
-  production_steps: ProductionStepsAPI.ListProductionStep | null;
+  production_steps: AccountUsersAPI.ListProductionStep | null;
 
   /**
    * Scanning station type.
@@ -199,73 +1257,212 @@ export interface ScanningStation {
   updated_at: string;
 }
 
-export interface ScanningStationDeleteResponse {}
-
-export interface ScanningStationRetrieveParams {
+/**
+ * Unit of measurement used for conversions and product quantities.
+ */
+export interface Unit {
   /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
+   * Unit ID.
    */
-  include?: Array<'department' | 'production_steps'>;
+  id: string;
+
+  /**
+   * Short abbreviation for the unit (e.g. "g", "kg").
+   */
+  abbreviation: string;
+
+  /**
+   * When this unit was created.
+   */
+  created_at: string;
+
+  /**
+   * Whether this is the base unit for its dimension. Conversion ratios are relative
+   * to this unit.
+   */
+  is_base_unit: boolean;
+
+  /**
+   * Display name of the unit (e.g. "Gram", "Kilogram").
+   */
+  name: string;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'unit';
+
+  /**
+   * Conversion offset denominator. Typically 1. Cannot be zero.
+   */
+  offset_denominator: string;
+
+  /**
+   * Conversion offset numerator, used for temperature-like conversions. Zero for
+   * most unit types.
+   */
+  offset_numerator: string;
+
+  /**
+   * Owner describes the provenance of a resource.
+   */
+  owner: RolesAPI.Owner | null;
+
+  /**
+   * Conversion ratio denominator relative to the base unit in the same dimension.
+   * Cannot be zero.
+   */
+  ratio_denominator: string;
+
+  /**
+   * Conversion ratio numerator relative to the base unit in the same dimension.
+   */
+  ratio_numerator: string;
+
+  /**
+   * Unit dimension.
+   */
+  type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area';
+
+  /**
+   * When this unit was last updated.
+   */
+  updated_at: string;
 }
 
-export interface ScanningStationUpdateParams {
+/**
+ * UnitGroup is a unit group resource.
+ */
+export interface UnitGroup {
   /**
-   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
-   * are returned as `null`.
+   * Unit group ID.
    */
-  include?: Array<'department' | 'production_steps'>;
+  id: string;
 
   /**
-   * Body param: Label size code.
+   * List represents a paginated list of resources.
+   */
+  associated_units: AccountUsersAPI.ListUnitGroupUnit | null;
+
+  /**
+   * Unit of measurement used for conversions and product quantities.
+   */
+  base_unit: AccountUsersAPI.Unit | null;
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Display name.
+   */
+  name: string;
+
+  /**
+   * Notes.
+   */
+  notes: string | null;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'unit_group';
+
+  /**
+   * Owner describes the provenance of a resource.
+   */
+  owner: RolesAPI.Owner | null;
+
+  /**
+   * Unit type.
+   */
+  type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area';
+
+  /**
+   * Last updated timestamp.
+   */
+  updated_at: string;
+}
+
+/**
+ * UnitGroupUnit is an associated unit within a unit group.
+ */
+export interface UnitGroupUnit {
+  /**
+   * Unit group unit ID.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Customer portal visibility.
+   */
+  customer_portal_visibility: 'visible' | 'hidden';
+
+  /**
+   * Fixed discount amount.
+   */
+  discount_fixed: number;
+
+  /**
+   * Discount percentage.
+   */
+  discount_percentage: number;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'unit_group_unit';
+
+  /**
+   * Unit of measurement used for conversions and product quantities.
+   */
+  unit: AccountUsersAPI.Unit | null;
+
+  /**
+   * Last updated timestamp.
+   */
+  updated_at: string;
+}
+
+/**
+ * Request to partially update a scanning station.
+ */
+export interface UpdateScanningStationRequest {
+  /**
+   * Label size code.
    */
   label_size?: '1x1' | '1x3' | '1x4' | '2x4';
 
   /**
-   * Body param: Label type code.
+   * Label type code.
    */
   label_type?: 'tag' | 'traveler';
 
   /**
-   * Body param: Display name.
+   * Display name.
    */
   name?: string;
 
   /**
-   * Body param: Notes.
+   * Notes.
    */
   notes?: string | null;
 
   /**
-   * Body param: Operator requirement behavior for this station.
+   * Operator requirement behavior for this station.
    */
   operator_requirement?: 'none' | 'material_check';
 }
 
-export interface ScanningStationRetrieveScanningStationsParams {
-  /**
-   * Cursor token used to retrieve the next or previous page of results.
-   */
-  cursor?: string;
+export interface ScanningStationDeleteResponse {}
 
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'department' | 'production_steps'>;
-
-  /**
-   * Maximum number of results per page (default: 100, max: 1000).
-   */
-  limit?: number;
-
-  /**
-   * Search query used to filter results.
-   */
-  q?: string;
-}
-
-export interface ScanningStationScanningStationsParams {
+export interface ScanningStationCreateParams {
   /**
    * Body param: Department ID.
    */
@@ -308,14 +1505,109 @@ export interface ScanningStationScanningStationsParams {
   notes?: string;
 }
 
+export interface ScanningStationRetrieveParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'department' | 'production_steps'>;
+}
+
+export interface ScanningStationUpdateParams {
+  /**
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
+   */
+  include?: Array<'department' | 'production_steps'>;
+
+  /**
+   * Body param: Label size code.
+   */
+  label_size?: '1x1' | '1x3' | '1x4' | '2x4';
+
+  /**
+   * Body param: Label type code.
+   */
+  label_type?: 'tag' | 'traveler';
+
+  /**
+   * Body param: Display name.
+   */
+  name?: string;
+
+  /**
+   * Body param: Notes.
+   */
+  notes?: string | null;
+
+  /**
+   * Body param: Operator requirement behavior for this station.
+   */
+  operator_requirement?: 'none' | 'material_check';
+}
+
+export interface ScanningStationListParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'department' | 'production_steps'>;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+}
+
 export declare namespace ScanningStations {
   export {
+    type Account as Account,
+    type AccountBranding as AccountBranding,
+    type AccountPortal as AccountPortal,
+    type Address as Address,
+    type Attribute as Attribute,
+    type Consumption as Consumption,
+    type CreateScanningStationRequest as CreateScanningStationRequest,
+    type Department as Department,
+    type Geolocation as Geolocation,
+    type Item as Item,
+    type ItemCategory as ItemCategory,
+    type ListAttribute as ListAttribute,
+    type ListConsumption as ListConsumption,
+    type ListLocation as ListLocation,
+    type ListMachine as ListMachine,
+    type ListProductionStep as ListProductionStep,
+    type ListProperty as ListProperty,
     type ListScanningStation as ListScanningStation,
+    type ListUnitGroupUnit as ListUnitGroupUnit,
+    type Location as Location,
+    type Machine as Machine,
+    type Owner as Owner,
+    type PageInfo as PageInfo,
+    type ProductionOutput as ProductionOutput,
+    type ProductionStep as ProductionStep,
+    type Property as Property,
+    type Quantity as Quantity,
+    type Rate as Rate,
     type ScanningStation as ScanningStation,
+    type Unit as Unit,
+    type UnitGroup as UnitGroup,
+    type UnitGroupUnit as UnitGroupUnit,
+    type UpdateScanningStationRequest as UpdateScanningStationRequest,
     type ScanningStationDeleteResponse as ScanningStationDeleteResponse,
+    type ScanningStationCreateParams as ScanningStationCreateParams,
     type ScanningStationRetrieveParams as ScanningStationRetrieveParams,
     type ScanningStationUpdateParams as ScanningStationUpdateParams,
-    type ScanningStationRetrieveScanningStationsParams as ScanningStationRetrieveScanningStationsParams,
-    type ScanningStationScanningStationsParams as ScanningStationScanningStationsParams,
+    type ScanningStationListParams as ScanningStationListParams,
   };
 }

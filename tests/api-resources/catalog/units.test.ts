@@ -7,11 +7,16 @@ const client = new Augno({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource materials', () => {
+describe('resource units', () => {
   test('create: only required params', async () => {
-    const responsePromise = client.catalog.materials.create({
-      category_id: 'ic_01jm4r6700f8nwq3v5hx2d9ktp',
-      sku: 'MAT-001',
+    const responsePromise = client.catalog.units.create({
+      abbreviation: 'g',
+      name: 'Gram',
+      offset_denominator: '1',
+      offset_numerator: '0',
+      ratio_denominator: '1',
+      ratio_numerator: '1',
+      type: 'mass',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -23,35 +28,20 @@ describe('resource materials', () => {
   });
 
   test('create: required and optional params', async () => {
-    const response = await client.catalog.materials.create({
-      category_id: 'ic_01jm4r6700f8nwq3v5hx2d9ktp',
-      sku: 'MAT-001',
-      include: ['item'],
-      attribute_ids: ['string'],
-      burn_rate: {
-        denominator_unit_id: 'denominator_unit_id',
-        numerator_unit_id: 'numerator_unit_id',
-        value: 'value',
-      },
-      description: 'description',
-      lead_time: { unit_id: 'unit_id', value: 'value' },
-      notes: 'notes',
-      order_point: { unit_id: 'unit_id', value: 'value' },
-      unit_cost: {
-        denominator_unit_id: 'denominator_unit_id',
-        numerator_unit_id: 'numerator_unit_id',
-        value: 'value',
-      },
-      unit_price: {
-        denominator_unit_id: 'denominator_unit_id',
-        numerator_unit_id: 'numerator_unit_id',
-        value: 'value',
-      },
+    const response = await client.catalog.units.create({
+      abbreviation: 'g',
+      name: 'Gram',
+      offset_denominator: '1',
+      offset_numerator: '0',
+      ratio_denominator: '1',
+      ratio_numerator: '1',
+      type: 'mass',
+      include: ['owner'],
     });
   });
 
   test('retrieve', async () => {
-    const responsePromise = client.catalog.materials.retrieve('ml_01jm4r6700f8nwq3v5hx2d9ktp');
+    const responsePromise = client.catalog.units.retrieve('un_01966263f74a5a0cae356000a1');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -64,16 +54,16 @@ describe('resource materials', () => {
   test('retrieve: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.catalog.materials.retrieve(
-        'ml_01jm4r6700f8nwq3v5hx2d9ktp',
-        { include: ['item'] },
+      client.catalog.units.retrieve(
+        'un_01966263f74a5a0cae356000a1',
+        { include: ['owner'] },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Augno.NotFoundError);
   });
 
   test('update', async () => {
-    const responsePromise = client.catalog.materials.update('ml_01jm4r6700f8nwq3v5hx2d9ktp');
+    const responsePromise = client.catalog.units.update('un_01966263f74a5a0cae356000a1');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -86,20 +76,16 @@ describe('resource materials', () => {
   test('update: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.catalog.materials.update(
-        'ml_01jm4r6700f8nwq3v5hx2d9ktp',
+      client.catalog.units.update(
+        'un_01966263f74a5a0cae356000a1',
         {
-          include: ['item'],
-          description: 'description',
-          lead_time: { unit_id: 'unit_id', value: 'value' },
-          notes: 'notes',
-          order_point: { unit_id: 'unit_id', value: 'value' },
-          sku: 'MAT-001-UPDATED',
-          unit_cost: {
-            denominator_unit_id: 'denominator_unit_id',
-            numerator_unit_id: 'numerator_unit_id',
-            value: 'value',
-          },
+          include: ['owner'],
+          abbreviation: 'kg',
+          name: 'Kilogram',
+          offset_denominator: 'offset_denominator',
+          offset_numerator: 'offset_numerator',
+          ratio_denominator: 'ratio_denominator',
+          ratio_numerator: 'ratio_numerator',
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -107,7 +93,7 @@ describe('resource materials', () => {
   });
 
   test('list', async () => {
-    const responsePromise = client.catalog.materials.list();
+    const responsePromise = client.catalog.units.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -120,16 +106,14 @@ describe('resource materials', () => {
   test('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.catalog.materials.list(
+      client.catalog.units.list(
         {
-          attribute_ids: ['string'],
-          category_ids: ['string'],
           cursor: 'cursor',
-          end_date: '2019-12-27T18:11:19.117Z',
-          include: ['item'],
+          include: ['owner'],
           limit: 0,
           q: 'q',
-          start_date: '2019-12-27T18:11:19.117Z',
+          type: 'currency',
+          unit_group_ids: ['string'],
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -137,7 +121,7 @@ describe('resource materials', () => {
   });
 
   test('delete', async () => {
-    const responsePromise = client.catalog.materials.delete('ml_01jm4r6700f8nwq3v5hx2d9ktp');
+    const responsePromise = client.catalog.units.delete('un_01966263f74a5a0cae356000a1');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
