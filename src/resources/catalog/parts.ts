@@ -53,7 +53,6 @@ export class Parts extends APIResource {
    * ```ts
    * const part = await client.catalog.parts.update(
    *   'pt_018d7bab53e864351f4c693a21',
-   *   { sku: 'BRG-6204-2RS' },
    * );
    * ```
    */
@@ -115,23 +114,22 @@ export interface CreatePartRequest {
   /**
    * Description.
    */
-  description?: string | null;
+  description?: string;
 
   /**
    * Notes.
    */
-  notes?: string | null;
+  notes?: string;
 
   /**
-   * Initial unit cost. Same currency rule as unit_price.
+   * RateInput represents the input for creating or updating a rate.
    */
-  unit_cost?: MaterialsAPI.RateInput | null;
+  unit_cost?: MaterialsAPI.RateInput;
 
   /**
-   * Initial unit price. When set, numerator must be a currency unit and denominator
-   * must not be.
+   * RateInput represents the input for creating or updating a rate.
    */
-  unit_price?: MaterialsAPI.RateInput | null;
+  unit_price?: MaterialsAPI.RateInput;
 }
 
 /**
@@ -231,23 +229,22 @@ export interface PartCreateParams {
   /**
    * Body param: Description.
    */
-  description?: string | null;
+  description?: string;
 
   /**
    * Body param: Notes.
    */
-  notes?: string | null;
+  notes?: string;
 
   /**
-   * Body param: Initial unit cost. Same currency rule as unit_price.
+   * Body param: RateInput represents the input for creating or updating a rate.
    */
-  unit_cost?: MaterialsAPI.RateInput | null;
+  unit_cost?: MaterialsAPI.RateInput;
 
   /**
-   * Body param: Initial unit price. When set, numerator must be a currency unit and
-   * denominator must not be.
+   * Body param: RateInput represents the input for creating or updating a rate.
    */
-  unit_price?: MaterialsAPI.RateInput | null;
+  unit_price?: MaterialsAPI.RateInput;
 }
 
 export interface PartRetrieveParams {

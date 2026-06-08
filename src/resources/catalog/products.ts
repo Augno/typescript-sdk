@@ -20,7 +20,6 @@ export class Products extends APIResource {
    * ```ts
    * const product = await client.catalog.products.create({
    *   category_id: 'ic_01ae7bd7bfd21ca0ab81e1357e',
-   *   product_line_id: 'product_line_id',
    *   sku: 'ALM-2024-1001',
    *   type: 'sale',
    * });
@@ -56,7 +55,6 @@ export class Products extends APIResource {
    * ```ts
    * const product = await client.catalog.products.update(
    *   'pd_013c29ab3f1518d0004094c316',
-   *   { sku: 'SKU-002' },
    * );
    * ```
    */
@@ -135,11 +133,6 @@ export interface CreateProductRequest {
   category_id: string;
 
   /**
-   * Product line ID.
-   */
-  product_line_id: string | null;
-
-  /**
    * SKU.
    */
   sku: string;
@@ -157,12 +150,12 @@ export interface CreateProductRequest {
   /**
    * Description.
    */
-  description?: string | null;
+  description?: string;
 
   /**
    * Notes.
    */
-  notes?: string | null;
+  notes?: string;
 
   /**
    * Whether visible in the customer portal.
@@ -170,15 +163,19 @@ export interface CreateProductRequest {
   portal_visibility?: 'visible' | 'hidden';
 
   /**
-   * Initial unit cost. Same currency rule as unit_price.
+   * Product line ID.
    */
-  unit_cost?: MaterialsAPI.RateInput | null;
+  product_line_id?: string;
 
   /**
-   * Initial unit price. When set, numerator must be a currency unit and denominator
-   * must not be.
+   * RateInput represents the input for creating or updating a rate.
    */
-  unit_price?: MaterialsAPI.RateInput | null;
+  unit_cost?: MaterialsAPI.RateInput;
+
+  /**
+   * RateInput represents the input for creating or updating a rate.
+   */
+  unit_price?: MaterialsAPI.RateInput;
 }
 
 /**
@@ -271,9 +268,9 @@ export interface UpdateProductRequest {
   sku?: string;
 
   /**
-   * Updated unit price. Numerator must be a currency unit; denominator must not be.
+   * RateInput represents the input for creating or updating a rate.
    */
-  unit_price?: MaterialsAPI.RateInput | null;
+  unit_price?: MaterialsAPI.RateInput;
 }
 
 export interface ProductCreateParams {
@@ -281,11 +278,6 @@ export interface ProductCreateParams {
    * Body param: Category ID.
    */
   category_id: string;
-
-  /**
-   * Body param: Product line ID.
-   */
-  product_line_id: string | null;
 
   /**
    * Body param: SKU.
@@ -328,12 +320,12 @@ export interface ProductCreateParams {
   /**
    * Body param: Description.
    */
-  description?: string | null;
+  description?: string;
 
   /**
    * Body param: Notes.
    */
-  notes?: string | null;
+  notes?: string;
 
   /**
    * Body param: Whether visible in the customer portal.
@@ -341,15 +333,19 @@ export interface ProductCreateParams {
   portal_visibility?: 'visible' | 'hidden';
 
   /**
-   * Body param: Initial unit cost. Same currency rule as unit_price.
+   * Body param: Product line ID.
    */
-  unit_cost?: MaterialsAPI.RateInput | null;
+  product_line_id?: string;
 
   /**
-   * Body param: Initial unit price. When set, numerator must be a currency unit and
-   * denominator must not be.
+   * Body param: RateInput represents the input for creating or updating a rate.
    */
-  unit_price?: MaterialsAPI.RateInput | null;
+  unit_cost?: MaterialsAPI.RateInput;
+
+  /**
+   * Body param: RateInput represents the input for creating or updating a rate.
+   */
+  unit_price?: MaterialsAPI.RateInput;
 }
 
 export interface ProductRetrieveParams {
@@ -422,10 +418,9 @@ export interface ProductUpdateParams {
   sku?: string;
 
   /**
-   * Body param: Updated unit price. Numerator must be a currency unit; denominator
-   * must not be.
+   * Body param: RateInput represents the input for creating or updating a rate.
    */
-  unit_price?: MaterialsAPI.RateInput | null;
+  unit_price?: MaterialsAPI.RateInput;
 }
 
 export interface ProductListParams {

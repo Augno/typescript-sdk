@@ -49,7 +49,6 @@ export class AccountGroups extends APIResource {
    * const accountGroup =
    *   await client.sales.accountGroups.update(
    *     'acgp_018e88072d1320808dc979cfac',
-   *     { name: 'Updated Wholesale Customers' },
    *   );
    * ```
    */
@@ -105,6 +104,10 @@ export interface AccountGroup {
 
   /**
    * Commission policy.
+   *
+   * - `commission_exempt`: no commission applies.
+   * - `commission_applied`: commission applies; if the account group is within a
+   *   sales rep's territory, it will be assigned to that rep unless overridden.
    */
   commission_policy: 'commission_applied' | 'commission_exempt';
 
@@ -120,6 +123,10 @@ export interface AccountGroup {
 
   /**
    * Freight policy.
+   *
+   * - `free_freight`: customers within this group will not have to pay for freight.
+   * - `billed_freight`: freight will be applied to any order within this account
+   *   group, unless overridden elsewhere.
    */
   freight_policy: 'free_freight' | 'billed_freight';
 
@@ -136,11 +143,10 @@ export interface AccountGroup {
   /**
    * Account group type.
    *
-   * The type `pricing_group` indicates this account group is utilized for pricing
-   * rules. For example, you may have a 'Preferred' price group that receives a
-   * special discount rate. The type `type_group` indicates the account group is
-   * utilized to categorize a set of accounts. For example, you may have a group of
-   * accounts that are 'Consumers' or 'Distributors'.
+   * - `pricing_group`: used for pricing rules, such as a "Preferred" group that
+   *   receives a special discount.
+   * - `type_group`: used to categorize accounts, such as "Consumers" or
+   *   "Distributors".
    */
   type: 'pricing_group' | 'type_group';
 
@@ -161,11 +167,22 @@ export interface CreateAccountGroupRequest {
 
   /**
    * Account group type.
+   *
+   * Cannot be changed after creation.
+   *
+   * - `pricing_group`: used for pricing rules, such as a "Preferred" group that
+   *   receives a special discount.
+   * - `type_group`: used to categorize accounts, such as "Consumers" or
+   *   "Distributors".
    */
   type: 'pricing_group' | 'type_group';
 
   /**
-   * Commission policy.
+   * Commission policy. Defaults to `commission_exempt`.
+   *
+   * - `commission_exempt`: no commission applies.
+   * - `commission_applied`: commission applies; if the account group is within a
+   *   sales rep's territory, it will be assigned to that rep unless overridden.
    */
   commission_policy?: 'commission_applied' | 'commission_exempt';
 
@@ -175,7 +192,11 @@ export interface CreateAccountGroupRequest {
   description?: string;
 
   /**
-   * Freight policy.
+   * Freight policy. Defaults to `billed_freight`.
+   *
+   * - `free_freight`: customers within this group will not have to pay for freight.
+   * - `billed_freight`: freight will be applied to any order within this account
+   *   group, unless overridden elsewhere.
    */
   freight_policy?: 'free_freight' | 'billed_freight';
 }
@@ -206,6 +227,10 @@ export interface ListAccountGroup {
 export interface UpdateAccountGroupRequest {
   /**
    * Commission policy.
+   *
+   * - `commission_exempt`: no commission applies.
+   * - `commission_applied`: commission applies; if the account group is within a
+   *   sales rep's territory, it will be assigned to that rep unless overridden.
    */
   commission_policy?: 'commission_applied' | 'commission_exempt';
 
@@ -216,6 +241,10 @@ export interface UpdateAccountGroupRequest {
 
   /**
    * Freight policy.
+   *
+   * - `free_freight`: customers within this group will not have to pay for freight.
+   * - `billed_freight`: freight will be applied to any order within this account
+   *   group, unless overridden elsewhere.
    */
   freight_policy?: 'free_freight' | 'billed_freight';
 
@@ -235,11 +264,22 @@ export interface AccountGroupCreateParams {
 
   /**
    * Account group type.
+   *
+   * Cannot be changed after creation.
+   *
+   * - `pricing_group`: used for pricing rules, such as a "Preferred" group that
+   *   receives a special discount.
+   * - `type_group`: used to categorize accounts, such as "Consumers" or
+   *   "Distributors".
    */
   type: 'pricing_group' | 'type_group';
 
   /**
-   * Commission policy.
+   * Commission policy. Defaults to `commission_exempt`.
+   *
+   * - `commission_exempt`: no commission applies.
+   * - `commission_applied`: commission applies; if the account group is within a
+   *   sales rep's territory, it will be assigned to that rep unless overridden.
    */
   commission_policy?: 'commission_applied' | 'commission_exempt';
 
@@ -249,7 +289,11 @@ export interface AccountGroupCreateParams {
   description?: string;
 
   /**
-   * Freight policy.
+   * Freight policy. Defaults to `billed_freight`.
+   *
+   * - `free_freight`: customers within this group will not have to pay for freight.
+   * - `billed_freight`: freight will be applied to any order within this account
+   *   group, unless overridden elsewhere.
    */
   freight_policy?: 'free_freight' | 'billed_freight';
 }
@@ -257,6 +301,10 @@ export interface AccountGroupCreateParams {
 export interface AccountGroupUpdateParams {
   /**
    * Commission policy.
+   *
+   * - `commission_exempt`: no commission applies.
+   * - `commission_applied`: commission applies; if the account group is within a
+   *   sales rep's territory, it will be assigned to that rep unless overridden.
    */
   commission_policy?: 'commission_applied' | 'commission_exempt';
 
@@ -267,6 +315,10 @@ export interface AccountGroupUpdateParams {
 
   /**
    * Freight policy.
+   *
+   * - `free_freight`: customers within this group will not have to pay for freight.
+   * - `billed_freight`: freight will be applied to any order within this account
+   *   group, unless overridden elsewhere.
    */
   freight_policy?: 'free_freight' | 'billed_freight';
 

@@ -52,7 +52,6 @@ export class Materials extends APIResource {
    * ```ts
    * const material = await client.catalog.materials.update(
    *   'ml_014613b8f7959a091d8cc0cef4',
-   *   { sku: 'MAT-001-UPDATED' },
    * );
    * ```
    */
@@ -117,33 +116,32 @@ export interface CreateMaterialRequest {
   /**
    * Description.
    */
-  description?: string | null;
+  description?: string;
 
   /**
    * QuantityInputRequest is a quantity value and unit.
    */
-  lead_time?: QuantityInputRequest | null;
+  lead_time?: QuantityInputRequest;
 
   /**
    * Notes.
    */
-  notes?: string | null;
+  notes?: string;
 
   /**
    * QuantityInputRequest is a quantity value and unit.
    */
-  order_point?: QuantityInputRequest | null;
+  order_point?: QuantityInputRequest;
 
   /**
-   * Initial unit cost. Same currency rule as unit_price.
+   * RateInput represents the input for creating or updating a rate.
    */
-  unit_cost?: RateInput | null;
+  unit_cost?: RateInput;
 
   /**
-   * Initial unit price. When set, numerator must be a currency unit and denominator
-   * must not be.
+   * RateInput represents the input for creating or updating a rate.
    */
-  unit_price?: RateInput | null;
+  unit_price?: RateInput;
 }
 
 /**
@@ -221,6 +219,9 @@ export interface QuantityInputRequest {
   value: string;
 }
 
+/**
+ * RateInput represents the input for creating or updating a rate.
+ */
 export interface RateInput {
   /**
    * Denominator unit ID.
@@ -268,9 +269,9 @@ export interface UpdateMaterialRequest {
   sku?: string;
 
   /**
-   * Updated unit cost. Same currency rule as on create.
+   * RateInput represents the input for creating or updating a rate.
    */
-  unit_cost?: RateInput | null;
+  unit_cost?: RateInput;
 }
 
 export interface MaterialCreateParams {
@@ -307,33 +308,32 @@ export interface MaterialCreateParams {
   /**
    * Body param: Description.
    */
-  description?: string | null;
+  description?: string;
 
   /**
    * Body param: QuantityInputRequest is a quantity value and unit.
    */
-  lead_time?: QuantityInputRequest | null;
+  lead_time?: QuantityInputRequest;
 
   /**
    * Body param: Notes.
    */
-  notes?: string | null;
+  notes?: string;
 
   /**
    * Body param: QuantityInputRequest is a quantity value and unit.
    */
-  order_point?: QuantityInputRequest | null;
+  order_point?: QuantityInputRequest;
 
   /**
-   * Body param: Initial unit cost. Same currency rule as unit_price.
+   * Body param: RateInput represents the input for creating or updating a rate.
    */
-  unit_cost?: RateInput | null;
+  unit_cost?: RateInput;
 
   /**
-   * Body param: Initial unit price. When set, numerator must be a currency unit and
-   * denominator must not be.
+   * Body param: RateInput represents the input for creating or updating a rate.
    */
-  unit_price?: RateInput | null;
+  unit_price?: RateInput;
 }
 
 export interface MaterialRetrieveParams {
@@ -395,9 +395,9 @@ export interface MaterialUpdateParams {
   sku?: string;
 
   /**
-   * Body param: Updated unit cost. Same currency rule as on create.
+   * Body param: RateInput represents the input for creating or updating a rate.
    */
-  unit_cost?: RateInput | null;
+  unit_cost?: RateInput;
 }
 
 export interface MaterialListParams {

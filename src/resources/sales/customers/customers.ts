@@ -34,7 +34,6 @@ export class Customers extends APIResource {
    *     'shtm_014341ab4bb5bf94d5b6936f86',
    *   name: 'Acme Inc.',
    *   ship_to_address: { name: 'Acme Inc.', country: 'US' },
-   *   note: 'Key enterprise account',
    * });
    * ```
    */
@@ -69,11 +68,6 @@ export class Customers extends APIResource {
    * ```ts
    * const customer = await client.sales.customers.update(
    *   'ac_0170df1ac58e4d24c66fc89f5f',
-   *   {
-   *     default_carrier_id: 'cr_01784fd54c9ba197bb4e42f0e6',
-   *     freight_policy: 'billed_freight',
-   *     name: 'Acme Corp Updated',
-   *   },
    * );
    * ```
    */
@@ -175,6 +169,11 @@ export interface AccountUser {
    * When the account user was last updated.
    */
   updated_at: string;
+
+  /**
+   * Underlying user ID.
+   */
+  user_id: string;
 
   /**
    * Username.
