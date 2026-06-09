@@ -34,6 +34,9 @@ export class Carriers extends APIResource {
    * ```ts
    * const carrier = await client.operations.carriers.create({
    *   name: 'FedEx',
+   *   account_number: '1234567890',
+   *   code: 'fedex',
+   *   customer_portal_visibility: 'visible',
    * });
    * ```
    */
@@ -67,6 +70,7 @@ export class Carriers extends APIResource {
    * ```ts
    * const carrier = await client.operations.carriers.update(
    *   'cr_01784fd54c9ba197bb4e42f0e6',
+   *   { name: 'FedEx Express' },
    * );
    * ```
    */

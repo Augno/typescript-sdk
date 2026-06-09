@@ -59,6 +59,7 @@ export class ProductLines extends APIResource {
    * const productLine =
    *   await client.catalog.productLines.update(
    *     'pl_01996357326a0d3f7b129542ea',
+   *     { name: 'Updated Product Line' },
    *   );
    * ```
    */
