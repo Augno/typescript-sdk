@@ -225,7 +225,7 @@ export interface AccountUserCreateParams {
    * Query param: Sub-objects to expand in the response. When omitted, sub-objects
    * are returned as `null`.
    */
-  include?: Array<'role' | 'department'>;
+  include?: Array<'user' | 'role' | 'department'>;
 
   /**
    * Body param: Department assigned to the user.
@@ -270,7 +270,7 @@ export interface AccountUserRetrieveParams {
    * Sub-objects to expand in the response. When omitted, sub-objects are returned as
    * `null`.
    */
-  include?: Array<'role' | 'department'>;
+  include?: Array<'user' | 'role' | 'department'>;
 }
 
 export interface AccountUserUpdateParams {
@@ -278,7 +278,7 @@ export interface AccountUserUpdateParams {
    * Query param: Sub-objects to expand in the response. When omitted, sub-objects
    * are returned as `null`.
    */
-  include?: Array<'role' | 'department'>;
+  include?: Array<'user' | 'role' | 'department'>;
 
   /**
    * Body param: Department assigned to the user.
@@ -322,7 +322,7 @@ export interface AccountUserListParams {
    * Sub-objects to expand in the response. When omitted, sub-objects are returned as
    * `null`.
    */
-  include?: Array<'role' | 'department'>;
+  include?: Array<'user' | 'role' | 'department'>;
 
   /**
    * Maximum number of results per page (default: 100, max: 1000).

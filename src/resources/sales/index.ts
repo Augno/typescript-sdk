@@ -48,6 +48,7 @@ export {
   type ListScanningStation,
   type ListServiceLevel,
   type Location,
+  type LocationTypeCode,
   type Machine,
   type PaymentTerm,
   type ProductionOutput,

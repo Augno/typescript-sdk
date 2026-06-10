@@ -421,6 +421,7 @@ Types:
 - <code><a href="./src/resources/sales/customers/customers.ts">ListScanningStation</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">ListServiceLevel</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">Location</a></code>
+- <code><a href="./src/resources/sales/customers/customers.ts">LocationTypeCode</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">Machine</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">PaymentTerm</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">ProductionOutput</a></code>
