@@ -12,20 +12,20 @@ import { path } from '../../internal/utils/path';
  */
 export class ShippingTerms extends APIResource {
   /**
-   * Creates an account-owned shipping term.
+   * Returns a paginated list of shipping terms for the account, including default
+   * system shipping terms.
    *
    * @example
    * ```ts
-   * const shippingTerm =
-   *   await client.operations.shippingTerms.create({
-   *     name: 'Prepaid',
-   *     type: 'carrier_rate_freight',
-   *   });
+   * const listShippingTerm =
+   *   await client.operations.shippingTerms.list();
    * ```
    */
-  create(params: ShippingTermCreateParams, options?: RequestOptions): APIPromise<CustomersAPI.ShippingTerm> {
-    const { include, ...body } = params;
-    return this._client.post('/v1/operations/shipping-terms', { query: { include }, body, ...options });
+  list(
+    query: ShippingTermListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ListShippingTerm> {
+    return this._client.get('/v1/operations/shipping-terms', { query, ...options });
   }
 
   /**
@@ -45,6 +45,23 @@ export class ShippingTerms extends APIResource {
     options?: RequestOptions,
   ): APIPromise<CustomersAPI.ShippingTerm> {
     return this._client.get(path`/v1/operations/shipping-terms/${id}`, { query, ...options });
+  }
+
+  /**
+   * Creates an account-owned shipping term.
+   *
+   * @example
+   * ```ts
+   * const shippingTerm =
+   *   await client.operations.shippingTerms.create({
+   *     name: 'Prepaid',
+   *     type: 'carrier_rate_freight',
+   *   });
+   * ```
+   */
+  create(params: ShippingTermCreateParams, options?: RequestOptions): APIPromise<CustomersAPI.ShippingTerm> {
+    const { include, ...body } = params;
+    return this._client.post('/v1/operations/shipping-terms', { query: { include }, body, ...options });
   }
 
   /**
@@ -71,23 +88,6 @@ export class ShippingTerms extends APIResource {
       body,
       ...options,
     });
-  }
-
-  /**
-   * Returns a paginated list of shipping terms for the account, including default
-   * system shipping terms.
-   *
-   * @example
-   * ```ts
-   * const listShippingTerm =
-   *   await client.operations.shippingTerms.list();
-   * ```
-   */
-  list(
-    query: ShippingTermListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListShippingTerm> {
-    return this._client.get('/v1/operations/shipping-terms', { query, ...options });
   }
 
   /**
@@ -196,6 +196,41 @@ export interface UpdateShippingTermRequest {
 
 export interface ShippingTermDeleteResponse {}
 
+export interface ShippingTermListParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<
+    'owner' | 'owner.account' | 'flat_rate.unit' | 'minimum_order_value.unit' | 'free_shipping_service_levels'
+  >;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+}
+
+export interface ShippingTermRetrieveParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<
+    'owner' | 'owner.account' | 'flat_rate.unit' | 'minimum_order_value.unit' | 'free_shipping_service_levels'
+  >;
+}
+
 export interface ShippingTermCreateParams {
   /**
    * Body param: Display name.
@@ -231,16 +266,6 @@ export interface ShippingTermCreateParams {
    * create/update requests.
    */
   minimum_order_value?: CustomersAPI.QuantityInput;
-}
-
-export interface ShippingTermRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<
-    'owner' | 'owner.account' | 'flat_rate.unit' | 'minimum_order_value.unit' | 'free_shipping_service_levels'
-  >;
 }
 
 export interface ShippingTermUpdateParams {
@@ -281,40 +306,15 @@ export interface ShippingTermUpdateParams {
   type?: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight';
 }
 
-export interface ShippingTermListParams {
-  /**
-   * Cursor token used to retrieve the next or previous page of results.
-   */
-  cursor?: string;
-
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<
-    'owner' | 'owner.account' | 'flat_rate.unit' | 'minimum_order_value.unit' | 'free_shipping_service_levels'
-  >;
-
-  /**
-   * Maximum number of results per page (default: 100, max: 1000).
-   */
-  limit?: number;
-
-  /**
-   * Search query used to filter results.
-   */
-  q?: string;
-}
-
 export declare namespace ShippingTerms {
   export {
     type CreateShippingTermRequest as CreateShippingTermRequest,
     type ListShippingTerm as ListShippingTerm,
     type UpdateShippingTermRequest as UpdateShippingTermRequest,
     type ShippingTermDeleteResponse as ShippingTermDeleteResponse,
-    type ShippingTermCreateParams as ShippingTermCreateParams,
-    type ShippingTermRetrieveParams as ShippingTermRetrieveParams,
-    type ShippingTermUpdateParams as ShippingTermUpdateParams,
     type ShippingTermListParams as ShippingTermListParams,
+    type ShippingTermRetrieveParams as ShippingTermRetrieveParams,
+    type ShippingTermCreateParams as ShippingTermCreateParams,
+    type ShippingTermUpdateParams as ShippingTermUpdateParams,
   };
 }

@@ -77,6 +77,7 @@ import {
   ServiceLevel,
   ShippingTerm,
   UpdateCustomerRequest,
+  User,
 } from './customers/customers';
 
 export class Sales extends APIResource {
@@ -103,9 +104,9 @@ export declare namespace Sales {
     type ListAccountGroup as ListAccountGroup,
     type UpdateAccountGroupRequest as UpdateAccountGroupRequest,
     type AccountGroupDeleteResponse as AccountGroupDeleteResponse,
+    type AccountGroupListParams as AccountGroupListParams,
     type AccountGroupCreateParams as AccountGroupCreateParams,
     type AccountGroupUpdateParams as AccountGroupUpdateParams,
-    type AccountGroupListParams as AccountGroupListParams,
   };
 
   export {
@@ -114,25 +115,25 @@ export declare namespace Sales {
     type ListAddress as ListAddress,
     type UpdateAddressRequest as UpdateAddressRequest,
     type AddressDeleteResponse as AddressDeleteResponse,
+    type AddressListParams as AddressListParams,
     type AddressCreateParams as AddressCreateParams,
     type AddressUpdateParams as AddressUpdateParams,
-    type AddressListParams as AddressListParams,
   };
 
   export {
     AccountStatuses as AccountStatuses,
     type AccountStatus as AccountStatus,
     type ListAccountStatus as ListAccountStatus,
-    type AccountStatusRetrieveParams as AccountStatusRetrieveParams,
     type AccountStatusListParams as AccountStatusListParams,
+    type AccountStatusRetrieveParams as AccountStatusRetrieveParams,
   };
 
   export {
     Priorities as Priorities,
     type ListPriority as ListPriority,
     type Priority as Priority,
-    type PriorityRetrieveParams as PriorityRetrieveParams,
     type PriorityListParams as PriorityListParams,
+    type PriorityRetrieveParams as PriorityRetrieveParams,
   };
 
   export {
@@ -165,11 +166,12 @@ export declare namespace Sales {
     type ServiceLevel as ServiceLevel,
     type ShippingTerm as ShippingTerm,
     type UpdateCustomerRequest as UpdateCustomerRequest,
+    type User as User,
     type CustomerDeleteResponse as CustomerDeleteResponse,
-    type CustomerCreateParams as CustomerCreateParams,
-    type CustomerRetrieveParams as CustomerRetrieveParams,
-    type CustomerUpdateParams as CustomerUpdateParams,
     type CustomerListParams as CustomerListParams,
+    type CustomerRetrieveParams as CustomerRetrieveParams,
+    type CustomerCreateParams as CustomerCreateParams,
+    type CustomerUpdateParams as CustomerUpdateParams,
   };
 
   export {

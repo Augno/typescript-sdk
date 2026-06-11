@@ -12,21 +12,6 @@ import { path } from '../../internal/utils/path';
  */
 export class LocationTypes extends APIResource {
   /**
-   * Returns a location type by ID or code.
-   *
-   * @example
-   * ```ts
-   * const locationType =
-   *   await client.operations.locationTypes.retrieve(
-   *     'lc_01e69cd3745a1bc0dd485986c0',
-   *   );
-   * ```
-   */
-  retrieve(id: string, options?: RequestOptions): APIPromise<LocationType> {
-    return this._client.get(path`/v1/operations/location-types/${id}`, options);
-  }
-
-  /**
    * Returns a paginated list of location types.
    *
    * @example
@@ -40,6 +25,21 @@ export class LocationTypes extends APIResource {
     options?: RequestOptions,
   ): APIPromise<ListLocationType> {
     return this._client.get('/v1/operations/location-types', { query, ...options });
+  }
+
+  /**
+   * Returns a location type by ID or code.
+   *
+   * @example
+   * ```ts
+   * const locationType =
+   *   await client.operations.locationTypes.retrieve(
+   *     'lc_01e69cd3745a1bc0dd485986c0',
+   *   );
+   * ```
+   */
+  retrieve(id: string, options?: RequestOptions): APIPromise<LocationType> {
+    return this._client.get(path`/v1/operations/location-types/${id}`, options);
   }
 }
 
@@ -73,7 +73,15 @@ export interface LocationType {
   id: string;
 
   /**
-   * Location type code.
+   * Location type code, identifying the level of the storage hierarchy this type
+   * represents.
+   *
+   * - `building`: a building-level location.
+   * - `section`: a section within a building.
+   * - `aisle`: an aisle within a section.
+   * - `rack`: a rack within an aisle.
+   * - `shelf`: a shelf within a rack.
+   * - `bin`: a bin within a shelf.
    */
   code: CustomersAPI.LocationTypeCode;
 

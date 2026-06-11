@@ -16,6 +16,41 @@ export class AccountUsers extends APIResource {
   actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
 
   /**
+   * Returns a paginated list of account users for the current account.
+   *
+   * @example
+   * ```ts
+   * const listAccountUser =
+   *   await client.identity.accountUsers.list();
+   * ```
+   */
+  list(
+    query: AccountUserListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ListAccountUser> {
+    return this._client.get('/v1/identity/account-users', { query, ...options });
+  }
+
+  /**
+   * Returns an account user by ID.
+   *
+   * @example
+   * ```ts
+   * const accountUser =
+   *   await client.identity.accountUsers.retrieve(
+   *     'acus_01ea9983ddb41dacc44ecf997c',
+   *   );
+   * ```
+   */
+  retrieve(
+    id: string,
+    query: AccountUserRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<CustomersAPI.AccountUser> {
+    return this._client.get(path`/v1/identity/account-users/${id}`, { query, ...options });
+  }
+
+  /**
    * Creates a new account user and invites them to the target account.
    *
    * @example
@@ -45,25 +80,6 @@ export class AccountUsers extends APIResource {
   }
 
   /**
-   * Returns an account user by ID.
-   *
-   * @example
-   * ```ts
-   * const accountUser =
-   *   await client.identity.accountUsers.retrieve(
-   *     'acus_01ea9983ddb41dacc44ecf997c',
-   *   );
-   * ```
-   */
-  retrieve(
-    id: string,
-    query: AccountUserRetrieveParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<CustomersAPI.AccountUser> {
-    return this._client.get(path`/v1/identity/account-users/${id}`, { query, ...options });
-  }
-
-  /**
    * Partially updates an account user.
    *
    * @example
@@ -90,22 +106,6 @@ export class AccountUsers extends APIResource {
       body,
       ...options,
     });
-  }
-
-  /**
-   * Returns a paginated list of account users for the current account.
-   *
-   * @example
-   * ```ts
-   * const listAccountUser =
-   *   await client.identity.accountUsers.list();
-   * ```
-   */
-  list(
-    query: AccountUserListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListAccountUser> {
-    return this._client.get('/v1/identity/account-users', { query, ...options });
   }
 }
 
@@ -220,6 +220,47 @@ export interface UpdateAccountUserRequest {
   username?: string;
 }
 
+export interface AccountUserListParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'user' | 'role' | 'department'>;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+
+  /**
+   * Controls whether removed account users are included.
+   */
+  removed_scope?: 'excluded' | 'included';
+
+  /**
+   * Filter by role type code.
+   */
+  role_type?: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent';
+}
+
+export interface AccountUserRetrieveParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'user' | 'role' | 'department'>;
+}
+
 export interface AccountUserCreateParams {
   /**
    * Query param: Sub-objects to expand in the response. When omitted, sub-objects
@@ -265,14 +306,6 @@ export interface AccountUserCreateParams {
   username?: string;
 }
 
-export interface AccountUserRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'user' | 'role' | 'department'>;
-}
-
 export interface AccountUserUpdateParams {
   /**
    * Query param: Sub-objects to expand in the response. When omitted, sub-objects
@@ -312,39 +345,6 @@ export interface AccountUserUpdateParams {
   username?: string;
 }
 
-export interface AccountUserListParams {
-  /**
-   * Cursor token used to retrieve the next or previous page of results.
-   */
-  cursor?: string;
-
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'user' | 'role' | 'department'>;
-
-  /**
-   * Maximum number of results per page (default: 100, max: 1000).
-   */
-  limit?: number;
-
-  /**
-   * Search query used to filter results.
-   */
-  q?: string;
-
-  /**
-   * Controls whether removed account users are included.
-   */
-  removed_scope?: 'excluded' | 'included';
-
-  /**
-   * Filter by role type code.
-   */
-  role_type?: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent';
-}
-
 AccountUsers.Actions = Actions;
 
 export declare namespace AccountUsers {
@@ -353,10 +353,10 @@ export declare namespace AccountUsers {
     type ListAccountUser as ListAccountUser,
     type NotificationPreferenceItem as NotificationPreferenceItem,
     type UpdateAccountUserRequest as UpdateAccountUserRequest,
-    type AccountUserCreateParams as AccountUserCreateParams,
-    type AccountUserRetrieveParams as AccountUserRetrieveParams,
-    type AccountUserUpdateParams as AccountUserUpdateParams,
     type AccountUserListParams as AccountUserListParams,
+    type AccountUserRetrieveParams as AccountUserRetrieveParams,
+    type AccountUserCreateParams as AccountUserCreateParams,
+    type AccountUserUpdateParams as AccountUserUpdateParams,
   };
 
   export {

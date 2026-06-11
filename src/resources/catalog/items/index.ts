@@ -9,8 +9,8 @@ export {
   type ListItem,
   type Quantity,
   type Rate,
-  type ItemRetrieveParams,
   type ItemListParams,
-  type ItemChangeCategoryParams,
+  type ItemRetrieveParams,
   type ItemRetrieveInventoryParams,
+  type ItemChangeCategoryParams,
 } from './items';

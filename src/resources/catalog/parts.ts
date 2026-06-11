@@ -13,20 +13,15 @@ import { path } from '../../internal/utils/path';
  */
 export class Parts extends APIResource {
   /**
-   * Creates a part with the specified SKU and category.
+   * Returns a paginated list of parts for the current account.
    *
    * @example
    * ```ts
-   * const part = await client.catalog.parts.create({
-   *   category_id: 'ic_01ae7bd7bfd21ca0ab81e1357e',
-   *   sku: 'BRG-6204-2RS',
-   *   description: 'Deep groove ball bearing, 20x47x14mm',
-   * });
+   * const listPart = await client.catalog.parts.list();
    * ```
    */
-  create(params: PartCreateParams, options?: RequestOptions): APIPromise<Part> {
-    const { include, ...body } = params;
-    return this._client.post('/v1/catalog/parts', { query: { include }, body, ...options });
+  list(query: PartListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ListPart> {
+    return this._client.get('/v1/catalog/parts', { query, ...options });
   }
 
   /**
@@ -45,6 +40,23 @@ export class Parts extends APIResource {
     options?: RequestOptions,
   ): APIPromise<Part> {
     return this._client.get(path`/v1/catalog/parts/${id}`, { query, ...options });
+  }
+
+  /**
+   * Creates a part with the specified SKU and category.
+   *
+   * @example
+   * ```ts
+   * const part = await client.catalog.parts.create({
+   *   category_id: 'ic_01ae7bd7bfd21ca0ab81e1357e',
+   *   sku: 'BRG-6204-2RS',
+   *   description: 'Deep groove ball bearing, 20x47x14mm',
+   * });
+   * ```
+   */
+  create(params: PartCreateParams, options?: RequestOptions): APIPromise<Part> {
+    const { include, ...body } = params;
+    return this._client.post('/v1/catalog/parts', { query: { include }, body, ...options });
   }
 
   /**
@@ -68,18 +80,6 @@ export class Parts extends APIResource {
   ): APIPromise<Part> {
     const { include, ...body } = params ?? {};
     return this._client.patch(path`/v1/catalog/parts/${id}`, { query: { include }, body, ...options });
-  }
-
-  /**
-   * Returns a paginated list of parts for the current account.
-   *
-   * @example
-   * ```ts
-   * const listPart = await client.catalog.parts.list();
-   * ```
-   */
-  list(query: PartListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ListPart> {
-    return this._client.get('/v1/catalog/parts', { query, ...options });
   }
 
   /**
@@ -207,93 +207,6 @@ export interface UpdatePartRequest {
   sku?: string;
 }
 
-export interface PartCreateParams {
-  /**
-   * Body param: Category ID.
-   */
-  category_id: string;
-
-  /**
-   * Body param: SKU.
-   */
-  sku: string;
-
-  /**
-   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
-   * are returned as `null`.
-   */
-  include?: Array<
-    'item' | 'item.category' | 'item.unit_value' | 'item.unit_cost' | 'item.burn_rate' | 'item.attributes'
-  >;
-
-  /**
-   * Body param: Attribute IDs to connect to the part at creation time.
-   */
-  attribute_ids?: Array<string>;
-
-  /**
-   * Body param: Description.
-   */
-  description?: string;
-
-  /**
-   * Body param: Notes.
-   */
-  notes?: string;
-
-  /**
-   * Body param: RateInput represents the input for creating or updating a rate.
-   */
-  unit_cost?: MaterialsAPI.RateInput;
-
-  /**
-   * Body param: RateInput represents the input for creating or updating a rate.
-   */
-  unit_price?: MaterialsAPI.RateInput;
-}
-
-export interface PartRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<
-    | 'item'
-    | 'item.category'
-    | 'item.category.properties'
-    | 'item.category.unit_group'
-    | 'item.unit_value'
-    | 'item.unit_cost'
-    | 'item.burn_rate'
-    | 'item.attributes'
-  >;
-}
-
-export interface PartUpdateParams {
-  /**
-   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
-   * are returned as `null`.
-   */
-  include?: Array<
-    'item' | 'item.category' | 'item.unit_value' | 'item.unit_cost' | 'item.burn_rate' | 'item.attributes'
-  >;
-
-  /**
-   * Body param: Description.
-   */
-  description?: string | null;
-
-  /**
-   * Body param: Notes.
-   */
-  notes?: string | null;
-
-  /**
-   * Body param: SKU.
-   */
-  sku?: string;
-}
-
 export interface PartListParams {
   /**
    * Filter by attribute IDs.
@@ -346,15 +259,102 @@ export interface PartListParams {
   start_date?: string;
 }
 
+export interface PartRetrieveParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<
+    | 'item'
+    | 'item.category'
+    | 'item.category.properties'
+    | 'item.category.unit_group'
+    | 'item.unit_value'
+    | 'item.unit_cost'
+    | 'item.burn_rate'
+    | 'item.attributes'
+  >;
+}
+
+export interface PartCreateParams {
+  /**
+   * Body param: Category ID.
+   */
+  category_id: string;
+
+  /**
+   * Body param: SKU.
+   */
+  sku: string;
+
+  /**
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
+   */
+  include?: Array<
+    'item' | 'item.category' | 'item.unit_value' | 'item.unit_cost' | 'item.burn_rate' | 'item.attributes'
+  >;
+
+  /**
+   * Body param: Attribute IDs to connect to the part at creation time.
+   */
+  attribute_ids?: Array<string>;
+
+  /**
+   * Body param: Description.
+   */
+  description?: string;
+
+  /**
+   * Body param: Notes.
+   */
+  notes?: string;
+
+  /**
+   * Body param: RateInput represents the input for creating or updating a rate.
+   */
+  unit_cost?: MaterialsAPI.RateInput;
+
+  /**
+   * Body param: RateInput represents the input for creating or updating a rate.
+   */
+  unit_price?: MaterialsAPI.RateInput;
+}
+
+export interface PartUpdateParams {
+  /**
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
+   */
+  include?: Array<
+    'item' | 'item.category' | 'item.unit_value' | 'item.unit_cost' | 'item.burn_rate' | 'item.attributes'
+  >;
+
+  /**
+   * Body param: Description.
+   */
+  description?: string | null;
+
+  /**
+   * Body param: Notes.
+   */
+  notes?: string | null;
+
+  /**
+   * Body param: SKU.
+   */
+  sku?: string;
+}
+
 export declare namespace Parts {
   export {
     type CreatePartRequest as CreatePartRequest,
     type ListPart as ListPart,
     type Part as Part,
     type UpdatePartRequest as UpdatePartRequest,
-    type PartCreateParams as PartCreateParams,
-    type PartRetrieveParams as PartRetrieveParams,
-    type PartUpdateParams as PartUpdateParams,
     type PartListParams as PartListParams,
+    type PartRetrieveParams as PartRetrieveParams,
+    type PartCreateParams as PartCreateParams,
+    type PartUpdateParams as PartUpdateParams,
   };
 }

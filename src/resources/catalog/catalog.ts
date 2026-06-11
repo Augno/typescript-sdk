@@ -157,10 +157,10 @@ export declare namespace Catalog {
     type Unit as Unit,
     type UpdateUnitRequest as UpdateUnitRequest,
     type UnitDeleteResponse as UnitDeleteResponse,
-    type UnitCreateParams as UnitCreateParams,
-    type UnitRetrieveParams as UnitRetrieveParams,
-    type UnitUpdateParams as UnitUpdateParams,
     type UnitListParams as UnitListParams,
+    type UnitRetrieveParams as UnitRetrieveParams,
+    type UnitCreateParams as UnitCreateParams,
+    type UnitUpdateParams as UnitUpdateParams,
   };
 
   export {
@@ -173,10 +173,10 @@ export declare namespace Catalog {
     type UnitGroupUnit as UnitGroupUnit,
     type UpdateUnitGroupRequest as UpdateUnitGroupRequest,
     type UnitGroupDeleteResponse as UnitGroupDeleteResponse,
-    type UnitGroupCreateParams as UnitGroupCreateParams,
-    type UnitGroupRetrieveParams as UnitGroupRetrieveParams,
-    type UnitGroupUpdateParams as UnitGroupUpdateParams,
     type UnitGroupListParams as UnitGroupListParams,
+    type UnitGroupRetrieveParams as UnitGroupRetrieveParams,
+    type UnitGroupCreateParams as UnitGroupCreateParams,
+    type UnitGroupUpdateParams as UnitGroupUpdateParams,
   };
 
   export {
@@ -188,10 +188,10 @@ export declare namespace Catalog {
     type Property as Property,
     type UpdatePropertyRequest as UpdatePropertyRequest,
     type PropertyDeleteResponse as PropertyDeleteResponse,
-    type PropertyCreateParams as PropertyCreateParams,
-    type PropertyRetrieveParams as PropertyRetrieveParams,
-    type PropertyUpdateParams as PropertyUpdateParams,
     type PropertyListParams as PropertyListParams,
+    type PropertyRetrieveParams as PropertyRetrieveParams,
+    type PropertyCreateParams as PropertyCreateParams,
+    type PropertyUpdateParams as PropertyUpdateParams,
   };
 
   export {
@@ -202,10 +202,10 @@ export declare namespace Catalog {
     type ListItem as ListItem,
     type Quantity as Quantity,
     type Rate as Rate,
-    type ItemRetrieveParams as ItemRetrieveParams,
     type ItemListParams as ItemListParams,
-    type ItemChangeCategoryParams as ItemChangeCategoryParams,
+    type ItemRetrieveParams as ItemRetrieveParams,
     type ItemRetrieveInventoryParams as ItemRetrieveInventoryParams,
+    type ItemChangeCategoryParams as ItemChangeCategoryParams,
   };
 
   export {
@@ -215,10 +215,10 @@ export declare namespace Catalog {
     type UpdateItemCategoryRequest as UpdateItemCategoryRequest,
     type ItemCategoryDeleteResponse as ItemCategoryDeleteResponse,
     type ItemCategoryChangeUnitGroupResponse as ItemCategoryChangeUnitGroupResponse,
-    type ItemCategoryCreateParams as ItemCategoryCreateParams,
-    type ItemCategoryRetrieveParams as ItemCategoryRetrieveParams,
-    type ItemCategoryUpdateParams as ItemCategoryUpdateParams,
     type ItemCategoryListParams as ItemCategoryListParams,
+    type ItemCategoryRetrieveParams as ItemCategoryRetrieveParams,
+    type ItemCategoryCreateParams as ItemCategoryCreateParams,
+    type ItemCategoryUpdateParams as ItemCategoryUpdateParams,
     type ItemCategoryChangeUnitGroupParams as ItemCategoryChangeUnitGroupParams,
   };
 
@@ -230,10 +230,10 @@ export declare namespace Catalog {
     type QuantityInputRequest as QuantityInputRequest,
     type RateInput as RateInput,
     type UpdateMaterialRequest as UpdateMaterialRequest,
-    type MaterialCreateParams as MaterialCreateParams,
-    type MaterialRetrieveParams as MaterialRetrieveParams,
-    type MaterialUpdateParams as MaterialUpdateParams,
     type MaterialListParams as MaterialListParams,
+    type MaterialRetrieveParams as MaterialRetrieveParams,
+    type MaterialCreateParams as MaterialCreateParams,
+    type MaterialUpdateParams as MaterialUpdateParams,
   };
 
   export {
@@ -242,10 +242,10 @@ export declare namespace Catalog {
     type ListPart as ListPart,
     type Part as Part,
     type UpdatePartRequest as UpdatePartRequest,
-    type PartCreateParams as PartCreateParams,
-    type PartRetrieveParams as PartRetrieveParams,
-    type PartUpdateParams as PartUpdateParams,
     type PartListParams as PartListParams,
+    type PartRetrieveParams as PartRetrieveParams,
+    type PartCreateParams as PartCreateParams,
+    type PartUpdateParams as PartUpdateParams,
   };
 
   export {
@@ -255,10 +255,10 @@ export declare namespace Catalog {
     type ProductLine as ProductLine,
     type UpdateProductLineRequest as UpdateProductLineRequest,
     type ProductLineDeleteResponse as ProductLineDeleteResponse,
-    type ProductLineCreateParams as ProductLineCreateParams,
-    type ProductLineRetrieveParams as ProductLineRetrieveParams,
-    type ProductLineUpdateParams as ProductLineUpdateParams,
     type ProductLineListParams as ProductLineListParams,
+    type ProductLineRetrieveParams as ProductLineRetrieveParams,
+    type ProductLineCreateParams as ProductLineCreateParams,
+    type ProductLineUpdateParams as ProductLineUpdateParams,
   };
 
   export {
@@ -267,10 +267,10 @@ export declare namespace Catalog {
     type ListProduct as ListProduct,
     type Product as Product,
     type UpdateProductRequest as UpdateProductRequest,
-    type ProductCreateParams as ProductCreateParams,
-    type ProductRetrieveParams as ProductRetrieveParams,
-    type ProductUpdateParams as ProductUpdateParams,
     type ProductListParams as ProductListParams,
+    type ProductRetrieveParams as ProductRetrieveParams,
+    type ProductCreateParams as ProductCreateParams,
+    type ProductUpdateParams as ProductUpdateParams,
     type ProductDeleteParams as ProductDeleteParams,
     type ProductChangeProductLineParams as ProductChangeProductLineParams,
   };

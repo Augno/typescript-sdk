@@ -14,20 +14,15 @@ import { path } from '../../internal/utils/path';
  */
 export class Products extends APIResource {
   /**
-   * Creates a product.
+   * Returns a paginated list of products for the target account.
    *
    * @example
    * ```ts
-   * const product = await client.catalog.products.create({
-   *   category_id: 'ic_01ae7bd7bfd21ca0ab81e1357e',
-   *   sku: 'ALM-2024-1001',
-   *   type: 'sale',
-   * });
+   * const listProduct = await client.catalog.products.list();
    * ```
    */
-  create(params: ProductCreateParams, options?: RequestOptions): APIPromise<Product> {
-    const { include, ...body } = params;
-    return this._client.post('/v1/catalog/products', { query: { include }, body, ...options });
+  list(query: ProductListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ListProduct> {
+    return this._client.get('/v1/catalog/products', { query, ...options });
   }
 
   /**
@@ -49,6 +44,23 @@ export class Products extends APIResource {
   }
 
   /**
+   * Creates a product.
+   *
+   * @example
+   * ```ts
+   * const product = await client.catalog.products.create({
+   *   category_id: 'ic_01ae7bd7bfd21ca0ab81e1357e',
+   *   sku: 'ALM-2024-1001',
+   *   type: 'sale',
+   * });
+   * ```
+   */
+  create(params: ProductCreateParams, options?: RequestOptions): APIPromise<Product> {
+    const { include, ...body } = params;
+    return this._client.post('/v1/catalog/products', { query: { include }, body, ...options });
+  }
+
+  /**
    * Partially updates a product.
    *
    * @example
@@ -66,18 +78,6 @@ export class Products extends APIResource {
   ): APIPromise<Product> {
     const { include, ...body } = params ?? {};
     return this._client.patch(path`/v1/catalog/products/${id}`, { query: { include }, body, ...options });
-  }
-
-  /**
-   * Returns a paginated list of products for the target account.
-   *
-   * @example
-   * ```ts
-   * const listProduct = await client.catalog.products.list();
-   * ```
-   */
-  list(query: ProductListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ListProduct> {
-    return this._client.get('/v1/catalog/products', { query, ...options });
   }
 
   /**
@@ -224,7 +224,11 @@ export interface Product {
   object: 'product';
 
   /**
-   * Product portal visibility.
+   * Whether the product is shown to buyers in the customer portal.
+   *
+   * - `visible`: buyers can see and order the product in the portal.
+   * - `hidden`: the product is concealed from the portal but remains usable
+   *   internally.
    */
   portal_visibility: 'visible' | 'hidden';
 
@@ -234,7 +238,15 @@ export interface Product {
   product_line: ProductLinesAPI.ProductLine | null;
 
   /**
-   * Product type code.
+   * Product type code, which determines how the product behaves on orders and
+   * invoices.
+   *
+   * - `sale`: a standard sellable product.
+   * - `service`: a non-physical service line, such as labor or installation.
+   * - `shipping`: a shipping charge applied to an order.
+   * - `credit`: a credit applied against an order or invoice.
+   * - `return`: a returned product (RMA).
+   * - `tax`: a tax line.
    */
   type: 'sale' | 'service' | 'shipping' | 'credit' | 'return' | 'tax';
 
@@ -270,156 +282,6 @@ export interface UpdateProductRequest {
 
   /**
    * RateInput represents the input for creating or updating a rate.
-   */
-  unit_price?: MaterialsAPI.RateInput;
-}
-
-export interface ProductCreateParams {
-  /**
-   * Body param: Category ID.
-   */
-  category_id: string;
-
-  /**
-   * Body param: SKU.
-   */
-  sku: string;
-
-  /**
-   * Body param: Product type code.
-   */
-  type: 'sale' | 'service' | 'shipping' | 'credit' | 'return' | 'tax';
-
-  /**
-   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
-   * are returned as `null`.
-   */
-  include?: Array<
-    | 'product_line'
-    | 'product_line.unit_group'
-    | 'product_line.unit_group.base_unit'
-    | 'product_line.unit_group.associated_units'
-    | 'product_line.unit_group.associated_units.unit'
-    | 'item'
-    | 'item.category'
-    | 'item.category.properties'
-    | 'item.category.unit_group'
-    | 'item.category.unit_group.base_unit'
-    | 'item.category.unit_group.associated_units'
-    | 'item.category.unit_group.associated_units.unit'
-    | 'item.unit_value'
-    | 'item.unit_cost'
-    | 'item.burn_rate'
-    | 'item.attributes'
-  >;
-
-  /**
-   * Body param: Attribute IDs to connect to the product at creation time.
-   */
-  attribute_ids?: Array<string>;
-
-  /**
-   * Body param: Description.
-   */
-  description?: string;
-
-  /**
-   * Body param: Notes.
-   */
-  notes?: string;
-
-  /**
-   * Body param: Whether visible in the customer portal.
-   */
-  portal_visibility?: 'visible' | 'hidden';
-
-  /**
-   * Body param: Product line ID.
-   */
-  product_line_id?: string;
-
-  /**
-   * Body param: RateInput represents the input for creating or updating a rate.
-   */
-  unit_cost?: MaterialsAPI.RateInput;
-
-  /**
-   * Body param: RateInput represents the input for creating or updating a rate.
-   */
-  unit_price?: MaterialsAPI.RateInput;
-}
-
-export interface ProductRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<
-    | 'product_line'
-    | 'product_line.unit_group'
-    | 'product_line.unit_group.base_unit'
-    | 'product_line.unit_group.associated_units'
-    | 'product_line.unit_group.associated_units.unit'
-    | 'item'
-    | 'item.category'
-    | 'item.category.properties'
-    | 'item.category.unit_group'
-    | 'item.category.unit_group.base_unit'
-    | 'item.category.unit_group.associated_units'
-    | 'item.category.unit_group.associated_units.unit'
-    | 'item.unit_value'
-    | 'item.unit_cost'
-    | 'item.burn_rate'
-    | 'item.attributes'
-  >;
-}
-
-export interface ProductUpdateParams {
-  /**
-   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
-   * are returned as `null`.
-   */
-  include?: Array<
-    | 'product_line'
-    | 'product_line.unit_group'
-    | 'product_line.unit_group.base_unit'
-    | 'product_line.unit_group.associated_units'
-    | 'product_line.unit_group.associated_units.unit'
-    | 'item'
-    | 'item.category'
-    | 'item.category.properties'
-    | 'item.category.unit_group'
-    | 'item.category.unit_group.base_unit'
-    | 'item.category.unit_group.associated_units'
-    | 'item.category.unit_group.associated_units.unit'
-    | 'item.unit_value'
-    | 'item.unit_cost'
-    | 'item.burn_rate'
-    | 'item.attributes'
-  >;
-
-  /**
-   * Body param: Description.
-   */
-  description?: string | null;
-
-  /**
-   * Body param: Notes.
-   */
-  notes?: string | null;
-
-  /**
-   * Body param: Whether visible in the customer portal.
-   */
-  portal_visibility?: 'visible' | 'hidden';
-
-  /**
-   * Body param: SKU.
-   */
-  sku?: string;
-
-  /**
-   * Body param: RateInput represents the input for creating or updating a rate.
    */
   unit_price?: MaterialsAPI.RateInput;
 }
@@ -499,6 +361,156 @@ export interface ProductListParams {
   start_date?: string;
 }
 
+export interface ProductRetrieveParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<
+    | 'product_line'
+    | 'product_line.unit_group'
+    | 'product_line.unit_group.base_unit'
+    | 'product_line.unit_group.associated_units'
+    | 'product_line.unit_group.associated_units.unit'
+    | 'item'
+    | 'item.category'
+    | 'item.category.properties'
+    | 'item.category.unit_group'
+    | 'item.category.unit_group.base_unit'
+    | 'item.category.unit_group.associated_units'
+    | 'item.category.unit_group.associated_units.unit'
+    | 'item.unit_value'
+    | 'item.unit_cost'
+    | 'item.burn_rate'
+    | 'item.attributes'
+  >;
+}
+
+export interface ProductCreateParams {
+  /**
+   * Body param: Category ID.
+   */
+  category_id: string;
+
+  /**
+   * Body param: SKU.
+   */
+  sku: string;
+
+  /**
+   * Body param: Product type code.
+   */
+  type: 'sale' | 'service' | 'shipping' | 'credit' | 'return' | 'tax';
+
+  /**
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
+   */
+  include?: Array<
+    | 'product_line'
+    | 'product_line.unit_group'
+    | 'product_line.unit_group.base_unit'
+    | 'product_line.unit_group.associated_units'
+    | 'product_line.unit_group.associated_units.unit'
+    | 'item'
+    | 'item.category'
+    | 'item.category.properties'
+    | 'item.category.unit_group'
+    | 'item.category.unit_group.base_unit'
+    | 'item.category.unit_group.associated_units'
+    | 'item.category.unit_group.associated_units.unit'
+    | 'item.unit_value'
+    | 'item.unit_cost'
+    | 'item.burn_rate'
+    | 'item.attributes'
+  >;
+
+  /**
+   * Body param: Attribute IDs to connect to the product at creation time.
+   */
+  attribute_ids?: Array<string>;
+
+  /**
+   * Body param: Description.
+   */
+  description?: string;
+
+  /**
+   * Body param: Notes.
+   */
+  notes?: string;
+
+  /**
+   * Body param: Whether visible in the customer portal.
+   */
+  portal_visibility?: 'visible' | 'hidden';
+
+  /**
+   * Body param: Product line ID.
+   */
+  product_line_id?: string;
+
+  /**
+   * Body param: RateInput represents the input for creating or updating a rate.
+   */
+  unit_cost?: MaterialsAPI.RateInput;
+
+  /**
+   * Body param: RateInput represents the input for creating or updating a rate.
+   */
+  unit_price?: MaterialsAPI.RateInput;
+}
+
+export interface ProductUpdateParams {
+  /**
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
+   */
+  include?: Array<
+    | 'product_line'
+    | 'product_line.unit_group'
+    | 'product_line.unit_group.base_unit'
+    | 'product_line.unit_group.associated_units'
+    | 'product_line.unit_group.associated_units.unit'
+    | 'item'
+    | 'item.category'
+    | 'item.category.properties'
+    | 'item.category.unit_group'
+    | 'item.category.unit_group.base_unit'
+    | 'item.category.unit_group.associated_units'
+    | 'item.category.unit_group.associated_units.unit'
+    | 'item.unit_value'
+    | 'item.unit_cost'
+    | 'item.burn_rate'
+    | 'item.attributes'
+  >;
+
+  /**
+   * Body param: Description.
+   */
+  description?: string | null;
+
+  /**
+   * Body param: Notes.
+   */
+  notes?: string | null;
+
+  /**
+   * Body param: Whether visible in the customer portal.
+   */
+  portal_visibility?: 'visible' | 'hidden';
+
+  /**
+   * Body param: SKU.
+   */
+  sku?: string;
+
+  /**
+   * Body param: RateInput represents the input for creating or updating a rate.
+   */
+  unit_price?: MaterialsAPI.RateInput;
+}
+
 export interface ProductDeleteParams {
   /**
    * Sub-objects to expand in the response. When omitted, sub-objects are returned as
@@ -560,10 +572,10 @@ export declare namespace Products {
     type ListProduct as ListProduct,
     type Product as Product,
     type UpdateProductRequest as UpdateProductRequest,
-    type ProductCreateParams as ProductCreateParams,
-    type ProductRetrieveParams as ProductRetrieveParams,
-    type ProductUpdateParams as ProductUpdateParams,
     type ProductListParams as ProductListParams,
+    type ProductRetrieveParams as ProductRetrieveParams,
+    type ProductCreateParams as ProductCreateParams,
+    type ProductUpdateParams as ProductUpdateParams,
     type ProductDeleteParams as ProductDeleteParams,
     type ProductChangeProductLineParams as ProductChangeProductLineParams,
   };

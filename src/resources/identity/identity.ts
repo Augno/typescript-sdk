@@ -41,10 +41,10 @@ export declare namespace Identity {
     type ListAccountUser as ListAccountUser,
     type NotificationPreferenceItem as NotificationPreferenceItem,
     type UpdateAccountUserRequest as UpdateAccountUserRequest,
-    type AccountUserCreateParams as AccountUserCreateParams,
-    type AccountUserRetrieveParams as AccountUserRetrieveParams,
-    type AccountUserUpdateParams as AccountUserUpdateParams,
     type AccountUserListParams as AccountUserListParams,
+    type AccountUserRetrieveParams as AccountUserRetrieveParams,
+    type AccountUserCreateParams as AccountUserCreateParams,
+    type AccountUserUpdateParams as AccountUserUpdateParams,
   };
 
   export {
@@ -53,9 +53,9 @@ export declare namespace Identity {
     type ListRole as ListRole,
     type UpdateRoleRequest as UpdateRoleRequest,
     type RoleDeleteResponse as RoleDeleteResponse,
-    type RoleCreateParams as RoleCreateParams,
-    type RoleRetrieveParams as RoleRetrieveParams,
-    type RoleUpdateParams as RoleUpdateParams,
     type RoleListParams as RoleListParams,
+    type RoleRetrieveParams as RoleRetrieveParams,
+    type RoleCreateParams as RoleCreateParams,
+    type RoleUpdateParams as RoleUpdateParams,
   };
 }

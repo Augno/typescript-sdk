@@ -25,18 +25,18 @@ export class Properties extends APIResource {
   attributes: AttributesAPI.Attributes = new AttributesAPI.Attributes(this._client);
 
   /**
-   * Creates a property.
+   * Returns a paginated list of properties for the target account.
    *
    * @example
    * ```ts
-   * const property = await client.catalog.properties.create({
-   *   name: 'Color',
-   * });
+   * const listProperty = await client.catalog.properties.list();
    * ```
    */
-  create(params: PropertyCreateParams, options?: RequestOptions): APIPromise<Property> {
-    const { include, ...body } = params;
-    return this._client.post('/v1/catalog/properties', { query: { include }, body, ...options });
+  list(
+    query: PropertyListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ListProperty> {
+    return this._client.get('/v1/catalog/properties', { query, ...options });
   }
 
   /**
@@ -58,6 +58,21 @@ export class Properties extends APIResource {
   }
 
   /**
+   * Creates a property.
+   *
+   * @example
+   * ```ts
+   * const property = await client.catalog.properties.create({
+   *   name: 'Color',
+   * });
+   * ```
+   */
+  create(params: PropertyCreateParams, options?: RequestOptions): APIPromise<Property> {
+    const { include, ...body } = params;
+    return this._client.post('/v1/catalog/properties', { query: { include }, body, ...options });
+  }
+
+  /**
    * Partially updates a property.
    *
    * @example
@@ -75,21 +90,6 @@ export class Properties extends APIResource {
   ): APIPromise<Property> {
     const { include, ...body } = params ?? {};
     return this._client.patch(path`/v1/catalog/properties/${id}`, { query: { include }, body, ...options });
-  }
-
-  /**
-   * Returns a paginated list of properties for the target account.
-   *
-   * @example
-   * ```ts
-   * const listProperty = await client.catalog.properties.list();
-   * ```
-   */
-  list(
-    query: PropertyListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListProperty> {
-    return this._client.get('/v1/catalog/properties', { query, ...options });
   }
 
   /**
@@ -117,7 +117,10 @@ export interface Attribute {
   id: string;
 
   /**
-   * Color code.
+   * Swatch color used to display this attribute in the UI.
+   *
+   * One of `blue`, `brown`, `gray`, `green`, `orange`, `pink`, `purple`, `red`,
+   * `yellow`, or `default` (a neutral fallback color).
    */
   color: 'blue' | 'brown' | 'default' | 'gray' | 'green' | 'orange' | 'pink' | 'purple' | 'red' | 'yellow';
 
@@ -137,7 +140,10 @@ export interface Attribute {
   property: Property | null;
 
   /**
-   * Display order.
+   * Position of this attribute relative to its siblings within the property,
+   * ascending.
+   *
+   * Lower values sort first.
    */
   sort_order: number;
 
@@ -147,7 +153,8 @@ export interface Attribute {
   updated_at: string;
 
   /**
-   * Attribute value.
+   * The selectable value this attribute represents, such as `Red` for a `Color`
+   * property or `Large` for a `Size` property.
    */
   value: string;
 }
@@ -222,7 +229,7 @@ export interface Property {
   created_at: string;
 
   /**
-   * Display name.
+   * Display name of the property, such as `Color` or `Size`.
    */
   name: string;
 
@@ -249,40 +256,6 @@ export interface UpdatePropertyRequest {
 
 export interface PropertyDeleteResponse {}
 
-export interface PropertyCreateParams {
-  /**
-   * Body param: Name.
-   */
-  name: string;
-
-  /**
-   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
-   * are returned as `null`.
-   */
-  include?: Array<'attributes'>;
-}
-
-export interface PropertyRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'attributes'>;
-}
-
-export interface PropertyUpdateParams {
-  /**
-   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
-   * are returned as `null`.
-   */
-  include?: Array<'attributes'>;
-
-  /**
-   * Body param: Name.
-   */
-  name?: string;
-}
-
 export interface PropertyListParams {
   /**
    * Cursor token used to retrieve the next or previous page of results.
@@ -306,6 +279,40 @@ export interface PropertyListParams {
   q?: string;
 }
 
+export interface PropertyRetrieveParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'attributes'>;
+}
+
+export interface PropertyCreateParams {
+  /**
+   * Body param: Name.
+   */
+  name: string;
+
+  /**
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
+   */
+  include?: Array<'attributes'>;
+}
+
+export interface PropertyUpdateParams {
+  /**
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
+   */
+  include?: Array<'attributes'>;
+
+  /**
+   * Body param: Name.
+   */
+  name?: string;
+}
+
 Properties.Attributes = Attributes;
 
 export declare namespace Properties {
@@ -317,10 +324,10 @@ export declare namespace Properties {
     type Property as Property,
     type UpdatePropertyRequest as UpdatePropertyRequest,
     type PropertyDeleteResponse as PropertyDeleteResponse,
-    type PropertyCreateParams as PropertyCreateParams,
-    type PropertyRetrieveParams as PropertyRetrieveParams,
-    type PropertyUpdateParams as PropertyUpdateParams,
     type PropertyListParams as PropertyListParams,
+    type PropertyRetrieveParams as PropertyRetrieveParams,
+    type PropertyCreateParams as PropertyCreateParams,
+    type PropertyUpdateParams as PropertyUpdateParams,
   };
 
   export {
@@ -328,10 +335,10 @@ export declare namespace Properties {
     type CreateAttributeRequest as CreateAttributeRequest,
     type UpdateAttributeRequest as UpdateAttributeRequest,
     type AttributeDeleteResponse as AttributeDeleteResponse,
-    type AttributeCreateParams as AttributeCreateParams,
-    type AttributeRetrieveParams as AttributeRetrieveParams,
-    type AttributeUpdateParams as AttributeUpdateParams,
     type AttributeListParams as AttributeListParams,
+    type AttributeRetrieveParams as AttributeRetrieveParams,
+    type AttributeCreateParams as AttributeCreateParams,
+    type AttributeUpdateParams as AttributeUpdateParams,
     type AttributeDeleteParams as AttributeDeleteParams,
   };
 }

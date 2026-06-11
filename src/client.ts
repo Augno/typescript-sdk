@@ -687,7 +687,12 @@ export class Augno {
 
     const headers = buildHeaders([
       idempotencyHeaders,
-      { Accept: 'application/json', 'User-Agent': this.getUserAgent(), 'Augno-Account': this.augnoAccountID },
+      {
+        Accept: 'application/json',
+        'User-Agent': this.getUserAgent(),
+        'Augno-Version': '1.0.forge-preview.2',
+        'Augno-Account': this.augnoAccountID,
+      },
       await this.authHeaders(options),
       this._options.defaultHeaders,
       bodyHeaders,
@@ -808,9 +813,9 @@ export declare namespace Augno {
     type ListTransactionType as ListTransactionType,
     type TransactionMethod as TransactionMethod,
     type TransactionType as TransactionType,
-    type FinanceRetrieveAdjustmentTypesParams as FinanceRetrieveAdjustmentTypesParams,
-    type FinanceRetrieveTransactionMethodsParams as FinanceRetrieveTransactionMethodsParams,
     type FinanceRetrieveTransactionTypesParams as FinanceRetrieveTransactionTypesParams,
+    type FinanceRetrieveTransactionMethodsParams as FinanceRetrieveTransactionMethodsParams,
+    type FinanceRetrieveAdjustmentTypesParams as FinanceRetrieveAdjustmentTypesParams,
   };
 
   export { Operations as Operations };

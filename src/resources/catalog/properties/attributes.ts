@@ -11,27 +11,22 @@ import { path } from '../../../internal/utils/path';
  */
 export class Attributes extends APIResource {
   /**
-   * Creates an attribute under a property.
+   * Returns a paginated list of attributes for a property.
    *
    * @example
    * ```ts
-   * const attribute =
-   *   await client.catalog.properties.attributes.create(
+   * const listAttribute =
+   *   await client.catalog.properties.attributes.list(
    *     'pp_01e21344878064372f69e67093',
-   *     {
-   *       value: 'Red',
-   *       color: 'red',
-   *       sort_order: 1,
-   *     },
    *   );
    * ```
    */
-  create(
+  list(
     propertyID: string,
-    body: AttributeCreateParams,
+    query: AttributeListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<PropertiesAPI.Attribute> {
-    return this._client.post(path`/v1/catalog/properties/${propertyID}/attributes`, { body, ...options });
+  ): APIPromise<PropertiesAPI.ListAttribute> {
+    return this._client.get(path`/v1/catalog/properties/${propertyID}/attributes`, { query, ...options });
   }
 
   /**
@@ -53,6 +48,30 @@ export class Attributes extends APIResource {
   ): APIPromise<PropertiesAPI.Attribute> {
     const { property_id } = params;
     return this._client.get(path`/v1/catalog/properties/${property_id}/attributes/${id}`, options);
+  }
+
+  /**
+   * Creates an attribute under a property.
+   *
+   * @example
+   * ```ts
+   * const attribute =
+   *   await client.catalog.properties.attributes.create(
+   *     'pp_01e21344878064372f69e67093',
+   *     {
+   *       value: 'Red',
+   *       color: 'red',
+   *       sort_order: 1,
+   *     },
+   *   );
+   * ```
+   */
+  create(
+    propertyID: string,
+    body: AttributeCreateParams,
+    options?: RequestOptions,
+  ): APIPromise<PropertiesAPI.Attribute> {
+    return this._client.post(path`/v1/catalog/properties/${propertyID}/attributes`, { body, ...options });
   }
 
   /**
@@ -80,25 +99,6 @@ export class Attributes extends APIResource {
       body,
       ...options,
     });
-  }
-
-  /**
-   * Returns a paginated list of attributes for a property.
-   *
-   * @example
-   * ```ts
-   * const listAttribute =
-   *   await client.catalog.properties.attributes.list(
-   *     'pp_01e21344878064372f69e67093',
-   *   );
-   * ```
-   */
-  list(
-    propertyID: string,
-    query: AttributeListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<PropertiesAPI.ListAttribute> {
-    return this._client.get(path`/v1/catalog/properties/${propertyID}/attributes`, { query, ...options });
   }
 
   /**
@@ -165,6 +165,30 @@ export interface UpdateAttributeRequest {
 
 export interface AttributeDeleteResponse {}
 
+export interface AttributeListParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+}
+
+export interface AttributeRetrieveParams {
+  /**
+   * Property ID.
+   */
+  property_id: string;
+}
+
 export interface AttributeCreateParams {
   /**
    * Attribute value.
@@ -180,13 +204,6 @@ export interface AttributeCreateParams {
    * Display order. Defaults to last position if not provided.
    */
   sort_order?: number;
-}
-
-export interface AttributeRetrieveParams {
-  /**
-   * Property ID.
-   */
-  property_id: string;
 }
 
 export interface AttributeUpdateParams {
@@ -211,23 +228,6 @@ export interface AttributeUpdateParams {
   value?: string;
 }
 
-export interface AttributeListParams {
-  /**
-   * Cursor token used to retrieve the next or previous page of results.
-   */
-  cursor?: string;
-
-  /**
-   * Maximum number of results per page (default: 100, max: 1000).
-   */
-  limit?: number;
-
-  /**
-   * Search query used to filter results.
-   */
-  q?: string;
-}
-
 export interface AttributeDeleteParams {
   /**
    * Property ID.
@@ -240,10 +240,10 @@ export declare namespace Attributes {
     type CreateAttributeRequest as CreateAttributeRequest,
     type UpdateAttributeRequest as UpdateAttributeRequest,
     type AttributeDeleteResponse as AttributeDeleteResponse,
-    type AttributeCreateParams as AttributeCreateParams,
-    type AttributeRetrieveParams as AttributeRetrieveParams,
-    type AttributeUpdateParams as AttributeUpdateParams,
     type AttributeListParams as AttributeListParams,
+    type AttributeRetrieveParams as AttributeRetrieveParams,
+    type AttributeCreateParams as AttributeCreateParams,
+    type AttributeUpdateParams as AttributeUpdateParams,
     type AttributeDeleteParams as AttributeDeleteParams,
   };
 }

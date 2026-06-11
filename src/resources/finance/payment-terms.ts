@@ -12,19 +12,20 @@ import { path } from '../../internal/utils/path';
  */
 export class PaymentTerms extends APIResource {
   /**
-   * Creates a payment term.
+   * Returns a paginated list of payment terms. Includes both account-specific and
+   * system default payment terms.
    *
    * @example
    * ```ts
-   * const paymentTerm =
-   *   await client.finance.paymentTerms.create({
-   *     name: 'Net 30',
-   *   });
+   * const listPaymentTerm =
+   *   await client.finance.paymentTerms.list();
    * ```
    */
-  create(params: PaymentTermCreateParams, options?: RequestOptions): APIPromise<CustomersAPI.PaymentTerm> {
-    const { include, ...body } = params;
-    return this._client.post('/v1/finance/payment-terms', { query: { include }, body, ...options });
+  list(
+    query: PaymentTermListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ListPaymentTerm> {
+    return this._client.get('/v1/finance/payment-terms', { query, ...options });
   }
 
   /**
@@ -44,6 +45,22 @@ export class PaymentTerms extends APIResource {
     options?: RequestOptions,
   ): APIPromise<CustomersAPI.PaymentTerm> {
     return this._client.get(path`/v1/finance/payment-terms/${id}`, { query, ...options });
+  }
+
+  /**
+   * Creates a payment term.
+   *
+   * @example
+   * ```ts
+   * const paymentTerm =
+   *   await client.finance.paymentTerms.create({
+   *     name: 'Net 30',
+   *   });
+   * ```
+   */
+  create(params: PaymentTermCreateParams, options?: RequestOptions): APIPromise<CustomersAPI.PaymentTerm> {
+    const { include, ...body } = params;
+    return this._client.post('/v1/finance/payment-terms', { query: { include }, body, ...options });
   }
 
   /**
@@ -69,23 +86,6 @@ export class PaymentTerms extends APIResource {
       body,
       ...options,
     });
-  }
-
-  /**
-   * Returns a paginated list of payment terms. Includes both account-specific and
-   * system default payment terms.
-   *
-   * @example
-   * ```ts
-   * const listPaymentTerm =
-   *   await client.finance.paymentTerms.list();
-   * ```
-   */
-  list(
-    query: PaymentTermListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListPaymentTerm> {
-    return this._client.get('/v1/finance/payment-terms', { query, ...options });
   }
 
   /**
@@ -146,40 +146,6 @@ export interface UpdatePaymentTermRequest {
 
 export interface PaymentTermDeleteResponse {}
 
-export interface PaymentTermCreateParams {
-  /**
-   * Body param: Display name (e.g. "Net 30").
-   */
-  name: string;
-
-  /**
-   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
-   * are returned as `null`.
-   */
-  include?: Array<'owner' | 'owner.account'>;
-}
-
-export interface PaymentTermRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'owner' | 'owner.account'>;
-}
-
-export interface PaymentTermUpdateParams {
-  /**
-   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
-   * are returned as `null`.
-   */
-  include?: Array<'owner' | 'owner.account'>;
-
-  /**
-   * Body param: Display name.
-   */
-  name?: string;
-}
-
 export interface PaymentTermListParams {
   /**
    * Cursor token used to retrieve the next or previous page of results.
@@ -203,15 +169,49 @@ export interface PaymentTermListParams {
   q?: string;
 }
 
+export interface PaymentTermRetrieveParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'owner' | 'owner.account'>;
+}
+
+export interface PaymentTermCreateParams {
+  /**
+   * Body param: Display name (e.g. "Net 30").
+   */
+  name: string;
+
+  /**
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
+   */
+  include?: Array<'owner' | 'owner.account'>;
+}
+
+export interface PaymentTermUpdateParams {
+  /**
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
+   */
+  include?: Array<'owner' | 'owner.account'>;
+
+  /**
+   * Body param: Display name.
+   */
+  name?: string;
+}
+
 export declare namespace PaymentTerms {
   export {
     type CreatePaymentTermRequest as CreatePaymentTermRequest,
     type ListPaymentTerm as ListPaymentTerm,
     type UpdatePaymentTermRequest as UpdatePaymentTermRequest,
     type PaymentTermDeleteResponse as PaymentTermDeleteResponse,
-    type PaymentTermCreateParams as PaymentTermCreateParams,
-    type PaymentTermRetrieveParams as PaymentTermRetrieveParams,
-    type PaymentTermUpdateParams as PaymentTermUpdateParams,
     type PaymentTermListParams as PaymentTermListParams,
+    type PaymentTermRetrieveParams as PaymentTermRetrieveParams,
+    type PaymentTermCreateParams as PaymentTermCreateParams,
+    type PaymentTermUpdateParams as PaymentTermUpdateParams,
   };
 }

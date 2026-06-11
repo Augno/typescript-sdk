@@ -31,9 +31,10 @@ export {
   type ServiceLevel,
   type ShippingTerm,
   type UpdateCustomerRequest,
+  type User,
   type CustomerDeleteResponse,
-  type CustomerCreateParams,
-  type CustomerRetrieveParams,
-  type CustomerUpdateParams,
   type CustomerListParams,
+  type CustomerRetrieveParams,
+  type CustomerCreateParams,
+  type CustomerUpdateParams,
 } from './customers';

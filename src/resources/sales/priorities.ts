@@ -11,6 +11,21 @@ import { path } from '../../internal/utils/path';
  */
 export class Priorities extends APIResource {
   /**
+   * Returns a paginated list of priorities.
+   *
+   * @example
+   * ```ts
+   * const listPriority = await client.sales.priorities.list();
+   * ```
+   */
+  list(
+    query: PriorityListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ListPriority> {
+    return this._client.get('/v1/sales/priorities', { query, ...options });
+  }
+
+  /**
    * Returns a priority by ID or code.
    *
    * @example
@@ -26,21 +41,6 @@ export class Priorities extends APIResource {
     options?: RequestOptions,
   ): APIPromise<Priority> {
     return this._client.get(path`/v1/sales/priorities/${id}`, { query, ...options });
-  }
-
-  /**
-   * Returns a paginated list of priorities.
-   *
-   * @example
-   * ```ts
-   * const listPriority = await client.sales.priorities.list();
-   * ```
-   */
-  list(
-    query: PriorityListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListPriority> {
-    return this._client.get('/v1/sales/priorities', { query, ...options });
   }
 }
 
@@ -74,7 +74,11 @@ export interface Priority {
   id: string;
 
   /**
-   * Machine-readable code.
+   * Machine-readable code identifying the priority level.
+   *
+   * - `low`: lowest urgency; worked after normal and high.
+   * - `normal`: default urgency for most orders and picks.
+   * - `high`: highest urgency; worked ahead of normal and low.
    */
   code: 'low' | 'normal' | 'high';
 
@@ -104,14 +108,6 @@ export interface Priority {
   updated_at: string;
 }
 
-export interface PriorityRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'owner'>;
-}
-
 export interface PriorityListParams {
   /**
    * Cursor token used to retrieve the next or previous page of results.
@@ -135,11 +131,19 @@ export interface PriorityListParams {
   q?: string;
 }
 
+export interface PriorityRetrieveParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'owner'>;
+}
+
 export declare namespace Priorities {
   export {
     type ListPriority as ListPriority,
     type Priority as Priority,
-    type PriorityRetrieveParams as PriorityRetrieveParams,
     type PriorityListParams as PriorityListParams,
+    type PriorityRetrieveParams as PriorityRetrieveParams,
   };
 }

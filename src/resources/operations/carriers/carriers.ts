@@ -26,23 +26,15 @@ export class Carriers extends APIResource {
   serviceLevels: ServiceLevelsAPI.ServiceLevels = new ServiceLevelsAPI.ServiceLevels(this._client);
 
   /**
-   * Creates a carrier. If a Shippo-supported carrier code is provided, the carrier
-   * will be registered with Shippo and service levels will be auto-synced as
-   * options.
+   * Returns a paginated list of carriers for the current account.
    *
    * @example
    * ```ts
-   * const carrier = await client.operations.carriers.create({
-   *   name: 'FedEx',
-   *   account_number: '1234567890',
-   *   code: 'fedex',
-   *   customer_portal_visibility: 'visible',
-   * });
+   * const listCarrier = await client.operations.carriers.list();
    * ```
    */
-  create(params: CarrierCreateParams, options?: RequestOptions): APIPromise<CustomersAPI.Carrier> {
-    const { include, ...body } = params;
-    return this._client.post('/v1/operations/carriers', { query: { include }, body, ...options });
+  list(query: CarrierListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ListCarrier> {
+    return this._client.get('/v1/operations/carriers', { query, ...options });
   }
 
   /**
@@ -64,6 +56,26 @@ export class Carriers extends APIResource {
   }
 
   /**
+   * Creates a carrier. If a Shippo-supported carrier code is provided, the carrier
+   * will be registered with Shippo and service levels will be auto-synced as
+   * options.
+   *
+   * @example
+   * ```ts
+   * const carrier = await client.operations.carriers.create({
+   *   name: 'FedEx',
+   *   account_number: '1234567890',
+   *   code: 'fedex',
+   *   customer_portal_visibility: 'visible',
+   * });
+   * ```
+   */
+  create(params: CarrierCreateParams, options?: RequestOptions): APIPromise<CustomersAPI.Carrier> {
+    const { include, ...body } = params;
+    return this._client.post('/v1/operations/carriers', { query: { include }, body, ...options });
+  }
+
+  /**
    * Partially updates a carrier's name and portal visibility.
    *
    * @example
@@ -81,18 +93,6 @@ export class Carriers extends APIResource {
   ): APIPromise<CustomersAPI.Carrier> {
     const { include, ...body } = params ?? {};
     return this._client.patch(path`/v1/operations/carriers/${id}`, { query: { include }, body, ...options });
-  }
-
-  /**
-   * Returns a paginated list of carriers for the current account.
-   *
-   * @example
-   * ```ts
-   * const listCarrier = await client.operations.carriers.list();
-   * ```
-   */
-  list(query: CarrierListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ListCarrier> {
-    return this._client.get('/v1/operations/carriers', { query, ...options });
   }
 
   /**
@@ -181,6 +181,37 @@ export interface UpdateCarrierRequest {
 
 export interface CarrierDeleteResponse {}
 
+export interface CarrierListParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'owner' | 'owner.account' | 'service_levels'>;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+}
+
+export interface CarrierRetrieveParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'owner' | 'owner.account' | 'service_levels'>;
+}
+
 export interface CarrierCreateParams {
   /**
    * Body param: Display name.
@@ -213,14 +244,6 @@ export interface CarrierCreateParams {
   customer_portal_visibility?: 'visible' | 'hidden';
 }
 
-export interface CarrierRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'owner' | 'owner.account' | 'service_levels'>;
-}
-
 export interface CarrierUpdateParams {
   /**
    * Query param: Sub-objects to expand in the response. When omitted, sub-objects
@@ -243,29 +266,6 @@ export interface CarrierUpdateParams {
   name?: string;
 }
 
-export interface CarrierListParams {
-  /**
-   * Cursor token used to retrieve the next or previous page of results.
-   */
-  cursor?: string;
-
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'owner' | 'owner.account' | 'service_levels'>;
-
-  /**
-   * Maximum number of results per page (default: 100, max: 1000).
-   */
-  limit?: number;
-
-  /**
-   * Search query used to filter results.
-   */
-  q?: string;
-}
-
 Carriers.ServiceLevels = ServiceLevels;
 
 export declare namespace Carriers {
@@ -274,10 +274,10 @@ export declare namespace Carriers {
     type ListCarrier as ListCarrier,
     type UpdateCarrierRequest as UpdateCarrierRequest,
     type CarrierDeleteResponse as CarrierDeleteResponse,
-    type CarrierCreateParams as CarrierCreateParams,
-    type CarrierRetrieveParams as CarrierRetrieveParams,
-    type CarrierUpdateParams as CarrierUpdateParams,
     type CarrierListParams as CarrierListParams,
+    type CarrierRetrieveParams as CarrierRetrieveParams,
+    type CarrierCreateParams as CarrierCreateParams,
+    type CarrierUpdateParams as CarrierUpdateParams,
   };
 
   export {
@@ -285,10 +285,10 @@ export declare namespace Carriers {
     type CreateServiceLevelRequest as CreateServiceLevelRequest,
     type UpdateServiceLevelRequest as UpdateServiceLevelRequest,
     type ServiceLevelDeleteResponse as ServiceLevelDeleteResponse,
-    type ServiceLevelCreateParams as ServiceLevelCreateParams,
-    type ServiceLevelRetrieveParams as ServiceLevelRetrieveParams,
-    type ServiceLevelUpdateParams as ServiceLevelUpdateParams,
     type ServiceLevelListParams as ServiceLevelListParams,
+    type ServiceLevelRetrieveParams as ServiceLevelRetrieveParams,
+    type ServiceLevelCreateParams as ServiceLevelCreateParams,
+    type ServiceLevelUpdateParams as ServiceLevelUpdateParams,
     type ServiceLevelDeleteParams as ServiceLevelDeleteParams,
   };
 }

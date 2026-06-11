@@ -14,28 +14,6 @@ export class APIKeys extends APIResource {
   actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
 
   /**
-   * Creates an [API key](https://docs.augno.com/api/api-keys) to authenticate API
-   * requests.
-   *
-   * The secret key is returned once and cannot be retrieved later, so you should
-   * store it securely. We provide some
-   * [recommendations](https://docs.augno.com/api/managing-api-keys) on how you can
-   * manage your API keys.
-   *
-   * @example
-   * ```ts
-   * const createdAPIKey = await client.auth.apiKeys.create({
-   *   name: 'Production API Key',
-   *   role_id: 'rl_01c16d2eb637c0d1f3a372937c',
-   * });
-   * ```
-   */
-  create(params: APIKeyCreateParams, options?: RequestOptions): APIPromise<CreatedAPIKey> {
-    const { include, ...body } = params;
-    return this._client.post('/v1/auth/api-keys', { query: { include }, body, ...options });
-  }
-
-  /**
    * Returns [API key](https://docs.augno.com/api/api-keys) metadata by ID.
    *
    * @example
@@ -63,6 +41,28 @@ export class APIKeys extends APIResource {
    */
   list(query: APIKeyListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ListAPIKey> {
     return this._client.get('/v1/auth/api-keys', { query, ...options });
+  }
+
+  /**
+   * Creates an [API key](https://docs.augno.com/api/api-keys) to authenticate API
+   * requests.
+   *
+   * The secret key is returned once and cannot be retrieved later, so you should
+   * store it securely. We provide some
+   * [recommendations](https://docs.augno.com/api/managing-api-keys) on how you can
+   * manage your API keys.
+   *
+   * @example
+   * ```ts
+   * const createdAPIKey = await client.auth.apiKeys.create({
+   *   name: 'Production API Key',
+   *   role_id: 'rl_01c16d2eb637c0d1f3a372937c',
+   * });
+   * ```
+   */
+  create(params: APIKeyCreateParams, options?: RequestOptions): APIPromise<CreatedAPIKey> {
+    const { include, ...body } = params;
+    return this._client.post('/v1/auth/api-keys', { query: { include }, body, ...options });
   }
 
   /**
@@ -268,6 +268,10 @@ export interface Address {
 
   /**
    * Address type.
+   *
+   * - `standard`: a normal shipping or billing address.
+   * - `drop_ship`: an address an order is shipped to directly, typically a third
+   *   party or end customer rather than the account itself.
    */
   type: 'standard' | 'drop_ship';
 
@@ -292,12 +296,16 @@ export interface APIKey {
   created_at: string;
 
   /**
-   * Expiration timestamp.
+   * When the key expires and stops authenticating.
+   *
+   * `null` if the key never expires.
    */
   expires_at: string | null;
 
   /**
-   * Last used timestamp.
+   * When the key was last used to authenticate a request.
+   *
+   * `null` if it has never been used.
    */
   last_used_at: string | null;
 
@@ -317,7 +325,9 @@ export interface APIKey {
   redacted_value: string;
 
   /**
-   * Revocation timestamp.
+   * When the key was revoked.
+   *
+   * `null` if the key has not been revoked.
    */
   revoked_at: string | null;
 
@@ -362,7 +372,9 @@ export interface CreatedAPIKey {
   api_key_info: APIKey;
 
   /**
-   * Full secret value. Returned once and cannot be retrieved later. Learn more about
+   * Full secret value.
+   *
+   * Returned once and cannot be retrieved later. Learn more about
    * [managing your API keys](https://docs.augno.com/api/managing-api-keys).
    */
   api_key_secret: string;
@@ -453,8 +465,12 @@ export interface Owner {
   object: 'owner';
 
   /**
-   * The owner type: "system" for platform defaults, "account" for account-owned
-   * resources.
+   * Owner type, identifying where the resource came from.
+   *
+   * - `system`: a platform-provided default shared across all accounts; not
+   *   editable.
+   * - `account`: created and owned by a specific account; the `account` field
+   *   identifies which.
    */
   type: 'system' | 'account';
 }
@@ -524,6 +540,13 @@ export interface Role {
    * The role's type is sometimes used to gate special behaviors in the frontend and
    * to restrict some actions to only certain types of roles. For example, only roles
    * with the type `admin` can create and manage API keys.
+   *
+   * - `admin`: full administrative access, including managing API keys.
+   * - `user`: a custom role tailored to a specific need (its permissions are defined
+   *   explicitly).
+   * - `scanner`: a role for scanning-station operators.
+   * - `sales_rep`: a role for sales representatives.
+   * - `agent`: a role assigned to an automated agent rather than a person.
    */
   type: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent';
 
@@ -534,29 +557,6 @@ export interface Role {
 }
 
 export interface APIKeyDeleteResponse {}
-
-export interface APIKeyCreateParams {
-  /**
-   * Body param: Human-readable name for the API key.
-   */
-  name: string;
-
-  /**
-   * Body param: Role ID assigned to the API key.
-   */
-  role_id: string;
-
-  /**
-   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
-   * are returned as `null`.
-   */
-  include?: Array<'role' | 'role.permissions'>;
-
-  /**
-   * Body param: Expiration timestamp. If not set, the key does not expire.
-   */
-  expires_at?: string;
-}
 
 export interface APIKeyRetrieveParams {
   /**
@@ -594,6 +594,29 @@ export interface APIKeyListParams {
   statuses?: Array<'active' | 'expired' | 'revoked'>;
 }
 
+export interface APIKeyCreateParams {
+  /**
+   * Body param: Human-readable name for the API key.
+   */
+  name: string;
+
+  /**
+   * Body param: Role ID assigned to the API key.
+   */
+  role_id: string;
+
+  /**
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
+   */
+  include?: Array<'role' | 'role.permissions'>;
+
+  /**
+   * Body param: Expiration timestamp. If not set, the key does not expire.
+   */
+  expires_at?: string;
+}
+
 APIKeys.Actions = Actions;
 
 export declare namespace APIKeys {
@@ -611,9 +634,9 @@ export declare namespace APIKeys {
     type PageInfo as PageInfo,
     type Role as Role,
     type APIKeyDeleteResponse as APIKeyDeleteResponse,
-    type APIKeyCreateParams as APIKeyCreateParams,
     type APIKeyRetrieveParams as APIKeyRetrieveParams,
     type APIKeyListParams as APIKeyListParams,
+    type APIKeyCreateParams as APIKeyCreateParams,
   };
 
   export {

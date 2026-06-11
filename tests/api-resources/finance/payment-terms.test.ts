@@ -8,8 +8,8 @@ const client = new Augno({
 });
 
 describe('resource paymentTerms', () => {
-  test('create: only required params', async () => {
-    const responsePromise = client.finance.paymentTerms.create({ name: 'Net 30' });
+  test('list', async () => {
+    const responsePromise = client.finance.paymentTerms.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -19,8 +19,19 @@ describe('resource paymentTerms', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('create: required and optional params', async () => {
-    const response = await client.finance.paymentTerms.create({ name: 'Net 30', include: ['owner'] });
+  test('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.finance.paymentTerms.list(
+        {
+          cursor: 'cursor',
+          include: ['owner'],
+          limit: 0,
+          q: 'q',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Augno.NotFoundError);
   });
 
   test('retrieve', async () => {
@@ -45,6 +56,21 @@ describe('resource paymentTerms', () => {
     ).rejects.toThrow(Augno.NotFoundError);
   });
 
+  test('create: only required params', async () => {
+    const responsePromise = client.finance.paymentTerms.create({ name: 'Net 30' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('create: required and optional params', async () => {
+    const response = await client.finance.paymentTerms.create({ name: 'Net 30', include: ['owner'] });
+  });
+
   test('update', async () => {
     const responsePromise = client.finance.paymentTerms.update('pytm_018694d6601ea771cd1b52e890');
     const rawResponse = await responsePromise.asResponse();
@@ -62,32 +88,6 @@ describe('resource paymentTerms', () => {
       client.finance.paymentTerms.update(
         'pytm_018694d6601ea771cd1b52e890',
         { include: ['owner'], name: 'Net 60' },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
-  });
-
-  test('list', async () => {
-    const responsePromise = client.finance.paymentTerms.list();
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.finance.paymentTerms.list(
-        {
-          cursor: 'cursor',
-          include: ['owner'],
-          limit: 0,
-          q: 'q',
-        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Augno.NotFoundError);

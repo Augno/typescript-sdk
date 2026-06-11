@@ -11,6 +11,32 @@ import { path } from '../../internal/utils/path';
  */
 export class Addresses extends APIResource {
   /**
+   * Returns a paginated list of addresses.
+   *
+   * @example
+   * ```ts
+   * const listAddress = await client.sales.addresses.list();
+   * ```
+   */
+  list(query: AddressListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ListAddress> {
+    return this._client.get('/v1/sales/addresses', { query, ...options });
+  }
+
+  /**
+   * Retrieves an address by ID.
+   *
+   * @example
+   * ```ts
+   * const address = await client.sales.addresses.retrieve(
+   *   'ad_012100950cfaa34aa0e0ad7258',
+   * );
+   * ```
+   */
+  retrieve(id: string, options?: RequestOptions): APIPromise<APIKeysAPI.Address> {
+    return this._client.get(path`/v1/sales/addresses/${id}`, options);
+  }
+
+  /**
    * Creates an address for the targeted account.
    *
    * @example
@@ -30,20 +56,6 @@ export class Addresses extends APIResource {
   }
 
   /**
-   * Retrieves an address by ID.
-   *
-   * @example
-   * ```ts
-   * const address = await client.sales.addresses.retrieve(
-   *   'ad_012100950cfaa34aa0e0ad7258',
-   * );
-   * ```
-   */
-  retrieve(id: string, options?: RequestOptions): APIPromise<APIKeysAPI.Address> {
-    return this._client.get(path`/v1/sales/addresses/${id}`, options);
-  }
-
-  /**
    * Partially updates an address.
    *
    * @example
@@ -60,18 +72,6 @@ export class Addresses extends APIResource {
     options?: RequestOptions,
   ): APIPromise<APIKeysAPI.Address> {
     return this._client.patch(path`/v1/sales/addresses/${id}`, { body, ...options });
-  }
-
-  /**
-   * Returns a paginated list of addresses.
-   *
-   * @example
-   * ```ts
-   * const listAddress = await client.sales.addresses.list();
-   * ```
-   */
-  list(query: AddressListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ListAddress> {
-    return this._client.get('/v1/sales/addresses', { query, ...options });
   }
 
   /**
@@ -222,6 +222,28 @@ export interface UpdateAddressRequest {
 
 export interface AddressDeleteResponse {}
 
+export interface AddressListParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+
+  /**
+   * Filter by address type.
+   */
+  type?: 'standard' | 'drop_ship';
+}
+
 export interface AddressCreateParams {
   /**
    * Two-letter country code.
@@ -326,36 +348,14 @@ export interface AddressUpdateParams {
   type?: 'standard' | 'drop_ship';
 }
 
-export interface AddressListParams {
-  /**
-   * Cursor token used to retrieve the next or previous page of results.
-   */
-  cursor?: string;
-
-  /**
-   * Maximum number of results per page (default: 100, max: 1000).
-   */
-  limit?: number;
-
-  /**
-   * Search query used to filter results.
-   */
-  q?: string;
-
-  /**
-   * Filter by address type.
-   */
-  type?: 'standard' | 'drop_ship';
-}
-
 export declare namespace Addresses {
   export {
     type AddressInput as AddressInput,
     type ListAddress as ListAddress,
     type UpdateAddressRequest as UpdateAddressRequest,
     type AddressDeleteResponse as AddressDeleteResponse,
+    type AddressListParams as AddressListParams,
     type AddressCreateParams as AddressCreateParams,
     type AddressUpdateParams as AddressUpdateParams,
-    type AddressListParams as AddressListParams,
   };
 }

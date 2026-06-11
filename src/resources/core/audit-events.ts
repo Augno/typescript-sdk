@@ -12,6 +12,21 @@ import { path } from '../../internal/utils/path';
  */
 export class AuditEvents extends APIResource {
   /**
+   * Returns a paginated list of audit events for the current account.
+   *
+   * @example
+   * ```ts
+   * const listAuditEvent = await client.core.auditEvents.list();
+   * ```
+   */
+  list(
+    query: AuditEventListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ListAuditEvent> {
+    return this._client.get('/v1/core/audit-events', { query, ...options });
+  }
+
+  /**
    * Returns an audit event by ID.
    *
    * @example
@@ -30,21 +45,6 @@ export class AuditEvents extends APIResource {
   }
 
   /**
-   * Returns a paginated list of audit events for the current account.
-   *
-   * @example
-   * ```ts
-   * const listAuditEvent = await client.core.auditEvents.list();
-   * ```
-   */
-  list(
-    query: AuditEventListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListAuditEvent> {
-    return this._client.get('/v1/core/audit-events', { query, ...options });
-  }
-
-  /**
    * Returns the full set of resource types that may appear on audit events.
    *
    * @example
@@ -59,8 +59,9 @@ export class AuditEvents extends APIResource {
 }
 
 /**
- * Immutable audit event record. Captures the actor, changed resource, and
- * timestamp.
+ * Immutable audit event record.
+ *
+ * Captures the actor, changed resource, and timestamp.
  */
 export interface AuditEvent {
   /**
@@ -70,6 +71,12 @@ export interface AuditEvent {
 
   /**
    * Mutation type.
+   *
+   * - `create`: the resource was created.
+   * - `update`: one or more fields were changed.
+   * - `delete`: the resource was deleted.
+   * - `restore`: a previously deleted resource was restored.
+   * - `archive`: the resource was archived.
    */
   action: 'create' | 'update' | 'delete' | 'restore' | 'archive';
 
@@ -346,8 +353,10 @@ export interface AuditFieldChange {
   field: string;
 
   /**
-   * New value as a JSON fragment. Null for deletion events. Encoded as a JSON value
-   * (object, array, string, number, boolean, or null), not a JSON-encoded string.
+   * New value as a JSON fragment.
+   *
+   * Null for deletion events. Encoded as a JSON value (object, array, string,
+   * number, boolean, or null), not a JSON-encoded string.
    */
   new_value: unknown | null;
 
@@ -357,9 +366,10 @@ export interface AuditFieldChange {
   object: 'audit_field_change';
 
   /**
-   * Previous value as a JSON fragment. Null for creation events. Encoded as a JSON
-   * value (object, array, string, number, boolean, or null), not a JSON-encoded
-   * string.
+   * Previous value as a JSON fragment.
+   *
+   * Null for creation events. Encoded as a JSON value (object, array, string,
+   * number, boolean, or null), not a JSON-encoded string.
    */
   old_value: unknown | null;
 }
@@ -630,14 +640,6 @@ export interface ListObjectType {
   page_info: APIKeysAPI.PageInfo;
 }
 
-export interface AuditEventRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'actor' | 'changes' | 'metadata' | 'request'>;
-}
-
 export interface AuditEventListParams {
   /**
    * Filter by the audit actions.
@@ -900,6 +902,14 @@ export interface AuditEventListParams {
   start_date?: string;
 }
 
+export interface AuditEventRetrieveParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'actor' | 'changes' | 'metadata' | 'request'>;
+}
+
 export declare namespace AuditEvents {
   export {
     type AuditEvent as AuditEvent,
@@ -907,7 +917,7 @@ export declare namespace AuditEvents {
     type ListAuditEvent as ListAuditEvent,
     type ListAuditFieldChange as ListAuditFieldChange,
     type ListObjectType as ListObjectType,
-    type AuditEventRetrieveParams as AuditEventRetrieveParams,
     type AuditEventListParams as AuditEventListParams,
+    type AuditEventRetrieveParams as AuditEventRetrieveParams,
   };
 }

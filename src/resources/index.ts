@@ -11,9 +11,9 @@ export {
   type ListTransactionType,
   type TransactionMethod,
   type TransactionType,
-  type FinanceRetrieveAdjustmentTypesParams,
-  type FinanceRetrieveTransactionMethodsParams,
   type FinanceRetrieveTransactionTypesParams,
+  type FinanceRetrieveTransactionMethodsParams,
+  type FinanceRetrieveAdjustmentTypesParams,
 } from './finance/finance';
 export { Identity } from './identity/identity';
 export { Operations } from './operations/operations';

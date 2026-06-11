@@ -11,24 +11,16 @@ import { path } from '../../internal/utils/path';
  */
 export class Units extends APIResource {
   /**
-   * Creates an account-owned unit.
+   * Returns a paginated list of units for the current account, including both
+   * account-owned and global system units.
    *
    * @example
    * ```ts
-   * const unit = await client.catalog.units.create({
-   *   abbreviation: 'g',
-   *   name: 'Gram',
-   *   offset_denominator: '1',
-   *   offset_numerator: '0',
-   *   ratio_denominator: '1',
-   *   ratio_numerator: '1',
-   *   type: 'mass',
-   * });
+   * const listUnit = await client.catalog.units.list();
    * ```
    */
-  create(params: UnitCreateParams, options?: RequestOptions): APIPromise<Unit> {
-    const { include, ...body } = params;
-    return this._client.post('/v1/catalog/units', { query: { include }, body, ...options });
+  list(query: UnitListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ListUnit> {
+    return this._client.get('/v1/catalog/units', { query, ...options });
   }
 
   /**
@@ -50,6 +42,27 @@ export class Units extends APIResource {
   }
 
   /**
+   * Creates an account-owned unit.
+   *
+   * @example
+   * ```ts
+   * const unit = await client.catalog.units.create({
+   *   abbreviation: 'g',
+   *   name: 'Gram',
+   *   offset_denominator: '1',
+   *   offset_numerator: '0',
+   *   ratio_denominator: '1',
+   *   ratio_numerator: '1',
+   *   type: 'mass',
+   * });
+   * ```
+   */
+  create(params: UnitCreateParams, options?: RequestOptions): APIPromise<Unit> {
+    const { include, ...body } = params;
+    return this._client.post('/v1/catalog/units', { query: { include }, body, ...options });
+  }
+
+  /**
    * Partially updates an account-owned unit; system units cannot be updated.
    *
    * @example
@@ -67,19 +80,6 @@ export class Units extends APIResource {
   ): APIPromise<Unit> {
     const { include, ...body } = params ?? {};
     return this._client.patch(path`/v1/catalog/units/${id}`, { query: { include }, body, ...options });
-  }
-
-  /**
-   * Returns a paginated list of units for the current account, including both
-   * account-owned and global system units.
-   *
-   * @example
-   * ```ts
-   * const listUnit = await client.catalog.units.list();
-   * ```
-   */
-  list(query: UnitListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ListUnit> {
-    return this._client.get('/v1/catalog/units', { query, ...options });
   }
 
   /**
@@ -179,8 +179,9 @@ export interface Unit {
   created_at: string;
 
   /**
-   * Whether this is the base unit for its dimension. Conversion ratios are relative
-   * to this unit.
+   * Whether this is the base unit for its dimension.
+   *
+   * Conversion ratios are relative to this unit.
    */
   is_base_unit: boolean;
 
@@ -195,13 +196,16 @@ export interface Unit {
   object: 'unit';
 
   /**
-   * Conversion offset denominator. Typically 1. Cannot be zero.
+   * Conversion offset denominator.
+   *
+   * Typically 1. Cannot be zero.
    */
   offset_denominator: string;
 
   /**
-   * Conversion offset numerator, used for temperature-like conversions. Zero for
-   * most unit types.
+   * Conversion offset numerator, used for temperature-like conversions.
+   *
+   * Zero for most unit types.
    */
   offset_numerator: string;
 
@@ -212,6 +216,7 @@ export interface Unit {
 
   /**
    * Conversion ratio denominator relative to the base unit in the same dimension.
+   *
    * Cannot be zero.
    */
   ratio_denominator: string;
@@ -223,6 +228,17 @@ export interface Unit {
 
   /**
    * Unit dimension.
+   *
+   * Units can only be converted to other units sharing the same dimension.
+   *
+   * - `currency`: monetary units such as dollars or euros.
+   * - `quantity`: discrete countable units.
+   * - `time`: time-based units such as hours or minutes.
+   * - `mass`: weight-based units such as kilograms or pounds.
+   * - `volume`: volumetric units such as liters or gallons.
+   * - `length`: distance-based units such as meters or feet.
+   * - `temperature`: temperature units such as Celsius or Fahrenheit.
+   * - `area`: area-based units such as square meters or acres.
    */
   type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area';
 
@@ -268,6 +284,47 @@ export interface UpdateUnitRequest {
 }
 
 export interface UnitDeleteResponse {}
+
+export interface UnitListParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'owner' | 'owner.account'>;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+
+  /**
+   * Filter by unit dimension code.
+   */
+  type?: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area';
+
+  /**
+   * Filter by unit group membership.
+   */
+  unit_group_ids?: Array<string>;
+}
+
+export interface UnitRetrieveParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'owner' | 'owner.account'>;
+}
 
 export interface UnitCreateParams {
   /**
@@ -315,14 +372,6 @@ export interface UnitCreateParams {
   include?: Array<'owner' | 'owner.account'>;
 }
 
-export interface UnitRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'owner' | 'owner.account'>;
-}
-
 export interface UnitUpdateParams {
   /**
    * Query param: Sub-objects to expand in the response. When omitted, sub-objects
@@ -362,39 +411,6 @@ export interface UnitUpdateParams {
   ratio_numerator?: string;
 }
 
-export interface UnitListParams {
-  /**
-   * Cursor token used to retrieve the next or previous page of results.
-   */
-  cursor?: string;
-
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'owner' | 'owner.account'>;
-
-  /**
-   * Maximum number of results per page (default: 100, max: 1000).
-   */
-  limit?: number;
-
-  /**
-   * Search query used to filter results.
-   */
-  q?: string;
-
-  /**
-   * Filter by unit dimension code.
-   */
-  type?: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area';
-
-  /**
-   * Filter by unit group membership.
-   */
-  unit_group_ids?: Array<string>;
-}
-
 export declare namespace Units {
   export {
     type CreateUnitRequest as CreateUnitRequest,
@@ -402,9 +418,9 @@ export declare namespace Units {
     type Unit as Unit,
     type UpdateUnitRequest as UpdateUnitRequest,
     type UnitDeleteResponse as UnitDeleteResponse,
-    type UnitCreateParams as UnitCreateParams,
-    type UnitRetrieveParams as UnitRetrieveParams,
-    type UnitUpdateParams as UnitUpdateParams,
     type UnitListParams as UnitListParams,
+    type UnitRetrieveParams as UnitRetrieveParams,
+    type UnitCreateParams as UnitCreateParams,
+    type UnitUpdateParams as UnitUpdateParams,
   };
 }

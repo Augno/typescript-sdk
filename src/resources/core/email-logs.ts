@@ -12,6 +12,21 @@ import { path } from '../../internal/utils/path';
  */
 export class EmailLogs extends APIResource {
   /**
+   * Returns a paginated list of email logs for the current account.
+   *
+   * @example
+   * ```ts
+   * const listEmailLog = await client.core.emailLogs.list();
+   * ```
+   */
+  list(
+    query: EmailLogListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ListEmailLog> {
+    return this._client.get('/v1/core/email-logs', { query, ...options });
+  }
+
+  /**
    * Returns an email log by ID.
    *
    * @example
@@ -27,21 +42,6 @@ export class EmailLogs extends APIResource {
     options?: RequestOptions,
   ): APIPromise<EmailLog> {
     return this._client.get(path`/v1/core/email-logs/${id}`, { query, ...options });
-  }
-
-  /**
-   * Returns a paginated list of email logs for the current account.
-   *
-   * @example
-   * ```ts
-   * const listEmailLog = await client.core.emailLogs.list();
-   * ```
-   */
-  list(
-    query: EmailLogListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListEmailLog> {
-    return this._client.get('/v1/core/email-logs', { query, ...options });
   }
 }
 
@@ -76,6 +76,9 @@ export interface EmailLog {
 
   /**
    * Email send status.
+   *
+   * - `pending`: the email is queued and has not been sent yet.
+   * - `sent`: the email has been handed off for delivery.
    */
   send_status: 'sent' | 'pending';
 
@@ -115,14 +118,6 @@ export interface ListEmailLog {
   page_info: APIKeysAPI.PageInfo;
 }
 
-export interface EmailLogRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'sent_by'>;
-}
-
 export interface EmailLogListParams {
   /**
    * Cursor token used to retrieve the next or previous page of results.
@@ -146,11 +141,19 @@ export interface EmailLogListParams {
   q?: string;
 }
 
+export interface EmailLogRetrieveParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'sent_by'>;
+}
+
 export declare namespace EmailLogs {
   export {
     type EmailLog as EmailLog,
     type ListEmailLog as ListEmailLog,
-    type EmailLogRetrieveParams as EmailLogRetrieveParams,
     type EmailLogListParams as EmailLogListParams,
+    type EmailLogRetrieveParams as EmailLogRetrieveParams,
   };
 }

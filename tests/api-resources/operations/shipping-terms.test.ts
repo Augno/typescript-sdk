@@ -8,6 +8,54 @@ const client = new Augno({
 });
 
 describe('resource shippingTerms', () => {
+  test('list', async () => {
+    const responsePromise = client.operations.shippingTerms.list();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.operations.shippingTerms.list(
+        {
+          cursor: 'cursor',
+          include: ['owner'],
+          limit: 0,
+          q: 'q',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Augno.NotFoundError);
+  });
+
+  test('retrieve', async () => {
+    const responsePromise = client.operations.shippingTerms.retrieve('shtm_014341ab4bb5bf94d5b6936f86');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('retrieve: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.operations.shippingTerms.retrieve(
+        'shtm_014341ab4bb5bf94d5b6936f86',
+        { include: ['owner'] },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Augno.NotFoundError);
+  });
+
   test('create: only required params', async () => {
     const responsePromise = client.operations.shippingTerms.create({
       name: 'Prepaid',
@@ -33,28 +81,6 @@ describe('resource shippingTerms', () => {
     });
   });
 
-  test('retrieve', async () => {
-    const responsePromise = client.operations.shippingTerms.retrieve('shtm_014341ab4bb5bf94d5b6936f86');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('retrieve: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.operations.shippingTerms.retrieve(
-        'shtm_014341ab4bb5bf94d5b6936f86',
-        { include: ['owner'] },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
-  });
-
   test('update', async () => {
     const responsePromise = client.operations.shippingTerms.update('shtm_014341ab4bb5bf94d5b6936f86');
     const rawResponse = await responsePromise.asResponse();
@@ -78,32 +104,6 @@ describe('resource shippingTerms', () => {
           minimum_order_value: { unit_id: 'unit_id', value: 'value' },
           name: 'Collect',
           type: 'free_freight',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
-  });
-
-  test('list', async () => {
-    const responsePromise = client.operations.shippingTerms.list();
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.operations.shippingTerms.list(
-        {
-          cursor: 'cursor',
-          include: ['owner'],
-          limit: 0,
-          q: 'q',
         },
         { path: '/_stainless_unknown_path' },
       ),

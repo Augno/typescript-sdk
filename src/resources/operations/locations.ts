@@ -11,19 +11,19 @@ import { path } from '../../internal/utils/path';
  */
 export class Locations extends APIResource {
   /**
-   * Creates a location for the caller's account.
+   * Returns a paginated list of locations for the caller's account.
    *
    * @example
    * ```ts
-   * const location = await client.operations.locations.create({
-   *   name: 'Warehouse A',
-   *   type: 'building',
-   * });
+   * const listLocation =
+   *   await client.operations.locations.list();
    * ```
    */
-  create(params: LocationCreateParams, options?: RequestOptions): APIPromise<CustomersAPI.Location> {
-    const { include, ...body } = params;
-    return this._client.post('/v1/operations/locations', { query: { include }, body, ...options });
+  list(
+    query: LocationListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<CustomersAPI.ListLocation> {
+    return this._client.get('/v1/operations/locations', { query, ...options });
   }
 
   /**
@@ -45,6 +45,22 @@ export class Locations extends APIResource {
   }
 
   /**
+   * Creates a location for the caller's account.
+   *
+   * @example
+   * ```ts
+   * const location = await client.operations.locations.create({
+   *   name: 'Warehouse A',
+   *   type: 'building',
+   * });
+   * ```
+   */
+  create(params: LocationCreateParams, options?: RequestOptions): APIPromise<CustomersAPI.Location> {
+    const { include, ...body } = params;
+    return this._client.post('/v1/operations/locations', { query: { include }, body, ...options });
+  }
+
+  /**
    * Partially updates a location.
    *
    * @example
@@ -62,22 +78,6 @@ export class Locations extends APIResource {
   ): APIPromise<CustomersAPI.Location> {
     const { include, ...body } = params ?? {};
     return this._client.patch(path`/v1/operations/locations/${id}`, { query: { include }, body, ...options });
-  }
-
-  /**
-   * Returns a paginated list of locations for the caller's account.
-   *
-   * @example
-   * ```ts
-   * const listLocation =
-   *   await client.operations.locations.list();
-   * ```
-   */
-  list(
-    query: LocationListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<CustomersAPI.ListLocation> {
-    return this._client.get('/v1/operations/locations', { query, ...options });
   }
 
   /**
@@ -148,6 +148,37 @@ export interface UpdateLocationRequest {
 
 export interface LocationDeleteResponse {}
 
+export interface LocationListParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'parent' | 'children'>;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+}
+
+export interface LocationRetrieveParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'parent' | 'children'>;
+}
+
 export interface LocationCreateParams {
   /**
    * Body param: Display name.
@@ -174,14 +205,6 @@ export interface LocationCreateParams {
    * Body param: Parent location ID. Null for top-level locations.
    */
   parent_id?: string;
-}
-
-export interface LocationRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'parent' | 'children'>;
 }
 
 export interface LocationUpdateParams {
@@ -213,37 +236,14 @@ export interface LocationUpdateParams {
   type?: CustomersAPI.LocationTypeCode;
 }
 
-export interface LocationListParams {
-  /**
-   * Cursor token used to retrieve the next or previous page of results.
-   */
-  cursor?: string;
-
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'parent' | 'children'>;
-
-  /**
-   * Maximum number of results per page (default: 100, max: 1000).
-   */
-  limit?: number;
-
-  /**
-   * Search query used to filter results.
-   */
-  q?: string;
-}
-
 export declare namespace Locations {
   export {
     type CreateLocationRequest as CreateLocationRequest,
     type UpdateLocationRequest as UpdateLocationRequest,
     type LocationDeleteResponse as LocationDeleteResponse,
-    type LocationCreateParams as LocationCreateParams,
-    type LocationRetrieveParams as LocationRetrieveParams,
-    type LocationUpdateParams as LocationUpdateParams,
     type LocationListParams as LocationListParams,
+    type LocationRetrieveParams as LocationRetrieveParams,
+    type LocationCreateParams as LocationCreateParams,
+    type LocationUpdateParams as LocationUpdateParams,
   };
 }

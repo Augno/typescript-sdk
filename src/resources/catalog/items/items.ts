@@ -18,6 +18,18 @@ export class Items extends APIResource {
   attributes: AttributesAPI.Attributes = new AttributesAPI.Attributes(this._client);
 
   /**
+   * Returns a paginated list of items.
+   *
+   * @example
+   * ```ts
+   * const listItem = await client.catalog.items.list();
+   * ```
+   */
+  list(query: ItemListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ListItem> {
+    return this._client.get('/v1/catalog/items', { query, ...options });
+  }
+
+  /**
    * Returns an item by ID.
    *
    * @example
@@ -36,15 +48,23 @@ export class Items extends APIResource {
   }
 
   /**
-   * Returns a paginated list of items.
+   * Returns inventory quantities for an item, including on-hand, reserved,
+   * available-to-promise, and short amounts.
    *
    * @example
    * ```ts
-   * const listItem = await client.catalog.items.list();
+   * const itemInventory =
+   *   await client.catalog.items.retrieveInventory(
+   *     'it_0131e386ac683e8c29a71f6f1f',
+   *   );
    * ```
    */
-  list(query: ItemListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ListItem> {
-    return this._client.get('/v1/catalog/items', { query, ...options });
+  retrieveInventory(
+    id: string,
+    query: ItemRetrieveInventoryParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ItemInventory> {
+    return this._client.get(path`/v1/catalog/items/${id}/inventory`, { query, ...options });
   }
 
   /**
@@ -69,26 +89,6 @@ export class Items extends APIResource {
       query: { include },
       ...options,
     });
-  }
-
-  /**
-   * Returns inventory quantities for an item, including on-hand, reserved,
-   * available-to-promise, and short amounts.
-   *
-   * @example
-   * ```ts
-   * const itemInventory =
-   *   await client.catalog.items.retrieveInventory(
-   *     'it_0131e386ac683e8c29a71f6f1f',
-   *   );
-   * ```
-   */
-  retrieveInventory(
-    id: string,
-    query: ItemRetrieveInventoryParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ItemInventory> {
-    return this._client.get(path`/v1/catalog/items/${id}/inventory`, { query, ...options });
   }
 }
 
@@ -142,7 +142,11 @@ export interface Item {
   sku: string;
 
   /**
-   * Item type code.
+   * What kind of item this is.
+   *
+   * - `product`: a finished product.
+   * - `material`: a raw material or component consumed in production.
+   * - `part`: a part used in production.
    */
   type: 'product' | 'material' | 'part';
 
@@ -202,7 +206,10 @@ export interface ItemCategory {
   properties: PropertiesAPI.ListProperty | null;
 
   /**
-   * Item category type.
+   * What kind of items this category groups.
+   *
+   * - `material_category`: groups raw materials or components.
+   * - `product_category`: groups finished products.
    */
   type: 'material_category' | 'product_category';
 
@@ -292,7 +299,10 @@ export interface Quantity {
   unit: UnitsAPI.Unit | null;
 
   /**
-   * Decimal value.
+   * Raw decimal value of the quantity, as a string to preserve precision.
+   *
+   * This is the unformatted machine value; see `display_value` for the
+   * human-readable rendering with unit and thousands separators.
    */
   value: string;
 }
@@ -340,25 +350,6 @@ export interface Rate {
    * Rate value as a decimal string.
    */
   value: string;
-}
-
-export interface ItemRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<
-    | 'category'
-    | 'unit_value'
-    | 'unit_cost'
-    | 'burn_rate'
-    | 'attributes'
-    | 'category.unit_group'
-    | 'category.properties'
-    | 'category.unit_group.base_unit'
-    | 'category.unit_group.associated_units'
-    | 'category.unit_group.associated_units.unit'
-  >;
 }
 
 export interface ItemListParams {
@@ -442,6 +433,33 @@ export interface ItemListParams {
   types?: Array<string>;
 }
 
+export interface ItemRetrieveParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<
+    | 'category'
+    | 'unit_value'
+    | 'unit_cost'
+    | 'burn_rate'
+    | 'attributes'
+    | 'category.unit_group'
+    | 'category.properties'
+    | 'category.unit_group.base_unit'
+    | 'category.unit_group.associated_units'
+    | 'category.unit_group.associated_units.unit'
+  >;
+}
+
+export interface ItemRetrieveInventoryParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'on_hand' | 'reserved' | 'available_to_promise' | 'short'>;
+}
+
 export interface ItemChangeCategoryParams {
   /**
    * Path param: Item ID.
@@ -466,14 +484,6 @@ export interface ItemChangeCategoryParams {
   >;
 }
 
-export interface ItemRetrieveInventoryParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'on_hand' | 'reserved' | 'available_to_promise' | 'short'>;
-}
-
 Items.Attributes = Attributes;
 
 export declare namespace Items {
@@ -484,10 +494,10 @@ export declare namespace Items {
     type ListItem as ListItem,
     type Quantity as Quantity,
     type Rate as Rate,
-    type ItemRetrieveParams as ItemRetrieveParams,
     type ItemListParams as ItemListParams,
-    type ItemChangeCategoryParams as ItemChangeCategoryParams,
+    type ItemRetrieveParams as ItemRetrieveParams,
     type ItemRetrieveInventoryParams as ItemRetrieveInventoryParams,
+    type ItemChangeCategoryParams as ItemChangeCategoryParams,
   };
 
   export {

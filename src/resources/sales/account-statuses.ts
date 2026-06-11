@@ -11,6 +11,23 @@ import { path } from '../../internal/utils/path';
  */
 export class AccountStatuses extends APIResource {
   /**
+   * Returns a paginated list of account statuses. Global lookup values for setting
+   * account relationship statuses.
+   *
+   * @example
+   * ```ts
+   * const listAccountStatus =
+   *   await client.sales.accountStatuses.list();
+   * ```
+   */
+  list(
+    query: AccountStatusListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ListAccountStatus> {
+    return this._client.get('/v1/sales/account-statuses', { query, ...options });
+  }
+
+  /**
    * Returns an account status by ID or code.
    *
    * @example
@@ -28,23 +45,6 @@ export class AccountStatuses extends APIResource {
   ): APIPromise<AccountStatus> {
     return this._client.get(path`/v1/sales/account-statuses/${id}`, { query, ...options });
   }
-
-  /**
-   * Returns a paginated list of account statuses. Global lookup values for setting
-   * account relationship statuses.
-   *
-   * @example
-   * ```ts
-   * const listAccountStatus =
-   *   await client.sales.accountStatuses.list();
-   * ```
-   */
-  list(
-    query: AccountStatusListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListAccountStatus> {
-    return this._client.get('/v1/sales/account-statuses', { query, ...options });
-  }
 }
 
 /**
@@ -58,6 +58,12 @@ export interface AccountStatus {
 
   /**
    * Machine-readable status code.
+   *
+   * - `normal`: standard account with no restrictions.
+   * - `preferred`: account flagged as preferred (e.g. for prioritized handling).
+   * - `hold_shipment`: shipments to this account are held; orders may still be
+   *   placed.
+   * - `hold_all`: all activity for this account is held.
    */
   code: 'normal' | 'preferred' | 'hold_shipment' | 'hold_all';
 
@@ -107,14 +113,6 @@ export interface ListAccountStatus {
   page_info: APIKeysAPI.PageInfo;
 }
 
-export interface AccountStatusRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'owner'>;
-}
-
 export interface AccountStatusListParams {
   /**
    * Cursor token used to retrieve the next or previous page of results.
@@ -138,11 +136,19 @@ export interface AccountStatusListParams {
   q?: string;
 }
 
+export interface AccountStatusRetrieveParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'owner'>;
+}
+
 export declare namespace AccountStatuses {
   export {
     type AccountStatus as AccountStatus,
     type ListAccountStatus as ListAccountStatus,
-    type AccountStatusRetrieveParams as AccountStatusRetrieveParams,
     type AccountStatusListParams as AccountStatusListParams,
+    type AccountStatusRetrieveParams as AccountStatusRetrieveParams,
   };
 }

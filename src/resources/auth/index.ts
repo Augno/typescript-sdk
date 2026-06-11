@@ -15,8 +15,8 @@ export {
   type PageInfo,
   type Role,
   type APIKeyDeleteResponse,
-  type APIKeyCreateParams,
   type APIKeyRetrieveParams,
   type APIKeyListParams,
+  type APIKeyCreateParams,
 } from './api-keys/index';
 export { Auth } from './auth';

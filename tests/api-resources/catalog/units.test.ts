@@ -8,6 +8,56 @@ const client = new Augno({
 });
 
 describe('resource units', () => {
+  test('list', async () => {
+    const responsePromise = client.catalog.units.list();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.catalog.units.list(
+        {
+          cursor: 'cursor',
+          include: ['owner'],
+          limit: 0,
+          q: 'q',
+          type: 'currency',
+          unit_group_ids: ['string'],
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Augno.NotFoundError);
+  });
+
+  test('retrieve', async () => {
+    const responsePromise = client.catalog.units.retrieve('un_01966263f74a5a0cae356000a1');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('retrieve: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.catalog.units.retrieve(
+        'un_01966263f74a5a0cae356000a1',
+        { include: ['owner'] },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Augno.NotFoundError);
+  });
+
   test('create: only required params', async () => {
     const responsePromise = client.catalog.units.create({
       abbreviation: 'g',
@@ -40,28 +90,6 @@ describe('resource units', () => {
     });
   });
 
-  test('retrieve', async () => {
-    const responsePromise = client.catalog.units.retrieve('un_01966263f74a5a0cae356000a1');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('retrieve: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.catalog.units.retrieve(
-        'un_01966263f74a5a0cae356000a1',
-        { include: ['owner'] },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
-  });
-
   test('update', async () => {
     const responsePromise = client.catalog.units.update('un_01966263f74a5a0cae356000a1');
     const rawResponse = await responsePromise.asResponse();
@@ -86,34 +114,6 @@ describe('resource units', () => {
           offset_numerator: 'offset_numerator',
           ratio_denominator: 'ratio_denominator',
           ratio_numerator: 'ratio_numerator',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
-  });
-
-  test('list', async () => {
-    const responsePromise = client.catalog.units.list();
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.catalog.units.list(
-        {
-          cursor: 'cursor',
-          include: ['owner'],
-          limit: 0,
-          q: 'q',
-          type: 'currency',
-          unit_group_ids: ['string'],
         },
         { path: '/_stainless_unknown_path' },
       ),

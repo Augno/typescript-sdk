@@ -11,19 +11,19 @@ import { path } from '../../internal/utils/path';
  */
 export class AccountGroups extends APIResource {
   /**
-   * Creates an account group.
+   * Returns a paginated list of account groups.
    *
    * @example
    * ```ts
-   * const accountGroup =
-   *   await client.sales.accountGroups.create({
-   *     name: 'Wholesale Customers',
-   *     type: 'type_group',
-   *   });
+   * const listAccountGroup =
+   *   await client.sales.accountGroups.list();
    * ```
    */
-  create(body: AccountGroupCreateParams, options?: RequestOptions): APIPromise<AccountGroup> {
-    return this._client.post('/v1/sales/account-groups', { body, ...options });
+  list(
+    query: AccountGroupListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ListAccountGroup> {
+    return this._client.get('/v1/sales/account-groups', { query, ...options });
   }
 
   /**
@@ -42,7 +42,26 @@ export class AccountGroups extends APIResource {
   }
 
   /**
+   * Creates an account group.
+   *
+   * @example
+   * ```ts
+   * const accountGroup =
+   *   await client.sales.accountGroups.create({
+   *     name: 'Wholesale Customers',
+   *     type: 'type_group',
+   *   });
+   * ```
+   */
+  create(body: AccountGroupCreateParams, options?: RequestOptions): APIPromise<AccountGroup> {
+    return this._client.post('/v1/sales/account-groups', { body, ...options });
+  }
+
+  /**
    * Partially updates an account group.
+   *
+   * Only the provided fields are changed. The account group's `type` cannot be
+   * changed after creation.
    *
    * @example
    * ```ts
@@ -59,22 +78,6 @@ export class AccountGroups extends APIResource {
     options?: RequestOptions,
   ): APIPromise<AccountGroup> {
     return this._client.patch(path`/v1/sales/account-groups/${id}`, { body, ...options });
-  }
-
-  /**
-   * Returns a paginated list of account groups.
-   *
-   * @example
-   * ```ts
-   * const listAccountGroup =
-   *   await client.sales.accountGroups.list();
-   * ```
-   */
-  list(
-    query: AccountGroupListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListAccountGroup> {
-    return this._client.get('/v1/sales/account-groups', { query, ...options });
   }
 
   /**
@@ -118,7 +121,9 @@ export interface AccountGroup {
   created_at: string;
 
   /**
-   * Description.
+   * Free-form description of the account group.
+   *
+   * Optional; `null` when not set.
    */
   description: string | null;
 
@@ -227,7 +232,7 @@ export interface ListAccountGroup {
  */
 export interface UpdateAccountGroupRequest {
   /**
-   * Commission policy.
+   * How sales commission applies to accounts in this group.
    *
    * - `commission_exempt`: no commission applies.
    * - `commission_applied`: commission applies; if the account group is within a
@@ -236,12 +241,12 @@ export interface UpdateAccountGroupRequest {
   commission_policy?: 'commission_applied' | 'commission_exempt';
 
   /**
-   * Description.
+   * Free-form description of the account group.
    */
   description?: string | null;
 
   /**
-   * Freight policy.
+   * How freight charges apply to orders from accounts in this group.
    *
    * - `free_freight`: customers within this group will not have to pay for freight.
    * - `billed_freight`: freight will be applied to any order within this account
@@ -250,12 +255,36 @@ export interface UpdateAccountGroupRequest {
   freight_policy?: 'free_freight' | 'billed_freight';
 
   /**
-   * Display name.
+   * Display name of the account group.
+   *
+   * Must be unique within your account; maximum 255 characters.
    */
   name?: string;
 }
 
 export interface AccountGroupDeleteResponse {}
+
+export interface AccountGroupListParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+
+  /**
+   * Account group type filter.
+   */
+  type?: 'pricing_group' | 'type_group';
+}
 
 export interface AccountGroupCreateParams {
   /**
@@ -301,7 +330,7 @@ export interface AccountGroupCreateParams {
 
 export interface AccountGroupUpdateParams {
   /**
-   * Commission policy.
+   * How sales commission applies to accounts in this group.
    *
    * - `commission_exempt`: no commission applies.
    * - `commission_applied`: commission applies; if the account group is within a
@@ -310,12 +339,12 @@ export interface AccountGroupUpdateParams {
   commission_policy?: 'commission_applied' | 'commission_exempt';
 
   /**
-   * Description.
+   * Free-form description of the account group.
    */
   description?: string | null;
 
   /**
-   * Freight policy.
+   * How freight charges apply to orders from accounts in this group.
    *
    * - `free_freight`: customers within this group will not have to pay for freight.
    * - `billed_freight`: freight will be applied to any order within this account
@@ -324,31 +353,11 @@ export interface AccountGroupUpdateParams {
   freight_policy?: 'free_freight' | 'billed_freight';
 
   /**
-   * Display name.
+   * Display name of the account group.
+   *
+   * Must be unique within your account; maximum 255 characters.
    */
   name?: string;
-}
-
-export interface AccountGroupListParams {
-  /**
-   * Cursor token used to retrieve the next or previous page of results.
-   */
-  cursor?: string;
-
-  /**
-   * Maximum number of results per page (default: 100, max: 1000).
-   */
-  limit?: number;
-
-  /**
-   * Search query used to filter results.
-   */
-  q?: string;
-
-  /**
-   * Account group type filter.
-   */
-  type?: 'pricing_group' | 'type_group';
 }
 
 export declare namespace AccountGroups {
@@ -358,8 +367,8 @@ export declare namespace AccountGroups {
     type ListAccountGroup as ListAccountGroup,
     type UpdateAccountGroupRequest as UpdateAccountGroupRequest,
     type AccountGroupDeleteResponse as AccountGroupDeleteResponse,
+    type AccountGroupListParams as AccountGroupListParams,
     type AccountGroupCreateParams as AccountGroupCreateParams,
     type AccountGroupUpdateParams as AccountGroupUpdateParams,
-    type AccountGroupListParams as AccountGroupListParams,
   };
 }

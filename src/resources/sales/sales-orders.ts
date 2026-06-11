@@ -57,6 +57,10 @@ export interface SalesOrderStatus {
 
   /**
    * Machine-readable status code.
+   *
+   * - `estimate`: a draft quote that has not yet been committed.
+   * - `issued`: the order has been issued and is being fulfilled.
+   * - `fulfilled`: the order has been completed and closed.
    */
   code: 'estimate' | 'issued' | 'fulfilled';
 

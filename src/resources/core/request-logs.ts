@@ -11,6 +11,21 @@ import { path } from '../../internal/utils/path';
  */
 export class RequestLogs extends APIResource {
   /**
+   * Returns a paginated list of request logs.
+   *
+   * @example
+   * ```ts
+   * const listRequestLog = await client.core.requestLogs.list();
+   * ```
+   */
+  list(
+    query: RequestLogListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ListRequestLog> {
+    return this._client.get('/v1/core/request-logs', { query, ...options });
+  }
+
+  /**
    * Returns a request log by ID.
    *
    * @example
@@ -27,21 +42,6 @@ export class RequestLogs extends APIResource {
   ): APIPromise<RequestLog> {
     return this._client.get(path`/v1/core/request-logs/${id}`, { query, ...options });
   }
-
-  /**
-   * Returns a paginated list of request logs.
-   *
-   * @example
-   * ```ts
-   * const listRequestLog = await client.core.requestLogs.list();
-   * ```
-   */
-  list(
-    query: RequestLogListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListRequestLog> {
-    return this._client.get('/v1/core/request-logs', { query, ...options });
-  }
 }
 
 /**
@@ -54,8 +54,11 @@ export interface Actor {
   id: string;
 
   /**
-   * Human-readable handle (`email` for users, `redacted_value` for API keys, `slug`
-   * for agents).
+   * Human-readable handle.
+   *
+   * - `email` for users
+   * - `redacted_value` for API keys
+   * - `slug` for agents
    */
   handle: string | null;
 
@@ -76,6 +79,10 @@ export interface Actor {
 
   /**
    * Actor type.
+   *
+   * - `user`: a human user account.
+   * - `api_key`: a programmatic caller authenticating with an API key.
+   * - `agent`: an automated agent acting on the account's behalf.
    */
   type: 'user' | 'api_key' | 'agent';
 }
@@ -135,17 +142,23 @@ export interface RequestLog {
   created_at: string;
 
   /**
-   * API error code.
+   * Machine-readable API error code.
+   *
+   * Populated only for failed requests; `null` on success.
    */
   error_code: string | null;
 
   /**
-   * Error message.
+   * Human-readable error message.
+   *
+   * Populated only for failed requests; `null` on success.
    */
   error_message: string | null;
 
   /**
-   * Request host. Usually `api.augno.com`.
+   * Request host.
+   *
+   * Usually `api.augno.com`.
    */
   host: string;
 
@@ -165,8 +178,10 @@ export interface RequestLog {
   method: string;
 
   /**
-   * _Normalized_ route template. For example `PATCH /v1/sales/customers/{id}` is the
-   * normalized route for a request route `PUT /v1/sales/customers/ac_...`.
+   * _Normalized_ route template.
+   *
+   * For example `PATCH /v1/sales/customers/{id}` is the normalized route for a
+   * request route `PUT /v1/sales/customers/ac_...`.
    */
   normalized_route: string;
 
@@ -209,9 +224,11 @@ export interface RequestLog {
   response_body: unknown | null;
 
   /**
-   * HTTP status code. Exception to the `status` naming convention: this is a numeric
-   * HTTP response code (200/404/…), not a domain lifecycle status enum, so the
-   * `_code` suffix is meaningful.
+   * HTTP status code.
+   *
+   * Exception to the `status` naming convention: this is a numeric HTTP response
+   * code (200/404/…), not a domain lifecycle status enum, so the `_code` suffix is
+   * meaningful.
    */
   status_code: number;
 
@@ -219,22 +236,6 @@ export interface RequestLog {
    * User agent.
    */
   user_agent: string | null;
-}
-
-export interface RequestLogRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<
-    | 'account'
-    | 'actor'
-    | 'actor.role'
-    | 'actor.role.permissions'
-    | 'query_params'
-    | 'request_body'
-    | 'response_body'
-  >;
 }
 
 export interface RequestLogListParams {
@@ -373,12 +374,28 @@ export interface RequestLogListParams {
   status_codes?: Array<number>;
 }
 
+export interface RequestLogRetrieveParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<
+    | 'account'
+    | 'actor'
+    | 'actor.role'
+    | 'actor.role.permissions'
+    | 'query_params'
+    | 'request_body'
+    | 'response_body'
+  >;
+}
+
 export declare namespace RequestLogs {
   export {
     type Actor as Actor,
     type ListRequestLog as ListRequestLog,
     type RequestLog as RequestLog,
-    type RequestLogRetrieveParams as RequestLogRetrieveParams,
     type RequestLogListParams as RequestLogListParams,
+    type RequestLogRetrieveParams as RequestLogRetrieveParams,
   };
 }

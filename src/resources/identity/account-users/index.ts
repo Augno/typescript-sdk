@@ -6,10 +6,10 @@ export {
   type ListAccountUser,
   type NotificationPreferenceItem,
   type UpdateAccountUserRequest,
-  type AccountUserCreateParams,
-  type AccountUserRetrieveParams,
-  type AccountUserUpdateParams,
   type AccountUserListParams,
+  type AccountUserRetrieveParams,
+  type AccountUserCreateParams,
+  type AccountUserUpdateParams,
 } from './account-users';
 export {
   Actions,

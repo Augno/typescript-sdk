@@ -8,17 +8,6 @@ const client = new Augno({
 });
 
 describe('resource locationTypes', () => {
-  test('retrieve', async () => {
-    const responsePromise = client.operations.locationTypes.retrieve('lc_01e69cd3745a1bc0dd485986c0');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
   test('list', async () => {
     const responsePromise = client.operations.locationTypes.list();
     const rawResponse = await responsePromise.asResponse();
@@ -42,5 +31,16 @@ describe('resource locationTypes', () => {
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Augno.NotFoundError);
+  });
+
+  test('retrieve', async () => {
+    const responsePromise = client.operations.locationTypes.retrieve('lc_01e69cd3745a1bc0dd485986c0');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
   });
 });

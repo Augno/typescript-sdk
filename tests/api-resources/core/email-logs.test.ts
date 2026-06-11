@@ -8,28 +8,6 @@ const client = new Augno({
 });
 
 describe('resource emailLogs', () => {
-  test('retrieve', async () => {
-    const responsePromise = client.core.emailLogs.retrieve('eml_017b80707ada92dddff8a2c3a0');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('retrieve: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.core.emailLogs.retrieve(
-        'eml_017b80707ada92dddff8a2c3a0',
-        { include: ['sent_by'] },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
-  });
-
   test('list', async () => {
     const responsePromise = client.core.emailLogs.list();
     const rawResponse = await responsePromise.asResponse();
@@ -51,6 +29,28 @@ describe('resource emailLogs', () => {
           limit: 0,
           q: 'q',
         },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Augno.NotFoundError);
+  });
+
+  test('retrieve', async () => {
+    const responsePromise = client.core.emailLogs.retrieve('eml_017b80707ada92dddff8a2c3a0');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('retrieve: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.core.emailLogs.retrieve(
+        'eml_017b80707ada92dddff8a2c3a0',
+        { include: ['sent_by'] },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Augno.NotFoundError);

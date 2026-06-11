@@ -8,6 +8,70 @@ const client = new Augno({
 });
 
 describe('resource customers', () => {
+  test('list', async () => {
+    const responsePromise = client.sales.customers.list();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.sales.customers.list(
+        {
+          carrier_ids: ['string'],
+          city: 'city',
+          commission_status_codes: ['commission_applied'],
+          cursor: 'cursor',
+          customer_group_ids: ['string'],
+          end_date: '2019-12-27T18:11:19.117Z',
+          freight_status_codes: ['free_freight'],
+          include: ['bill_to_address'],
+          limit: 0,
+          parent_account_status: 'parent',
+          payment_term_ids: ['string'],
+          postal_code: 'postal_code',
+          pricing_group_ids: ['string'],
+          q: 'q',
+          sales_rep_ids: ['string'],
+          service_level_ids: ['string'],
+          shipping_term_ids: ['string'],
+          start_date: '2019-12-27T18:11:19.117Z',
+          state: 'state',
+          status_codes: ['normal'],
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Augno.NotFoundError);
+  });
+
+  test('retrieve', async () => {
+    const responsePromise = client.sales.customers.retrieve('ac_0170df1ac58e4d24c66fc89f5f');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('retrieve: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.sales.customers.retrieve(
+        'ac_0170df1ac58e4d24c66fc89f5f',
+        { include: ['bill_to_address'] },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Augno.NotFoundError);
+  });
+
   test('create: only required params', async () => {
     const responsePromise = client.sales.customers.create({
       bill_to_address: { country: 'US', name: 'Acme Inc.' },
@@ -78,28 +142,6 @@ describe('resource customers', () => {
     });
   });
 
-  test('retrieve', async () => {
-    const responsePromise = client.sales.customers.retrieve('ac_0170df1ac58e4d24c66fc89f5f');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('retrieve: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.sales.customers.retrieve(
-        'ac_0170df1ac58e4d24c66fc89f5f',
-        { include: ['bill_to_address'] },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
-  });
-
   test('update', async () => {
     const responsePromise = client.sales.customers.update('ac_0170df1ac58e4d24c66fc89f5f');
     const rawResponse = await responsePromise.asResponse();
@@ -141,48 +183,6 @@ describe('resource customers', () => {
           ship_to_address_id: 'ship_to_address_id',
           status: 'normal',
           url: 'url',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
-  });
-
-  test('list', async () => {
-    const responsePromise = client.sales.customers.list();
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.sales.customers.list(
-        {
-          carrier_ids: ['string'],
-          city: 'city',
-          commission_status_codes: ['commission_applied'],
-          cursor: 'cursor',
-          customer_group_ids: ['string'],
-          end_date: '2019-12-27T18:11:19.117Z',
-          freight_status_codes: ['free_freight'],
-          include: ['bill_to_address'],
-          limit: 0,
-          parent_account_status: 'parent',
-          payment_term_ids: ['string'],
-          postal_code: 'postal_code',
-          pricing_group_ids: ['string'],
-          q: 'q',
-          sales_rep_ids: ['string'],
-          service_level_ids: ['string'],
-          shipping_term_ids: ['string'],
-          start_date: '2019-12-27T18:11:19.117Z',
-          state: 'state',
-          status_codes: ['normal'],
         },
         { path: '/_stainless_unknown_path' },
       ),

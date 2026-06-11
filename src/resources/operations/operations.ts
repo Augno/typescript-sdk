@@ -73,10 +73,10 @@ export declare namespace Operations {
     type ListShippingTerm as ListShippingTerm,
     type UpdateShippingTermRequest as UpdateShippingTermRequest,
     type ShippingTermDeleteResponse as ShippingTermDeleteResponse,
-    type ShippingTermCreateParams as ShippingTermCreateParams,
-    type ShippingTermRetrieveParams as ShippingTermRetrieveParams,
-    type ShippingTermUpdateParams as ShippingTermUpdateParams,
     type ShippingTermListParams as ShippingTermListParams,
+    type ShippingTermRetrieveParams as ShippingTermRetrieveParams,
+    type ShippingTermCreateParams as ShippingTermCreateParams,
+    type ShippingTermUpdateParams as ShippingTermUpdateParams,
   };
 
   export {
@@ -85,10 +85,10 @@ export declare namespace Operations {
     type ListCarrier as ListCarrier,
     type UpdateCarrierRequest as UpdateCarrierRequest,
     type CarrierDeleteResponse as CarrierDeleteResponse,
-    type CarrierCreateParams as CarrierCreateParams,
-    type CarrierRetrieveParams as CarrierRetrieveParams,
-    type CarrierUpdateParams as CarrierUpdateParams,
     type CarrierListParams as CarrierListParams,
+    type CarrierRetrieveParams as CarrierRetrieveParams,
+    type CarrierCreateParams as CarrierCreateParams,
+    type CarrierUpdateParams as CarrierUpdateParams,
   };
 
   export {
@@ -96,10 +96,10 @@ export declare namespace Operations {
     type CreateLocationRequest as CreateLocationRequest,
     type UpdateLocationRequest as UpdateLocationRequest,
     type LocationDeleteResponse as LocationDeleteResponse,
-    type LocationCreateParams as LocationCreateParams,
-    type LocationRetrieveParams as LocationRetrieveParams,
-    type LocationUpdateParams as LocationUpdateParams,
     type LocationListParams as LocationListParams,
+    type LocationRetrieveParams as LocationRetrieveParams,
+    type LocationCreateParams as LocationCreateParams,
+    type LocationUpdateParams as LocationUpdateParams,
   };
 
   export {
@@ -114,9 +114,9 @@ export declare namespace Operations {
     type CreateScanningStationRequest as CreateScanningStationRequest,
     type UpdateScanningStationRequest as UpdateScanningStationRequest,
     type ScanningStationDeleteResponse as ScanningStationDeleteResponse,
-    type ScanningStationCreateParams as ScanningStationCreateParams,
-    type ScanningStationRetrieveParams as ScanningStationRetrieveParams,
-    type ScanningStationUpdateParams as ScanningStationUpdateParams,
     type ScanningStationListParams as ScanningStationListParams,
+    type ScanningStationRetrieveParams as ScanningStationRetrieveParams,
+    type ScanningStationCreateParams as ScanningStationCreateParams,
+    type ScanningStationUpdateParams as ScanningStationUpdateParams,
   };
 }

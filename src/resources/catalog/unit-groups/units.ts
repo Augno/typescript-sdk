@@ -11,6 +11,49 @@ import { path } from '../../../internal/utils/path';
  */
 export class Units extends APIResource {
   /**
+   * Returns a list of associated units within a unit group.
+   *
+   * @example
+   * ```ts
+   * const listUnitGroupUnit =
+   *   await client.catalog.unitGroups.units.list(
+   *     'ug_01aad07abb8e41fd392d2d7013',
+   *   );
+   * ```
+   */
+  list(
+    unitGroupID: string,
+    query: UnitListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<UnitGroupsAPI.ListUnitGroupUnit> {
+    return this._client.get(path`/v1/catalog/unit-groups/${unitGroupID}/units`, { query, ...options });
+  }
+
+  /**
+   * Returns an associated unit within a unit group by ID.
+   *
+   * @example
+   * ```ts
+   * const unitGroupUnit =
+   *   await client.catalog.unitGroups.units.retrieve(
+   *     'un_01966263f74a5a0cae356000a1',
+   *     { unit_group_id: 'ug_01aad07abb8e41fd392d2d7013' },
+   *   );
+   * ```
+   */
+  retrieve(
+    id: string,
+    params: UnitRetrieveParams,
+    options?: RequestOptions,
+  ): APIPromise<UnitGroupsAPI.UnitGroupUnit> {
+    const { unit_group_id, ...query } = params;
+    return this._client.get(path`/v1/catalog/unit-groups/${unit_group_id}/units/${id}`, {
+      query,
+      ...options,
+    });
+  }
+
+  /**
    * Creates an associated unit within a unit group.
    *
    * @example
@@ -35,30 +78,6 @@ export class Units extends APIResource {
     return this._client.post(path`/v1/catalog/unit-groups/${unitGroupID}/units`, {
       query: { include },
       body,
-      ...options,
-    });
-  }
-
-  /**
-   * Returns an associated unit within a unit group by ID.
-   *
-   * @example
-   * ```ts
-   * const unitGroupUnit =
-   *   await client.catalog.unitGroups.units.retrieve(
-   *     'un_01966263f74a5a0cae356000a1',
-   *     { unit_group_id: 'ug_01aad07abb8e41fd392d2d7013' },
-   *   );
-   * ```
-   */
-  retrieve(
-    id: string,
-    params: UnitRetrieveParams,
-    options?: RequestOptions,
-  ): APIPromise<UnitGroupsAPI.UnitGroupUnit> {
-    const { unit_group_id, ...query } = params;
-    return this._client.get(path`/v1/catalog/unit-groups/${unit_group_id}/units/${id}`, {
-      query,
       ...options,
     });
   }
@@ -90,25 +109,6 @@ export class Units extends APIResource {
       body,
       ...options,
     });
-  }
-
-  /**
-   * Returns a list of associated units within a unit group.
-   *
-   * @example
-   * ```ts
-   * const listUnitGroupUnit =
-   *   await client.catalog.unitGroups.units.list(
-   *     'ug_01aad07abb8e41fd392d2d7013',
-   *   );
-   * ```
-   */
-  list(
-    unitGroupID: string,
-    query: UnitListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<UnitGroupsAPI.ListUnitGroupUnit> {
-    return this._client.get(path`/v1/catalog/unit-groups/${unitGroupID}/units`, { query, ...options });
   }
 
   /**
@@ -181,6 +181,27 @@ export interface UpdateUnitGroupUnitRequest {
 
 export interface UnitDeleteResponse {}
 
+export interface UnitListParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'unit'>;
+}
+
+export interface UnitRetrieveParams {
+  /**
+   * Path param: Unit group ID.
+   */
+  unit_group_id: string;
+
+  /**
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
+   */
+  include?: Array<'unit'>;
+}
+
 export interface UnitCreateParams {
   /**
    * Body param: Unit ID.
@@ -207,19 +228,6 @@ export interface UnitCreateParams {
    * Body param: Discount percentage.
    */
   discount_percentage?: number;
-}
-
-export interface UnitRetrieveParams {
-  /**
-   * Path param: Unit group ID.
-   */
-  unit_group_id: string;
-
-  /**
-   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
-   * are returned as `null`.
-   */
-  include?: Array<'unit'>;
 }
 
 export interface UnitUpdateParams {
@@ -255,14 +263,6 @@ export interface UnitUpdateParams {
   unit_id?: string;
 }
 
-export interface UnitListParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'unit'>;
-}
-
 export interface UnitDeleteParams {
   /**
    * Unit group ID.
@@ -275,10 +275,10 @@ export declare namespace Units {
     type CreateUnitGroupUnitRequest as CreateUnitGroupUnitRequest,
     type UpdateUnitGroupUnitRequest as UpdateUnitGroupUnitRequest,
     type UnitDeleteResponse as UnitDeleteResponse,
-    type UnitCreateParams as UnitCreateParams,
-    type UnitRetrieveParams as UnitRetrieveParams,
-    type UnitUpdateParams as UnitUpdateParams,
     type UnitListParams as UnitListParams,
+    type UnitRetrieveParams as UnitRetrieveParams,
+    type UnitCreateParams as UnitCreateParams,
+    type UnitUpdateParams as UnitUpdateParams,
     type UnitDeleteParams as UnitDeleteParams,
   };
 }

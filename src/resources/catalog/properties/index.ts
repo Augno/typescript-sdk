@@ -5,10 +5,10 @@ export {
   type CreateAttributeRequest,
   type UpdateAttributeRequest,
   type AttributeDeleteResponse,
-  type AttributeCreateParams,
-  type AttributeRetrieveParams,
-  type AttributeUpdateParams,
   type AttributeListParams,
+  type AttributeRetrieveParams,
+  type AttributeCreateParams,
+  type AttributeUpdateParams,
   type AttributeDeleteParams,
 } from './attributes';
 export {
@@ -20,8 +20,8 @@ export {
   type Property,
   type UpdatePropertyRequest,
   type PropertyDeleteResponse,
-  type PropertyCreateParams,
-  type PropertyRetrieveParams,
-  type PropertyUpdateParams,
   type PropertyListParams,
+  type PropertyRetrieveParams,
+  type PropertyCreateParams,
+  type PropertyUpdateParams,
 } from './properties';

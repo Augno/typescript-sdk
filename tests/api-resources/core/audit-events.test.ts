@@ -8,28 +8,6 @@ const client = new Augno({
 });
 
 describe('resource auditEvents', () => {
-  test('retrieve', async () => {
-    const responsePromise = client.core.auditEvents.retrieve('ae_01b1c07dc3085bbd84111edcbd');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('retrieve: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.core.auditEvents.retrieve(
-        'ae_01b1c07dc3085bbd84111edcbd',
-        { include: ['actor'] },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
-  });
-
   test('list', async () => {
     const responsePromise = client.core.auditEvents.list();
     const rawResponse = await responsePromise.asResponse();
@@ -57,6 +35,28 @@ describe('resource auditEvents', () => {
           resource_types: ['account'],
           start_date: '2019-12-27T18:11:19.117Z',
         },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Augno.NotFoundError);
+  });
+
+  test('retrieve', async () => {
+    const responsePromise = client.core.auditEvents.retrieve('ae_01b1c07dc3085bbd84111edcbd');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('retrieve: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.core.auditEvents.retrieve(
+        'ae_01b1c07dc3085bbd84111edcbd',
+        { include: ['actor'] },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Augno.NotFoundError);

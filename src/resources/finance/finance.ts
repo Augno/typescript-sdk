@@ -24,19 +24,19 @@ export class Finance extends APIResource {
   paymentTerms: PaymentTermsAPI.PaymentTerms = new PaymentTermsAPI.PaymentTerms(this._client);
 
   /**
-   * Returns a paginated list of adjustment types.
+   * Returns a paginated list of transaction types.
    *
    * @example
    * ```ts
-   * const listAdjustmentType =
-   *   await client.finance.retrieveAdjustmentTypes();
+   * const listTransactionType =
+   *   await client.finance.retrieveTransactionTypes();
    * ```
    */
-  retrieveAdjustmentTypes(
-    query: FinanceRetrieveAdjustmentTypesParams | null | undefined = {},
+  retrieveTransactionTypes(
+    query: FinanceRetrieveTransactionTypesParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ListAdjustmentType> {
-    return this._client.get('/v1/finance/adjustment-types', { query, ...options });
+  ): APIPromise<ListTransactionType> {
+    return this._client.get('/v1/finance/transaction-types', { query, ...options });
   }
 
   /**
@@ -56,19 +56,19 @@ export class Finance extends APIResource {
   }
 
   /**
-   * Returns a paginated list of transaction types.
+   * Returns a paginated list of adjustment types.
    *
    * @example
    * ```ts
-   * const listTransactionType =
-   *   await client.finance.retrieveTransactionTypes();
+   * const listAdjustmentType =
+   *   await client.finance.retrieveAdjustmentTypes();
    * ```
    */
-  retrieveTransactionTypes(
-    query: FinanceRetrieveTransactionTypesParams | null | undefined = {},
+  retrieveAdjustmentTypes(
+    query: FinanceRetrieveAdjustmentTypesParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ListTransactionType> {
-    return this._client.get('/v1/finance/transaction-types', { query, ...options });
+  ): APIPromise<ListAdjustmentType> {
+    return this._client.get('/v1/finance/adjustment-types', { query, ...options });
   }
 }
 
@@ -82,7 +82,15 @@ export interface AdjustmentType {
   id: string;
 
   /**
-   * Machine-readable code.
+   * Machine-readable code identifying what kind of adjustment this is.
+   *
+   * - `discount`: a price reduction applied to an order.
+   * - `shipping_discrepancy`: corrects a difference between quoted and actual
+   *   freight.
+   * - `short_payment`: reconciles an invoice paid for less than the amount due.
+   * - `write_off`: cancels an uncollectible balance.
+   * - `fee`: an additional charge added to an order.
+   * - `refund`: returns money to the customer.
    */
   code: 'discount' | 'shipping_discrepancy' | 'short_payment' | 'write_off' | 'fee' | 'refund';
 
@@ -182,7 +190,13 @@ export interface TransactionMethod {
   id: string;
 
   /**
-   * Machine-readable code.
+   * Machine-readable code identifying how the transaction was made.
+   *
+   * - `cash`
+   * - `check`
+   * - `credit_card`
+   * - `gift_card`
+   * - `ach`
    */
   code: 'cash' | 'check' | 'credit_card' | 'gift_card' | 'ach';
 
@@ -207,7 +221,12 @@ export interface TransactionType {
   id: string;
 
   /**
-   * Machine-readable code.
+   * Machine-readable code identifying the kind of transaction.
+   *
+   * - `payment`: money received from the customer.
+   * - `credit_memo`: a credit issued to the customer.
+   * - `adjustment`: a manual correction (see the transaction's `adjustment_type`).
+   * - `rebate`: a rebate granted to the customer.
    */
   code: 'payment' | 'credit_memo' | 'adjustment' | 'rebate';
 
@@ -222,17 +241,11 @@ export interface TransactionType {
   object: 'transaction_type';
 }
 
-export interface FinanceRetrieveAdjustmentTypesParams {
+export interface FinanceRetrieveTransactionTypesParams {
   /**
    * Cursor token used to retrieve the next or previous page of results.
    */
   cursor?: string;
-
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'owner'>;
 
   /**
    * Maximum number of results per page (default: 100, max: 1000).
@@ -262,11 +275,17 @@ export interface FinanceRetrieveTransactionMethodsParams {
   q?: string;
 }
 
-export interface FinanceRetrieveTransactionTypesParams {
+export interface FinanceRetrieveAdjustmentTypesParams {
   /**
    * Cursor token used to retrieve the next or previous page of results.
    */
   cursor?: string;
+
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'owner'>;
 
   /**
    * Maximum number of results per page (default: 100, max: 1000).
@@ -289,9 +308,9 @@ export declare namespace Finance {
     type ListTransactionType as ListTransactionType,
     type TransactionMethod as TransactionMethod,
     type TransactionType as TransactionType,
-    type FinanceRetrieveAdjustmentTypesParams as FinanceRetrieveAdjustmentTypesParams,
-    type FinanceRetrieveTransactionMethodsParams as FinanceRetrieveTransactionMethodsParams,
     type FinanceRetrieveTransactionTypesParams as FinanceRetrieveTransactionTypesParams,
+    type FinanceRetrieveTransactionMethodsParams as FinanceRetrieveTransactionMethodsParams,
+    type FinanceRetrieveAdjustmentTypesParams as FinanceRetrieveAdjustmentTypesParams,
   };
 
   export {
@@ -300,9 +319,9 @@ export declare namespace Finance {
     type ListPaymentTerm as ListPaymentTerm,
     type UpdatePaymentTermRequest as UpdatePaymentTermRequest,
     type PaymentTermDeleteResponse as PaymentTermDeleteResponse,
-    type PaymentTermCreateParams as PaymentTermCreateParams,
-    type PaymentTermRetrieveParams as PaymentTermRetrieveParams,
-    type PaymentTermUpdateParams as PaymentTermUpdateParams,
     type PaymentTermListParams as PaymentTermListParams,
+    type PaymentTermRetrieveParams as PaymentTermRetrieveParams,
+    type PaymentTermCreateParams as PaymentTermCreateParams,
+    type PaymentTermUpdateParams as PaymentTermUpdateParams,
   };
 }

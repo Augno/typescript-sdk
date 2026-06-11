@@ -63,9 +63,9 @@ export declare namespace Core {
     type ListSandbox as ListSandbox,
     type Sandbox as Sandbox,
     type SandboxDeleteResponse as SandboxDeleteResponse,
-    type SandboxCreateParams as SandboxCreateParams,
-    type SandboxRetrieveParams as SandboxRetrieveParams,
     type SandboxListParams as SandboxListParams,
+    type SandboxRetrieveParams as SandboxRetrieveParams,
+    type SandboxCreateParams as SandboxCreateParams,
   };
 
   export {
@@ -73,8 +73,8 @@ export declare namespace Core {
     type Actor as Actor,
     type ListRequestLog as ListRequestLog,
     type RequestLog as RequestLog,
-    type RequestLogRetrieveParams as RequestLogRetrieveParams,
     type RequestLogListParams as RequestLogListParams,
+    type RequestLogRetrieveParams as RequestLogRetrieveParams,
   };
 
   export {
@@ -84,8 +84,8 @@ export declare namespace Core {
     type ListAuditEvent as ListAuditEvent,
     type ListAuditFieldChange as ListAuditFieldChange,
     type ListObjectType as ListObjectType,
-    type AuditEventRetrieveParams as AuditEventRetrieveParams,
     type AuditEventListParams as AuditEventListParams,
+    type AuditEventRetrieveParams as AuditEventRetrieveParams,
   };
 
   export {
@@ -99,7 +99,7 @@ export declare namespace Core {
     EmailLogs as EmailLogs,
     type EmailLog as EmailLog,
     type ListEmailLog as ListEmailLog,
-    type EmailLogRetrieveParams as EmailLogRetrieveParams,
     type EmailLogListParams as EmailLogListParams,
+    type EmailLogRetrieveParams as EmailLogRetrieveParams,
   };
 }

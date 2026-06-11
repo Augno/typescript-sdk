@@ -12,19 +12,18 @@ import { path } from '../../internal/utils/path';
  */
 export class Materials extends APIResource {
   /**
-   * Creates a material.
+   * Returns a paginated list of materials.
    *
    * @example
    * ```ts
-   * const material = await client.catalog.materials.create({
-   *   category_id: 'ic_01ae7bd7bfd21ca0ab81e1357e',
-   *   sku: 'MAT-001',
-   * });
+   * const listMaterial = await client.catalog.materials.list();
    * ```
    */
-  create(params: MaterialCreateParams, options?: RequestOptions): APIPromise<Material> {
-    const { include, ...body } = params;
-    return this._client.post('/v1/catalog/materials', { query: { include }, body, ...options });
+  list(
+    query: MaterialListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ListMaterial> {
+    return this._client.get('/v1/catalog/materials', { query, ...options });
   }
 
   /**
@@ -46,6 +45,22 @@ export class Materials extends APIResource {
   }
 
   /**
+   * Creates a material.
+   *
+   * @example
+   * ```ts
+   * const material = await client.catalog.materials.create({
+   *   category_id: 'ic_01ae7bd7bfd21ca0ab81e1357e',
+   *   sku: 'MAT-001',
+   * });
+   * ```
+   */
+  create(params: MaterialCreateParams, options?: RequestOptions): APIPromise<Material> {
+    const { include, ...body } = params;
+    return this._client.post('/v1/catalog/materials', { query: { include }, body, ...options });
+  }
+
+  /**
    * Partially updates a material.
    *
    * @example
@@ -63,21 +78,6 @@ export class Materials extends APIResource {
   ): APIPromise<Material> {
     const { include, ...body } = params ?? {};
     return this._client.patch(path`/v1/catalog/materials/${id}`, { query: { include }, body, ...options });
-  }
-
-  /**
-   * Returns a paginated list of materials.
-   *
-   * @example
-   * ```ts
-   * const listMaterial = await client.catalog.materials.list();
-   * ```
-   */
-  list(
-    query: MaterialListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListMaterial> {
-    return this._client.get('/v1/catalog/materials', { query, ...options });
   }
 
   /**
@@ -275,6 +275,75 @@ export interface UpdateMaterialRequest {
   unit_cost?: RateInput;
 }
 
+export interface MaterialListParams {
+  /**
+   * Filter by attribute IDs.
+   */
+  attribute_ids?: Array<string>;
+
+  /**
+   * Filter by category IDs.
+   */
+  category_ids?: Array<string>;
+
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Filter to materials created on or before this date.
+   */
+  end_date?: string;
+
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<
+    | 'item'
+    | 'item.category'
+    | 'item.category.properties'
+    | 'item.category.unit_group'
+    | 'item.unit_value'
+    | 'item.unit_cost'
+    | 'item.burn_rate'
+    | 'item.attributes'
+  >;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+
+  /**
+   * Filter to materials created on or after this date.
+   */
+  start_date?: string;
+}
+
+export interface MaterialRetrieveParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<
+    | 'item'
+    | 'item.category'
+    | 'item.category.properties'
+    | 'item.category.unit_group'
+    | 'item.unit_value'
+    | 'item.unit_cost'
+    | 'item.burn_rate'
+    | 'item.attributes'
+  >;
+}
+
 export interface MaterialCreateParams {
   /**
    * Body param: Category ID.
@@ -337,23 +406,6 @@ export interface MaterialCreateParams {
   unit_price?: RateInput;
 }
 
-export interface MaterialRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<
-    | 'item'
-    | 'item.category'
-    | 'item.category.properties'
-    | 'item.category.unit_group'
-    | 'item.unit_value'
-    | 'item.unit_cost'
-    | 'item.burn_rate'
-    | 'item.attributes'
-  >;
-}
-
 export interface MaterialUpdateParams {
   /**
    * Query param: Sub-objects to expand in the response. When omitted, sub-objects
@@ -401,58 +453,6 @@ export interface MaterialUpdateParams {
   unit_cost?: RateInput;
 }
 
-export interface MaterialListParams {
-  /**
-   * Filter by attribute IDs.
-   */
-  attribute_ids?: Array<string>;
-
-  /**
-   * Filter by category IDs.
-   */
-  category_ids?: Array<string>;
-
-  /**
-   * Cursor token used to retrieve the next or previous page of results.
-   */
-  cursor?: string;
-
-  /**
-   * Filter to materials created on or before this date.
-   */
-  end_date?: string;
-
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<
-    | 'item'
-    | 'item.category'
-    | 'item.category.properties'
-    | 'item.category.unit_group'
-    | 'item.unit_value'
-    | 'item.unit_cost'
-    | 'item.burn_rate'
-    | 'item.attributes'
-  >;
-
-  /**
-   * Maximum number of results per page (default: 100, max: 1000).
-   */
-  limit?: number;
-
-  /**
-   * Search query used to filter results.
-   */
-  q?: string;
-
-  /**
-   * Filter to materials created on or after this date.
-   */
-  start_date?: string;
-}
-
 export declare namespace Materials {
   export {
     type CreateMaterialRequest as CreateMaterialRequest,
@@ -461,9 +461,9 @@ export declare namespace Materials {
     type QuantityInputRequest as QuantityInputRequest,
     type RateInput as RateInput,
     type UpdateMaterialRequest as UpdateMaterialRequest,
-    type MaterialCreateParams as MaterialCreateParams,
-    type MaterialRetrieveParams as MaterialRetrieveParams,
-    type MaterialUpdateParams as MaterialUpdateParams,
     type MaterialListParams as MaterialListParams,
+    type MaterialRetrieveParams as MaterialRetrieveParams,
+    type MaterialCreateParams as MaterialCreateParams,
+    type MaterialUpdateParams as MaterialUpdateParams,
   };
 }

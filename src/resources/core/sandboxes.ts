@@ -11,19 +11,15 @@ import { path } from '../../internal/utils/path';
  */
 export class Sandboxes extends APIResource {
   /**
-   * Creates a sandbox account.
+   * Returns a paginated list of sandboxes.
    *
    * @example
    * ```ts
-   * const sandbox = await client.core.sandboxes.create({
-   *   name: 'Integration Testing',
-   *   mode: 'blank',
-   * });
+   * const listSandbox = await client.core.sandboxes.list();
    * ```
    */
-  create(params: SandboxCreateParams, options?: RequestOptions): APIPromise<Sandbox> {
-    const { include, ...body } = params;
-    return this._client.post('/v1/core/sandboxes', { query: { include }, body, ...options });
+  list(query: SandboxListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ListSandbox> {
+    return this._client.get('/v1/core/sandboxes', { query, ...options });
   }
 
   /**
@@ -45,15 +41,19 @@ export class Sandboxes extends APIResource {
   }
 
   /**
-   * Returns a paginated list of sandboxes.
+   * Creates a sandbox account.
    *
    * @example
    * ```ts
-   * const listSandbox = await client.core.sandboxes.list();
+   * const sandbox = await client.core.sandboxes.create({
+   *   name: 'Integration Testing',
+   *   mode: 'blank',
+   * });
    * ```
    */
-  list(query: SandboxListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ListSandbox> {
-    return this._client.get('/v1/core/sandboxes', { query, ...options });
+  create(params: SandboxCreateParams, options?: RequestOptions): APIPromise<Sandbox> {
+    const { include, ...body } = params;
+    return this._client.post('/v1/core/sandboxes', { query: { include }, body, ...options });
   }
 
   /**
@@ -143,32 +143,6 @@ export interface Sandbox {
 
 export interface SandboxDeleteResponse {}
 
-export interface SandboxCreateParams {
-  /**
-   * Body param: Display name.
-   */
-  name: string;
-
-  /**
-   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
-   * are returned as `null`.
-   */
-  include?: Array<'owner_account'>;
-
-  /**
-   * Body param: Controls whether the sandbox is blank or seeded with sample data.
-   */
-  mode?: 'blank' | 'seeded';
-}
-
-export interface SandboxRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'owner_account'>;
-}
-
 export interface SandboxListParams {
   /**
    * Cursor token used to retrieve the next or previous page of results.
@@ -192,14 +166,40 @@ export interface SandboxListParams {
   q?: string;
 }
 
+export interface SandboxRetrieveParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'owner_account'>;
+}
+
+export interface SandboxCreateParams {
+  /**
+   * Body param: Display name.
+   */
+  name: string;
+
+  /**
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
+   */
+  include?: Array<'owner_account'>;
+
+  /**
+   * Body param: Controls whether the sandbox is blank or seeded with sample data.
+   */
+  mode?: 'blank' | 'seeded';
+}
+
 export declare namespace Sandboxes {
   export {
     type CreateSandboxRequest as CreateSandboxRequest,
     type ListSandbox as ListSandbox,
     type Sandbox as Sandbox,
     type SandboxDeleteResponse as SandboxDeleteResponse,
-    type SandboxCreateParams as SandboxCreateParams,
-    type SandboxRetrieveParams as SandboxRetrieveParams,
     type SandboxListParams as SandboxListParams,
+    type SandboxRetrieveParams as SandboxRetrieveParams,
+    type SandboxCreateParams as SandboxCreateParams,
   };
 }

@@ -6,10 +6,10 @@ export {
   type ListAccountUser,
   type NotificationPreferenceItem,
   type UpdateAccountUserRequest,
-  type AccountUserCreateParams,
-  type AccountUserRetrieveParams,
-  type AccountUserUpdateParams,
   type AccountUserListParams,
+  type AccountUserRetrieveParams,
+  type AccountUserCreateParams,
+  type AccountUserUpdateParams,
 } from './account-users/index';
 export { Identity } from './identity';
 export {
@@ -18,8 +18,8 @@ export {
   type ListRole,
   type UpdateRoleRequest,
   type RoleDeleteResponse,
-  type RoleCreateParams,
-  type RoleRetrieveParams,
-  type RoleUpdateParams,
   type RoleListParams,
+  type RoleRetrieveParams,
+  type RoleCreateParams,
+  type RoleUpdateParams,
 } from './roles';

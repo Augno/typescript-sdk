@@ -11,6 +11,49 @@ import { path } from '../../../internal/utils/path';
  */
 export class ServiceLevels extends APIResource {
   /**
+   * Returns a paginated list of service levels for a carrier.
+   *
+   * @example
+   * ```ts
+   * const listServiceLevel =
+   *   await client.operations.carriers.serviceLevels.list(
+   *     'cr_01784fd54c9ba197bb4e42f0e6',
+   *   );
+   * ```
+   */
+  list(
+    carrierID: string,
+    query: ServiceLevelListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<CustomersAPI.ListServiceLevel> {
+    return this._client.get(path`/v1/operations/carriers/${carrierID}/service-levels`, { query, ...options });
+  }
+
+  /**
+   * Returns a service level by ID.
+   *
+   * @example
+   * ```ts
+   * const serviceLevel =
+   *   await client.operations.carriers.serviceLevels.retrieve(
+   *     'crop_01cfaf03f104e90ef9680e2a30',
+   *     { carrier_id: 'cr_01784fd54c9ba197bb4e42f0e6' },
+   *   );
+   * ```
+   */
+  retrieve(
+    id: string,
+    params: ServiceLevelRetrieveParams,
+    options?: RequestOptions,
+  ): APIPromise<CustomersAPI.ServiceLevel> {
+    const { carrier_id, ...query } = params;
+    return this._client.get(path`/v1/operations/carriers/${carrier_id}/service-levels/${id}`, {
+      query,
+      ...options,
+    });
+  }
+
+  /**
    * Creates a service level for a carrier.
    *
    * @example
@@ -35,30 +78,6 @@ export class ServiceLevels extends APIResource {
     return this._client.post(path`/v1/operations/carriers/${carrierID}/service-levels`, {
       query: { include },
       body,
-      ...options,
-    });
-  }
-
-  /**
-   * Returns a service level by ID.
-   *
-   * @example
-   * ```ts
-   * const serviceLevel =
-   *   await client.operations.carriers.serviceLevels.retrieve(
-   *     'crop_01cfaf03f104e90ef9680e2a30',
-   *     { carrier_id: 'cr_01784fd54c9ba197bb4e42f0e6' },
-   *   );
-   * ```
-   */
-  retrieve(
-    id: string,
-    params: ServiceLevelRetrieveParams,
-    options?: RequestOptions,
-  ): APIPromise<CustomersAPI.ServiceLevel> {
-    const { carrier_id, ...query } = params;
-    return this._client.get(path`/v1/operations/carriers/${carrier_id}/service-levels/${id}`, {
-      query,
       ...options,
     });
   }
@@ -89,25 +108,6 @@ export class ServiceLevels extends APIResource {
       body,
       ...options,
     });
-  }
-
-  /**
-   * Returns a paginated list of service levels for a carrier.
-   *
-   * @example
-   * ```ts
-   * const listServiceLevel =
-   *   await client.operations.carriers.serviceLevels.list(
-   *     'cr_01784fd54c9ba197bb4e42f0e6',
-   *   );
-   * ```
-   */
-  list(
-    carrierID: string,
-    query: ServiceLevelListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<CustomersAPI.ListServiceLevel> {
-    return this._client.get(path`/v1/operations/carriers/${carrierID}/service-levels`, { query, ...options });
   }
 
   /**
@@ -187,6 +187,42 @@ export interface UpdateServiceLevelRequest {
 
 export interface ServiceLevelDeleteResponse {}
 
+export interface ServiceLevelListParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'owner' | 'owner.account'>;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+}
+
+export interface ServiceLevelRetrieveParams {
+  /**
+   * Path param: Carrier ID.
+   */
+  carrier_id: string;
+
+  /**
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
+   */
+  include?: Array<'owner' | 'owner.account'>;
+}
+
 export interface ServiceLevelCreateParams {
   /**
    * Body param: Service level code.
@@ -215,19 +251,6 @@ export interface ServiceLevelCreateParams {
    * in the customer portal.
    */
   customer_portal_visibility?: 'visible' | 'hidden';
-}
-
-export interface ServiceLevelRetrieveParams {
-  /**
-   * Path param: Carrier ID.
-   */
-  carrier_id: string;
-
-  /**
-   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
-   * are returned as `null`.
-   */
-  include?: Array<'owner' | 'owner.account'>;
 }
 
 export interface ServiceLevelUpdateParams {
@@ -265,29 +288,6 @@ export interface ServiceLevelUpdateParams {
   name?: string;
 }
 
-export interface ServiceLevelListParams {
-  /**
-   * Cursor token used to retrieve the next or previous page of results.
-   */
-  cursor?: string;
-
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'owner' | 'owner.account'>;
-
-  /**
-   * Maximum number of results per page (default: 100, max: 1000).
-   */
-  limit?: number;
-
-  /**
-   * Search query used to filter results.
-   */
-  q?: string;
-}
-
 export interface ServiceLevelDeleteParams {
   /**
    * Carrier ID.
@@ -300,10 +300,10 @@ export declare namespace ServiceLevels {
     type CreateServiceLevelRequest as CreateServiceLevelRequest,
     type UpdateServiceLevelRequest as UpdateServiceLevelRequest,
     type ServiceLevelDeleteResponse as ServiceLevelDeleteResponse,
-    type ServiceLevelCreateParams as ServiceLevelCreateParams,
-    type ServiceLevelRetrieveParams as ServiceLevelRetrieveParams,
-    type ServiceLevelUpdateParams as ServiceLevelUpdateParams,
     type ServiceLevelListParams as ServiceLevelListParams,
+    type ServiceLevelRetrieveParams as ServiceLevelRetrieveParams,
+    type ServiceLevelCreateParams as ServiceLevelCreateParams,
+    type ServiceLevelUpdateParams as ServiceLevelUpdateParams,
     type ServiceLevelDeleteParams as ServiceLevelDeleteParams,
   };
 }

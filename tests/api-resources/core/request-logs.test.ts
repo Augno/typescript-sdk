@@ -8,28 +8,6 @@ const client = new Augno({
 });
 
 describe('resource requestLogs', () => {
-  test('retrieve', async () => {
-    const responsePromise = client.core.requestLogs.retrieve('rq_01304bffe90e8cce9690cbefd4');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('retrieve: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.core.requestLogs.retrieve(
-        'rq_01304bffe90e8cce9690cbefd4',
-        { include: ['account'] },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
-  });
-
   test('list', async () => {
     const responsePromise = client.core.requestLogs.list();
     const rawResponse = await responsePromise.asResponse();
@@ -64,6 +42,28 @@ describe('resource requestLogs', () => {
           status_code_classes: [0],
           status_codes: [0],
         },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Augno.NotFoundError);
+  });
+
+  test('retrieve', async () => {
+    const responsePromise = client.core.requestLogs.retrieve('rq_01304bffe90e8cce9690cbefd4');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('retrieve: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.core.requestLogs.retrieve(
+        'rq_01304bffe90e8cce9690cbefd4',
+        { include: ['account'] },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Augno.NotFoundError);

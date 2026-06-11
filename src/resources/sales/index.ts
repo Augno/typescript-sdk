@@ -7,16 +7,16 @@ export {
   type ListAccountGroup,
   type UpdateAccountGroupRequest,
   type AccountGroupDeleteResponse,
+  type AccountGroupListParams,
   type AccountGroupCreateParams,
   type AccountGroupUpdateParams,
-  type AccountGroupListParams,
 } from './account-groups';
 export {
   AccountStatuses,
   type AccountStatus,
   type ListAccountStatus,
-  type AccountStatusRetrieveParams,
   type AccountStatusListParams,
+  type AccountStatusRetrieveParams,
 } from './account-statuses';
 export {
   Addresses,
@@ -24,9 +24,9 @@ export {
   type ListAddress,
   type UpdateAddressRequest,
   type AddressDeleteResponse,
+  type AddressListParams,
   type AddressCreateParams,
   type AddressUpdateParams,
-  type AddressListParams,
 } from './addresses';
 export {
   Customers,
@@ -58,18 +58,19 @@ export {
   type ServiceLevel,
   type ShippingTerm,
   type UpdateCustomerRequest,
+  type User,
   type CustomerDeleteResponse,
-  type CustomerCreateParams,
-  type CustomerRetrieveParams,
-  type CustomerUpdateParams,
   type CustomerListParams,
+  type CustomerRetrieveParams,
+  type CustomerCreateParams,
+  type CustomerUpdateParams,
 } from './customers/index';
 export {
   Priorities,
   type ListPriority,
   type Priority,
-  type PriorityRetrieveParams,
   type PriorityListParams,
+  type PriorityRetrieveParams,
 } from './priorities';
 export { Sales } from './sales';
 export {

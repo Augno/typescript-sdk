@@ -8,6 +8,56 @@ const client = new Augno({
 });
 
 describe('resource accountUsers', () => {
+  test('list', async () => {
+    const responsePromise = client.identity.accountUsers.list();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.identity.accountUsers.list(
+        {
+          cursor: 'cursor',
+          include: ['user'],
+          limit: 0,
+          q: 'q',
+          removed_scope: 'excluded',
+          role_type: 'admin',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Augno.NotFoundError);
+  });
+
+  test('retrieve', async () => {
+    const responsePromise = client.identity.accountUsers.retrieve('acus_01ea9983ddb41dacc44ecf997c');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('retrieve: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.identity.accountUsers.retrieve(
+        'acus_01ea9983ddb41dacc44ecf997c',
+        { include: ['user'] },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Augno.NotFoundError);
+  });
+
   test('create', async () => {
     const responsePromise = client.identity.accountUsers.create();
     const rawResponse = await responsePromise.asResponse();
@@ -38,28 +88,6 @@ describe('resource accountUsers', () => {
     ).rejects.toThrow(Augno.NotFoundError);
   });
 
-  test('retrieve', async () => {
-    const responsePromise = client.identity.accountUsers.retrieve('acus_01ea9983ddb41dacc44ecf997c');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('retrieve: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.identity.accountUsers.retrieve(
-        'acus_01ea9983ddb41dacc44ecf997c',
-        { include: ['user'] },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
-  });
-
   test('update', async () => {
     const responsePromise = client.identity.accountUsers.update('acus_01ea9983ddb41dacc44ecf997c');
     const rawResponse = await responsePromise.asResponse();
@@ -84,34 +112,6 @@ describe('resource accountUsers', () => {
           preferences: [{ enabled: true, notification_type: 'invoice' }],
           role_id: 'rl_01c16d2eb637c0d1f3a372937c',
           username: 'username',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
-  });
-
-  test('list', async () => {
-    const responsePromise = client.identity.accountUsers.list();
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.identity.accountUsers.list(
-        {
-          cursor: 'cursor',
-          include: ['user'],
-          limit: 0,
-          q: 'q',
-          removed_scope: 'excluded',
-          role_type: 'admin',
         },
         { path: '/_stainless_unknown_path' },
       ),

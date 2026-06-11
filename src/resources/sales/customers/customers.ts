@@ -19,6 +19,39 @@ export class Customers extends APIResource {
   actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
 
   /**
+   * Returns a paginated list of customers for the current account.
+   *
+   * @example
+   * ```ts
+   * const listCustomer = await client.sales.customers.list();
+   * ```
+   */
+  list(
+    query: CustomerListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ListCustomer> {
+    return this._client.get('/v1/sales/customers', { query, ...options });
+  }
+
+  /**
+   * Returns a customer by ID.
+   *
+   * @example
+   * ```ts
+   * const customer = await client.sales.customers.retrieve(
+   *   'ac_0170df1ac58e4d24c66fc89f5f',
+   * );
+   * ```
+   */
+  retrieve(
+    id: string,
+    query: CustomerRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<Customer> {
+    return this._client.get(path`/v1/sales/customers/${id}`, { query, ...options });
+  }
+
+  /**
    * Creates a customer account. Auto-generates a customer number if one is not
    * provided.
    *
@@ -58,24 +91,6 @@ export class Customers extends APIResource {
   }
 
   /**
-   * Returns a customer by ID.
-   *
-   * @example
-   * ```ts
-   * const customer = await client.sales.customers.retrieve(
-   *   'ac_0170df1ac58e4d24c66fc89f5f',
-   * );
-   * ```
-   */
-  retrieve(
-    id: string,
-    query: CustomerRetrieveParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<Customer> {
-    return this._client.get(path`/v1/sales/customers/${id}`, { query, ...options });
-  }
-
-  /**
    * Partially updates a customer account. When a Stripe integration is active,
    * customer changes are synced to Stripe.
    *
@@ -102,21 +117,6 @@ export class Customers extends APIResource {
   }
 
   /**
-   * Returns a paginated list of customers for the current account.
-   *
-   * @example
-   * ```ts
-   * const listCustomer = await client.sales.customers.list();
-   * ```
-   */
-  list(
-    query: CustomerListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListCustomer> {
-    return this._client.get('/v1/sales/customers', { query, ...options });
-  }
-
-  /**
    * Deletes a customer and associated account relations, addresses, and account
    * users.
    *
@@ -133,8 +133,10 @@ export class Customers extends APIResource {
 }
 
 /**
- * Account user with role and department. Profile fields (name, email, username,
- * image URL) live on the expandable user sub-resource.
+ * Account user with role and department.
+ *
+ * Profile fields (name, email, username, image URL) live on the expandable user
+ * sub-resource.
  */
 export interface AccountUser {
   /**
@@ -169,6 +171,10 @@ export interface AccountUser {
 
   /**
    * Account user status.
+   *
+   * - `active`: the user can access the account.
+   * - `disabled`: the user is locked out of the account.
+   * - `removed`: the user has been removed (soft-deleted) from the account.
    */
   status: 'active' | 'disabled' | 'removed';
 
@@ -180,59 +186,7 @@ export interface AccountUser {
   /**
    * User resource.
    */
-  user: AccountUser.User | null;
-}
-
-export namespace AccountUser {
-  /**
-   * User resource.
-   */
-  export interface User {
-    /**
-     * User ID.
-     */
-    id: string;
-
-    /**
-     * Creation timestamp.
-     */
-    created_at: string;
-
-    /**
-     * Email address.
-     */
-    email: string | null;
-
-    /**
-     * Email verified timestamp, null if unverified.
-     */
-    email_verified_at: string | null;
-
-    /**
-     * Profile image URL.
-     */
-    image_url: string | null;
-
-    /**
-     * Display name.
-     */
-    name: string | null;
-
-    /**
-     * Resource type identifier.
-     */
-    object: 'user';
-
-    /**
-     * Last updated timestamp.
-     */
-    updated_at: string;
-
-    /**
-     * Username.
-     */
-    username: string | null;
-  }
+  user: User | null;
 }
 
 /**
@@ -245,12 +199,21 @@ export interface Carrier {
   id: string;
 
   /**
-   * Account number.
+   * Your account number with this carrier, used for rating and billing.
    */
   account_number: string | null;
 
   /**
-   * Carrier code.
+   * Well-known carrier identifier.
+   *
+   * Null for custom carriers without a recognized code.
+   *
+   * - `fedex`, `ups`, `usps`: integrated carriers managed through Shippo (live
+   *   rating and labels).
+   * - `will_call`: customer picks the order up; no carrier shipment.
+   * - `delivery`: delivered by your own vehicles/drivers.
+   * - `ltl`, `ltl1`: less-than-truckload freight carriers.
+   * - `freight_collect`: freight billed to and arranged by the receiver.
    */
   code: 'fedex' | 'ups' | 'usps' | 'will_call' | 'delivery' | 'ltl' | 'ltl1' | 'freight_collect' | null;
 
@@ -260,7 +223,10 @@ export interface Carrier {
   created_at: string;
 
   /**
-   * Customer portal visibility.
+   * Whether this carrier is shown to customers in the customer portal.
+   *
+   * - `visible`: customers can see and select this carrier.
+   * - `hidden`: the carrier is concealed from the customer portal.
    */
   customer_portal_visibility: 'visible' | 'hidden';
 
@@ -481,7 +447,10 @@ export interface Customer {
   child_accounts: ListCustomer | null;
 
   /**
-   * Commission policy.
+   * Commission policy applied to this customer's orders.
+   *
+   * - `commission_applied`: commission applies to orders.
+   * - `commission_exempt`: no commission applies.
    */
   commission_policy: 'commission_applied' | 'commission_exempt';
 
@@ -506,7 +475,10 @@ export interface Customer {
   defaults: CustomerDefaults | null;
 
   /**
-   * EDI status.
+   * Whether EDI (Electronic Data Interchange) is enabled for this customer.
+   *
+   * - `enabled`: EDI is enabled.
+   * - `disabled`: EDI is disabled.
    */
   edi_status: 'enabled' | 'disabled';
 
@@ -531,7 +503,8 @@ export interface Customer {
   notification_preferences: CustomerNotificationPreferences | null;
 
   /**
-   * Customer number.
+   * Human-readable customer number used to identify the account, distinct from the
+   * `id`.
    */
   number: string;
 
@@ -551,7 +524,11 @@ export interface Customer {
   price_groups: AccountGroupsAPI.ListAccountGroup | null;
 
   /**
-   * Customer relationship type.
+   * The customer's position in the account hierarchy.
+   *
+   * - `standalone`: no parent or child accounts.
+   * - `parent`: has one or more child accounts (see `child_accounts`).
+   * - `child`: belongs to a parent account (see `parent_account`).
    */
   relationship_type: 'standalone' | 'parent' | 'child';
 
@@ -561,7 +538,12 @@ export interface Customer {
   ship_to_address: APIKeysAPI.Address | null;
 
   /**
-   * Account status code.
+   * Account status code, controlling whether the customer can transact.
+   *
+   * - `normal`: standard active account with no restrictions.
+   * - `preferred`: active account flagged as preferred.
+   * - `hold_shipment`: orders can be placed, but shipments are held.
+   * - `hold_all`: all activity is on hold.
    */
   status: 'normal' | 'preferred' | 'hold_shipment' | 'hold_all';
 
@@ -621,8 +603,10 @@ export interface CustomerDefaults {
   priority: PrioritiesAPI.Priority | null;
 
   /**
-   * Account user with role and department. Profile fields (name, email, username,
-   * image URL) live on the expandable user sub-resource.
+   * Account user with role and department.
+   *
+   * Profile fields (name, email, username, image URL) live on the expandable user
+   * sub-resource.
    */
   sales_rep: AccountUser | null;
 
@@ -637,12 +621,15 @@ export interface CustomerDefaults {
  */
 export interface CustomerFreightPreferences {
   /**
-   * Carrier billing account number.
+   * Carrier billing account number charged when `billing_type` is `third_party`.
    */
   billing_account: string | null;
 
   /**
-   * Carrier billing type.
+   * Who pays the carrier for shipments.
+   *
+   * - `sender`: the shipper (you) pays the carrier.
+   * - `third_party`: a third party is billed, using `billing_account`.
    */
   billing_type: 'sender' | 'third_party' | null;
 
@@ -662,7 +649,11 @@ export interface CustomerFreightPreferences {
   service_level: ServiceLevel | null;
 
   /**
-   * Freight policy.
+   * Freight policy applied to this customer's orders.
+   *
+   * - `free_freight`: the customer is not billed for freight.
+   * - `billed_freight`: freight is billed to the customer, unless overridden
+   *   elsewhere.
    */
   status: 'free_freight' | 'billed_freight';
 }
@@ -907,7 +898,14 @@ export interface Location {
   parent: Location | null;
 
   /**
-   * Location type code.
+   * Location type code, identifying this location's level in the storage hierarchy.
+   *
+   * - `building`: a building-level location.
+   * - `section`: a section within a building.
+   * - `aisle`: an aisle within a section.
+   * - `rack`: a rack within an aisle.
+   * - `shelf`: a shelf within a rack.
+   * - `bin`: a bin within a shelf.
    */
   type: LocationTypeCode;
 
@@ -995,6 +993,10 @@ export interface PaymentTerm {
 
   /**
    * Payment term status.
+   *
+   * - `active`: the term is available for assignment to customers and invoices.
+   * - `inactive`: the term is retained for historical records but cannot be
+   *   assigned.
    */
   status: 'active' | 'inactive';
 
@@ -1170,12 +1172,24 @@ export interface ScanningStation {
   department: Department | null;
 
   /**
-   * Label size code.
+   * Label size printed at this station.
+   *
+   * `null` when no label size is configured.
+   *
+   * - `1x1`: 1x1 inch label.
+   * - `1x3`: 1x3 inch label.
+   * - `1x4`: 1x4 inch label.
+   * - `2x4`: 2x4 inch label.
    */
   label_size: '1x1' | '1x3' | '1x4' | '2x4' | null;
 
   /**
-   * Label type code.
+   * Label type printed at this station.
+   *
+   * `null` when no label type is configured.
+   *
+   * - `tag`: a tag label.
+   * - `traveler`: a traveler label that accompanies the batch through production.
    */
   label_type: 'tag' | 'traveler' | null;
 
@@ -1196,6 +1210,10 @@ export interface ScanningStation {
 
   /**
    * Operator requirement behavior for this station.
+   *
+   * - `none`: no operator action is required to complete a scan.
+   * - `material_check`: the operator must perform a material check before the scan
+   *   is accepted.
    */
   operator_requirement: 'none' | 'material_check';
 
@@ -1205,7 +1223,12 @@ export interface ScanningStation {
   production_steps: ListProductionStep | null;
 
   /**
-   * Scanning station type.
+   * Scanning station type, determining which batch operation the station performs.
+   *
+   * - `init_batch`: initializes a new batch.
+   * - `merge_batch`: merges multiple batches into one.
+   * - `move_batch`: moves a batch to another location or step.
+   * - `split_batch`: splits a batch into multiple batches.
    */
   type: 'init_batch' | 'merge_batch' | 'move_batch' | 'split_batch';
 
@@ -1230,12 +1253,16 @@ export interface ServiceLevel {
   created_at: string;
 
   /**
-   * Customer portal visibility.
+   * Whether this service level is shown to customers in the customer portal.
+   *
+   * - `visible`: customers can see and select this service level.
+   * - `hidden`: the service level is concealed from the customer portal.
    */
   customer_portal_visibility: 'visible' | 'hidden';
 
   /**
-   * Default service level for the carrier.
+   * Whether this is the carrier's default service level, pre-selected when the
+   * carrier is chosen.
    */
   is_default: boolean;
 
@@ -1255,7 +1282,10 @@ export interface ServiceLevel {
   owner: APIKeysAPI.Owner | null;
 
   /**
-   * Service level token.
+   * Carrier-specific code identifying this service level (e.g. `fedex_ground`,
+   * `ups_next_day_air`).
+   *
+   * Values are carrier-defined, so any non-empty string is accepted.
    */
   service_level_token: string;
 
@@ -1310,7 +1340,13 @@ export interface ShippingTerm {
   owner: APIKeysAPI.Owner | null;
 
   /**
-   * Shipping term type.
+   * Freight pricing model applied by this shipping term.
+   *
+   * - `free_freight`: no shipping cost to the buyer.
+   * - `flat_rate_freight`: a fixed shipping cost regardless of order details (see
+   *   `flat_rate`).
+   * - `carrier_rate_freight`: shipping cost is determined by the carrier's quoted
+   *   rate.
    */
   type: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight';
 
@@ -1441,7 +1477,216 @@ export interface UpdateCustomerRequest {
   url?: string | null;
 }
 
+/**
+ * User resource.
+ */
+export interface User {
+  /**
+   * User ID.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Email address.
+   *
+   * `null` if the user has no email on record.
+   */
+  email: string | null;
+
+  /**
+   * When the user verified their email address.
+   *
+   * `null` if the email is unverified.
+   */
+  email_verified_at: string | null;
+
+  /**
+   * URL of the user's profile image.
+   *
+   * `null` if no image has been uploaded.
+   */
+  image_url: string | null;
+
+  /**
+   * User's full display name.
+   *
+   * `null` if not set.
+   */
+  name: string | null;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'user';
+
+  /**
+   * Last updated timestamp.
+   */
+  updated_at: string;
+
+  /**
+   * Username.
+   *
+   * `null` if the user has no username.
+   */
+  username: string | null;
+}
+
 export interface CustomerDeleteResponse {}
+
+export interface CustomerListParams {
+  /**
+   * Filter by carrier IDs.
+   */
+  carrier_ids?: Array<string>;
+
+  /**
+   * Filter by city.
+   */
+  city?: string;
+
+  /**
+   * Filter by commission status codes.
+   */
+  commission_status_codes?: Array<'commission_applied' | 'commission_exempt'>;
+
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Filter by customer group IDs.
+   */
+  customer_group_ids?: Array<string>;
+
+  /**
+   * Filter by end date (created before).
+   */
+  end_date?: string;
+
+  /**
+   * Filter by freight status codes.
+   */
+  freight_status_codes?: Array<'free_freight' | 'billed_freight'>;
+
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<
+    | 'bill_to_address'
+    | 'ship_to_address'
+    | 'type'
+    | 'parent_account'
+    | 'freight_preferences.carrier'
+    | 'freight_preferences.service_level'
+    | 'defaults.payment_term'
+    | 'defaults.shipping_term'
+    | 'defaults.sales_rep'
+    | 'defaults.sales_rep.user'
+    | 'defaults.priority'
+    | 'contact_info'
+    | 'freight_preferences'
+    | 'defaults'
+    | 'notification_preferences'
+    | 'price_groups'
+    | 'child_accounts'
+    | 'credit_limit'
+  >;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Filter by whether the customer has child accounts.
+   */
+  parent_account_status?: 'parent' | 'non_parent';
+
+  /**
+   * Filter by payment term IDs.
+   */
+  payment_term_ids?: Array<string>;
+
+  /**
+   * Filter by postal code.
+   */
+  postal_code?: string;
+
+  /**
+   * Filter by pricing group IDs.
+   */
+  pricing_group_ids?: Array<string>;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+
+  /**
+   * Filter by sales rep IDs.
+   */
+  sales_rep_ids?: Array<string>;
+
+  /**
+   * Filter by service level IDs.
+   */
+  service_level_ids?: Array<string>;
+
+  /**
+   * Filter by shipping term IDs.
+   */
+  shipping_term_ids?: Array<string>;
+
+  /**
+   * Filter by start date (created after).
+   */
+  start_date?: string;
+
+  /**
+   * Filter by state.
+   */
+  state?: string;
+
+  /**
+   * Filter by status codes.
+   */
+  status_codes?: Array<'normal' | 'preferred' | 'hold_shipment' | 'hold_all'>;
+}
+
+export interface CustomerRetrieveParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<
+    | 'bill_to_address'
+    | 'ship_to_address'
+    | 'type'
+    | 'parent_account'
+    | 'freight_preferences.carrier'
+    | 'freight_preferences.service_level'
+    | 'defaults.payment_term'
+    | 'defaults.shipping_term'
+    | 'defaults.sales_rep'
+    | 'defaults.sales_rep.user'
+    | 'defaults.priority'
+    | 'contact_info'
+    | 'freight_preferences'
+    | 'defaults'
+    | 'notification_preferences'
+    | 'price_groups'
+    | 'child_accounts'
+    | 'credit_limit'
+  >;
+}
 
 export interface CustomerCreateParams {
   /**
@@ -1584,33 +1829,6 @@ export interface CustomerCreateParams {
    * Body param: Website URL.
    */
   url?: string;
-}
-
-export interface CustomerRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<
-    | 'bill_to_address'
-    | 'ship_to_address'
-    | 'type'
-    | 'parent_account'
-    | 'freight_preferences.carrier'
-    | 'freight_preferences.service_level'
-    | 'defaults.payment_term'
-    | 'defaults.shipping_term'
-    | 'defaults.sales_rep'
-    | 'defaults.sales_rep.user'
-    | 'defaults.priority'
-    | 'contact_info'
-    | 'freight_preferences'
-    | 'defaults'
-    | 'notification_preferences'
-    | 'price_groups'
-    | 'child_accounts'
-    | 'credit_limit'
-  >;
 }
 
 export interface CustomerUpdateParams {
@@ -1756,128 +1974,6 @@ export interface CustomerUpdateParams {
   url?: string | null;
 }
 
-export interface CustomerListParams {
-  /**
-   * Filter by carrier IDs.
-   */
-  carrier_ids?: Array<string>;
-
-  /**
-   * Filter by city.
-   */
-  city?: string;
-
-  /**
-   * Filter by commission status codes.
-   */
-  commission_status_codes?: Array<'commission_applied' | 'commission_exempt'>;
-
-  /**
-   * Cursor token used to retrieve the next or previous page of results.
-   */
-  cursor?: string;
-
-  /**
-   * Filter by customer group IDs.
-   */
-  customer_group_ids?: Array<string>;
-
-  /**
-   * Filter by end date (created before).
-   */
-  end_date?: string;
-
-  /**
-   * Filter by freight status codes.
-   */
-  freight_status_codes?: Array<'free_freight' | 'billed_freight'>;
-
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<
-    | 'bill_to_address'
-    | 'ship_to_address'
-    | 'type'
-    | 'parent_account'
-    | 'freight_preferences.carrier'
-    | 'freight_preferences.service_level'
-    | 'defaults.payment_term'
-    | 'defaults.shipping_term'
-    | 'defaults.sales_rep'
-    | 'defaults.sales_rep.user'
-    | 'defaults.priority'
-    | 'contact_info'
-    | 'freight_preferences'
-    | 'defaults'
-    | 'notification_preferences'
-    | 'price_groups'
-    | 'child_accounts'
-    | 'credit_limit'
-  >;
-
-  /**
-   * Maximum number of results per page (default: 100, max: 1000).
-   */
-  limit?: number;
-
-  /**
-   * Filter by whether the customer has child accounts.
-   */
-  parent_account_status?: 'parent' | 'non_parent';
-
-  /**
-   * Filter by payment term IDs.
-   */
-  payment_term_ids?: Array<string>;
-
-  /**
-   * Filter by postal code.
-   */
-  postal_code?: string;
-
-  /**
-   * Filter by pricing group IDs.
-   */
-  pricing_group_ids?: Array<string>;
-
-  /**
-   * Search query used to filter results.
-   */
-  q?: string;
-
-  /**
-   * Filter by sales rep IDs.
-   */
-  sales_rep_ids?: Array<string>;
-
-  /**
-   * Filter by service level IDs.
-   */
-  service_level_ids?: Array<string>;
-
-  /**
-   * Filter by shipping term IDs.
-   */
-  shipping_term_ids?: Array<string>;
-
-  /**
-   * Filter by start date (created after).
-   */
-  start_date?: string;
-
-  /**
-   * Filter by state.
-   */
-  state?: string;
-
-  /**
-   * Filter by status codes.
-   */
-  status_codes?: Array<'normal' | 'preferred' | 'hold_shipment' | 'hold_all'>;
-}
-
 Customers.Actions = Actions;
 
 export declare namespace Customers {
@@ -1910,11 +2006,12 @@ export declare namespace Customers {
     type ServiceLevel as ServiceLevel,
     type ShippingTerm as ShippingTerm,
     type UpdateCustomerRequest as UpdateCustomerRequest,
+    type User as User,
     type CustomerDeleteResponse as CustomerDeleteResponse,
-    type CustomerCreateParams as CustomerCreateParams,
-    type CustomerRetrieveParams as CustomerRetrieveParams,
-    type CustomerUpdateParams as CustomerUpdateParams,
     type CustomerListParams as CustomerListParams,
+    type CustomerRetrieveParams as CustomerRetrieveParams,
+    type CustomerCreateParams as CustomerCreateParams,
+    type CustomerUpdateParams as CustomerUpdateParams,
   };
 
   export {

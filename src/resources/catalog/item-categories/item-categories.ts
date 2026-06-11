@@ -22,21 +22,20 @@ export class ItemCategories extends APIResource {
   properties: PropertiesAPI.Properties = new PropertiesAPI.Properties(this._client);
 
   /**
-   * Creates an account-owned item category.
+   * Returns a paginated list of item categories for the current account, including
+   * account-specific and global system categories.
    *
    * @example
    * ```ts
-   * const itemCategory =
-   *   await client.catalog.itemCategories.create({
-   *     name: 'Electronics',
-   *     type: 'material_category',
-   *     unit_group_id: 'ug_01aad07abb8e41fd392d2d7013',
-   *   });
+   * const listItemCategory =
+   *   await client.catalog.itemCategories.list();
    * ```
    */
-  create(params: ItemCategoryCreateParams, options?: RequestOptions): APIPromise<ItemsAPI.ItemCategory> {
-    const { include, ...body } = params;
-    return this._client.post('/v1/catalog/item-categories', { query: { include }, body, ...options });
+  list(
+    query: ItemCategoryListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ListItemCategory> {
+    return this._client.get('/v1/catalog/item-categories', { query, ...options });
   }
 
   /**
@@ -57,6 +56,24 @@ export class ItemCategories extends APIResource {
     options?: RequestOptions,
   ): APIPromise<ItemsAPI.ItemCategory> {
     return this._client.get(path`/v1/catalog/item-categories/${id}`, { query, ...options });
+  }
+
+  /**
+   * Creates an account-owned item category.
+   *
+   * @example
+   * ```ts
+   * const itemCategory =
+   *   await client.catalog.itemCategories.create({
+   *     name: 'Electronics',
+   *     type: 'material_category',
+   *     unit_group_id: 'ug_01aad07abb8e41fd392d2d7013',
+   *   });
+   * ```
+   */
+  create(params: ItemCategoryCreateParams, options?: RequestOptions): APIPromise<ItemsAPI.ItemCategory> {
+    const { include, ...body } = params;
+    return this._client.post('/v1/catalog/item-categories', { query: { include }, body, ...options });
   }
 
   /**
@@ -83,23 +100,6 @@ export class ItemCategories extends APIResource {
       body,
       ...options,
     });
-  }
-
-  /**
-   * Returns a paginated list of item categories for the current account, including
-   * account-specific and global system categories.
-   *
-   * @example
-   * ```ts
-   * const listItemCategory =
-   *   await client.catalog.itemCategories.list();
-   * ```
-   */
-  list(
-    query: ItemCategoryListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListItemCategory> {
-    return this._client.get('/v1/catalog/item-categories', { query, ...options });
   }
 
   /**
@@ -201,6 +201,58 @@ export interface ItemCategoryDeleteResponse {}
 
 export interface ItemCategoryChangeUnitGroupResponse {}
 
+export interface ItemCategoryListParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<
+    | 'owner'
+    | 'owner.account'
+    | 'properties'
+    | 'unit_group'
+    | 'unit_group.base_unit'
+    | 'unit_group.associated_units'
+    | 'unit_group.associated_units.unit'
+  >;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+
+  /**
+   * Filter by item category type.
+   */
+  type?: 'material_category' | 'product_category';
+}
+
+export interface ItemCategoryRetrieveParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<
+    | 'owner'
+    | 'owner.account'
+    | 'properties'
+    | 'unit_group'
+    | 'unit_group.base_unit'
+    | 'unit_group.associated_units'
+    | 'unit_group.associated_units.unit'
+  >;
+}
+
 export interface ItemCategoryCreateParams {
   /**
    * Body param: Display name.
@@ -221,22 +273,6 @@ export interface ItemCategoryCreateParams {
   /**
    * Query param: Sub-objects to expand in the response. When omitted, sub-objects
    * are returned as `null`.
-   */
-  include?: Array<
-    | 'owner'
-    | 'owner.account'
-    | 'properties'
-    | 'unit_group'
-    | 'unit_group.base_unit'
-    | 'unit_group.associated_units'
-    | 'unit_group.associated_units.unit'
-  >;
-}
-
-export interface ItemCategoryRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
    */
   include?: Array<
     | 'owner'
@@ -275,42 +311,6 @@ export interface ItemCategoryUpdateParams {
   notes?: string;
 }
 
-export interface ItemCategoryListParams {
-  /**
-   * Cursor token used to retrieve the next or previous page of results.
-   */
-  cursor?: string;
-
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<
-    | 'owner'
-    | 'owner.account'
-    | 'properties'
-    | 'unit_group'
-    | 'unit_group.base_unit'
-    | 'unit_group.associated_units'
-    | 'unit_group.associated_units.unit'
-  >;
-
-  /**
-   * Maximum number of results per page (default: 100, max: 1000).
-   */
-  limit?: number;
-
-  /**
-   * Search query used to filter results.
-   */
-  q?: string;
-
-  /**
-   * Filter by item category type.
-   */
-  type?: 'material_category' | 'product_category';
-}
-
 export interface ItemCategoryChangeUnitGroupParams {
   /**
    * Item category ID.
@@ -327,10 +327,10 @@ export declare namespace ItemCategories {
     type UpdateItemCategoryRequest as UpdateItemCategoryRequest,
     type ItemCategoryDeleteResponse as ItemCategoryDeleteResponse,
     type ItemCategoryChangeUnitGroupResponse as ItemCategoryChangeUnitGroupResponse,
-    type ItemCategoryCreateParams as ItemCategoryCreateParams,
-    type ItemCategoryRetrieveParams as ItemCategoryRetrieveParams,
-    type ItemCategoryUpdateParams as ItemCategoryUpdateParams,
     type ItemCategoryListParams as ItemCategoryListParams,
+    type ItemCategoryRetrieveParams as ItemCategoryRetrieveParams,
+    type ItemCategoryCreateParams as ItemCategoryCreateParams,
+    type ItemCategoryUpdateParams as ItemCategoryUpdateParams,
     type ItemCategoryChangeUnitGroupParams as ItemCategoryChangeUnitGroupParams,
   };
 

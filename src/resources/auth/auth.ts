@@ -44,8 +44,8 @@ export declare namespace Auth {
     type PageInfo as PageInfo,
     type Role as Role,
     type APIKeyDeleteResponse as APIKeyDeleteResponse,
-    type APIKeyCreateParams as APIKeyCreateParams,
     type APIKeyRetrieveParams as APIKeyRetrieveParams,
     type APIKeyListParams as APIKeyListParams,
+    type APIKeyCreateParams as APIKeyCreateParams,
   };
 }
