@@ -45,7 +45,10 @@ export class Materials extends APIResource {
   }
 
   /**
-   * Creates a material.
+   * Creates a material with the specified SKU and category.
+   *
+   * Inventory tracking for the new material starts at a zero on-hand quantity in the
+   * category's base unit.
    *
    * @example
    * ```ts
@@ -62,6 +65,8 @@ export class Materials extends APIResource {
 
   /**
    * Partially updates a material.
+   *
+   * Fields not provided retain their current values.
    *
    * @example
    * ```ts
@@ -81,7 +86,11 @@ export class Materials extends APIResource {
   }
 
   /**
-   * Deletes a material by ID.
+   * Deletes a material.
+   *
+   * This is a soft delete: the material is marked deleted and no longer returned by
+   * other endpoints, but the record is retained. Deleting an already-deleted
+   * material returns an error.
    *
    * @example
    * ```ts
@@ -100,22 +109,28 @@ export class Materials extends APIResource {
  */
 export interface CreateMaterialRequest {
   /**
-   * Category ID.
+   * ID of the item category to place the material in.
+   *
+   * The category's unit group determines the base unit used for the material's rates
+   * (`unit_value`, `unit_cost`, `burn_rate`).
    */
   category_id: string;
 
   /**
-   * SKU code.
+   * Stock keeping unit code for the material.
+   *
+   * Must be unique within the account; creating a material with a SKU already used
+   * by another item fails with a conflict error.
    */
   sku: string;
 
   /**
-   * Attribute IDs to connect to the material at creation time.
+   * IDs of existing attributes to link to the material at creation time.
    */
   attribute_ids?: Array<string>;
 
   /**
-   * Description.
+   * Free-form description of the material.
    */
   description?: string;
 
@@ -125,7 +140,7 @@ export interface CreateMaterialRequest {
   lead_time?: QuantityInputRequest;
 
   /**
-   * Notes.
+   * Free-form notes about the material.
    */
   notes?: string;
 
@@ -135,12 +150,14 @@ export interface CreateMaterialRequest {
   order_point?: QuantityInputRequest;
 
   /**
-   * RateInput represents the input for creating or updating a rate.
+   * A rate value with its numerator and denominator units, used in create and update
+   * requests.
    */
   unit_cost?: RateInput;
 
   /**
-   * RateInput represents the input for creating or updating a rate.
+   * A rate value with its numerator and denominator units, used in create and update
+   * requests.
    */
   unit_price?: RateInput;
 }
@@ -166,7 +183,12 @@ export interface ListMaterial {
 }
 
 /**
- * Material with order point and lead time.
+ * A material in the account's catalog: a raw material or component consumed in
+ * production.
+ *
+ * Material-level data such as the SKU, description, category, pricing, and
+ * attributes lives on the underlying `item`; the material record adds the
+ * reordering fields `order_point` and `lead_time`.
  */
 export interface Material {
   /**
@@ -210,32 +232,34 @@ export interface Material {
  */
 export interface QuantityInputRequest {
   /**
-   * Unit ID.
+   * ID of the unit the value is expressed in.
    */
   unit_id: string;
 
   /**
-   * Quantity value.
+   * Decimal value of the quantity.
    */
   value: string;
 }
 
 /**
- * RateInput represents the input for creating or updating a rate.
+ * A rate value with its numerator and denominator units, used in create and update
+ * requests.
  */
 export interface RateInput {
   /**
-   * Denominator unit ID.
+   * ID of the unit for the rate's denominator (the per-unit basis).
    */
   denominator_unit_id: string;
 
   /**
-   * Numerator unit ID.
+   * ID of the unit for the rate's numerator (e.g. the currency of a price).
    */
   numerator_unit_id: string;
 
   /**
-   * Decimal value of the rate.
+   * Decimal value of the rate, expressed as the amount of the numerator unit per one
+   * denominator unit.
    */
   value: string;
 }
@@ -245,7 +269,7 @@ export interface RateInput {
  */
 export interface UpdateMaterialRequest {
   /**
-   * Description.
+   * New description for the material.
    */
   description?: string;
 
@@ -255,7 +279,7 @@ export interface UpdateMaterialRequest {
   lead_time?: QuantityInputRequest;
 
   /**
-   * Notes.
+   * New notes for the material.
    */
   notes?: string;
 
@@ -265,12 +289,16 @@ export interface UpdateMaterialRequest {
   order_point?: QuantityInputRequest;
 
   /**
-   * SKU code.
+   * New stock keeping unit code for the material.
+   *
+   * Must remain unique within the account; a conflict error is returned if another
+   * item already uses it.
    */
   sku?: string;
 
   /**
-   * RateInput represents the input for creating or updating a rate.
+   * A rate value with its numerator and denominator units, used in create and update
+   * requests.
    */
   unit_cost?: RateInput;
 }
@@ -287,7 +315,11 @@ export interface MaterialListParams {
   category_ids?: Array<string>;
 
   /**
-   * Cursor token used to retrieve the next or previous page of results.
+   * Opaque cursor token identifying where the page of results starts.
+   *
+   * Use the `cursor` value embedded in a previous response's `next_page_url` or
+   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
+   * page.
    */
   cursor?: string;
 
@@ -312,12 +344,14 @@ export interface MaterialListParams {
   >;
 
   /**
-   * Maximum number of results per page (default: 100, max: 1000).
+   * Maximum number of results to return in a single page.
    */
   limit?: number;
 
   /**
-   * Search query used to filter results.
+   * Free-text search term used to filter results.
+   *
+   * Which fields are matched against the term varies by endpoint.
    */
   q?: string;
 
@@ -346,12 +380,18 @@ export interface MaterialRetrieveParams {
 
 export interface MaterialCreateParams {
   /**
-   * Body param: Category ID.
+   * Body param: ID of the item category to place the material in.
+   *
+   * The category's unit group determines the base unit used for the material's rates
+   * (`unit_value`, `unit_cost`, `burn_rate`).
    */
   category_id: string;
 
   /**
-   * Body param: SKU code.
+   * Body param: Stock keeping unit code for the material.
+   *
+   * Must be unique within the account; creating a material with a SKU already used
+   * by another item fails with a conflict error.
    */
   sku: string;
 
@@ -371,12 +411,12 @@ export interface MaterialCreateParams {
   >;
 
   /**
-   * Body param: Attribute IDs to connect to the material at creation time.
+   * Body param: IDs of existing attributes to link to the material at creation time.
    */
   attribute_ids?: Array<string>;
 
   /**
-   * Body param: Description.
+   * Body param: Free-form description of the material.
    */
   description?: string;
 
@@ -386,7 +426,7 @@ export interface MaterialCreateParams {
   lead_time?: QuantityInputRequest;
 
   /**
-   * Body param: Notes.
+   * Body param: Free-form notes about the material.
    */
   notes?: string;
 
@@ -396,12 +436,14 @@ export interface MaterialCreateParams {
   order_point?: QuantityInputRequest;
 
   /**
-   * Body param: RateInput represents the input for creating or updating a rate.
+   * Body param: A rate value with its numerator and denominator units, used in
+   * create and update requests.
    */
   unit_cost?: RateInput;
 
   /**
-   * Body param: RateInput represents the input for creating or updating a rate.
+   * Body param: A rate value with its numerator and denominator units, used in
+   * create and update requests.
    */
   unit_price?: RateInput;
 }
@@ -423,7 +465,7 @@ export interface MaterialUpdateParams {
   >;
 
   /**
-   * Body param: Description.
+   * Body param: New description for the material.
    */
   description?: string;
 
@@ -433,7 +475,7 @@ export interface MaterialUpdateParams {
   lead_time?: QuantityInputRequest;
 
   /**
-   * Body param: Notes.
+   * Body param: New notes for the material.
    */
   notes?: string;
 
@@ -443,12 +485,16 @@ export interface MaterialUpdateParams {
   order_point?: QuantityInputRequest;
 
   /**
-   * Body param: SKU code.
+   * Body param: New stock keeping unit code for the material.
+   *
+   * Must remain unique within the account; a conflict error is returned if another
+   * item already uses it.
    */
   sku?: string;
 
   /**
-   * Body param: RateInput represents the input for creating or updating a rate.
+   * Body param: A rate value with its numerator and denominator units, used in
+   * create and update requests.
    */
   unit_cost?: RateInput;
 }

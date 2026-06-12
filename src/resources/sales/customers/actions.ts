@@ -11,8 +11,12 @@ import { path } from '../../../internal/utils/path';
  */
 export class Actions extends APIResource {
   /**
-   * Merges one or more source customers into a target customer, reassigning all
-   * associated records and deleting the source accounts.
+   * Merges one or more source customers into a target customer.
+   *
+   * Sales orders, invoices, shipments, deliveries, and other transaction records
+   * from the source customers are reassigned to the target; price groups, product
+   * line access, addresses, and users are consolidated without duplicates; the
+   * source customers are then deleted.
    *
    * @example
    * ```ts
@@ -39,14 +43,20 @@ export class Actions extends APIResource {
  */
 export interface MergeCustomersRequest {
   /**
-   * Source customer IDs.
+   * IDs of the source customers to merge into the target.
+   *
+   * Sources are deleted after the merge. The list must not contain duplicates or the
+   * target customer's ID.
    */
   source_customer_ids: Array<string>;
 }
 
 export interface ActionMergeParams {
   /**
-   * Body param: Source customer IDs.
+   * Body param: IDs of the source customers to merge into the target.
+   *
+   * Sources are deleted after the merge. The list must not contain duplicates or the
+   * target customer's ID.
    */
   source_customer_ids: Array<string>;
 

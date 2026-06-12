@@ -108,7 +108,9 @@ export class Properties extends APIResource {
 }
 
 /**
- * Value option within a property.
+ * A selectable value within a property, such as `Red` for a `Color` property.
+ *
+ * Attributes are assigned to items to classify them.
  */
 export interface Attribute {
   /**
@@ -119,8 +121,8 @@ export interface Attribute {
   /**
    * Swatch color used to display this attribute in the UI.
    *
-   * One of `blue`, `brown`, `gray`, `green`, `orange`, `pink`, `purple`, `red`,
-   * `yellow`, or `default` (a neutral fallback color).
+   * The named colors are arbitrary display choices; `default` is a neutral fallback
+   * used when no specific swatch applies.
    */
   color: 'blue' | 'brown' | 'default' | 'gray' | 'green' | 'orange' | 'pink' | 'purple' | 'red' | 'yellow';
 
@@ -135,15 +137,19 @@ export interface Attribute {
   object: 'attribute';
 
   /**
-   * Property that groups attributes.
+   * A named characteristic used to classify items, such as `Color` or `Size`.
+   *
+   * Each property defines a set of attributes — the selectable values (e.g. `Red`,
+   * `Blue`) that can be assigned to items.
    */
   property: Property | null;
 
   /**
    * Position of this attribute relative to its siblings within the property,
-   * ascending.
+   * starting at `1`.
    *
-   * Lower values sort first.
+   * Positions are kept contiguous: creating, reordering, or deleting an attribute
+   * automatically shifts its siblings.
    */
   sort_order: number;
 
@@ -164,7 +170,7 @@ export interface Attribute {
  */
 export interface CreatePropertyRequest {
   /**
-   * Name.
+   * Display name of the property, such as `Color` or `Size`.
    */
   name: string;
 }
@@ -210,7 +216,10 @@ export interface ListProperty {
 }
 
 /**
- * Property that groups attributes.
+ * A named characteristic used to classify items, such as `Color` or `Size`.
+ *
+ * Each property defines a set of attributes — the selectable values (e.g. `Red`,
+ * `Blue`) that can be assigned to items.
  */
 export interface Property {
   /**
@@ -249,7 +258,7 @@ export interface Property {
  */
 export interface UpdatePropertyRequest {
   /**
-   * Name.
+   * Display name of the property, such as `Color` or `Size`.
    */
   name?: string;
 }
@@ -258,7 +267,11 @@ export interface PropertyDeleteResponse {}
 
 export interface PropertyListParams {
   /**
-   * Cursor token used to retrieve the next or previous page of results.
+   * Opaque cursor token identifying where the page of results starts.
+   *
+   * Use the `cursor` value embedded in a previous response's `next_page_url` or
+   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
+   * page.
    */
   cursor?: string;
 
@@ -269,12 +282,14 @@ export interface PropertyListParams {
   include?: Array<'attributes'>;
 
   /**
-   * Maximum number of results per page (default: 100, max: 1000).
+   * Maximum number of results to return in a single page.
    */
   limit?: number;
 
   /**
-   * Search query used to filter results.
+   * Free-text search term used to filter results.
+   *
+   * Which fields are matched against the term varies by endpoint.
    */
   q?: string;
 }
@@ -289,7 +304,7 @@ export interface PropertyRetrieveParams {
 
 export interface PropertyCreateParams {
   /**
-   * Body param: Name.
+   * Body param: Display name of the property, such as `Color` or `Size`.
    */
   name: string;
 
@@ -308,7 +323,7 @@ export interface PropertyUpdateParams {
   include?: Array<'attributes'>;
 
   /**
-   * Body param: Name.
+   * Body param: Display name of the property, such as `Color` or `Size`.
    */
   name?: string;
 }

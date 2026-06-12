@@ -11,7 +11,7 @@ import { path } from '../../internal/utils/path';
  */
 export class ScanningStations extends APIResource {
   /**
-   * Returns a paginated list of scanning stations for the current account.
+   * Returns a paginated list of scanning stations in your account.
    *
    * @example
    * ```ts
@@ -46,7 +46,10 @@ export class ScanningStations extends APIResource {
   }
 
   /**
-   * Creates a scanning station associated with a department.
+   * Creates a scanning station and assigns it to a department.
+   *
+   * Returns a conflict error if a scanning station with the same name already
+   * exists.
    *
    * @example
    * ```ts
@@ -71,6 +74,9 @@ export class ScanningStations extends APIResource {
 
   /**
    * Partially updates a scanning station.
+   *
+   * Only the fields provided in the request are changed. Returns a conflict error if
+   * the new name is already in use by another scanning station.
    *
    * @example
    * ```ts
@@ -115,37 +121,54 @@ export class ScanningStations extends APIResource {
  */
 export interface CreateScanningStationRequest {
   /**
-   * Department ID.
+   * ID of the department this station belongs to.
    */
   department_id: string;
 
   /**
-   * Display name.
+   * Display name of the scanning station.
+   *
+   * Must be unique within your account; maximum 255 characters.
    */
   name: string;
 
   /**
-   * Operator requirement behavior for this station.
+   * Whether operators must perform a material check at this station.
+   *
+   * - `none`: no additional operator check is required.
+   * - `material_check`: a material check is expected before the operation.
    */
   operator_requirement: 'none' | 'material_check';
 
   /**
-   * Scanning station type.
+   * Scanning station type, determining which batch operation the station performs.
+   *
+   * - `init_batch`: initializes a new batch.
+   * - `merge_batch`: merges multiple batches into one.
+   * - `move_batch`: moves a batch to another location or step.
+   * - `split_batch`: splits a batch into multiple batches.
+   *
+   * The type cannot be changed after creation.
    */
   type: 'init_batch' | 'merge_batch' | 'move_batch' | 'split_batch';
 
   /**
-   * Label size code.
+   * Size of the labels printed at this station, given as width-by-height (for
+   * example, `1x1`).
    */
   label_size?: '1x1' | '1x3' | '1x4' | '2x4';
 
   /**
-   * Label type code.
+   * Type of label printed at this station.
+   *
+   * - `tag`: a label attached to the physical product.
+   * - `traveler`: a routing sheet that accompanies the batch through every
+   *   production step.
    */
   label_type?: 'tag' | 'traveler';
 
   /**
-   * Notes.
+   * Free-form notes about the scanning station.
    */
   notes?: string;
 }
@@ -155,27 +178,39 @@ export interface CreateScanningStationRequest {
  */
 export interface UpdateScanningStationRequest {
   /**
-   * Label size code.
+   * Size of the labels printed at this station, given as width-by-height (for
+   * example, `1x1`).
    */
   label_size?: '1x1' | '1x3' | '1x4' | '2x4';
 
   /**
-   * Label type code.
+   * Type of label printed at this station.
+   *
+   * - `tag`: a label attached to the physical product.
+   * - `traveler`: a routing sheet that accompanies the batch through every
+   *   production step.
    */
   label_type?: 'tag' | 'traveler';
 
   /**
-   * Display name.
+   * Display name of the scanning station.
+   *
+   * Must be unique within your account; maximum 255 characters.
    */
   name?: string;
 
   /**
-   * Notes.
+   * Free-form notes about the scanning station.
+   *
+   * Send `null` to clear.
    */
   notes?: string | null;
 
   /**
-   * Operator requirement behavior for this station.
+   * Whether operators must perform a material check at this station.
+   *
+   * - `none`: no additional operator check is required.
+   * - `material_check`: a material check is expected before the operation.
    */
   operator_requirement?: 'none' | 'material_check';
 }
@@ -184,7 +219,11 @@ export interface ScanningStationDeleteResponse {}
 
 export interface ScanningStationListParams {
   /**
-   * Cursor token used to retrieve the next or previous page of results.
+   * Opaque cursor token identifying where the page of results starts.
+   *
+   * Use the `cursor` value embedded in a previous response's `next_page_url` or
+   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
+   * page.
    */
   cursor?: string;
 
@@ -195,12 +234,14 @@ export interface ScanningStationListParams {
   include?: Array<'department' | 'production_steps'>;
 
   /**
-   * Maximum number of results per page (default: 100, max: 1000).
+   * Maximum number of results to return in a single page.
    */
   limit?: number;
 
   /**
-   * Search query used to filter results.
+   * Free-text search term used to filter results.
+   *
+   * Which fields are matched against the term varies by endpoint.
    */
   q?: string;
 }
@@ -215,22 +256,35 @@ export interface ScanningStationRetrieveParams {
 
 export interface ScanningStationCreateParams {
   /**
-   * Body param: Department ID.
+   * Body param: ID of the department this station belongs to.
    */
   department_id: string;
 
   /**
-   * Body param: Display name.
+   * Body param: Display name of the scanning station.
+   *
+   * Must be unique within your account; maximum 255 characters.
    */
   name: string;
 
   /**
-   * Body param: Operator requirement behavior for this station.
+   * Body param: Whether operators must perform a material check at this station.
+   *
+   * - `none`: no additional operator check is required.
+   * - `material_check`: a material check is expected before the operation.
    */
   operator_requirement: 'none' | 'material_check';
 
   /**
-   * Body param: Scanning station type.
+   * Body param: Scanning station type, determining which batch operation the station
+   * performs.
+   *
+   * - `init_batch`: initializes a new batch.
+   * - `merge_batch`: merges multiple batches into one.
+   * - `move_batch`: moves a batch to another location or step.
+   * - `split_batch`: splits a batch into multiple batches.
+   *
+   * The type cannot be changed after creation.
    */
   type: 'init_batch' | 'merge_batch' | 'move_batch' | 'split_batch';
 
@@ -241,17 +295,22 @@ export interface ScanningStationCreateParams {
   include?: Array<'department' | 'production_steps'>;
 
   /**
-   * Body param: Label size code.
+   * Body param: Size of the labels printed at this station, given as width-by-height
+   * (for example, `1x1`).
    */
   label_size?: '1x1' | '1x3' | '1x4' | '2x4';
 
   /**
-   * Body param: Label type code.
+   * Body param: Type of label printed at this station.
+   *
+   * - `tag`: a label attached to the physical product.
+   * - `traveler`: a routing sheet that accompanies the batch through every
+   *   production step.
    */
   label_type?: 'tag' | 'traveler';
 
   /**
-   * Body param: Notes.
+   * Body param: Free-form notes about the scanning station.
    */
   notes?: string;
 }
@@ -264,27 +323,39 @@ export interface ScanningStationUpdateParams {
   include?: Array<'department' | 'production_steps'>;
 
   /**
-   * Body param: Label size code.
+   * Body param: Size of the labels printed at this station, given as width-by-height
+   * (for example, `1x1`).
    */
   label_size?: '1x1' | '1x3' | '1x4' | '2x4';
 
   /**
-   * Body param: Label type code.
+   * Body param: Type of label printed at this station.
+   *
+   * - `tag`: a label attached to the physical product.
+   * - `traveler`: a routing sheet that accompanies the batch through every
+   *   production step.
    */
   label_type?: 'tag' | 'traveler';
 
   /**
-   * Body param: Display name.
+   * Body param: Display name of the scanning station.
+   *
+   * Must be unique within your account; maximum 255 characters.
    */
   name?: string;
 
   /**
-   * Body param: Notes.
+   * Body param: Free-form notes about the scanning station.
+   *
+   * Send `null` to clear.
    */
   notes?: string | null;
 
   /**
-   * Body param: Operator requirement behavior for this station.
+   * Body param: Whether operators must perform a material check at this station.
+   *
+   * - `none`: no additional operator check is required.
+   * - `material_check`: a material check is expected before the operation.
    */
   operator_requirement?: 'none' | 'material_check';
 }

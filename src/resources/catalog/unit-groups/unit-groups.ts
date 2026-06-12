@@ -124,21 +124,25 @@ export class UnitGroups extends APIResource {
 }
 
 /**
- * CreateUnitGroupRequest is a request to create a unit group.
+ * Request to create a unit group.
  */
 export interface CreateUnitGroupRequest {
   /**
-   * Base unit ID.
+   * ID of the unit to designate as the group's reference unit.
    */
   base_unit_id: string;
 
   /**
-   * Display name.
+   * Display name of the unit group.
+   *
+   * Must be unique within the account.
    */
   name: string;
 
   /**
-   * Unit type.
+   * Dimension shared by every unit in this group (e.g. `mass`, `volume`).
+   *
+   * All associated units must be of this dimension.
    */
   type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area';
 
@@ -148,32 +152,36 @@ export interface CreateUnitGroupRequest {
   associated_units?: Array<CreateUnitGroupUnitParam>;
 
   /**
-   * Notes.
+   * Free-form notes about the unit group.
    */
   notes?: string;
 }
 
 /**
- * CreateUnitGroupUnitParam contains parameters for an associated unit.
+ * Parameters for associating a unit with a unit group.
  */
 export interface CreateUnitGroupUnitParam {
   /**
-   * Unit ID.
+   * ID of the unit to associate with the group.
+   *
+   * The unit's dimension must match the group's `type`.
    */
   unit_id: string;
 
   /**
-   * Customer portal visibility.
+   * Whether the unit is shown to customers in the customer portal.
    */
   customer_portal_visibility?: 'visible' | 'hidden';
 
   /**
-   * Fixed discount amount.
+   * Flat amount subtracted from the unit's price when an order is placed in this
+   * unit.
    */
   discount_fixed?: number;
 
   /**
-   * Discount percentage.
+   * Percentage discount applied to the unit's price when an order is placed in this
+   * unit (e.g. `10` is a 10% discount).
    */
   discount_percentage?: number;
 }
@@ -219,7 +227,8 @@ export interface ListUnitGroupUnit {
 }
 
 /**
- * UnitGroup is a unit group resource.
+ * Named collection of units sharing one dimension, defining which units products
+ * can be ordered in along with per-unit discounts and customer portal visibility.
  */
 export interface UnitGroup {
   /**
@@ -248,7 +257,7 @@ export interface UnitGroup {
   name: string;
 
   /**
-   * Notes.
+   * Free-form notes about the unit group.
    */
   notes: string | null;
 
@@ -263,18 +272,10 @@ export interface UnitGroup {
   owner: APIKeysAPI.Owner | null;
 
   /**
-   * Dimension shared by every unit in this group.
+   * Physical dimension shared by every unit in this group, such as mass, volume, or
+   * currency.
    *
    * Only units of this dimension can belong to the group.
-   *
-   * - `currency`: monetary units such as dollars or euros.
-   * - `quantity`: discrete countable units.
-   * - `time`: time-based units such as hours or minutes.
-   * - `mass`: weight-based units such as kilograms or pounds.
-   * - `volume`: volumetric units such as liters or gallons.
-   * - `length`: distance-based units such as meters or feet.
-   * - `temperature`: temperature units such as Celsius or Fahrenheit.
-   * - `area`: area-based units such as square meters or acres.
    */
   type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area';
 
@@ -285,7 +286,8 @@ export interface UnitGroup {
 }
 
 /**
- * UnitGroupUnit is an associated unit within a unit group.
+ * Membership of a unit in a unit group, carrying the discount and customer portal
+ * visibility settings applied when ordering in that unit.
  */
 export interface UnitGroupUnit {
   /**
@@ -300,25 +302,18 @@ export interface UnitGroupUnit {
 
   /**
    * Whether this unit is shown to customers in the customer portal.
-   *
-   * - `visible`: the unit is selectable in the customer portal.
-   * - `hidden`: the unit is hidden from the customer portal.
    */
   customer_portal_visibility: 'visible' | 'hidden';
 
   /**
-   * Fixed per-unit discount amount applied when ordering in this unit, in the
-   * account's currency.
-   *
-   * Defaults to `0`.
+   * Flat amount subtracted from the unit's price when an order is placed in this
+   * unit.
    */
   discount_fixed: number;
 
   /**
-   * Percentage discount applied when ordering in this unit, as a number out of 100
-   * (e.g. `1` means 1%).
-   *
-   * Defaults to `1`.
+   * Percentage discount applied to the unit's price when an order is placed in this
+   * unit (e.g. `10` is a 10% discount).
    */
   discount_percentage: number;
 
@@ -339,27 +334,33 @@ export interface UnitGroupUnit {
 }
 
 /**
- * UpdateUnitGroupRequest is a request to partially update a unit group.
+ * Request to partially update a unit group.
  */
 export interface UpdateUnitGroupRequest {
   /**
-   * Upserts associated units when provided. Existing units not in the list are
-   * preserved.
+   * Associated units to add or update in the group.
+   *
+   * Upserted by unit: a listed unit already in the group has its association
+   * updated, otherwise it is added. Existing units not in the list are preserved.
    */
   associated_units?: Array<CreateUnitGroupUnitParam>;
 
   /**
-   * Base unit ID.
+   * ID of the group's base unit.
    */
   base_unit_id?: string;
 
   /**
-   * Display name.
+   * Display name of the unit group.
+   *
+   * Must be unique within the account.
    */
   name?: string;
 
   /**
-   * Notes. Set to null to clear.
+   * Free-form notes about the unit group.
+   *
+   * Set to `null` to clear.
    */
   notes?: string | null;
 }
@@ -368,7 +369,11 @@ export interface UnitGroupDeleteResponse {}
 
 export interface UnitGroupListParams {
   /**
-   * Cursor token used to retrieve the next or previous page of results.
+   * Opaque cursor token identifying where the page of results starts.
+   *
+   * Use the `cursor` value embedded in a previous response's `next_page_url` or
+   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
+   * page.
    */
   cursor?: string;
 
@@ -379,17 +384,19 @@ export interface UnitGroupListParams {
   include?: Array<'owner' | 'owner.account' | 'base_unit' | 'associated_units'>;
 
   /**
-   * Maximum number of results per page (default: 100, max: 1000).
+   * Maximum number of results to return in a single page.
    */
   limit?: number;
 
   /**
-   * Search query used to filter results.
+   * Free-text search term used to filter results.
+   *
+   * Which fields are matched against the term varies by endpoint.
    */
   q?: string;
 
   /**
-   * Filter by the unit type.
+   * Filter by unit dimension (e.g. `mass`).
    */
   type?: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area';
 }
@@ -404,17 +411,22 @@ export interface UnitGroupRetrieveParams {
 
 export interface UnitGroupCreateParams {
   /**
-   * Body param: Base unit ID.
+   * Body param: ID of the unit to designate as the group's reference unit.
    */
   base_unit_id: string;
 
   /**
-   * Body param: Display name.
+   * Body param: Display name of the unit group.
+   *
+   * Must be unique within the account.
    */
   name: string;
 
   /**
-   * Body param: Unit type.
+   * Body param: Dimension shared by every unit in this group (e.g. `mass`,
+   * `volume`).
+   *
+   * All associated units must be of this dimension.
    */
   type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area';
 
@@ -430,7 +442,7 @@ export interface UnitGroupCreateParams {
   associated_units?: Array<CreateUnitGroupUnitParam>;
 
   /**
-   * Body param: Notes.
+   * Body param: Free-form notes about the unit group.
    */
   notes?: string;
 }
@@ -443,23 +455,29 @@ export interface UnitGroupUpdateParams {
   include?: Array<'owner' | 'owner.account' | 'base_unit' | 'associated_units'>;
 
   /**
-   * Body param: Upserts associated units when provided. Existing units not in the
-   * list are preserved.
+   * Body param: Associated units to add or update in the group.
+   *
+   * Upserted by unit: a listed unit already in the group has its association
+   * updated, otherwise it is added. Existing units not in the list are preserved.
    */
   associated_units?: Array<CreateUnitGroupUnitParam>;
 
   /**
-   * Body param: Base unit ID.
+   * Body param: ID of the group's base unit.
    */
   base_unit_id?: string;
 
   /**
-   * Body param: Display name.
+   * Body param: Display name of the unit group.
+   *
+   * Must be unique within the account.
    */
   name?: string;
 
   /**
-   * Body param: Notes. Set to null to clear.
+   * Body param: Free-form notes about the unit group.
+   *
+   * Set to `null` to clear.
    */
   notes?: string | null;
 }

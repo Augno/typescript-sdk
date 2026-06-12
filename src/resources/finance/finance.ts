@@ -73,23 +73,26 @@ export class Finance extends APIResource {
 }
 
 /**
- * Adjustment type resource.
+ * A category of financial adjustment, such as a discount, fee, or write-off.
+ *
+ * Adjustment types classify adjustment transactions recorded against customer
+ * invoices.
  */
 export interface AdjustmentType {
   /**
-   * Adjustment ID.
+   * Adjustment type ID.
    */
   id: string;
 
   /**
    * Machine-readable code identifying what kind of adjustment this is.
    *
-   * - `discount`: a price reduction applied to an order.
+   * - `discount`: a price reduction.
    * - `shipping_discrepancy`: corrects a difference between quoted and actual
    *   freight.
    * - `short_payment`: reconciles an invoice paid for less than the amount due.
    * - `write_off`: cancels an uncollectible balance.
-   * - `fee`: an additional charge added to an order.
+   * - `fee`: an additional charge.
    * - `refund`: returns money to the customer.
    */
   code: 'discount' | 'shipping_discrepancy' | 'short_payment' | 'write_off' | 'fee' | 'refund';
@@ -100,7 +103,7 @@ export interface AdjustmentType {
   created_at: string;
 
   /**
-   * Display name.
+   * Human-readable name of the adjustment type (e.g. "Discount").
    */
   name: string;
 
@@ -181,7 +184,7 @@ export interface ListTransactionType {
 }
 
 /**
- * Transaction method resource.
+ * The payment method used to make a transaction, such as cash or check.
  */
 export interface TransactionMethod {
   /**
@@ -191,12 +194,6 @@ export interface TransactionMethod {
 
   /**
    * Machine-readable code identifying how the transaction was made.
-   *
-   * - `cash`
-   * - `check`
-   * - `credit_card`
-   * - `gift_card`
-   * - `ach`
    */
   code: 'cash' | 'check' | 'credit_card' | 'gift_card' | 'ach';
 
@@ -212,11 +209,11 @@ export interface TransactionMethod {
 }
 
 /**
- * Transaction type resource.
+ * The category of a financial transaction, such as a payment or credit memo.
  */
 export interface TransactionType {
   /**
-   * Transaction ID.
+   * Transaction type ID.
    */
   id: string;
 
@@ -243,41 +240,57 @@ export interface TransactionType {
 
 export interface FinanceRetrieveTransactionTypesParams {
   /**
-   * Cursor token used to retrieve the next or previous page of results.
+   * Opaque cursor token identifying where the page of results starts.
+   *
+   * Use the `cursor` value embedded in a previous response's `next_page_url` or
+   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
+   * page.
    */
   cursor?: string;
 
   /**
-   * Maximum number of results per page (default: 100, max: 1000).
+   * Maximum number of results to return in a single page.
    */
   limit?: number;
 
   /**
-   * Search query used to filter results.
+   * Free-text search term used to filter results.
+   *
+   * Which fields are matched against the term varies by endpoint.
    */
   q?: string;
 }
 
 export interface FinanceRetrieveTransactionMethodsParams {
   /**
-   * Cursor token used to retrieve the next or previous page of results.
+   * Opaque cursor token identifying where the page of results starts.
+   *
+   * Use the `cursor` value embedded in a previous response's `next_page_url` or
+   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
+   * page.
    */
   cursor?: string;
 
   /**
-   * Maximum number of results per page (default: 100, max: 1000).
+   * Maximum number of results to return in a single page.
    */
   limit?: number;
 
   /**
-   * Search query used to filter results.
+   * Free-text search term used to filter results.
+   *
+   * Which fields are matched against the term varies by endpoint.
    */
   q?: string;
 }
 
 export interface FinanceRetrieveAdjustmentTypesParams {
   /**
-   * Cursor token used to retrieve the next or previous page of results.
+   * Opaque cursor token identifying where the page of results starts.
+   *
+   * Use the `cursor` value embedded in a previous response's `next_page_url` or
+   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
+   * page.
    */
   cursor?: string;
 
@@ -288,12 +301,14 @@ export interface FinanceRetrieveAdjustmentTypesParams {
   include?: Array<'owner'>;
 
   /**
-   * Maximum number of results per page (default: 100, max: 1000).
+   * Maximum number of results to return in a single page.
    */
   limit?: number;
 
   /**
-   * Search query used to filter results.
+   * Free-text search term used to filter results.
+   *
+   * Which fields are matched against the term varies by endpoint.
    */
   q?: string;
 }

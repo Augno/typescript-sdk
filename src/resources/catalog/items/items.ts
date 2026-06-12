@@ -68,8 +68,11 @@ export class Items extends APIResource {
   }
 
   /**
-   * Changes the category of an item. When the category changes, the item's rate
-   * units are updated to the new category's base unit.
+   * Moves an item to a different category.
+   *
+   * The item's rate units (unit value, unit cost, burn rate) and any related
+   * order-point, consumption, and production quantity units are updated to the new
+   * category's base unit. Re-assigning the item's current category is a no-op.
    *
    * @example
    * ```ts
@@ -107,12 +110,14 @@ export interface Item {
   attributes: PropertiesAPI.ListAttribute | null;
 
   /**
-   * Rate resource.
+   * Value expressed as a ratio of two units, such as a price per kilogram or a
+   * throughput per hour.
    */
   burn_rate: Rate | null;
 
   /**
-   * ItemCategory resource.
+   * A grouping of related catalog items that defines the unit group and properties
+   * available to the items within it.
    */
   category: ItemCategory | null;
 
@@ -127,7 +132,7 @@ export interface Item {
   description: string | null;
 
   /**
-   * Notes.
+   * Free-form notes about the item.
    */
   notes: string | null;
 
@@ -137,7 +142,7 @@ export interface Item {
   object: 'item';
 
   /**
-   * Stock keeping unit code.
+   * Stock keeping unit code, unique within the account.
    */
   sku: string;
 
@@ -151,12 +156,14 @@ export interface Item {
   type: 'product' | 'material' | 'part';
 
   /**
-   * Rate resource.
+   * Value expressed as a ratio of two units, such as a price per kilogram or a
+   * throughput per hour.
    */
   unit_cost: Rate | null;
 
   /**
-   * Rate resource.
+   * Value expressed as a ratio of two units, such as a price per kilogram or a
+   * throughput per hour.
    */
   unit_value: Rate | null;
 
@@ -167,7 +174,8 @@ export interface Item {
 }
 
 /**
- * ItemCategory resource.
+ * A grouping of related catalog items that defines the unit group and properties
+ * available to the items within it.
  */
 export interface ItemCategory {
   /**
@@ -181,12 +189,12 @@ export interface ItemCategory {
   created_at: string;
 
   /**
-   * Display name.
+   * Display name of the item category.
    */
   name: string;
 
   /**
-   * Notes.
+   * Free-form notes about the item category.
    */
   notes: string | null;
 
@@ -208,13 +216,18 @@ export interface ItemCategory {
   /**
    * What kind of items this category groups.
    *
-   * - `material_category`: groups raw materials or components.
-   * - `product_category`: groups finished products.
+   * An item can only be assigned to a category whose type matches the item's `type`.
+   *
+   * - `material_category`: groups raw materials and components (items of type
+   *   `material`).
+   * - `product_category`: groups finished products and parts (items of type
+   *   `product` or `part`).
    */
   type: 'material_category' | 'product_category';
 
   /**
-   * UnitGroup is a unit group resource.
+   * Named collection of units sharing one dimension, defining which units products
+   * can be ordered in along with per-unit discounts and customer portal visibility.
    */
   unit_group: UnitGroupsAPI.UnitGroup | null;
 
@@ -308,7 +321,8 @@ export interface Quantity {
 }
 
 /**
- * Rate resource.
+ * Value expressed as a ratio of two units, such as a price per kilogram or a
+ * throughput per hour.
  */
 export interface Rate {
   /**
@@ -347,7 +361,9 @@ export interface Rate {
   updated_at: string;
 
   /**
-   * Rate value as a decimal string.
+   * Decimal value of the rate, as a string to preserve precision.
+   *
+   * Expressed as the amount of the numerator unit per one denominator unit.
    */
   value: string;
 }
@@ -364,7 +380,11 @@ export interface ItemListParams {
   category_ids?: Array<string>;
 
   /**
-   * Cursor token used to retrieve the next or previous page of results.
+   * Opaque cursor token identifying where the page of results starts.
+   *
+   * Use the `cursor` value embedded in a previous response's `next_page_url` or
+   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
+   * page.
    */
   cursor?: string;
 
@@ -397,7 +417,7 @@ export interface ItemListParams {
   >;
 
   /**
-   * Maximum number of results per page (default: 100, max: 1000).
+   * Maximum number of results to return in a single page.
    */
   limit?: number;
 
@@ -408,7 +428,9 @@ export interface ItemListParams {
   product_line_ids?: Array<string>;
 
   /**
-   * Search query used to filter results.
+   * Free-text search term used to filter results.
+   *
+   * Which fields are matched against the term varies by endpoint.
    */
   q?: string;
 
@@ -418,7 +440,11 @@ export interface ItemListParams {
   start_date?: string;
 
   /**
-   * Which subassemblies to include when listing (default: all).
+   * Restricts results based on where the item is produced in its production flow.
+   *
+   * - `all`: no restriction.
+   * - `initial_only`: only items produced by an initial production step, i.e. a step
+   *   with no upstream steps feeding into it.
    */
   subassembly_filter?: 'all' | 'initial_only';
 
@@ -428,7 +454,7 @@ export interface ItemListParams {
   supplier_id?: string;
 
   /**
-   * Filter by item type codes.
+   * Filter to items of these types (`product`, `material`, `part`).
    */
   types?: Array<string>;
 }

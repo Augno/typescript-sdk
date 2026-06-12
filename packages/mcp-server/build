@@ -48,9 +48,15 @@ cd ..
 # pack bundle
 cp manifest.json dist-bundle
 
-npx mcpb pack dist-bundle augno_sdk_api.mcpb
+# Run mcpb with NODE_OPTIONS cleared. The public TS SDK is generated with
+# NODE_OPTIONS=--preserve-symlinks (so stlc's typescript + mcp plugins share one
+# codegen.lib.mjs); that flag is inherited by these child processes. Under
+# --preserve-symlinks, mcpb's hoisted @inquirer/core resolves the hoisted
+# signal-exit (v3, no `onExit` export) instead of its realpath peer (v4), which
+# crashes module load. mcpb does not need any inherited NODE_OPTIONS.
+env -u NODE_OPTIONS npx mcpb pack dist-bundle augno_sdk_api.mcpb
 
-npx mcpb sign augno_sdk_api.mcpb --self-signed
+env -u NODE_OPTIONS npx mcpb sign augno_sdk_api.mcpb --self-signed
 
 # clean up
 rm -rf dist-bundle
