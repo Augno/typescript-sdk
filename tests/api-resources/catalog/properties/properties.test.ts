@@ -8,6 +8,65 @@ const client = new Augno({
 });
 
 describe('resource properties', () => {
+  test('create: only required params', async () => {
+    const responsePromise = client.catalog.properties.create({ name: 'Color' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('create: required and optional params', async () => {
+    const response = await client.catalog.properties.create({ name: 'Color', include: ['attributes'] });
+  });
+
+  test('retrieve', async () => {
+    const responsePromise = client.catalog.properties.retrieve('pp_01jm4r6700f8nwq3v5hx2d9ktp');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('retrieve: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.catalog.properties.retrieve(
+        'pp_01jm4r6700f8nwq3v5hx2d9ktp',
+        { include: ['attributes'] },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Augno.NotFoundError);
+  });
+
+  test('update', async () => {
+    const responsePromise = client.catalog.properties.update('pp_01jm4r6700f8nwq3v5hx2d9ktp');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('update: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.catalog.properties.update(
+        'pp_01jm4r6700f8nwq3v5hx2d9ktp',
+        { include: ['attributes'], name: 'Size' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Augno.NotFoundError);
+  });
+
   test('list', async () => {
     const responsePromise = client.catalog.properties.list();
     const rawResponse = await responsePromise.asResponse();
@@ -34,67 +93,8 @@ describe('resource properties', () => {
     ).rejects.toThrow(Augno.NotFoundError);
   });
 
-  test('retrieve', async () => {
-    const responsePromise = client.catalog.properties.retrieve('pp_01e21344878064372f69e67093');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('retrieve: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.catalog.properties.retrieve(
-        'pp_01e21344878064372f69e67093',
-        { include: ['attributes'] },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
-  });
-
-  test('create: only required params', async () => {
-    const responsePromise = client.catalog.properties.create({ name: 'Color' });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('create: required and optional params', async () => {
-    const response = await client.catalog.properties.create({ name: 'Color', include: ['attributes'] });
-  });
-
-  test('update', async () => {
-    const responsePromise = client.catalog.properties.update('pp_01e21344878064372f69e67093');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('update: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.catalog.properties.update(
-        'pp_01e21344878064372f69e67093',
-        { include: ['attributes'], name: 'Size' },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
-  });
-
   test('delete', async () => {
-    const responsePromise = client.catalog.properties.delete('pp_01e21344878064372f69e67093');
+    const responsePromise = client.catalog.properties.delete('pp_01jm4r6700f8nwq3v5hx2d9ktp');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

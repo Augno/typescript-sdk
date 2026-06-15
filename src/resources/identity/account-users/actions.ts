@@ -10,72 +10,62 @@ import { path } from '../../../internal/utils/path';
  */
 export class Actions extends APIResource {
   /**
-   * Activates a disabled or removed account user, restoring their access to the
-   * target account.
-   *
-   * Reactivation consumes a seat, so the request fails if the account is at its seat
-   * limit. Activating an already-active user is a no-op.
+   * Activates a disabled or removed account user.
    *
    * @example
    * ```ts
    * const response =
-   *   await client.identity.accountUsers.actions.activate(
-   *     'acus_01ea9983ddb41dacc44ecf997c',
+   *   await client.identity.accountUsers.actions.updateActivate(
+   *     'acus_01gf7a8200er3ar3pkfrb6kk29',
    *   );
    * ```
    */
-  activate(id: string, options?: RequestOptions): APIPromise<ActionActivateResponse> {
+  updateActivate(id: string, options?: RequestOptions): APIPromise<ActionUpdateActivateResponse> {
     return this._client.put(path`/v1/identity/account-users/${id}/actions/activate`, options);
   }
 
   /**
-   * Disables (locks) an account user.
-   *
-   * Disabled users cannot access the target account and their active sessions are
-   * revoked. Admin users cannot be disabled, you cannot disable yourself, and
-   * removed users must be activated before they can be disabled.
+   * Disables an account user. Disabled users will not be able to access the target
+   * account.
    *
    * @example
    * ```ts
    * const response =
-   *   await client.identity.accountUsers.actions.disable(
-   *     'acus_01ea9983ddb41dacc44ecf997c',
+   *   await client.identity.accountUsers.actions.updateDisable(
+   *     'acus_01gf7a8200er3ar3pkfrb6kk29',
    *   );
    * ```
    */
-  disable(id: string, options?: RequestOptions): APIPromise<ActionDisableResponse> {
+  updateDisable(id: string, options?: RequestOptions): APIPromise<ActionUpdateDisableResponse> {
     return this._client.put(path`/v1/identity/account-users/${id}/actions/disable`, options);
   }
 
   /**
    * Removes a user from the target account.
    *
-   * Removal is a soft delete: removed users are excluded from listings unless
-   * requested via `removed_scope`, and can be restored with the activate action.
-   *
    * @example
    * ```ts
-   * const action =
-   *   await client.identity.accountUsers.actions.remove(
-   *     'acus_01ea9983ddb41dacc44ecf997c',
+   * const response =
+   *   await client.identity.accountUsers.actions.updateRemove(
+   *     'acus_01gf7a8200er3ar3pkfrb6kk29',
    *   );
    * ```
    */
-  remove(id: string, options?: RequestOptions): APIPromise<ActionRemoveResponse> {
+  updateRemove(id: string, options?: RequestOptions): APIPromise<ActionUpdateRemoveResponse> {
     return this._client.put(path`/v1/identity/account-users/${id}/actions/remove`, options);
   }
 }
 
-export interface ActionActivateResponse {}
+export interface ActionUpdateActivateResponse {}
 
-export interface ActionDisableResponse {}
+export interface ActionUpdateDisableResponse {}
 
-export interface ActionRemoveResponse {}
+export interface ActionUpdateRemoveResponse {}
 
 export declare namespace Actions {
   export {
-    type ActionActivateResponse as ActionActivateResponse,
-    type ActionDisableResponse as ActionDisableResponse,
-    type ActionRemoveResponse as ActionRemoveResponse,
+    type ActionUpdateActivateResponse as ActionUpdateActivateResponse,
+    type ActionUpdateDisableResponse as ActionUpdateDisableResponse,
+    type ActionUpdateRemoveResponse as ActionUpdateRemoveResponse,
   };
 }

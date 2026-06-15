@@ -8,6 +8,47 @@ const client = new Augno({
 });
 
 describe('resource sandboxes', () => {
+  test('create: only required params', async () => {
+    const responsePromise = client.core.sandboxes.create({ name: 'Integration Testing' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('create: required and optional params', async () => {
+    const response = await client.core.sandboxes.create({
+      name: 'Integration Testing',
+      include: ['owner_account'],
+      mode: 'blank',
+    });
+  });
+
+  test('retrieve', async () => {
+    const responsePromise = client.core.sandboxes.retrieve('sbac_01jm4r6700f8nwq3v5hx2d9ktp');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('retrieve: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.core.sandboxes.retrieve(
+        'sbac_01jm4r6700f8nwq3v5hx2d9ktp',
+        { include: ['owner_account'] },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Augno.NotFoundError);
+  });
+
   test('list', async () => {
     const responsePromise = client.core.sandboxes.list();
     const rawResponse = await responsePromise.asResponse();
@@ -34,49 +75,8 @@ describe('resource sandboxes', () => {
     ).rejects.toThrow(Augno.NotFoundError);
   });
 
-  test('retrieve', async () => {
-    const responsePromise = client.core.sandboxes.retrieve('sbac_01ebd87c707b138806f060b9ae');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('retrieve: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.core.sandboxes.retrieve(
-        'sbac_01ebd87c707b138806f060b9ae',
-        { include: ['owner_account'] },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
-  });
-
-  test('create: only required params', async () => {
-    const responsePromise = client.core.sandboxes.create({ name: 'Integration Testing' });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('create: required and optional params', async () => {
-    const response = await client.core.sandboxes.create({
-      name: 'Integration Testing',
-      include: ['owner_account'],
-      mode: 'blank',
-    });
-  });
-
   test('delete', async () => {
-    const responsePromise = client.core.sandboxes.delete('sbac_01ebd87c707b138806f060b9ae');
+    const responsePromise = client.core.sandboxes.delete('sbac_01jm4r6700f8nwq3v5hx2d9ktp');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

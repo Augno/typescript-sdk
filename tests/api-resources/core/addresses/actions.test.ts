@@ -8,8 +8,8 @@ const client = new Augno({
 });
 
 describe('resource actions', () => {
-  test('validate: only required params', async () => {
-    const responsePromise = client.core.addresses.actions.validate({
+  test('updateValidate: only required params', async () => {
+    const responsePromise = client.core.addresses.actions.updateValidate({
       address_line_1: '123 Main St',
       city: 'Springfield',
       country: 'US',
@@ -25,8 +25,8 @@ describe('resource actions', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('validate: required and optional params', async () => {
-    const response = await client.core.addresses.actions.validate({
+  test('updateValidate: required and optional params', async () => {
+    const response = await client.core.addresses.actions.updateValidate({
       address_line_1: '123 Main St',
       city: 'Springfield',
       country: 'US',

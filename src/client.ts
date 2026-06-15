@@ -16,23 +16,27 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
+import { Healthz } from './resources/healthz';
+import { Webhooks } from './resources/webhooks';
+import { AI } from './resources/ai/ai';
 import { Auth } from './resources/auth/auth';
+import { Billing } from './resources/billing/billing';
 import { Catalog } from './resources/catalog/catalog';
 import { Core } from './resources/core/core';
 import {
   AdjustmentType,
   Finance,
   FinanceRetrieveAdjustmentTypesParams,
+  FinanceRetrieveAdjustmentTypesResponse,
   FinanceRetrieveTransactionMethodsParams,
+  FinanceRetrieveTransactionMethodsResponse,
   FinanceRetrieveTransactionTypesParams,
-  ListAdjustmentType,
-  ListTransactionMethod,
-  ListTransactionType,
+  FinanceRetrieveTransactionTypesResponse,
   TransactionMethod,
   TransactionType,
 } from './resources/finance/finance';
 import { Identity } from './resources/identity/identity';
-import { Operations } from './resources/operations/operations';
+import { Operations, Rate } from './resources/operations/operations';
 import { Sales } from './resources/sales/sales';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -55,9 +59,14 @@ type Environment = keyof typeof environments;
 
 export interface ClientOptions {
   /**
-   * API key sent as a Bearer token. Omit for cookie-based user sessions (dashboard).
+   * Bearer access token from session authentication
    */
   bearerToken?: string | null | undefined;
+
+  /**
+   * API key (X-Augno-API-Key)
+   */
+  augnoAPIKey?: string | null | undefined;
 
   /**
    * Current account UUID (Augno-Account). Update when switching accounts.
@@ -147,6 +156,7 @@ export interface ClientOptions {
  */
 export class Augno {
   bearerToken: string | null;
+  augnoAPIKey: string | null;
   augnoAccountID: string | null;
 
   baseURL: string;
@@ -164,7 +174,8 @@ export class Augno {
   /**
    * API Client for interfacing with the Augno API.
    *
-   * @param {string | null | undefined} [opts.bearerToken=process.env['AUGNO_API_KEY'] ?? null]
+   * @param {string | null | undefined} [opts.bearerToken]
+   * @param {string | null | undefined} [opts.augnoAPIKey=process.env['AUGNO_API_KEY'] ?? null]
    * @param {string | null | undefined} [opts.augnoAccountID]
    * @param {Environment} [opts.environment=production] - Specifies the environment URL to use for the API.
    * @param {string} [opts.baseURL=process.env['AUGNO_BASE_URL'] ?? https://api.augno.com] - Override the default base URL for the API.
@@ -177,12 +188,14 @@ export class Augno {
    */
   constructor({
     baseURL = readEnv('AUGNO_BASE_URL'),
-    bearerToken = readEnv('AUGNO_API_KEY') ?? null,
+    bearerToken = null,
+    augnoAPIKey = readEnv('AUGNO_API_KEY') ?? null,
     augnoAccountID = null,
     ...opts
   }: ClientOptions = {}) {
     const options: ClientOptions = {
       bearerToken,
+      augnoAPIKey,
       augnoAccountID,
       ...opts,
       baseURL,
@@ -225,6 +238,7 @@ export class Augno {
     this._options = options;
 
     this.bearerToken = bearerToken;
+    this.augnoAPIKey = augnoAPIKey;
     this.augnoAccountID = augnoAccountID;
   }
 
@@ -243,6 +257,7 @@ export class Augno {
       fetch: this.fetch,
       fetchOptions: this.fetchOptions,
       bearerToken: this.bearerToken,
+      augnoAPIKey: this.augnoAPIKey,
       augnoAccountID: this.augnoAccountID,
       ...options,
     });
@@ -261,10 +276,37 @@ export class Augno {
   }
 
   protected validateHeaders({ values, nulls }: NullableHeaders) {
-    return;
+    if (this.augnoAPIKey && values.get('x-augno-api-key')) {
+      return;
+    }
+    if (nulls.has('x-augno-api-key')) {
+      return;
+    }
+
+    if (this.bearerToken && values.get('authorization')) {
+      return;
+    }
+    if (nulls.has('authorization')) {
+      return;
+    }
+
+    throw new Error(
+      'Could not resolve authentication method. Expected either augnoAPIKey or bearerToken to be set. Or for one of the "X-Augno-API-Key" or "Authorization" headers to be explicitly omitted',
+    );
   }
 
   protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
+    return buildHeaders([await this.augnoAPIKeyAuth(opts), await this.bearerAuth(opts)]);
+  }
+
+  protected async augnoAPIKeyAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
+    if (this.augnoAPIKey == null) {
+      return undefined;
+    }
+    return buildHeaders([{ 'X-Augno-API-Key': this.augnoAPIKey }]);
+  }
+
+  protected async bearerAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
     if (this.bearerToken == null) {
       return undefined;
     }
@@ -687,12 +729,7 @@ export class Augno {
 
     const headers = buildHeaders([
       idempotencyHeaders,
-      {
-        Accept: 'application/json',
-        'User-Agent': this.getUserAgent(),
-        'Augno-Version': '1.0.forge-preview.2',
-        'Augno-Account': this.augnoAccountID,
-      },
+      { Accept: 'application/json', 'User-Agent': this.getUserAgent(), 'Augno-Account': this.augnoAccountID },
       await this.authHeaders(options),
       this._options.defaultHeaders,
       bodyHeaders,
@@ -774,51 +811,67 @@ export class Augno {
 
   static toFile = Uploads.toFile;
 
+  healthz: API.Healthz = new API.Healthz(this);
+  ai: API.AI = new API.AI(this);
   auth: API.Auth = new API.Auth(this);
-  core: API.Core = new API.Core(this);
+  billing: API.Billing = new API.Billing(this);
   catalog: API.Catalog = new API.Catalog(this);
-  sales: API.Sales = new API.Sales(this);
+  core: API.Core = new API.Core(this);
   /**
    * Create, view, update, and delete transactions.
    */
   finance: API.Finance = new API.Finance(this);
-  operations: API.Operations = new API.Operations(this);
   identity: API.Identity = new API.Identity(this);
+  operations: API.Operations = new API.Operations(this);
+  sales: API.Sales = new API.Sales(this);
+  webhooks: API.Webhooks = new API.Webhooks(this);
 }
 
+Augno.Healthz = Healthz;
+Augno.AI = AI;
 Augno.Auth = Auth;
-Augno.Core = Core;
+Augno.Billing = Billing;
 Augno.Catalog = Catalog;
-Augno.Sales = Sales;
+Augno.Core = Core;
 Augno.Finance = Finance;
-Augno.Operations = Operations;
 Augno.Identity = Identity;
+Augno.Operations = Operations;
+Augno.Sales = Sales;
+Augno.Webhooks = Webhooks;
 
 export declare namespace Augno {
   export type RequestOptions = Opts.RequestOptions;
 
+  export { Healthz as Healthz };
+
+  export { AI as AI };
+
   export { Auth as Auth };
 
-  export { Core as Core };
+  export { Billing as Billing };
 
   export { Catalog as Catalog };
 
-  export { Sales as Sales };
+  export { Core as Core };
 
   export {
     Finance as Finance,
     type AdjustmentType as AdjustmentType,
-    type ListAdjustmentType as ListAdjustmentType,
-    type ListTransactionMethod as ListTransactionMethod,
-    type ListTransactionType as ListTransactionType,
     type TransactionMethod as TransactionMethod,
     type TransactionType as TransactionType,
-    type FinanceRetrieveTransactionTypesParams as FinanceRetrieveTransactionTypesParams,
-    type FinanceRetrieveTransactionMethodsParams as FinanceRetrieveTransactionMethodsParams,
+    type FinanceRetrieveAdjustmentTypesResponse as FinanceRetrieveAdjustmentTypesResponse,
+    type FinanceRetrieveTransactionMethodsResponse as FinanceRetrieveTransactionMethodsResponse,
+    type FinanceRetrieveTransactionTypesResponse as FinanceRetrieveTransactionTypesResponse,
     type FinanceRetrieveAdjustmentTypesParams as FinanceRetrieveAdjustmentTypesParams,
+    type FinanceRetrieveTransactionMethodsParams as FinanceRetrieveTransactionMethodsParams,
+    type FinanceRetrieveTransactionTypesParams as FinanceRetrieveTransactionTypesParams,
   };
 
-  export { Operations as Operations };
-
   export { Identity as Identity };
+
+  export { Operations as Operations, type Rate as Rate };
+
+  export { Sales as Sales };
+
+  export { Webhooks as Webhooks };
 }

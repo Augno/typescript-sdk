@@ -2,26 +2,22 @@
 
 export {
   Attributes,
-  type CreateAttributeRequest,
-  type UpdateAttributeRequest,
+  type Attribute,
+  type ListAttribute,
   type AttributeDeleteResponse,
-  type AttributeListParams,
-  type AttributeRetrieveParams,
   type AttributeCreateParams,
+  type AttributeRetrieveParams,
   type AttributeUpdateParams,
+  type AttributeListParams,
   type AttributeDeleteParams,
 } from './attributes';
 export {
   Properties,
-  type Attribute,
-  type CreatePropertyRequest,
-  type ListAttribute,
   type ListProperty,
   type Property,
-  type UpdatePropertyRequest,
   type PropertyDeleteResponse,
-  type PropertyListParams,
-  type PropertyRetrieveParams,
   type PropertyCreateParams,
+  type PropertyRetrieveParams,
   type PropertyUpdateParams,
+  type PropertyListParams,
 } from './properties';

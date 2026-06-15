@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
+import * as AgentsAPI from '../../ai/agents';
 import * as PropertiesAPI from './properties';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
@@ -11,22 +12,19 @@ import { path } from '../../../internal/utils/path';
  */
 export class Attributes extends APIResource {
   /**
-   * Returns a paginated list of attributes for a property.
+   * Creates an attribute under a property.
    *
    * @example
    * ```ts
-   * const listAttribute =
-   *   await client.catalog.properties.attributes.list(
-   *     'pp_01e21344878064372f69e67093',
+   * const attribute =
+   *   await client.catalog.properties.attributes.create(
+   *     'pp_01jm4r6700f8nwq3v5hx2d9ktp',
+   *     { sort_order: 1, value: 'Red' },
    *   );
    * ```
    */
-  list(
-    propertyID: string,
-    query: AttributeListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<PropertiesAPI.ListAttribute> {
-    return this._client.get(path`/v1/catalog/properties/${propertyID}/attributes`, { query, ...options });
+  create(propertyID: string, body: AttributeCreateParams, options?: RequestOptions): APIPromise<Attribute> {
+    return this._client.post(path`/v1/catalog/properties/${propertyID}/attributes`, { body, ...options });
   }
 
   /**
@@ -36,42 +34,14 @@ export class Attributes extends APIResource {
    * ```ts
    * const attribute =
    *   await client.catalog.properties.attributes.retrieve(
-   *     'at_01c9493ec0c46bb0ed12708ae4',
-   *     { property_id: 'pp_01e21344878064372f69e67093' },
+   *     'at_01jm4r6700f8nwq3v5hx2d9ktp',
+   *     { property_id: 'pp_01jm4r6700f8nwq3v5hx2d9ktp' },
    *   );
    * ```
    */
-  retrieve(
-    id: string,
-    params: AttributeRetrieveParams,
-    options?: RequestOptions,
-  ): APIPromise<PropertiesAPI.Attribute> {
+  retrieve(id: string, params: AttributeRetrieveParams, options?: RequestOptions): APIPromise<Attribute> {
     const { property_id } = params;
     return this._client.get(path`/v1/catalog/properties/${property_id}/attributes/${id}`, options);
-  }
-
-  /**
-   * Creates an attribute under a property.
-   *
-   * @example
-   * ```ts
-   * const attribute =
-   *   await client.catalog.properties.attributes.create(
-   *     'pp_01e21344878064372f69e67093',
-   *     {
-   *       value: 'Red',
-   *       color: 'red',
-   *       sort_order: 1,
-   *     },
-   *   );
-   * ```
-   */
-  create(
-    propertyID: string,
-    body: AttributeCreateParams,
-    options?: RequestOptions,
-  ): APIPromise<PropertiesAPI.Attribute> {
-    return this._client.post(path`/v1/catalog/properties/${propertyID}/attributes`, { body, ...options });
   }
 
   /**
@@ -81,19 +51,15 @@ export class Attributes extends APIResource {
    * ```ts
    * const attribute =
    *   await client.catalog.properties.attributes.update(
-   *     'at_01c9493ec0c46bb0ed12708ae4',
+   *     'at_01jm4r6700f8nwq3v5hx2d9ktp',
    *     {
-   *       property_id: 'pp_01e21344878064372f69e67093',
+   *       property_id: 'pp_01jm4r6700f8nwq3v5hx2d9ktp',
    *       value: 'Blue',
    *     },
    *   );
    * ```
    */
-  update(
-    id: string,
-    params: AttributeUpdateParams,
-    options?: RequestOptions,
-  ): APIPromise<PropertiesAPI.Attribute> {
+  update(id: string, params: AttributeUpdateParams, options?: RequestOptions): APIPromise<Attribute> {
     const { property_id, ...body } = params;
     return this._client.patch(path`/v1/catalog/properties/${property_id}/attributes/${id}`, {
       body,
@@ -102,17 +68,33 @@ export class Attributes extends APIResource {
   }
 
   /**
-   * Deletes an attribute from a property.
+   * Returns a paginated list of attributes for a property.
    *
-   * Remaining attributes in the property are shifted so their sort orders stay
-   * contiguous.
+   * @example
+   * ```ts
+   * const listAttribute =
+   *   await client.catalog.properties.attributes.list(
+   *     'pp_01jm4r6700f8nwq3v5hx2d9ktp',
+   *   );
+   * ```
+   */
+  list(
+    propertyID: string,
+    query: AttributeListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ListAttribute> {
+    return this._client.get(path`/v1/catalog/properties/${propertyID}/attributes`, { query, ...options });
+  }
+
+  /**
+   * Deletes an attribute from a property.
    *
    * @example
    * ```ts
    * const attribute =
    *   await client.catalog.properties.attributes.delete(
-   *     'at_01c9493ec0c46bb0ed12708ae4',
-   *     { property_id: 'pp_01e21344878064372f69e67093' },
+   *     'at_01jm4r6700f8nwq3v5hx2d9ktp',
+   *     { property_id: 'pp_01jm4r6700f8nwq3v5hx2d9ktp' },
    *   );
    * ```
    */
@@ -127,86 +109,98 @@ export class Attributes extends APIResource {
 }
 
 /**
- * Request to create an attribute.
+ * Value option within a property.
  */
-export interface CreateAttributeRequest {
+export interface Attribute {
   /**
-   * The selectable value this attribute represents, such as `Red`.
-   *
-   * Must be unique across all attributes in the account, not just within the
-   * property. Leading and trailing whitespace is trimmed.
+   * Attribute ID.
+   */
+  id: string;
+
+  /**
+   * Color code.
+   */
+  color: 'blue' | 'brown' | 'default' | 'gray' | 'green' | 'orange' | 'pink' | 'purple' | 'red' | 'yellow';
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'attribute';
+
+  /**
+   * Property that groups attributes.
+   */
+  property: PropertiesAPI.Property | null;
+
+  /**
+   * Display order.
+   */
+  sort_order: number;
+
+  /**
+   * Last update timestamp.
+   */
+  updated_at: string;
+
+  /**
+   * Attribute value.
    */
   value: string;
-
-  /**
-   * Swatch color used to display this attribute in the UI.
-   *
-   * When omitted, one of the nine named colors (everything except `default`) is
-   * assigned at random.
-   */
-  color?: 'blue' | 'brown' | 'default' | 'gray' | 'green' | 'orange' | 'pink' | 'purple' | 'red' | 'yellow';
-
-  /**
-   * Position of the new attribute relative to its siblings within the property,
-   * starting at `1`.
-   *
-   * Must be at most the property's current attribute count plus one; siblings at or
-   * after this position are shifted one position later. Defaults to the last
-   * position if not provided.
-   */
-  sort_order?: number;
 }
 
 /**
- * Request to update an attribute.
+ * List represents a paginated list of resources.
  */
-export interface UpdateAttributeRequest {
+export interface ListAttribute {
   /**
-   * Swatch color used to display this attribute in the UI.
+   * Resources in this page.
    */
-  color?: 'blue' | 'brown' | 'default' | 'gray' | 'green' | 'orange' | 'pink' | 'purple' | 'red' | 'yellow';
+  data: Array<Attribute>;
 
   /**
-   * New position of this attribute relative to its siblings within the property,
-   * starting at `1`.
-   *
-   * Must be at most the property's current attribute count; the attributes between
-   * the old and new positions shift to make room.
+   * Resource type identifier.
    */
-  sort_order?: number;
+  object: 'list';
 
   /**
-   * The selectable value this attribute represents, such as `Red`.
-   *
-   * Must be non-blank and unique across all attributes in the account, not just
-   * within the property.
+   * PageInfo contains URL-based pagination metadata.
    */
-  value?: string;
+  page_info: AgentsAPI.PageInfo;
 }
 
 export interface AttributeDeleteResponse {}
 
-export interface AttributeListParams {
+export interface AttributeCreateParams {
   /**
-   * Opaque cursor token identifying where the page of results starts.
-   *
-   * Use the `cursor` value embedded in a previous response's `next_page_url` or
-   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
-   * page.
+   * Display order. Defaults to last position if not provided.
    */
-  cursor?: string;
+  sort_order: number | null;
 
   /**
-   * Maximum number of results to return in a single page.
+   * Attribute value.
    */
-  limit?: number;
+  value: string;
 
   /**
-   * Free-text search term used to filter results.
-   *
-   * Which fields are matched against the term varies by endpoint.
+   * Color code. Randomly assigned if not provided.
    */
-  q?: string;
+  color?:
+    | 'blue'
+    | 'brown'
+    | 'default'
+    | 'gray'
+    | 'green'
+    | 'orange'
+    | 'pink'
+    | 'purple'
+    | 'red'
+    | 'yellow'
+    | null;
 }
 
 export interface AttributeRetrieveParams {
@@ -216,34 +210,6 @@ export interface AttributeRetrieveParams {
   property_id: string;
 }
 
-export interface AttributeCreateParams {
-  /**
-   * The selectable value this attribute represents, such as `Red`.
-   *
-   * Must be unique across all attributes in the account, not just within the
-   * property. Leading and trailing whitespace is trimmed.
-   */
-  value: string;
-
-  /**
-   * Swatch color used to display this attribute in the UI.
-   *
-   * When omitted, one of the nine named colors (everything except `default`) is
-   * assigned at random.
-   */
-  color?: 'blue' | 'brown' | 'default' | 'gray' | 'green' | 'orange' | 'pink' | 'purple' | 'red' | 'yellow';
-
-  /**
-   * Position of the new attribute relative to its siblings within the property,
-   * starting at `1`.
-   *
-   * Must be at most the property's current attribute count plus one; siblings at or
-   * after this position are shifted one position later. Defaults to the last
-   * position if not provided.
-   */
-  sort_order?: number;
-}
-
 export interface AttributeUpdateParams {
   /**
    * Path param: Property ID.
@@ -251,26 +217,36 @@ export interface AttributeUpdateParams {
   property_id: string;
 
   /**
-   * Body param: Swatch color used to display this attribute in the UI.
+   * Body param: Color code.
    */
   color?: 'blue' | 'brown' | 'default' | 'gray' | 'green' | 'orange' | 'pink' | 'purple' | 'red' | 'yellow';
 
   /**
-   * Body param: New position of this attribute relative to its siblings within the
-   * property, starting at `1`.
-   *
-   * Must be at most the property's current attribute count; the attributes between
-   * the old and new positions shift to make room.
+   * Body param: Display order. Must be a positive integer.
    */
   sort_order?: number;
 
   /**
-   * Body param: The selectable value this attribute represents, such as `Red`.
-   *
-   * Must be non-blank and unique across all attributes in the account, not just
-   * within the property.
+   * Body param: Attribute value.
    */
   value?: string;
+}
+
+export interface AttributeListParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
 }
 
 export interface AttributeDeleteParams {
@@ -282,13 +258,13 @@ export interface AttributeDeleteParams {
 
 export declare namespace Attributes {
   export {
-    type CreateAttributeRequest as CreateAttributeRequest,
-    type UpdateAttributeRequest as UpdateAttributeRequest,
+    type Attribute as Attribute,
+    type ListAttribute as ListAttribute,
     type AttributeDeleteResponse as AttributeDeleteResponse,
-    type AttributeListParams as AttributeListParams,
-    type AttributeRetrieveParams as AttributeRetrieveParams,
     type AttributeCreateParams as AttributeCreateParams,
+    type AttributeRetrieveParams as AttributeRetrieveParams,
     type AttributeUpdateParams as AttributeUpdateParams,
+    type AttributeListParams as AttributeListParams,
     type AttributeDeleteParams as AttributeDeleteParams,
   };
 }

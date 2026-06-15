@@ -8,36 +8,8 @@ const client = new Augno({
 });
 
 describe('resource accountUsers', () => {
-  test('list', async () => {
-    const responsePromise = client.identity.accountUsers.list();
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.identity.accountUsers.list(
-        {
-          cursor: 'cursor',
-          include: ['user'],
-          limit: 0,
-          q: 'q',
-          removed_scope: 'excluded',
-          role_type: 'admin',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
-  });
-
   test('retrieve', async () => {
-    const responsePromise = client.identity.accountUsers.retrieve('acus_01ea9983ddb41dacc44ecf997c');
+    const responsePromise = client.identity.accountUsers.retrieve('acus_01gf7a8200er3ar3pkfrb6kk29');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -51,45 +23,15 @@ describe('resource accountUsers', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.identity.accountUsers.retrieve(
-        'acus_01ea9983ddb41dacc44ecf997c',
-        { include: ['user'] },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
-  });
-
-  test('create', async () => {
-    const responsePromise = client.identity.accountUsers.create();
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('create: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.identity.accountUsers.create(
-        {
-          include: ['user'],
-          department_id: 'department_id',
-          email: 'jdoe@augno.com',
-          name: 'John Doe',
-          password: 'QgS7Z8Hhj3&1',
-          preferences: [{ enabled: true, notification_type: 'order_acknowledgement' }],
-          role_id: 'rl_01c16d2eb637c0d1f3a372937c',
-          username: 'jdoe',
-        },
+        'acus_01gf7a8200er3ar3pkfrb6kk29',
+        { include: ['role'] },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Augno.NotFoundError);
   });
 
   test('update', async () => {
-    const responsePromise = client.identity.accountUsers.update('acus_01ea9983ddb41dacc44ecf997c');
+    const responsePromise = client.identity.accountUsers.update('acus_01gf7a8200er3ar3pkfrb6kk29');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -103,15 +45,72 @@ describe('resource accountUsers', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.identity.accountUsers.update(
-        'acus_01ea9983ddb41dacc44ecf997c',
+        'acus_01gf7a8200er3ar3pkfrb6kk29',
         {
-          include: ['user'],
-          department_id: 'dp_01791c25ab59da4704cba61874',
+          include: ['role'],
+          department_id: 'department_id',
           email: 'email',
           name: 'John Doe',
           preferences: [{ enabled: true, notification_type: 'invoice' }],
-          role_id: 'rl_01c16d2eb637c0d1f3a372937c',
+          role_id: 'role_id',
           username: 'username',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Augno.NotFoundError);
+  });
+
+  test('accountUsers: only required params', async () => {
+    const responsePromise = client.identity.accountUsers.accountUsers({
+      email: 'jdoe@augno.com',
+      name: 'John Doe',
+      password: 'QgS7Z8Hhj3&1',
+      username: 'jdoe',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('accountUsers: required and optional params', async () => {
+    const response = await client.identity.accountUsers.accountUsers({
+      email: 'jdoe@augno.com',
+      name: 'John Doe',
+      password: 'QgS7Z8Hhj3&1',
+      username: 'jdoe',
+      include: ['role'],
+      department_id: 'department_id',
+      preferences: [{ enabled: true, notification_type: 'order_acknowledgement' }],
+      role_id: 'role_id',
+    });
+  });
+
+  test('retrieveAccountUsers', async () => {
+    const responsePromise = client.identity.accountUsers.retrieveAccountUsers();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('retrieveAccountUsers: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.identity.accountUsers.retrieveAccountUsers(
+        {
+          cursor: 'cursor',
+          include: ['role'],
+          limit: 0,
+          q: 'q',
+          removed_scope: 'excluded',
+          role_type: 'admin',
         },
         { path: '/_stainless_unknown_path' },
       ),

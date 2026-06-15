@@ -11,15 +11,14 @@ import { path } from '../../../internal/utils/path';
  */
 export class Attributes extends APIResource {
   /**
-   * Adds an attribute to an item and returns the updated item.
-   *
-   * If the attribute is already associated with the item, this is a no-op.
+   * Adds an attribute to an item. If the attribute is already associated with the
+   * item, this is a no-op.
    *
    * @example
    * ```ts
    * const item = await client.catalog.items.attributes.update(
-   *   'at_01c9493ec0c46bb0ed12708ae4',
-   *   { id: 'it_0131e386ac683e8c29a71f6f1f' },
+   *   'at_01jm4r6700f8nwq3v5hx2d9ktp',
+   *   { id: 'it_01jm4r6700f8nwq3v5hx2d9ktp' },
    * );
    * ```
    */
@@ -41,8 +40,8 @@ export class Attributes extends APIResource {
    * @example
    * ```ts
    * const item = await client.catalog.items.attributes.delete(
-   *   'at_01c9493ec0c46bb0ed12708ae4',
-   *   { id: 'it_0131e386ac683e8c29a71f6f1f' },
+   *   'at_01jm4r6700f8nwq3v5hx2d9ktp',
+   *   { id: 'it_01jm4r6700f8nwq3v5hx2d9ktp' },
    * );
    * ```
    */

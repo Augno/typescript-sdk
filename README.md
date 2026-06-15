@@ -6,15 +6,6 @@ This library provides convenient access to the Augno REST API from server-side T
 
 The full API of this library can be found in [api.md](api.md).
 
-## MCP Server
-
-Use the Augno MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.
-
-[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40augno%2Fsdk-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBhdWduby9zZGstbWNwIl0sImVudiI6eyJBVUdOT19BUElfS0VZIjoiTXkgQmVhcmVyIFRva2VuIiwiQVVHTk9fQVVHTk9fQUNDT1VOVF9JRCI6Ik15IEF1Z25vIEFjY291bnQgSUQifX0)
-[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40augno%2Fsdk-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40augno%2Fsdk-mcp%22%5D%2C%22env%22%3A%7B%22AUGNO_API_KEY%22%3A%22My%20Bearer%20Token%22%2C%22AUGNO_AUGNO_ACCOUNT_ID%22%3A%22My%20Augno%20Account%20ID%22%7D%7D)
-
-> Note: You may need to set environment variables in your MCP client.
-
 ## Installation
 
 ```sh
@@ -30,13 +21,13 @@ The full API of this library can be found in [api.md](api.md).
 import Augno from '@augno/sdk';
 
 const client = new Augno({
-  bearerToken: process.env['AUGNO_API_KEY'], // This is the default and can be omitted
+  bearerToken: 'My Bearer Token',
   environment: 'local', // defaults to 'production'
 });
 
-const listItem = await client.catalog.items.list();
+const apiKey = await client.auth.apiKeys.retrieve('apke_01jm4r6700e3kxb9w2nqh7g5fp');
 
-console.log(listItem.data);
+console.log(apiKey.id);
 ```
 
 ### Request & Response types
@@ -48,11 +39,13 @@ This library includes TypeScript definitions for all request params and response
 import Augno from '@augno/sdk';
 
 const client = new Augno({
-  bearerToken: process.env['AUGNO_API_KEY'], // This is the default and can be omitted
+  bearerToken: 'My Bearer Token',
   environment: 'local', // defaults to 'production'
 });
 
-const listItem: Augno.Catalog.ListItem = await client.catalog.items.list();
+const apiKey: Augno.Auth.APIKey = await client.auth.apiKeys.retrieve(
+  'apke_01jm4r6700e3kxb9w2nqh7g5fp',
+);
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -65,15 +58,17 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const listItem = await client.catalog.items.list().catch(async (err) => {
-  if (err instanceof Augno.APIError) {
-    console.log(err.status); // 400
-    console.log(err.name); // BadRequestError
-    console.log(err.headers); // {server: 'nginx', ...}
-  } else {
-    throw err;
-  }
-});
+const apiKey = await client.auth.apiKeys
+  .retrieve('apke_01jm4r6700e3kxb9w2nqh7g5fp')
+  .catch(async (err) => {
+    if (err instanceof Augno.APIError) {
+      console.log(err.status); // 400
+      console.log(err.name); // BadRequestError
+      console.log(err.headers); // {server: 'nginx', ...}
+    } else {
+      throw err;
+    }
+  });
 ```
 
 Error codes are as follows:
@@ -105,7 +100,7 @@ const client = new Augno({
 });
 
 // Or, configure per-request:
-await client.catalog.items.list({
+await client.auth.apiKeys.retrieve('apke_01jm4r6700e3kxb9w2nqh7g5fp', {
   maxRetries: 5,
 });
 ```
@@ -122,7 +117,7 @@ const client = new Augno({
 });
 
 // Override per-request:
-await client.catalog.items.list({
+await client.auth.apiKeys.retrieve('apke_01jm4r6700e3kxb9w2nqh7g5fp', {
   timeout: 5 * 1000,
 });
 ```
@@ -130,24 +125,6 @@ await client.catalog.items.list({
 On timeout, an `APIConnectionTimeoutError` is thrown.
 
 Note that requests which time out will be [retried twice by default](#retries).
-
-## Default Headers
-
-We automatically send the `Augno-Version` header set to `1.0.forge-preview.2`.
-
-If you need to, you can override it by setting default headers on a per-request basis.
-
-Be aware that doing so may result in incorrect types and other unexpected or undefined behavior in the SDK.
-
-```ts
-import Augno from '@augno/sdk';
-
-const client = new Augno();
-
-const listItem = await client.catalog.items.list({
-  headers: { 'Augno-Version': 'My-Custom-Value' },
-});
-```
 
 ## Advanced Usage
 
@@ -163,13 +140,15 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Augno();
 
-const response = await client.catalog.items.list().asResponse();
+const response = await client.auth.apiKeys.retrieve('apke_01jm4r6700e3kxb9w2nqh7g5fp').asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: listItem, response: raw } = await client.catalog.items.list().withResponse();
+const { data: apiKey, response: raw } = await client.auth.apiKeys
+  .retrieve('apke_01jm4r6700e3kxb9w2nqh7g5fp')
+  .withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(listItem.data);
+console.log(apiKey.id);
 ```
 
 ### Logging
@@ -249,7 +228,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.catalog.items.list({
+client.auth.apiKeys.retrieve({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',

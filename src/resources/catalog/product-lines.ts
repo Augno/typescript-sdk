@@ -1,7 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as APIKeysAPI from '../auth/api-keys/api-keys';
+import * as AgentsAPI from '../ai/agents';
+import * as ItemCategoriesAPI from './item-categories/item-categories';
 import * as UnitGroupsAPI from './unit-groups/unit-groups';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
@@ -12,23 +13,6 @@ import { path } from '../../internal/utils/path';
  */
 export class ProductLines extends APIResource {
   /**
-   * Returns a paginated list of product lines, including account-owned and system
-   * product lines.
-   *
-   * @example
-   * ```ts
-   * const listProductLine =
-   *   await client.catalog.productLines.list();
-   * ```
-   */
-  list(
-    query: ProductLineListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListProductLine> {
-    return this._client.get('/v1/catalog/product-lines', { query, ...options });
-  }
-
-  /**
    * Returns a product line by ID, including system-owned product lines accessible to
    * the account.
    *
@@ -36,7 +20,7 @@ export class ProductLines extends APIResource {
    * ```ts
    * const productLine =
    *   await client.catalog.productLines.retrieve(
-   *     'pl_01996357326a0d3f7b129542ea',
+   *     'pl_01jm4r6700f8nwq3v5hx2d9ktp',
    *   );
    * ```
    */
@@ -49,35 +33,14 @@ export class ProductLines extends APIResource {
   }
 
   /**
-   * Creates an account-owned product line.
-   *
-   * @example
-   * ```ts
-   * const productLine =
-   *   await client.catalog.productLines.create({
-   *     commission_policy: 'commission_exempt',
-   *     freight_policy: 'billed_freight',
-   *     name: 'Industrial Fasteners',
-   *     unit_group_id: 'ug_01aad07abb8e41fd392d2d7013',
-   *   });
-   * ```
-   */
-  create(params: ProductLineCreateParams, options?: RequestOptions): APIPromise<ProductLine> {
-    const { include, ...body } = params;
-    return this._client.post('/v1/catalog/product-lines', { query: { include }, body, ...options });
-  }
-
-  /**
-   * Partially updates an account-owned product line.
-   *
-   * Only the provided fields are changed. The reserved default product lines
-   * (shipping, service, credit, tax) cannot be updated.
+   * Partially updates an account-owned product line. Default system product lines
+   * cannot be updated.
    *
    * @example
    * ```ts
    * const productLine =
    *   await client.catalog.productLines.update(
-   *     'pl_01996357326a0d3f7b129542ea',
+   *     'pl_01jm4r6700f8nwq3v5hx2d9ktp',
    *     { name: 'Updated Product Line' },
    *   );
    * ```
@@ -96,61 +59,56 @@ export class ProductLines extends APIResource {
   }
 
   /**
-   * Permanently deletes an account-owned product line.
-   *
-   * The reserved default product lines (shipping, service, credit, tax) cannot be
+   * Deletes an account-owned product line. Default system product lines cannot be
    * deleted.
    *
    * @example
    * ```ts
    * const productLine =
    *   await client.catalog.productLines.delete(
-   *     'pl_01996357326a0d3f7b129542ea',
+   *     'pl_01jm4r6700f8nwq3v5hx2d9ktp',
    *   );
    * ```
    */
   delete(id: string, options?: RequestOptions): APIPromise<ProductLineDeleteResponse> {
     return this._client.delete(path`/v1/catalog/product-lines/${id}`, options);
   }
-}
-
-/**
- * Request to create a product line.
- */
-export interface CreateProductLineRequest {
-  /**
-   * Default commission policy for products in this product line.
-   *
-   * - `commission_exempt`: no commission applies to these products.
-   * - `commission_applied`: commission applies to these products, unless overridden
-   *   elsewhere.
-   */
-  commission_policy: 'commission_applied' | 'commission_exempt';
 
   /**
-   * Default freight policy for products in this product line.
+   * Creates an account-owned product line.
    *
-   * - `free_freight`: these products do not incur a freight charge.
-   * - `billed_freight`: freight is billed for these products, unless overridden
-   *   elsewhere.
+   * @example
+   * ```ts
+   * const productLine =
+   *   await client.catalog.productLines.productLines({
+   *     commission_policy: 'commission_exempt',
+   *     freight_policy: 'billed_freight',
+   *     name: 'Industrial Fasteners',
+   *     unit_group_id: 'ug_01jm4r6700f8nwq3v5hx2d9ktp',
+   *   });
+   * ```
    */
-  freight_policy: 'free_freight' | 'billed_freight';
+  productLines(params: ProductLineProductLinesParams, options?: RequestOptions): APIPromise<ProductLine> {
+    const { include, ...body } = params;
+    return this._client.post('/v1/catalog/product-lines', { query: { include }, body, ...options });
+  }
 
   /**
-   * Display name.
+   * Returns a paginated list of product lines, including account-owned and system
+   * product lines.
    *
-   * Must be unique among the account's product lines; a duplicate name returns a
-   * conflict error.
+   * @example
+   * ```ts
+   * const listProductLine =
+   *   await client.catalog.productLines.retrieveProductLines();
+   * ```
    */
-  name: string;
-
-  /**
-   * ID of the unit group to associate with this product line.
-   *
-   * The unit group determines the set of units available to products in this product
-   * line.
-   */
-  unit_group_id: string;
+  retrieveProductLines(
+    query: ProductLineRetrieveProductLinesParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ListProductLine> {
+    return this._client.get('/v1/catalog/product-lines', { query, ...options });
+  }
 }
 
 /**
@@ -170,14 +128,11 @@ export interface ListProductLine {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: APIKeysAPI.PageInfo;
+  page_info: AgentsAPI.PageInfo;
 }
 
 /**
  * Product line resource.
- *
- * A product line groups related products in your catalog and carries the default
- * commission policy, freight policy, and unit group for those products.
  */
 export interface ProductLine {
   /**
@@ -186,11 +141,7 @@ export interface ProductLine {
   id: string;
 
   /**
-   * Default commission policy for products in this product line.
-   *
-   * - `commission_exempt`: no commission applies to these products.
-   * - `commission_applied`: commission applies to these products, unless overridden
-   *   elsewhere.
+   * Commission policy of products in this product line.
    */
   commission_policy: 'commission_applied' | 'commission_exempt';
 
@@ -200,26 +151,22 @@ export interface ProductLine {
   created_at: string;
 
   /**
-   * Free-form description of the product line.
+   * Description.
    */
   description: string | null;
 
   /**
-   * Default freight policy for products in this product line.
-   *
-   * - `free_freight`: these products do not incur a freight charge.
-   * - `billed_freight`: freight is billed for these products, unless overridden
-   *   elsewhere.
+   * Freight policy for all items in this product line.
    */
   freight_policy: 'free_freight' | 'billed_freight';
 
   /**
-   * Display name of the product line.
+   * Display name.
    */
   name: string;
 
   /**
-   * Free-form notes about the product line.
+   * Notes.
    */
   notes: string | null;
 
@@ -231,11 +178,10 @@ export interface ProductLine {
   /**
    * Owner describes the provenance of a resource.
    */
-  owner: APIKeysAPI.Owner | null;
+  owner: ItemCategoriesAPI.Owner | null;
 
   /**
-   * Named collection of units sharing one dimension, defining which units products
-   * can be ordered in along with per-unit discounts and customer portal visibility.
+   * UnitGroup is a unit group resource.
    */
   unit_group: UnitGroupsAPI.UnitGroup | null;
 
@@ -245,122 +191,12 @@ export interface ProductLine {
   updated_at: string;
 }
 
-/**
- * Request to partially update a product line.
- */
-export interface UpdateProductLineRequest {
-  /**
-   * Default commission policy for products in this product line.
-   *
-   * - `commission_exempt`: no commission applies to these products.
-   * - `commission_applied`: commission applies to these products, unless overridden
-   *   elsewhere.
-   */
-  commission_policy?: 'commission_applied' | 'commission_exempt';
-
-  /**
-   * Default freight policy for products in this product line.
-   *
-   * - `free_freight`: these products do not incur a freight charge.
-   * - `billed_freight`: freight is billed for these products, unless overridden
-   *   elsewhere.
-   */
-  freight_policy?: 'free_freight' | 'billed_freight';
-
-  /**
-   * Display name.
-   *
-   * Must be unique among the account's product lines; a duplicate name returns a
-   * conflict error.
-   */
-  name?: string;
-
-  /**
-   * ID of the unit group to associate with this product line.
-   *
-   * The unit group determines the set of units available to products in this product
-   * line.
-   */
-  unit_group_id?: string;
-}
-
 export interface ProductLineDeleteResponse {}
-
-export interface ProductLineListParams {
-  /**
-   * Opaque cursor token identifying where the page of results starts.
-   *
-   * Use the `cursor` value embedded in a previous response's `next_page_url` or
-   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
-   * page.
-   */
-  cursor?: string;
-
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'owner' | 'owner.account' | 'unit_group'>;
-
-  /**
-   * Maximum number of results to return in a single page.
-   */
-  limit?: number;
-
-  /**
-   * Free-text search term used to filter results.
-   *
-   * Which fields are matched against the term varies by endpoint.
-   */
-  q?: string;
-}
 
 export interface ProductLineRetrieveParams {
   /**
    * Sub-objects to expand in the response. When omitted, sub-objects are returned as
    * `null`.
-   */
-  include?: Array<'owner' | 'owner.account' | 'unit_group'>;
-}
-
-export interface ProductLineCreateParams {
-  /**
-   * Body param: Default commission policy for products in this product line.
-   *
-   * - `commission_exempt`: no commission applies to these products.
-   * - `commission_applied`: commission applies to these products, unless overridden
-   *   elsewhere.
-   */
-  commission_policy: 'commission_applied' | 'commission_exempt';
-
-  /**
-   * Body param: Default freight policy for products in this product line.
-   *
-   * - `free_freight`: these products do not incur a freight charge.
-   * - `billed_freight`: freight is billed for these products, unless overridden
-   *   elsewhere.
-   */
-  freight_policy: 'free_freight' | 'billed_freight';
-
-  /**
-   * Body param: Display name.
-   *
-   * Must be unique among the account's product lines; a duplicate name returns a
-   * conflict error.
-   */
-  name: string;
-
-  /**
-   * Body param: ID of the unit group to associate with this product line.
-   *
-   * The unit group determines the set of units available to products in this product
-   * line.
-   */
-  unit_group_id: string;
-
-  /**
-   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
-   * are returned as `null`.
    */
   include?: Array<'owner' | 'owner.account' | 'unit_group'>;
 }
@@ -373,50 +209,87 @@ export interface ProductLineUpdateParams {
   include?: Array<'owner' | 'owner.account' | 'unit_group'>;
 
   /**
-   * Body param: Default commission policy for products in this product line.
-   *
-   * - `commission_exempt`: no commission applies to these products.
-   * - `commission_applied`: commission applies to these products, unless overridden
-   *   elsewhere.
+   * Body param: Commission policy of products in this product line.
    */
   commission_policy?: 'commission_applied' | 'commission_exempt';
 
   /**
-   * Body param: Default freight policy for products in this product line.
-   *
-   * - `free_freight`: these products do not incur a freight charge.
-   * - `billed_freight`: freight is billed for these products, unless overridden
-   *   elsewhere.
+   * Body param: Freight policy for all items in this product line.
    */
   freight_policy?: 'free_freight' | 'billed_freight';
 
   /**
    * Body param: Display name.
-   *
-   * Must be unique among the account's product lines; a duplicate name returns a
-   * conflict error.
    */
   name?: string;
 
   /**
-   * Body param: ID of the unit group to associate with this product line.
-   *
-   * The unit group determines the set of units available to products in this product
-   * line.
+   * Body param: Unit group ID associated with this product line. This unit group
+   * dictates the units that products in this product line may be purchased in.
    */
   unit_group_id?: string;
 }
 
+export interface ProductLineProductLinesParams {
+  /**
+   * Body param: Commission policy of products in this product line.
+   */
+  commission_policy: 'commission_applied' | 'commission_exempt';
+
+  /**
+   * Body param: Freight policy for all items in this product line.
+   */
+  freight_policy: 'free_freight' | 'billed_freight';
+
+  /**
+   * Body param: Display name.
+   */
+  name: string;
+
+  /**
+   * Body param: Unit group ID associated with this product line. This unit group
+   * dictates the units that products in this product line may be purchased in.
+   */
+  unit_group_id: string;
+
+  /**
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
+   */
+  include?: Array<'owner' | 'owner.account' | 'unit_group'>;
+}
+
+export interface ProductLineRetrieveProductLinesParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'owner' | 'owner.account' | 'unit_group'>;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+}
+
 export declare namespace ProductLines {
   export {
-    type CreateProductLineRequest as CreateProductLineRequest,
     type ListProductLine as ListProductLine,
     type ProductLine as ProductLine,
-    type UpdateProductLineRequest as UpdateProductLineRequest,
     type ProductLineDeleteResponse as ProductLineDeleteResponse,
-    type ProductLineListParams as ProductLineListParams,
     type ProductLineRetrieveParams as ProductLineRetrieveParams,
-    type ProductLineCreateParams as ProductLineCreateParams,
     type ProductLineUpdateParams as ProductLineUpdateParams,
+    type ProductLineProductLinesParams as ProductLineProductLinesParams,
+    type ProductLineRetrieveProductLinesParams as ProductLineRetrieveProductLinesParams,
   };
 }

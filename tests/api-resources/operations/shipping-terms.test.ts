@@ -8,34 +8,8 @@ const client = new Augno({
 });
 
 describe('resource shippingTerms', () => {
-  test('list', async () => {
-    const responsePromise = client.operations.shippingTerms.list();
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.operations.shippingTerms.list(
-        {
-          cursor: 'cursor',
-          include: ['owner'],
-          limit: 0,
-          q: 'q',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
-  });
-
   test('retrieve', async () => {
-    const responsePromise = client.operations.shippingTerms.retrieve('shtm_014341ab4bb5bf94d5b6936f86');
+    const responsePromise = client.operations.shippingTerms.retrieve('shtm_01jm4r6700f8nwq3v5hx2d9ktp');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -49,40 +23,15 @@ describe('resource shippingTerms', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.operations.shippingTerms.retrieve(
-        'shtm_014341ab4bb5bf94d5b6936f86',
+        'shtm_01jm4r6700f8nwq3v5hx2d9ktp',
         { include: ['owner'] },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Augno.NotFoundError);
   });
 
-  test('create: only required params', async () => {
-    const responsePromise = client.operations.shippingTerms.create({
-      name: 'Prepaid',
-      type: 'carrier_rate_freight',
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('create: required and optional params', async () => {
-    const response = await client.operations.shippingTerms.create({
-      name: 'Prepaid',
-      type: 'carrier_rate_freight',
-      include: ['owner'],
-      flat_rate: { unit_id: 'unit_id', value: 'value' },
-      free_shipping_service_level_ids: ['string'],
-      minimum_order_value: { unit_id: 'unit_id', value: 'value' },
-    });
-  });
-
   test('update', async () => {
-    const responsePromise = client.operations.shippingTerms.update('shtm_014341ab4bb5bf94d5b6936f86');
+    const responsePromise = client.operations.shippingTerms.update('shtm_01jm4r6700f8nwq3v5hx2d9ktp');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -96,7 +45,7 @@ describe('resource shippingTerms', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.operations.shippingTerms.update(
-        'shtm_014341ab4bb5bf94d5b6936f86',
+        'shtm_01jm4r6700f8nwq3v5hx2d9ktp',
         {
           include: ['owner'],
           flat_rate: { unit_id: 'unit_id', value: 'value' },
@@ -111,7 +60,7 @@ describe('resource shippingTerms', () => {
   });
 
   test('delete', async () => {
-    const responsePromise = client.operations.shippingTerms.delete('shtm_014341ab4bb5bf94d5b6936f86');
+    const responsePromise = client.operations.shippingTerms.delete('shtm_01jm4r6700f8nwq3v5hx2d9ktp');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -119,5 +68,56 @@ describe('resource shippingTerms', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('retrieveShippingTerms', async () => {
+    const responsePromise = client.operations.shippingTerms.retrieveShippingTerms();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('retrieveShippingTerms: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.operations.shippingTerms.retrieveShippingTerms(
+        {
+          cursor: 'cursor',
+          include: ['owner'],
+          limit: 0,
+          q: 'q',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Augno.NotFoundError);
+  });
+
+  test('shippingTerms: only required params', async () => {
+    const responsePromise = client.operations.shippingTerms.shippingTerms({
+      name: 'Prepaid',
+      type: 'carrier_rate_freight',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('shippingTerms: required and optional params', async () => {
+    const response = await client.operations.shippingTerms.shippingTerms({
+      name: 'Prepaid',
+      type: 'carrier_rate_freight',
+      include: ['owner'],
+      flat_rate: { unit_id: 'unit_id', value: 'value' },
+      free_shipping_service_level_ids: ['string'],
+      minimum_order_value: { unit_id: 'unit_id', value: 'value' },
+    });
   });
 });

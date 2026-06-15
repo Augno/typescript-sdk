@@ -14,8 +14,8 @@ export class Actions extends APIResource {
    *
    * @example
    * ```ts
-   * const validatedAddress =
-   *   await client.core.addresses.actions.validate({
+   * const response =
+   *   await client.core.addresses.actions.updateValidate({
    *     address_line_1: '123 Main St',
    *     city: 'Springfield',
    *     country: 'US',
@@ -24,7 +24,10 @@ export class Actions extends APIResource {
    *   });
    * ```
    */
-  validate(body: ActionValidateParams, options?: RequestOptions): APIPromise<ValidatedAddress> {
+  updateValidate(
+    body: ActionUpdateValidateParams,
+    options?: RequestOptions,
+  ): APIPromise<ActionUpdateValidateResponse> {
     return this._client.put('/v1/core/addresses/actions/validate', { body, ...options });
   }
 }
@@ -75,54 +78,16 @@ export interface AddressComponents {
 }
 
 /**
- * Request to validate an address.
- */
-export interface ValidateAddressRequest {
-  /**
-   * First line of the street address.
-   */
-  address_line_1: string;
-
-  /**
-   * City or locality.
-   */
-  city: string;
-
-  /**
-   * Country name or two-letter country code (for example `United States` or `US`).
-   */
-  country: string;
-
-  /**
-   * Postal or ZIP code.
-   */
-  postal_code: string;
-
-  /**
-   * State or administrative area.
-   */
-  state: string;
-
-  /**
-   * Second line of the street address.
-   */
-  address_line_2?: string;
-}
-
-/**
  * Result of address validation.
  */
-export interface ValidatedAddress {
+export interface ActionUpdateValidateResponse {
   /**
    * Parsed address components.
    */
   components: AddressComponents | null;
 
   /**
-   * Formatted, single-line address as standardized by the validation service.
-   *
-   * The validation service may omit this regardless of `status`, so it can be absent
-   * even for a `valid` address.
+   * Formatted address from the validation service.
    */
   formatted_address: string | null;
 
@@ -132,21 +97,17 @@ export interface ValidatedAddress {
   object: 'validated_address';
 
   /**
-   * Whether the address could be validated.
+   * Address validation status.
    */
   status: 'valid' | 'invalid';
 
   /**
-   * Human-readable messages describing issues found during validation.
-   *
-   * May be non-empty even when `status` is `valid`, for example when components were
-   * inferred or replaced with standardized values. Empty when no issues were
-   * reported.
+   * Validation messages for issues found.
    */
   validation_messages: Array<string>;
 }
 
-export interface ActionValidateParams {
+export interface ActionUpdateValidateParams {
   /**
    * First line of the street address.
    */
@@ -158,7 +119,7 @@ export interface ActionValidateParams {
   city: string;
 
   /**
-   * Country name or two-letter country code (for example `United States` or `US`).
+   * Country name or code.
    */
   country: string;
 
@@ -181,8 +142,7 @@ export interface ActionValidateParams {
 export declare namespace Actions {
   export {
     type AddressComponents as AddressComponents,
-    type ValidateAddressRequest as ValidateAddressRequest,
-    type ValidatedAddress as ValidatedAddress,
-    type ActionValidateParams as ActionValidateParams,
+    type ActionUpdateValidateResponse as ActionUpdateValidateResponse,
+    type ActionUpdateValidateParams as ActionUpdateValidateParams,
   };
 }

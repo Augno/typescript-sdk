@@ -1,7 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as APIKeysAPI from '../auth/api-keys/api-keys';
+import * as AgentsAPI from '../ai/agents';
+import * as ItemCategoriesAPI from '../catalog/item-categories/item-categories';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -11,27 +12,12 @@ import { path } from '../../internal/utils/path';
  */
 export class Priorities extends APIResource {
   /**
-   * Returns a paginated list of priorities.
-   *
-   * @example
-   * ```ts
-   * const listPriority = await client.sales.priorities.list();
-   * ```
-   */
-  list(
-    query: PriorityListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListPriority> {
-    return this._client.get('/v1/sales/priorities', { query, ...options });
-  }
-
-  /**
    * Returns a priority by ID or code.
    *
    * @example
    * ```ts
    * const priority = await client.sales.priorities.retrieve(
-   *   'pi_01fc435701244bb3978bfb77ff',
+   *   'pi_01jm4r6700f8nwq3v5hx2d9ktp',
    * );
    * ```
    */
@@ -42,30 +28,25 @@ export class Priorities extends APIResource {
   ): APIPromise<Priority> {
     return this._client.get(path`/v1/sales/priorities/${id}`, { query, ...options });
   }
+
+  /**
+   * Returns a paginated list of priorities.
+   *
+   * @example
+   * ```ts
+   * const priorities = await client.sales.priorities.list();
+   * ```
+   */
+  list(
+    query: PriorityListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<PriorityListResponse> {
+    return this._client.get('/v1/sales/priorities', { query, ...options });
+  }
 }
 
 /**
- * List represents a paginated list of resources.
- */
-export interface ListPriority {
-  /**
-   * Resources in this page.
-   */
-  data: Array<Priority>;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'list';
-
-  /**
-   * PageInfo contains URL-based pagination metadata.
-   */
-  page_info: APIKeysAPI.PageInfo;
-}
-
-/**
- * Priority level used to order work on sales orders, purchase orders, and picks.
+ * Priority level used by sales orders and picks.
  */
 export interface Priority {
   /**
@@ -74,11 +55,7 @@ export interface Priority {
   id: string;
 
   /**
-   * Machine-readable code identifying the priority level.
-   *
-   * - `low`: lowest urgency; worked after normal and high.
-   * - `normal`: default urgency for most orders and picks.
-   * - `high`: highest urgency; worked ahead of normal and low.
+   * Machine-readable code.
    */
   code: 'low' | 'normal' | 'high';
 
@@ -100,7 +77,7 @@ export interface Priority {
   /**
    * Owner describes the provenance of a resource.
    */
-  owner: APIKeysAPI.Owner | null;
+  owner: ItemCategoriesAPI.Owner | null;
 
   /**
    * Last updated timestamp.
@@ -108,33 +85,24 @@ export interface Priority {
   updated_at: string;
 }
 
-export interface PriorityListParams {
+/**
+ * List represents a paginated list of resources.
+ */
+export interface PriorityListResponse {
   /**
-   * Opaque cursor token identifying where the page of results starts.
-   *
-   * Use the `cursor` value embedded in a previous response's `next_page_url` or
-   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
-   * page.
+   * Resources in this page.
    */
-  cursor?: string;
+  data: Array<Priority>;
 
   /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
+   * Resource type identifier.
    */
-  include?: Array<'owner'>;
+  object: 'list';
 
   /**
-   * Maximum number of results to return in a single page.
+   * PageInfo contains URL-based pagination metadata.
    */
-  limit?: number;
-
-  /**
-   * Free-text search term used to filter results.
-   *
-   * Which fields are matched against the term varies by endpoint.
-   */
-  q?: string;
+  page_info: AgentsAPI.PageInfo;
 }
 
 export interface PriorityRetrieveParams {
@@ -145,11 +113,34 @@ export interface PriorityRetrieveParams {
   include?: Array<'owner'>;
 }
 
+export interface PriorityListParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'owner'>;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+}
+
 export declare namespace Priorities {
   export {
-    type ListPriority as ListPriority,
     type Priority as Priority,
-    type PriorityListParams as PriorityListParams,
+    type PriorityListResponse as PriorityListResponse,
     type PriorityRetrieveParams as PriorityRetrieveParams,
+    type PriorityListParams as PriorityListParams,
   };
 }

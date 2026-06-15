@@ -1,19 +1,31 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as AgentsAPI from '../ai/agents';
+import * as InvoicesAPI from './invoices';
+import { Invoices } from './invoices';
 import * as PaymentTermsAPI from './payment-terms';
 import {
-  CreatePaymentTermRequest,
-  ListPaymentTerm,
-  PaymentTermCreateParams,
+  PaymentTerm,
   PaymentTermDeleteResponse,
-  PaymentTermListParams,
+  PaymentTermPaymentTermsParams,
   PaymentTermRetrieveParams,
+  PaymentTermRetrievePaymentTermsParams,
+  PaymentTermRetrievePaymentTermsResponse,
   PaymentTermUpdateParams,
   PaymentTerms,
-  UpdatePaymentTermRequest,
 } from './payment-terms';
-import * as APIKeysAPI from '../auth/api-keys/api-keys';
+import * as SettlementsAPI from './settlements';
+import { Settlements } from './settlements';
+import * as TransactionAllocationsAPI from './transaction-allocations';
+import { TransactionAllocations } from './transaction-allocations';
+import * as TransactionsAPI from './transactions';
+import { Transactions } from './transactions';
+import * as ItemCategoriesAPI from '../catalog/item-categories/item-categories';
+import * as AccountsAPI from './accounts/accounts';
+import { Accounts } from './accounts/accounts';
+import * as ReceivablesAPI from './receivables/receivables';
+import { Receivables } from './receivables/receivables';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
@@ -21,22 +33,29 @@ import { RequestOptions } from '../../internal/request-options';
  * Create, view, update, and delete transactions.
  */
 export class Finance extends APIResource {
+  accounts: AccountsAPI.Accounts = new AccountsAPI.Accounts(this._client);
+  invoices: InvoicesAPI.Invoices = new InvoicesAPI.Invoices(this._client);
   paymentTerms: PaymentTermsAPI.PaymentTerms = new PaymentTermsAPI.PaymentTerms(this._client);
+  receivables: ReceivablesAPI.Receivables = new ReceivablesAPI.Receivables(this._client);
+  settlements: SettlementsAPI.Settlements = new SettlementsAPI.Settlements(this._client);
+  transactionAllocations: TransactionAllocationsAPI.TransactionAllocations =
+    new TransactionAllocationsAPI.TransactionAllocations(this._client);
+  transactions: TransactionsAPI.Transactions = new TransactionsAPI.Transactions(this._client);
 
   /**
-   * Returns a paginated list of transaction types.
+   * Returns a paginated list of adjustment types.
    *
    * @example
    * ```ts
-   * const listTransactionType =
-   *   await client.finance.retrieveTransactionTypes();
+   * const response =
+   *   await client.finance.retrieveAdjustmentTypes();
    * ```
    */
-  retrieveTransactionTypes(
-    query: FinanceRetrieveTransactionTypesParams | null | undefined = {},
+  retrieveAdjustmentTypes(
+    query: FinanceRetrieveAdjustmentTypesParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ListTransactionType> {
-    return this._client.get('/v1/finance/transaction-types', { query, ...options });
+  ): APIPromise<FinanceRetrieveAdjustmentTypesResponse> {
+    return this._client.get('/v1/finance/adjustment-types', { query, ...options });
   }
 
   /**
@@ -44,56 +63,45 @@ export class Finance extends APIResource {
    *
    * @example
    * ```ts
-   * const listTransactionMethod =
+   * const response =
    *   await client.finance.retrieveTransactionMethods();
    * ```
    */
   retrieveTransactionMethods(
     query: FinanceRetrieveTransactionMethodsParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ListTransactionMethod> {
+  ): APIPromise<FinanceRetrieveTransactionMethodsResponse> {
     return this._client.get('/v1/finance/transaction-methods', { query, ...options });
   }
 
   /**
-   * Returns a paginated list of adjustment types.
+   * Returns a paginated list of transaction types.
    *
    * @example
    * ```ts
-   * const listAdjustmentType =
-   *   await client.finance.retrieveAdjustmentTypes();
+   * const response =
+   *   await client.finance.retrieveTransactionTypes();
    * ```
    */
-  retrieveAdjustmentTypes(
-    query: FinanceRetrieveAdjustmentTypesParams | null | undefined = {},
+  retrieveTransactionTypes(
+    query: FinanceRetrieveTransactionTypesParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ListAdjustmentType> {
-    return this._client.get('/v1/finance/adjustment-types', { query, ...options });
+  ): APIPromise<FinanceRetrieveTransactionTypesResponse> {
+    return this._client.get('/v1/finance/transaction-types', { query, ...options });
   }
 }
 
 /**
- * A category of financial adjustment, such as a discount, fee, or write-off.
- *
- * Adjustment types classify adjustment transactions recorded against customer
- * invoices.
+ * Adjustment type resource.
  */
 export interface AdjustmentType {
   /**
-   * Adjustment type ID.
+   * Adjustment ID.
    */
   id: string;
 
   /**
-   * Machine-readable code identifying what kind of adjustment this is.
-   *
-   * - `discount`: a price reduction.
-   * - `shipping_discrepancy`: corrects a difference between quoted and actual
-   *   freight.
-   * - `short_payment`: reconciles an invoice paid for less than the amount due.
-   * - `write_off`: cancels an uncollectible balance.
-   * - `fee`: an additional charge.
-   * - `refund`: returns money to the customer.
+   * Machine-readable code.
    */
   code: 'discount' | 'shipping_discrepancy' | 'short_payment' | 'write_off' | 'fee' | 'refund';
 
@@ -103,7 +111,7 @@ export interface AdjustmentType {
   created_at: string;
 
   /**
-   * Human-readable name of the adjustment type (e.g. "Discount").
+   * Display name.
    */
   name: string;
 
@@ -115,7 +123,7 @@ export interface AdjustmentType {
   /**
    * Owner describes the provenance of a resource.
    */
-  owner: APIKeysAPI.Owner | null;
+  owner: ItemCategoriesAPI.Owner | null;
 
   /**
    * Last updated timestamp.
@@ -124,67 +132,7 @@ export interface AdjustmentType {
 }
 
 /**
- * List represents a paginated list of resources.
- */
-export interface ListAdjustmentType {
-  /**
-   * Resources in this page.
-   */
-  data: Array<AdjustmentType>;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'list';
-
-  /**
-   * PageInfo contains URL-based pagination metadata.
-   */
-  page_info: APIKeysAPI.PageInfo;
-}
-
-/**
- * List represents a paginated list of resources.
- */
-export interface ListTransactionMethod {
-  /**
-   * Resources in this page.
-   */
-  data: Array<TransactionMethod>;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'list';
-
-  /**
-   * PageInfo contains URL-based pagination metadata.
-   */
-  page_info: APIKeysAPI.PageInfo;
-}
-
-/**
- * List represents a paginated list of resources.
- */
-export interface ListTransactionType {
-  /**
-   * Resources in this page.
-   */
-  data: Array<TransactionType>;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'list';
-
-  /**
-   * PageInfo contains URL-based pagination metadata.
-   */
-  page_info: APIKeysAPI.PageInfo;
-}
-
-/**
- * The payment method used to make a transaction, such as cash or check.
+ * Transaction method resource.
  */
 export interface TransactionMethod {
   /**
@@ -193,7 +141,7 @@ export interface TransactionMethod {
   id: string;
 
   /**
-   * Machine-readable code identifying how the transaction was made.
+   * Machine-readable code.
    */
   code: 'cash' | 'check' | 'credit_card' | 'gift_card' | 'ach';
 
@@ -209,21 +157,16 @@ export interface TransactionMethod {
 }
 
 /**
- * The category of a financial transaction, such as a payment or credit memo.
+ * Transaction type resource.
  */
 export interface TransactionType {
   /**
-   * Transaction type ID.
+   * Transaction ID.
    */
   id: string;
 
   /**
-   * Machine-readable code identifying the kind of transaction.
-   *
-   * - `payment`: money received from the customer.
-   * - `credit_memo`: a credit issued to the customer.
-   * - `adjustment`: a manual correction (see the transaction's `adjustment_type`).
-   * - `rebate`: a rebate granted to the customer.
+   * Machine-readable code.
    */
   code: 'payment' | 'credit_memo' | 'adjustment' | 'rebate';
 
@@ -238,59 +181,69 @@ export interface TransactionType {
   object: 'transaction_type';
 }
 
-export interface FinanceRetrieveTransactionTypesParams {
+/**
+ * List represents a paginated list of resources.
+ */
+export interface FinanceRetrieveAdjustmentTypesResponse {
   /**
-   * Opaque cursor token identifying where the page of results starts.
-   *
-   * Use the `cursor` value embedded in a previous response's `next_page_url` or
-   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
-   * page.
+   * Resources in this page.
    */
-  cursor?: string;
+  data: Array<AdjustmentType>;
 
   /**
-   * Maximum number of results to return in a single page.
+   * Resource type identifier.
    */
-  limit?: number;
+  object: 'list';
 
   /**
-   * Free-text search term used to filter results.
-   *
-   * Which fields are matched against the term varies by endpoint.
+   * PageInfo contains URL-based pagination metadata.
    */
-  q?: string;
+  page_info: AgentsAPI.PageInfo;
 }
 
-export interface FinanceRetrieveTransactionMethodsParams {
+/**
+ * List represents a paginated list of resources.
+ */
+export interface FinanceRetrieveTransactionMethodsResponse {
   /**
-   * Opaque cursor token identifying where the page of results starts.
-   *
-   * Use the `cursor` value embedded in a previous response's `next_page_url` or
-   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
-   * page.
+   * Resources in this page.
    */
-  cursor?: string;
+  data: Array<TransactionMethod>;
 
   /**
-   * Maximum number of results to return in a single page.
+   * Resource type identifier.
    */
-  limit?: number;
+  object: 'list';
 
   /**
-   * Free-text search term used to filter results.
-   *
-   * Which fields are matched against the term varies by endpoint.
+   * PageInfo contains URL-based pagination metadata.
    */
-  q?: string;
+  page_info: AgentsAPI.PageInfo;
+}
+
+/**
+ * List represents a paginated list of resources.
+ */
+export interface FinanceRetrieveTransactionTypesResponse {
+  /**
+   * Resources in this page.
+   */
+  data: Array<TransactionType>;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'list';
+
+  /**
+   * PageInfo contains URL-based pagination metadata.
+   */
+  page_info: AgentsAPI.PageInfo;
 }
 
 export interface FinanceRetrieveAdjustmentTypesParams {
   /**
-   * Opaque cursor token identifying where the page of results starts.
-   *
-   * Use the `cursor` value embedded in a previous response's `next_page_url` or
-   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
-   * page.
+   * Cursor token used to retrieve the next or previous page of results.
    */
   cursor?: string;
 
@@ -301,42 +254,91 @@ export interface FinanceRetrieveAdjustmentTypesParams {
   include?: Array<'owner'>;
 
   /**
-   * Maximum number of results to return in a single page.
+   * Maximum number of results per page (default: 100, max: 1000).
    */
   limit?: number;
 
   /**
-   * Free-text search term used to filter results.
-   *
-   * Which fields are matched against the term varies by endpoint.
+   * Search query used to filter results.
    */
   q?: string;
 }
 
+export interface FinanceRetrieveTransactionMethodsParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+}
+
+export interface FinanceRetrieveTransactionTypesParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+}
+
+Finance.Accounts = Accounts;
+Finance.Invoices = Invoices;
 Finance.PaymentTerms = PaymentTerms;
+Finance.Receivables = Receivables;
+Finance.Settlements = Settlements;
+Finance.TransactionAllocations = TransactionAllocations;
+Finance.Transactions = Transactions;
 
 export declare namespace Finance {
   export {
     type AdjustmentType as AdjustmentType,
-    type ListAdjustmentType as ListAdjustmentType,
-    type ListTransactionMethod as ListTransactionMethod,
-    type ListTransactionType as ListTransactionType,
     type TransactionMethod as TransactionMethod,
     type TransactionType as TransactionType,
-    type FinanceRetrieveTransactionTypesParams as FinanceRetrieveTransactionTypesParams,
-    type FinanceRetrieveTransactionMethodsParams as FinanceRetrieveTransactionMethodsParams,
+    type FinanceRetrieveAdjustmentTypesResponse as FinanceRetrieveAdjustmentTypesResponse,
+    type FinanceRetrieveTransactionMethodsResponse as FinanceRetrieveTransactionMethodsResponse,
+    type FinanceRetrieveTransactionTypesResponse as FinanceRetrieveTransactionTypesResponse,
     type FinanceRetrieveAdjustmentTypesParams as FinanceRetrieveAdjustmentTypesParams,
+    type FinanceRetrieveTransactionMethodsParams as FinanceRetrieveTransactionMethodsParams,
+    type FinanceRetrieveTransactionTypesParams as FinanceRetrieveTransactionTypesParams,
   };
+
+  export { Accounts as Accounts };
+
+  export { Invoices as Invoices };
 
   export {
     PaymentTerms as PaymentTerms,
-    type CreatePaymentTermRequest as CreatePaymentTermRequest,
-    type ListPaymentTerm as ListPaymentTerm,
-    type UpdatePaymentTermRequest as UpdatePaymentTermRequest,
+    type PaymentTerm as PaymentTerm,
     type PaymentTermDeleteResponse as PaymentTermDeleteResponse,
-    type PaymentTermListParams as PaymentTermListParams,
+    type PaymentTermRetrievePaymentTermsResponse as PaymentTermRetrievePaymentTermsResponse,
     type PaymentTermRetrieveParams as PaymentTermRetrieveParams,
-    type PaymentTermCreateParams as PaymentTermCreateParams,
     type PaymentTermUpdateParams as PaymentTermUpdateParams,
+    type PaymentTermPaymentTermsParams as PaymentTermPaymentTermsParams,
+    type PaymentTermRetrievePaymentTermsParams as PaymentTermRetrievePaymentTermsParams,
   };
+
+  export { Receivables as Receivables };
+
+  export { Settlements as Settlements };
+
+  export { TransactionAllocations as TransactionAllocations };
+
+  export { Transactions as Transactions };
 }

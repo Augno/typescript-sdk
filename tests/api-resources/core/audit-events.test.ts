@@ -8,42 +8,8 @@ const client = new Augno({
 });
 
 describe('resource auditEvents', () => {
-  test('list', async () => {
-    const responsePromise = client.core.auditEvents.list();
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.core.auditEvents.list(
-        {
-          actions: ['create'],
-          actor_account_ids: ['string'],
-          actor_ids: ['string'],
-          cursor: 'cursor',
-          end_date: '2019-12-27T18:11:19.117Z',
-          include: ['account'],
-          limit: 0,
-          q: 'q',
-          resource_ids: ['string'],
-          resource_types: ['account'],
-          start_date: '2019-12-27T18:11:19.117Z',
-          target_account_ids: ['string'],
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
-  });
-
   test('retrieve', async () => {
-    const responsePromise = client.core.auditEvents.retrieve('ae_01b1c07dc3085bbd84111edcbd');
+    const responsePromise = client.core.auditEvents.retrieve('ae_01gq7s3f2m0y9h2t7z1w7q3v9k');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -57,8 +23,40 @@ describe('resource auditEvents', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.core.auditEvents.retrieve(
-        'ae_01b1c07dc3085bbd84111edcbd',
-        { include: ['account'] },
+        'ae_01gq7s3f2m0y9h2t7z1w7q3v9k',
+        { include: ['actor'] },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Augno.NotFoundError);
+  });
+
+  test('retrieveAuditEvents', async () => {
+    const responsePromise = client.core.auditEvents.retrieveAuditEvents();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('retrieveAuditEvents: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.core.auditEvents.retrieveAuditEvents(
+        {
+          actions: ['create'],
+          actor_ids: ['string'],
+          cursor: 'cursor',
+          end_date: '2019-12-27T18:11:19.117Z',
+          include: ['actor'],
+          limit: 0,
+          q: 'q',
+          resource_ids: ['string'],
+          resource_types: ['account'],
+          start_date: '2019-12-27T18:11:19.117Z',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Augno.NotFoundError);

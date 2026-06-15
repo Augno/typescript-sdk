@@ -1,7 +1,9 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as CustomersAPI from '../sales/customers/customers';
+import * as AgentsAPI from '../ai/agents';
+import * as DepartmentsAPI from './departments';
+import * as ProductionStepsAPI from './production-steps/production-steps';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -11,29 +13,13 @@ import { path } from '../../internal/utils/path';
  */
 export class ScanningStations extends APIResource {
   /**
-   * Returns a paginated list of scanning stations in your account.
-   *
-   * @example
-   * ```ts
-   * const listScanningStation =
-   *   await client.operations.scanningStations.list();
-   * ```
-   */
-  list(
-    query: ScanningStationListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<CustomersAPI.ListScanningStation> {
-    return this._client.get('/v1/operations/scanning-stations', { query, ...options });
-  }
-
-  /**
    * Returns a scanning station by ID.
    *
    * @example
    * ```ts
    * const scanningStation =
    *   await client.operations.scanningStations.retrieve(
-   *     'scst_0129335dd6286056a97024fcc1',
+   *     'scst_01jm4r6700f8nwq3v5hx2d9ktp',
    *   );
    * ```
    */
@@ -41,48 +27,18 @@ export class ScanningStations extends APIResource {
     id: string,
     query: ScanningStationRetrieveParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.ScanningStation> {
+  ): APIPromise<ScanningStation> {
     return this._client.get(path`/v1/operations/scanning-stations/${id}`, { query, ...options });
-  }
-
-  /**
-   * Creates a scanning station and assigns it to a department.
-   *
-   * Returns a conflict error if a scanning station with the same name already
-   * exists.
-   *
-   * @example
-   * ```ts
-   * const scanningStation =
-   *   await client.operations.scanningStations.create({
-   *     department_id: 'dp_01791c25ab59da4704cba61874',
-   *     name: 'Packaging Line 1',
-   *     operator_requirement: 'none',
-   *     type: 'init_batch',
-   *     label_size: '1x1',
-   *     label_type: 'tag',
-   *   });
-   * ```
-   */
-  create(
-    params: ScanningStationCreateParams,
-    options?: RequestOptions,
-  ): APIPromise<CustomersAPI.ScanningStation> {
-    const { include, ...body } = params;
-    return this._client.post('/v1/operations/scanning-stations', { query: { include }, body, ...options });
   }
 
   /**
    * Partially updates a scanning station.
    *
-   * Only the fields provided in the request are changed. Returns a conflict error if
-   * the new name is already in use by another scanning station.
-   *
    * @example
    * ```ts
    * const scanningStation =
    *   await client.operations.scanningStations.update(
-   *     'scst_0129335dd6286056a97024fcc1',
+   *     'scst_01jm4r6700f8nwq3v5hx2d9ktp',
    *     { name: 'Station B' },
    *   );
    * ```
@@ -91,7 +47,7 @@ export class ScanningStations extends APIResource {
     id: string,
     params: ScanningStationUpdateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.ScanningStation> {
+  ): APIPromise<ScanningStation> {
     const { include, ...body } = params ?? {};
     return this._client.patch(path`/v1/operations/scanning-stations/${id}`, {
       query: { include },
@@ -107,144 +63,143 @@ export class ScanningStations extends APIResource {
    * ```ts
    * const scanningStation =
    *   await client.operations.scanningStations.delete(
-   *     'scst_0129335dd6286056a97024fcc1',
+   *     'scst_01jm4r6700f8nwq3v5hx2d9ktp',
    *   );
    * ```
    */
   delete(id: string, options?: RequestOptions): APIPromise<ScanningStationDeleteResponse> {
     return this._client.delete(path`/v1/operations/scanning-stations/${id}`, options);
   }
+
+  /**
+   * Returns a paginated list of scanning stations for the current account.
+   *
+   * @example
+   * ```ts
+   * const listScanningStation =
+   *   await client.operations.scanningStations.retrieveScanningStations();
+   * ```
+   */
+  retrieveScanningStations(
+    query: ScanningStationRetrieveScanningStationsParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ListScanningStation> {
+    return this._client.get('/v1/operations/scanning-stations', { query, ...options });
+  }
+
+  /**
+   * Creates a scanning station associated with a department.
+   *
+   * @example
+   * ```ts
+   * const scanningStation =
+   *   await client.operations.scanningStations.scanningStations(
+   *     {
+   *       department_id: 'dp_01gf7a8200er3ar3pkfrb6kk30',
+   *       name: 'Packaging Line 1',
+   *       operator_requirement: 'none',
+   *       type: 'init_batch',
+   *       label_size: '1x1',
+   *       label_type: 'tag',
+   *     },
+   *   );
+   * ```
+   */
+  scanningStations(
+    params: ScanningStationScanningStationsParams,
+    options?: RequestOptions,
+  ): APIPromise<ScanningStation> {
+    const { include, ...body } = params;
+    return this._client.post('/v1/operations/scanning-stations', { query: { include }, body, ...options });
+  }
 }
 
 /**
- * Request to create a scanning station.
+ * List represents a paginated list of resources.
  */
-export interface CreateScanningStationRequest {
+export interface ListScanningStation {
   /**
-   * ID of the department this station belongs to.
+   * Resources in this page.
    */
-  department_id: string;
+  data: Array<ScanningStation>;
 
   /**
-   * Display name of the scanning station.
-   *
-   * Must be unique within your account; maximum 255 characters.
+   * Resource type identifier.
+   */
+  object: 'list';
+
+  /**
+   * PageInfo contains URL-based pagination metadata.
+   */
+  page_info: AgentsAPI.PageInfo;
+}
+
+/**
+ * Scanning station resource.
+ */
+export interface ScanningStation {
+  /**
+   * Scanning station ID.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Department resource.
+   */
+  department: DepartmentsAPI.Department | null;
+
+  /**
+   * Label size code.
+   */
+  label_size: '1x1' | '1x3' | '1x4' | '2x4' | null;
+
+  /**
+   * Label type code.
+   */
+  label_type: 'tag' | 'traveler' | null;
+
+  /**
+   * Display name.
    */
   name: string;
 
   /**
-   * Whether operators must perform a material check at this station.
-   *
-   * - `none`: no additional operator check is required.
-   * - `material_check`: a material check is expected before the operation.
+   * Notes.
+   */
+  notes: string | null;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'scanning_station';
+
+  /**
+   * Operator requirement behavior for this station.
    */
   operator_requirement: 'none' | 'material_check';
 
   /**
-   * Scanning station type, determining which batch operation the station performs.
-   *
-   * - `init_batch`: initializes a new batch.
-   * - `merge_batch`: merges multiple batches into one.
-   * - `move_batch`: moves a batch to another location or step.
-   * - `split_batch`: splits a batch into multiple batches.
-   *
-   * The type cannot be changed after creation.
+   * List represents a paginated list of resources.
+   */
+  production_steps: ProductionStepsAPI.ListProductionStep | null;
+
+  /**
+   * Scanning station type.
    */
   type: 'init_batch' | 'merge_batch' | 'move_batch' | 'split_batch';
 
   /**
-   * Size of the labels printed at this station, given as width-by-height (for
-   * example, `1x1`).
+   * Last updated timestamp.
    */
-  label_size?: '1x1' | '1x3' | '1x4' | '2x4';
-
-  /**
-   * Type of label printed at this station.
-   *
-   * - `tag`: a label attached to the physical product.
-   * - `traveler`: a routing sheet that accompanies the batch through every
-   *   production step.
-   */
-  label_type?: 'tag' | 'traveler';
-
-  /**
-   * Free-form notes about the scanning station.
-   */
-  notes?: string;
-}
-
-/**
- * Request to partially update a scanning station.
- */
-export interface UpdateScanningStationRequest {
-  /**
-   * Size of the labels printed at this station, given as width-by-height (for
-   * example, `1x1`).
-   */
-  label_size?: '1x1' | '1x3' | '1x4' | '2x4';
-
-  /**
-   * Type of label printed at this station.
-   *
-   * - `tag`: a label attached to the physical product.
-   * - `traveler`: a routing sheet that accompanies the batch through every
-   *   production step.
-   */
-  label_type?: 'tag' | 'traveler';
-
-  /**
-   * Display name of the scanning station.
-   *
-   * Must be unique within your account; maximum 255 characters.
-   */
-  name?: string;
-
-  /**
-   * Free-form notes about the scanning station.
-   *
-   * Send `null` to clear.
-   */
-  notes?: string | null;
-
-  /**
-   * Whether operators must perform a material check at this station.
-   *
-   * - `none`: no additional operator check is required.
-   * - `material_check`: a material check is expected before the operation.
-   */
-  operator_requirement?: 'none' | 'material_check';
+  updated_at: string;
 }
 
 export interface ScanningStationDeleteResponse {}
-
-export interface ScanningStationListParams {
-  /**
-   * Opaque cursor token identifying where the page of results starts.
-   *
-   * Use the `cursor` value embedded in a previous response's `next_page_url` or
-   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
-   * page.
-   */
-  cursor?: string;
-
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'department' | 'production_steps'>;
-
-  /**
-   * Maximum number of results to return in a single page.
-   */
-  limit?: number;
-
-  /**
-   * Free-text search term used to filter results.
-   *
-   * Which fields are matched against the term varies by endpoint.
-   */
-  q?: string;
-}
 
 export interface ScanningStationRetrieveParams {
   /**
@@ -252,67 +207,6 @@ export interface ScanningStationRetrieveParams {
    * `null`.
    */
   include?: Array<'department' | 'production_steps'>;
-}
-
-export interface ScanningStationCreateParams {
-  /**
-   * Body param: ID of the department this station belongs to.
-   */
-  department_id: string;
-
-  /**
-   * Body param: Display name of the scanning station.
-   *
-   * Must be unique within your account; maximum 255 characters.
-   */
-  name: string;
-
-  /**
-   * Body param: Whether operators must perform a material check at this station.
-   *
-   * - `none`: no additional operator check is required.
-   * - `material_check`: a material check is expected before the operation.
-   */
-  operator_requirement: 'none' | 'material_check';
-
-  /**
-   * Body param: Scanning station type, determining which batch operation the station
-   * performs.
-   *
-   * - `init_batch`: initializes a new batch.
-   * - `merge_batch`: merges multiple batches into one.
-   * - `move_batch`: moves a batch to another location or step.
-   * - `split_batch`: splits a batch into multiple batches.
-   *
-   * The type cannot be changed after creation.
-   */
-  type: 'init_batch' | 'merge_batch' | 'move_batch' | 'split_batch';
-
-  /**
-   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
-   * are returned as `null`.
-   */
-  include?: Array<'department' | 'production_steps'>;
-
-  /**
-   * Body param: Size of the labels printed at this station, given as width-by-height
-   * (for example, `1x1`).
-   */
-  label_size?: '1x1' | '1x3' | '1x4' | '2x4';
-
-  /**
-   * Body param: Type of label printed at this station.
-   *
-   * - `tag`: a label attached to the physical product.
-   * - `traveler`: a routing sheet that accompanies the batch through every
-   *   production step.
-   */
-  label_type?: 'tag' | 'traveler';
-
-  /**
-   * Body param: Free-form notes about the scanning station.
-   */
-  notes?: string;
 }
 
 export interface ScanningStationUpdateParams {
@@ -323,51 +217,105 @@ export interface ScanningStationUpdateParams {
   include?: Array<'department' | 'production_steps'>;
 
   /**
-   * Body param: Size of the labels printed at this station, given as width-by-height
-   * (for example, `1x1`).
+   * Body param: Label size code.
    */
   label_size?: '1x1' | '1x3' | '1x4' | '2x4';
 
   /**
-   * Body param: Type of label printed at this station.
-   *
-   * - `tag`: a label attached to the physical product.
-   * - `traveler`: a routing sheet that accompanies the batch through every
-   *   production step.
+   * Body param: Label type code.
    */
   label_type?: 'tag' | 'traveler';
 
   /**
-   * Body param: Display name of the scanning station.
-   *
-   * Must be unique within your account; maximum 255 characters.
+   * Body param: Display name.
    */
   name?: string;
 
   /**
-   * Body param: Free-form notes about the scanning station.
-   *
-   * Send `null` to clear.
+   * Body param: Notes.
    */
   notes?: string | null;
 
   /**
-   * Body param: Whether operators must perform a material check at this station.
-   *
-   * - `none`: no additional operator check is required.
-   * - `material_check`: a material check is expected before the operation.
+   * Body param: Operator requirement behavior for this station.
    */
   operator_requirement?: 'none' | 'material_check';
 }
 
+export interface ScanningStationRetrieveScanningStationsParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'department' | 'production_steps'>;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+}
+
+export interface ScanningStationScanningStationsParams {
+  /**
+   * Body param: Department ID.
+   */
+  department_id: string;
+
+  /**
+   * Body param: Display name.
+   */
+  name: string;
+
+  /**
+   * Body param: Operator requirement behavior for this station.
+   */
+  operator_requirement: 'none' | 'material_check';
+
+  /**
+   * Body param: Scanning station type.
+   */
+  type: 'init_batch' | 'merge_batch' | 'move_batch' | 'split_batch';
+
+  /**
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
+   */
+  include?: Array<'department' | 'production_steps'>;
+
+  /**
+   * Body param: Label size code.
+   */
+  label_size?: '1x1' | '1x3' | '1x4' | '2x4';
+
+  /**
+   * Body param: Label type code.
+   */
+  label_type?: 'tag' | 'traveler';
+
+  /**
+   * Body param: Notes.
+   */
+  notes?: string;
+}
+
 export declare namespace ScanningStations {
   export {
-    type CreateScanningStationRequest as CreateScanningStationRequest,
-    type UpdateScanningStationRequest as UpdateScanningStationRequest,
+    type ListScanningStation as ListScanningStation,
+    type ScanningStation as ScanningStation,
     type ScanningStationDeleteResponse as ScanningStationDeleteResponse,
-    type ScanningStationListParams as ScanningStationListParams,
     type ScanningStationRetrieveParams as ScanningStationRetrieveParams,
-    type ScanningStationCreateParams as ScanningStationCreateParams,
     type ScanningStationUpdateParams as ScanningStationUpdateParams,
+    type ScanningStationRetrieveScanningStationsParams as ScanningStationRetrieveScanningStationsParams,
+    type ScanningStationScanningStationsParams as ScanningStationScanningStationsParams,
   };
 }

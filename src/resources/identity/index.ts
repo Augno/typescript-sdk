@@ -2,24 +2,27 @@
 
 export {
   AccountUsers,
-  type CreateAccountUserRequest,
-  type ListAccountUser,
+  type AccountUser,
   type NotificationPreferenceItem,
-  type UpdateAccountUserRequest,
-  type AccountUserListParams,
+  type AccountUserRetrieveAccountUsersResponse,
   type AccountUserRetrieveParams,
-  type AccountUserCreateParams,
   type AccountUserUpdateParams,
+  type AccountUserAccountUsersParams,
+  type AccountUserRetrieveAccountUsersParams,
 } from './account-users/index';
+export { Accounts, type Account } from './accounts';
+export { ChildAccounts } from './child-accounts';
 export { Identity } from './identity';
+export { Integrations } from './integrations/index';
+export { Me } from './me/index';
 export {
   Roles,
-  type CreateRoleRequest,
-  type ListRole,
-  type UpdateRoleRequest,
+  type Role,
+  type RoleListResponse,
   type RoleDeleteResponse,
-  type RoleListParams,
-  type RoleRetrieveParams,
   type RoleCreateParams,
+  type RoleRetrieveParams,
   type RoleUpdateParams,
+  type RoleListParams,
 } from './roles';
+export { Users } from './users/index';

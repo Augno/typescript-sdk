@@ -8,8 +8,8 @@ const client = new Augno({
 });
 
 describe('resource locationTypes', () => {
-  test('list', async () => {
-    const responsePromise = client.operations.locationTypes.list();
+  test('retrieve', async () => {
+    const responsePromise = client.operations.locationTypes.retrieve('lc_01gf7a8200er3ar3pkfrb6kk31');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -19,10 +19,21 @@ describe('resource locationTypes', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('list: request options and params are passed correctly', async () => {
+  test('retrieveLocationTypes', async () => {
+    const responsePromise = client.operations.locationTypes.retrieveLocationTypes();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('retrieveLocationTypes: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.operations.locationTypes.list(
+      client.operations.locationTypes.retrieveLocationTypes(
         {
           cursor: 'cursor',
           limit: 0,
@@ -31,16 +42,5 @@ describe('resource locationTypes', () => {
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Augno.NotFoundError);
-  });
-
-  test('retrieve', async () => {
-    const responsePromise = client.operations.locationTypes.retrieve('lc_01e69cd3745a1bc0dd485986c0');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
   });
 });

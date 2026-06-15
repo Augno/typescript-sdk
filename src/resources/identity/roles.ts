@@ -1,7 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as APIKeysAPI from '../auth/api-keys/api-keys';
+import * as AgentsAPI from '../ai/agents';
+import * as ItemCategoriesAPI from '../catalog/item-categories/item-categories';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -11,39 +12,7 @@ import { path } from '../../internal/utils/path';
  */
 export class Roles extends APIResource {
   /**
-   * Returns a paginated list of roles for the target account, including global
-   * roles.
-   *
-   * @example
-   * ```ts
-   * const listRole = await client.identity.roles.list();
-   * ```
-   */
-  list(query: RoleListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ListRole> {
-    return this._client.get('/v1/identity/roles', { query, ...options });
-  }
-
-  /**
-   * Returns a role by ID, including its permissions.
-   *
-   * @example
-   * ```ts
-   * const role = await client.identity.roles.retrieve(
-   *   'rl_01c16d2eb637c0d1f3a372937c',
-   * );
-   * ```
-   */
-  retrieve(
-    id: string,
-    query: RoleRetrieveParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<APIKeysAPI.Role> {
-    return this._client.get(path`/v1/identity/roles/${id}`, { query, ...options });
-  }
-
-  /**
-   * Creates a custom role with the specified permissions. Roles created through the
-   * API always have type `user`.
+   * Creates a new role with the specified permissions.
    *
    * @example
    * ```ts
@@ -58,9 +27,27 @@ export class Roles extends APIResource {
    * });
    * ```
    */
-  create(params: RoleCreateParams, options?: RequestOptions): APIPromise<APIKeysAPI.Role> {
+  create(params: RoleCreateParams, options?: RequestOptions): APIPromise<Role> {
     const { include, ...body } = params;
     return this._client.post('/v1/identity/roles', { query: { include }, body, ...options });
+  }
+
+  /**
+   * Returns a role by ID, including its structured permissions.
+   *
+   * @example
+   * ```ts
+   * const role = await client.identity.roles.retrieve(
+   *   'rl_01gf7a8200er3ar3pkfrb6kk29',
+   * );
+   * ```
+   */
+  retrieve(
+    id: string,
+    query: RoleRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<Role> {
+    return this._client.get(path`/v1/identity/roles/${id}`, { query, ...options });
   }
 
   /**
@@ -70,7 +57,7 @@ export class Roles extends APIResource {
    * @example
    * ```ts
    * const role = await client.identity.roles.update(
-   *   'rl_01c16d2eb637c0d1f3a372937c',
+   *   'rl_01gf7a8200er3ar3pkfrb6kk29',
    *   {
    *     name: 'Updated Manager',
    *     permissions: ['customers:read', 'customers:update'],
@@ -82,19 +69,34 @@ export class Roles extends APIResource {
     id: string,
     params: RoleUpdateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<APIKeysAPI.Role> {
+  ): APIPromise<Role> {
     const { include, ...body } = params ?? {};
     return this._client.patch(path`/v1/identity/roles/${id}`, { query: { include }, body, ...options });
   }
 
   /**
-   * Deletes a role and its associated permissions. Global roles and roles currently
-   * assigned to one or more users cannot be deleted.
+   * Returns a paginated list of roles for the target account, including global
+   * roles.
+   *
+   * @example
+   * ```ts
+   * const roles = await client.identity.roles.list();
+   * ```
+   */
+  list(
+    query: RoleListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<RoleListResponse> {
+    return this._client.get('/v1/identity/roles', { query, ...options });
+  }
+
+  /**
+   * Deletes a role and its associated permissions. Global roles cannot be deleted.
    *
    * @example
    * ```ts
    * const role = await client.identity.roles.delete(
-   *   'rl_01c16d2eb637c0d1f3a372937c',
+   *   'rl_01gf7a8200er3ar3pkfrb6kk29',
    * );
    * ```
    */
@@ -104,31 +106,62 @@ export class Roles extends APIResource {
 }
 
 /**
- * CreateRoleRequest is a request to create a role.
+ * Role resource.
  */
-export interface CreateRoleRequest {
+export interface Role {
   /**
-   * Display name for the role, unique within the account.
+   * Role ID.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Display name.
    */
   name: string;
 
   /**
-   * Permissions to grant, in `{domain}:{action}` format, such as `customers:read`.
-   *
-   * The action must be one of `create`, `read`, `update`, or `delete`. Omit to
-   * create a role with no permissions.
+   * Resource type identifier.
    */
-  permissions: Array<string>;
+  object: 'role';
+
+  /**
+   * Owner describes the provenance of a resource.
+   */
+  owner: ItemCategoriesAPI.Owner | null;
+
+  /**
+   * Permissions in `{domain}:{action}` format.
+   */
+  permissions: Array<string> | null;
+
+  /**
+   * Role type code.
+   *
+   * The role's type is sometimes used to gate special behaviors in the frontend and
+   * to restrict some actions to only certain types of roles. For example, only roles
+   * with the type `admin` can create and manage API keys.
+   */
+  type: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent';
+
+  /**
+   * Last updated timestamp.
+   */
+  updated_at: string;
 }
 
 /**
  * List represents a paginated list of resources.
  */
-export interface ListRole {
+export interface RoleListResponse {
   /**
    * Resources in this page.
    */
-  data: Array<APIKeysAPI.Role>;
+  data: Array<Role>;
 
   /**
    * Resource type identifier.
@@ -138,91 +171,33 @@ export interface ListRole {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: APIKeysAPI.PageInfo;
-}
-
-/**
- * UpdateRoleRequest is a request to update a role.
- */
-export interface UpdateRoleRequest {
-  /**
-   * New display name for the role, unique within the account. Omit to leave
-   * unchanged.
-   */
-  name?: string;
-
-  /**
-   * Full replacement set of permissions, in `{domain}:{action}` format, such as
-   * `customers:read`.
-   *
-   * Replaces all existing permissions on the role. Pass an empty array to remove all
-   * permissions, or omit to leave them unchanged.
-   */
-  permissions?: Array<string>;
+  page_info: AgentsAPI.PageInfo;
 }
 
 export interface RoleDeleteResponse {}
 
-export interface RoleListParams {
-  /**
-   * Opaque cursor token identifying where the page of results starts.
-   *
-   * Use the `cursor` value embedded in a previous response's `next_page_url` or
-   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
-   * page.
-   */
-  cursor?: string;
-
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'owner' | 'owner.account' | 'permissions'>;
-
-  /**
-   * Maximum number of results to return in a single page.
-   */
-  limit?: number;
-
-  /**
-   * Free-text search term used to filter results.
-   *
-   * Which fields are matched against the term varies by endpoint.
-   */
-  q?: string;
-
-  /**
-   * Filter results to roles whose type matches any of the given values.
-   */
-  types?: Array<'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'>;
-}
-
-export interface RoleRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'owner' | 'owner.account' | 'permissions'>;
-}
-
 export interface RoleCreateParams {
   /**
-   * Body param: Display name for the role, unique within the account.
+   * Body param: Display name.
    */
   name: string;
 
   /**
-   * Body param: Permissions to grant, in `{domain}:{action}` format, such as
-   * `customers:read`.
-   *
-   * The action must be one of `create`, `read`, `update`, or `delete`. Omit to
-   * create a role with no permissions.
+   * Body param: Permissions to attach in `<domain>:<action>` format.
    */
   permissions: Array<string>;
 
   /**
    * Query param: Sub-objects to expand in the response. When omitted, sub-objects
    * are returned as `null`.
+   */
+  include?: Array<'owner' | 'owner.account' | 'permissions'>;
+}
+
+export interface RoleRetrieveParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
    */
   include?: Array<'owner' | 'owner.account' | 'permissions'>;
 }
@@ -235,30 +210,53 @@ export interface RoleUpdateParams {
   include?: Array<'owner' | 'owner.account' | 'permissions'>;
 
   /**
-   * Body param: New display name for the role, unique within the account. Omit to
-   * leave unchanged.
+   * Body param: Display name.
    */
   name?: string;
 
   /**
-   * Body param: Full replacement set of permissions, in `{domain}:{action}` format,
-   * such as `customers:read`.
-   *
-   * Replaces all existing permissions on the role. Pass an empty array to remove all
-   * permissions, or omit to leave them unchanged.
+   * Body param: Permissions in `<domain>:<action>` format. Replaces all existing
+   * permissions; omit to leave unchanged.
    */
   permissions?: Array<string>;
 }
 
+export interface RoleListParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'owner' | 'owner.account' | 'permissions'>;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+
+  /**
+   * Filter by role types.
+   */
+  types?: Array<'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent'>;
+}
+
 export declare namespace Roles {
   export {
-    type CreateRoleRequest as CreateRoleRequest,
-    type ListRole as ListRole,
-    type UpdateRoleRequest as UpdateRoleRequest,
+    type Role as Role,
+    type RoleListResponse as RoleListResponse,
     type RoleDeleteResponse as RoleDeleteResponse,
-    type RoleListParams as RoleListParams,
-    type RoleRetrieveParams as RoleRetrieveParams,
     type RoleCreateParams as RoleCreateParams,
+    type RoleRetrieveParams as RoleRetrieveParams,
     type RoleUpdateParams as RoleUpdateParams,
+    type RoleListParams as RoleListParams,
   };
 }

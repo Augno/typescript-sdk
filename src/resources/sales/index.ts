@@ -3,79 +3,52 @@
 export {
   AccountGroups,
   type AccountGroup,
-  type CreateAccountGroupRequest,
   type ListAccountGroup,
-  type UpdateAccountGroupRequest,
   type AccountGroupDeleteResponse,
-  type AccountGroupListParams,
-  type AccountGroupCreateParams,
   type AccountGroupUpdateParams,
+  type AccountGroupAccountGroupsParams,
+  type AccountGroupRetrieveAccountGroupsParams,
 } from './account-groups';
+export { AccountPrices } from './account-prices';
 export {
   AccountStatuses,
   type AccountStatus,
-  type ListAccountStatus,
-  type AccountStatusListParams,
+  type AccountStatusRetrieveAccountStatusesResponse,
   type AccountStatusRetrieveParams,
+  type AccountStatusRetrieveAccountStatusesParams,
 } from './account-statuses';
+export { AccountUsers } from './account-users/index';
+export { Accounts } from './accounts/index';
 export {
   Addresses,
+  type Address,
   type AddressInput,
-  type ListAddress,
-  type UpdateAddressRequest,
+  type AddressListResponse,
   type AddressDeleteResponse,
-  type AddressListParams,
   type AddressCreateParams,
   type AddressUpdateParams,
+  type AddressListParams,
 } from './addresses';
 export {
   Customers,
-  type AccountUser,
-  type Carrier,
-  type Consumption,
-  type CreateCustomerRequest,
   type Customer,
-  type CustomerContactInfo,
-  type CustomerDefaults,
-  type CustomerFreightPreferences,
-  type CustomerNotificationPreferences,
-  type Department,
-  type ListConsumption,
   type ListCustomer,
-  type ListLocation,
-  type ListMachine,
-  type ListProductionStep,
-  type ListScanningStation,
-  type ListServiceLevel,
-  type Location,
-  type LocationTypeCode,
-  type Machine,
-  type PaymentTerm,
-  type ProductionOutput,
-  type ProductionStep,
-  type QuantityInput,
-  type ScanningStation,
-  type ServiceLevel,
-  type ShippingTerm,
-  type UpdateCustomerRequest,
-  type User,
   type CustomerDeleteResponse,
-  type CustomerListParams,
-  type CustomerRetrieveParams,
   type CustomerCreateParams,
+  type CustomerRetrieveParams,
   type CustomerUpdateParams,
+  type CustomerListParams,
 } from './customers/index';
+export { OrderDiscounts } from './order-discounts/index';
 export {
   Priorities,
-  type ListPriority,
   type Priority,
-  type PriorityListParams,
+  type PriorityListResponse,
   type PriorityRetrieveParams,
+  type PriorityListParams,
 } from './priorities';
+export { ProductLineAccess } from './product-line-access/index';
+export { RegistrationFlows } from './registration-flows';
 export { Sales } from './sales';
-export {
-  SalesOrders,
-  type ListSalesOrderStatus,
-  type SalesOrderStatus,
-  type SalesOrderRetrieveStatusesParams,
-} from './sales-orders';
+export { SalesOrders, type SalesOrderRetrieveStatusesParams } from './sales-orders/index';
+export { VolumeDiscounts } from './volume-discounts';

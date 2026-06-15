@@ -8,8 +8,8 @@ const client = new Augno({
 });
 
 describe('resource requestLogs', () => {
-  test('list', async () => {
-    const responsePromise = client.core.requestLogs.list();
+  test('retrieve', async () => {
+    const responsePromise = client.core.requestLogs.retrieve('rq_01jm4r6700f8nwq3v5hx2d9ktp');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -19,12 +19,34 @@ describe('resource requestLogs', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('list: request options and params are passed correctly', async () => {
+  test('retrieve: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.core.requestLogs.list(
+      client.core.requestLogs.retrieve(
+        'rq_01jm4r6700f8nwq3v5hx2d9ktp',
+        { include: ['account'] },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Augno.NotFoundError);
+  });
+
+  test('retrieveRequestLogs', async () => {
+    const responsePromise = client.core.requestLogs.retrieveRequestLogs();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('retrieveRequestLogs: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.core.requestLogs.retrieveRequestLogs(
         {
-          actor_account_ids: ['string'],
+          account_ids: ['string'],
           actor_ids: ['string'],
           actor_types: ['user'],
           cursor: 'cursor',
@@ -39,32 +61,8 @@ describe('resource requestLogs', () => {
           normalized_routes: ['string'],
           q: 'q',
           start_date: '2019-12-27T18:11:19.117Z',
-          status_code_classes: [0],
           status_codes: [0],
-          target_account_ids: ['string'],
         },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
-  });
-
-  test('retrieve', async () => {
-    const responsePromise = client.core.requestLogs.retrieve('rq_01304bffe90e8cce9690cbefd4');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('retrieve: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.core.requestLogs.retrieve(
-        'rq_01304bffe90e8cce9690cbefd4',
-        { include: ['account'] },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Augno.NotFoundError);

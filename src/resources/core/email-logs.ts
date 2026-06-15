@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as RequestLogsAPI from './request-logs';
-import * as APIKeysAPI from '../auth/api-keys/api-keys';
+import * as AgentsAPI from '../ai/agents';
+import * as AlertsAPI from '../ai/alerts/alerts';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -12,27 +12,12 @@ import { path } from '../../internal/utils/path';
  */
 export class EmailLogs extends APIResource {
   /**
-   * Returns a paginated list of email logs for the current account.
-   *
-   * @example
-   * ```ts
-   * const listEmailLog = await client.core.emailLogs.list();
-   * ```
-   */
-  list(
-    query: EmailLogListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListEmailLog> {
-    return this._client.get('/v1/core/email-logs', { query, ...options });
-  }
-
-  /**
    * Returns an email log by ID.
    *
    * @example
    * ```ts
    * const emailLog = await client.core.emailLogs.retrieve(
-   *   'eml_017b80707ada92dddff8a2c3a0',
+   *   'eml_01jm4r6700f8nwq3v5hx2d9ktp',
    * );
    * ```
    */
@@ -43,11 +28,26 @@ export class EmailLogs extends APIResource {
   ): APIPromise<EmailLog> {
     return this._client.get(path`/v1/core/email-logs/${id}`, { query, ...options });
   }
+
+  /**
+   * Returns a paginated list of email logs for the current account.
+   *
+   * @example
+   * ```ts
+   * const response =
+   *   await client.core.emailLogs.retrieveEmailLogs();
+   * ```
+   */
+  retrieveEmailLogs(
+    query: EmailLogRetrieveEmailLogsParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<EmailLogRetrieveEmailLogsResponse> {
+    return this._client.get('/v1/core/email-logs', { query, ...options });
+  }
 }
 
 /**
- * A record of an email sent on the account's behalf, such as an invoice or a user
- * invitation.
+ * Email log entry.
  */
 export interface EmailLog {
   /**
@@ -61,7 +61,7 @@ export interface EmailLog {
   created_at: string;
 
   /**
-   * Filename of the attached document.
+   * Filename of any attachment.
    */
   filename: string | null;
 
@@ -77,16 +77,13 @@ export interface EmailLog {
 
   /**
    * Email send status.
-   *
-   * - `pending`: the email is queued and has not been sent yet.
-   * - `sent`: the email has been handed off for delivery.
    */
   send_status: 'sent' | 'pending';
 
   /**
    * Reference to an actor (user, API key, or agent).
    */
-  sent_by: RequestLogsAPI.Actor | null;
+  sent_by: AlertsAPI.Actor | null;
 
   /**
    * Email subject line.
@@ -102,7 +99,7 @@ export interface EmailLog {
 /**
  * List represents a paginated list of resources.
  */
-export interface ListEmailLog {
+export interface EmailLogRetrieveEmailLogsResponse {
   /**
    * Resources in this page.
    */
@@ -116,36 +113,7 @@ export interface ListEmailLog {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: APIKeysAPI.PageInfo;
-}
-
-export interface EmailLogListParams {
-  /**
-   * Opaque cursor token identifying where the page of results starts.
-   *
-   * Use the `cursor` value embedded in a previous response's `next_page_url` or
-   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
-   * page.
-   */
-  cursor?: string;
-
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'sent_by'>;
-
-  /**
-   * Maximum number of results to return in a single page.
-   */
-  limit?: number;
-
-  /**
-   * Free-text search term used to filter results.
-   *
-   * Which fields are matched against the term varies by endpoint.
-   */
-  q?: string;
+  page_info: AgentsAPI.PageInfo;
 }
 
 export interface EmailLogRetrieveParams {
@@ -156,11 +124,34 @@ export interface EmailLogRetrieveParams {
   include?: Array<'sent_by'>;
 }
 
+export interface EmailLogRetrieveEmailLogsParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'sent_by'>;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+}
+
 export declare namespace EmailLogs {
   export {
     type EmailLog as EmailLog,
-    type ListEmailLog as ListEmailLog,
-    type EmailLogListParams as EmailLogListParams,
+    type EmailLogRetrieveEmailLogsResponse as EmailLogRetrieveEmailLogsResponse,
     type EmailLogRetrieveParams as EmailLogRetrieveParams,
+    type EmailLogRetrieveEmailLogsParams as EmailLogRetrieveEmailLogsParams,
   };
 }

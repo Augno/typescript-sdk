@@ -1,20 +1,22 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as APIKeysAPI from '../../auth/api-keys/api-keys';
+import * as AgentsAPI from '../../ai/agents';
+import * as ItemCategoriesAPI from '../../catalog/item-categories/item-categories';
+import * as ActionsAPI from './actions';
+import { Actions } from './actions';
 import * as ServiceLevelsAPI from './service-levels';
 import {
-  CreateServiceLevelRequest,
-  ServiceLevelCreateParams,
+  ListServiceLevel,
+  ServiceLevel,
   ServiceLevelDeleteParams,
   ServiceLevelDeleteResponse,
-  ServiceLevelListParams,
   ServiceLevelRetrieveParams,
+  ServiceLevelRetrieveServiceLevelsParams,
+  ServiceLevelServiceLevelsParams,
   ServiceLevelUpdateParams,
   ServiceLevels,
-  UpdateServiceLevelRequest,
 } from './service-levels';
-import * as CustomersAPI from '../../sales/customers/customers';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
@@ -24,17 +26,26 @@ import { path } from '../../../internal/utils/path';
  */
 export class Carriers extends APIResource {
   serviceLevels: ServiceLevelsAPI.ServiceLevels = new ServiceLevelsAPI.ServiceLevels(this._client);
+  actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
 
   /**
-   * Returns a paginated list of carriers for the current account.
+   * Creates a carrier. If a Shippo-supported carrier code is provided, the carrier
+   * will be registered with Shippo and service levels will be auto-synced as
+   * options.
    *
    * @example
    * ```ts
-   * const listCarrier = await client.operations.carriers.list();
+   * const carrier = await client.operations.carriers.create({
+   *   account_number: '1234567890',
+   *   code: 'fedex',
+   *   name: 'FedEx',
+   *   customer_portal_visibility: 'visible',
+   * });
    * ```
    */
-  list(query: CarrierListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ListCarrier> {
-    return this._client.get('/v1/operations/carriers', { query, ...options });
+  create(params: CarrierCreateParams, options?: RequestOptions): APIPromise<Carrier> {
+    const { include, ...body } = params;
+    return this._client.post('/v1/operations/carriers', { query: { include }, body, ...options });
   }
 
   /**
@@ -43,7 +54,7 @@ export class Carriers extends APIResource {
    * @example
    * ```ts
    * const carrier = await client.operations.carriers.retrieve(
-   *   'cr_01784fd54c9ba197bb4e42f0e6',
+   *   'cr_01jm4r6700f8nwq3v5hx2d9ktp',
    * );
    * ```
    */
@@ -51,30 +62,8 @@ export class Carriers extends APIResource {
     id: string,
     query: CarrierRetrieveParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.Carrier> {
+  ): APIPromise<Carrier> {
     return this._client.get(path`/v1/operations/carriers/${id}`, { query, ...options });
-  }
-
-  /**
-   * Creates a carrier.
-   *
-   * If a Shippo-supported code (`fedex`, `ups`, `usps`) is provided, the carrier is
-   * connected through Shippo and its service levels are auto-synced, initially
-   * hidden from the customer portal. Sandbox accounts skip the Shippo connection.
-   *
-   * @example
-   * ```ts
-   * const carrier = await client.operations.carriers.create({
-   *   name: 'FedEx',
-   *   account_number: '1234567890',
-   *   code: 'fedex',
-   *   customer_portal_visibility: 'visible',
-   * });
-   * ```
-   */
-  create(params: CarrierCreateParams, options?: RequestOptions): APIPromise<CustomersAPI.Carrier> {
-    const { include, ...body } = params;
-    return this._client.post('/v1/operations/carriers', { query: { include }, body, ...options });
   }
 
   /**
@@ -83,7 +72,7 @@ export class Carriers extends APIResource {
    * @example
    * ```ts
    * const carrier = await client.operations.carriers.update(
-   *   'cr_01784fd54c9ba197bb4e42f0e6',
+   *   'cr_01jm4r6700f8nwq3v5hx2d9ktp',
    *   { name: 'FedEx Express' },
    * );
    * ```
@@ -92,21 +81,34 @@ export class Carriers extends APIResource {
     id: string,
     params: CarrierUpdateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.Carrier> {
+  ): APIPromise<Carrier> {
     const { include, ...body } = params ?? {};
     return this._client.patch(path`/v1/operations/carriers/${id}`, { query: { include }, body, ...options });
   }
 
   /**
-   * Deletes a carrier and all of its service levels.
+   * Returns a paginated list of carriers for the current account.
    *
-   * If the carrier is connected through Shippo, its Shippo carrier account is
-   * deactivated. System-owned carriers cannot be deleted.
+   * @example
+   * ```ts
+   * const carriers = await client.operations.carriers.list();
+   * ```
+   */
+  list(
+    query: CarrierListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<CarrierListResponse> {
+    return this._client.get('/v1/operations/carriers', { query, ...options });
+  }
+
+  /**
+   * Deletes a carrier and cascades to remove all options. If the carrier is managed
+   * by Shippo, the Shippo account is deactivated.
    *
    * @example
    * ```ts
    * const carrier = await client.operations.carriers.delete(
-   *   'cr_01784fd54c9ba197bb4e42f0e6',
+   *   'cr_01jm4r6700f8nwq3v5hx2d9ktp',
    * );
    * ```
    */
@@ -116,49 +118,73 @@ export class Carriers extends APIResource {
 }
 
 /**
- * Request to create a carrier.
+ * Carrier resource.
  */
-export interface CreateCarrierRequest {
+export interface Carrier {
   /**
-   * Human-readable name for the carrier.
-   *
-   * Must be unique among your account's carriers.
+   * Carrier ID.
+   */
+  id: string;
+
+  /**
+   * Account number.
+   */
+  account_number: string | null;
+
+  /**
+   * Carrier code.
+   */
+  code: 'fedex' | 'ups' | 'usps' | 'will_call' | 'delivery' | 'ltl' | 'ltl1' | 'freight_collect' | null;
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Customer portal visibility.
+   */
+  customer_portal_visibility: 'visible' | 'hidden';
+
+  /**
+   * Soft-delete timestamp.
+   */
+  deleted_at: string | null;
+
+  /**
+   * Display name.
    */
   name: string;
 
   /**
-   * Your account number with this carrier.
-   *
-   * Required when `code` is `ups` or `usps`, which connect to Shippo using this
-   * number; FedEx connects via OAuth instead.
+   * Resource type identifier.
    */
-  account_number?: string;
+  object: 'carrier';
 
   /**
-   * Well-known carrier code.
-   *
-   * Omit for a custom carrier. Providing a Shippo-supported code (`fedex`, `ups`,
-   * `usps`) connects the carrier through Shippo and auto-syncs its service levels.
+   * Owner describes the provenance of a resource.
    */
-  code?: 'fedex' | 'ups' | 'usps' | 'will_call' | 'delivery' | 'ltl' | 'ltl1' | 'freight_collect';
+  owner: ItemCategoriesAPI.Owner | null;
 
   /**
-   * Carrier visibility in the customer portal.
-   *
-   * A `visible` carrier can be selected by your customers at checkout; a `hidden`
-   * carrier is not offered there. New carriers are visible unless set to `hidden`.
+   * List represents a paginated list of resources.
    */
-  customer_portal_visibility?: 'visible' | 'hidden';
+  service_levels: ServiceLevelsAPI.ListServiceLevel | null;
+
+  /**
+   * Last updated timestamp.
+   */
+  updated_at: string;
 }
 
 /**
  * List represents a paginated list of resources.
  */
-export interface ListCarrier {
+export interface CarrierListResponse {
   /**
    * Resources in this page.
    */
-  data: Array<CustomersAPI.Carrier>;
+  data: Array<Carrier>;
 
   /**
    * Resource type identifier.
@@ -168,57 +194,38 @@ export interface ListCarrier {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: APIKeysAPI.PageInfo;
-}
-
-/**
- * Request to update a carrier.
- */
-export interface UpdateCarrierRequest {
-  /**
-   * Carrier visibility in the customer portal.
-   *
-   * If `visible`, this carrier will be available for your customers to utilize when
-   * they go to checkout. If `hidden`, this carrier will not be an option on
-   * checkout.
-   */
-  customer_portal_visibility?: 'visible' | 'hidden';
-
-  /**
-   * Human-readable name for the carrier, unique among your account's carriers.
-   */
-  name?: string;
+  page_info: AgentsAPI.PageInfo;
 }
 
 export interface CarrierDeleteResponse {}
 
-export interface CarrierListParams {
+export interface CarrierCreateParams {
   /**
-   * Opaque cursor token identifying where the page of results starts.
-   *
-   * Use the `cursor` value embedded in a previous response's `next_page_url` or
-   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
-   * page.
+   * Body param: Carrier account number. Required for UPS and USPS carriers.
    */
-  cursor?: string;
+  account_number: string | null;
 
   /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
+   * Body param: Carrier code.
+   */
+  code: 'fedex' | 'ups' | 'usps' | 'will_call' | 'delivery' | 'ltl' | 'ltl1' | 'freight_collect' | null;
+
+  /**
+   * Body param: Display name.
+   */
+  name: string;
+
+  /**
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
    */
   include?: Array<'owner' | 'owner.account' | 'service_levels'>;
 
   /**
-   * Maximum number of results to return in a single page.
+   * Body param: Whether this carrier will be available for customers to select in
+   * the customer portal.
    */
-  limit?: number;
-
-  /**
-   * Free-text search term used to filter results.
-   *
-   * Which fields are matched against the term varies by endpoint.
-   */
-  q?: string;
+  customer_portal_visibility?: 'visible' | 'hidden';
 }
 
 export interface CarrierRetrieveParams {
@@ -229,45 +236,6 @@ export interface CarrierRetrieveParams {
   include?: Array<'owner' | 'owner.account' | 'service_levels'>;
 }
 
-export interface CarrierCreateParams {
-  /**
-   * Body param: Human-readable name for the carrier.
-   *
-   * Must be unique among your account's carriers.
-   */
-  name: string;
-
-  /**
-   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
-   * are returned as `null`.
-   */
-  include?: Array<'owner' | 'owner.account' | 'service_levels'>;
-
-  /**
-   * Body param: Your account number with this carrier.
-   *
-   * Required when `code` is `ups` or `usps`, which connect to Shippo using this
-   * number; FedEx connects via OAuth instead.
-   */
-  account_number?: string;
-
-  /**
-   * Body param: Well-known carrier code.
-   *
-   * Omit for a custom carrier. Providing a Shippo-supported code (`fedex`, `ups`,
-   * `usps`) connects the carrier through Shippo and auto-syncs its service levels.
-   */
-  code?: 'fedex' | 'ups' | 'usps' | 'will_call' | 'delivery' | 'ltl' | 'ltl1' | 'freight_collect';
-
-  /**
-   * Body param: Carrier visibility in the customer portal.
-   *
-   * A `visible` carrier can be selected by your customers at checkout; a `hidden`
-   * carrier is not offered there. New carriers are visible unless set to `hidden`.
-   */
-  customer_portal_visibility?: 'visible' | 'hidden';
-}
-
 export interface CarrierUpdateParams {
   /**
    * Query param: Sub-objects to expand in the response. When omitted, sub-objects
@@ -276,44 +244,65 @@ export interface CarrierUpdateParams {
   include?: Array<'owner' | 'owner.account' | 'service_levels'>;
 
   /**
-   * Body param: Carrier visibility in the customer portal.
-   *
-   * If `visible`, this carrier will be available for your customers to utilize when
-   * they go to checkout. If `hidden`, this carrier will not be an option on
-   * checkout.
+   * Body param: Whether this carrier will be available for customers to select in
+   * the customer portal.
    */
   customer_portal_visibility?: 'visible' | 'hidden';
 
   /**
-   * Body param: Human-readable name for the carrier, unique among your account's
-   * carriers.
+   * Body param: Display name.
    */
   name?: string;
 }
 
+export interface CarrierListParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'owner' | 'owner.account' | 'service_levels'>;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+}
+
 Carriers.ServiceLevels = ServiceLevels;
+Carriers.Actions = Actions;
 
 export declare namespace Carriers {
   export {
-    type CreateCarrierRequest as CreateCarrierRequest,
-    type ListCarrier as ListCarrier,
-    type UpdateCarrierRequest as UpdateCarrierRequest,
+    type Carrier as Carrier,
+    type CarrierListResponse as CarrierListResponse,
     type CarrierDeleteResponse as CarrierDeleteResponse,
-    type CarrierListParams as CarrierListParams,
-    type CarrierRetrieveParams as CarrierRetrieveParams,
     type CarrierCreateParams as CarrierCreateParams,
+    type CarrierRetrieveParams as CarrierRetrieveParams,
     type CarrierUpdateParams as CarrierUpdateParams,
+    type CarrierListParams as CarrierListParams,
   };
 
   export {
     ServiceLevels as ServiceLevels,
-    type CreateServiceLevelRequest as CreateServiceLevelRequest,
-    type UpdateServiceLevelRequest as UpdateServiceLevelRequest,
+    type ListServiceLevel as ListServiceLevel,
+    type ServiceLevel as ServiceLevel,
     type ServiceLevelDeleteResponse as ServiceLevelDeleteResponse,
-    type ServiceLevelListParams as ServiceLevelListParams,
     type ServiceLevelRetrieveParams as ServiceLevelRetrieveParams,
-    type ServiceLevelCreateParams as ServiceLevelCreateParams,
     type ServiceLevelUpdateParams as ServiceLevelUpdateParams,
     type ServiceLevelDeleteParams as ServiceLevelDeleteParams,
+    type ServiceLevelRetrieveServiceLevelsParams as ServiceLevelRetrieveServiceLevelsParams,
+    type ServiceLevelServiceLevelsParams as ServiceLevelServiceLevelsParams,
   };
+
+  export { Actions as Actions };
 }

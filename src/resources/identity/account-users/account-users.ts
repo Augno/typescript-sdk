@@ -1,10 +1,16 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as APIKeysAPI from '../../auth/api-keys/api-keys';
+import * as AgentsAPI from '../../ai/agents';
+import * as RolesAPI from '../roles';
+import * as DepartmentsAPI from '../../operations/departments';
 import * as ActionsAPI from './actions';
-import { ActionActivateResponse, ActionDisableResponse, ActionRemoveResponse, Actions } from './actions';
-import * as CustomersAPI from '../../sales/customers/customers';
+import {
+  ActionUpdateActivateResponse,
+  ActionUpdateDisableResponse,
+  ActionUpdateRemoveResponse,
+  Actions,
+} from './actions';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
@@ -16,29 +22,13 @@ export class AccountUsers extends APIResource {
   actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
 
   /**
-   * Returns a paginated list of account users for the current account.
-   *
-   * @example
-   * ```ts
-   * const listAccountUser =
-   *   await client.identity.accountUsers.list();
-   * ```
-   */
-  list(
-    query: AccountUserListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListAccountUser> {
-    return this._client.get('/v1/identity/account-users', { query, ...options });
-  }
-
-  /**
    * Returns an account user by ID.
    *
    * @example
    * ```ts
    * const accountUser =
    *   await client.identity.accountUsers.retrieve(
-   *     'acus_01ea9983ddb41dacc44ecf997c',
+   *     'acus_01gf7a8200er3ar3pkfrb6kk29',
    *   );
    * ```
    */
@@ -46,60 +36,19 @@ export class AccountUsers extends APIResource {
     id: string,
     query: AccountUserRetrieveParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.AccountUser> {
+  ): APIPromise<AccountUser> {
     return this._client.get(path`/v1/identity/account-users/${id}`, { query, ...options });
-  }
-
-  /**
-   * Adds a user to the target account.
-   *
-   * If no user with the given email or username exists, a new user is created and
-   * sent a welcome email containing a generated password. If a matching user already
-   * exists, that user is added to the account instead.
-   *
-   * @example
-   * ```ts
-   * const accountUser =
-   *   await client.identity.accountUsers.create({
-   *     email: 'jdoe@augno.com',
-   *     name: 'John Doe',
-   *     password: 'QgS7Z8Hhj3&1',
-   *     preferences: [
-   *       {
-   *         notification_type: 'order_acknowledgement',
-   *         enabled: true,
-   *       },
-   *     ],
-   *     role_id: 'rl_01c16d2eb637c0d1f3a372937c',
-   *     username: 'jdoe',
-   *   });
-   * ```
-   */
-  create(
-    params: AccountUserCreateParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<CustomersAPI.AccountUser> {
-    const { include, ...body } = params ?? {};
-    return this._client.post('/v1/identity/account-users', { query: { include }, body, ...options });
   }
 
   /**
    * Partially updates an account user.
    *
-   * Omitted fields are left unchanged. Profile fields (`name`, `email`, `username`)
-   * update the underlying user, which is shared across every account the user
-   * belongs to.
-   *
    * @example
    * ```ts
    * const accountUser =
    *   await client.identity.accountUsers.update(
-   *     'acus_01ea9983ddb41dacc44ecf997c',
-   *     {
-   *       department_id: 'dp_01791c25ab59da4704cba61874',
-   *       name: 'John Doe',
-   *       role_id: 'rl_01c16d2eb637c0d1f3a372937c',
-   *     },
+   *     'acus_01gf7a8200er3ar3pkfrb6kk29',
+   *     { name: 'John Doe' },
    *   );
    * ```
    */
@@ -107,7 +56,7 @@ export class AccountUsers extends APIResource {
     id: string,
     params: AccountUserUpdateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.AccountUser> {
+  ): APIPromise<AccountUser> {
     const { include, ...body } = params ?? {};
     return this._client.patch(path`/v1/identity/account-users/${id}`, {
       query: { include },
@@ -115,83 +64,112 @@ export class AccountUsers extends APIResource {
       ...options,
     });
   }
+
+  /**
+   * Creates a new account user and invites them to the target account.
+   *
+   * @example
+   * ```ts
+   * const accountUser =
+   *   await client.identity.accountUsers.accountUsers({
+   *     email: 'jdoe@augno.com',
+   *     name: 'John Doe',
+   *     password: 'QgS7Z8Hhj3&1',
+   *     username: 'jdoe',
+   *     preferences: [
+   *       {
+   *         notification_type: 'order_acknowledgement',
+   *         enabled: true,
+   *       },
+   *     ],
+   *   });
+   * ```
+   */
+  accountUsers(params: AccountUserAccountUsersParams, options?: RequestOptions): APIPromise<AccountUser> {
+    const { include, ...body } = params;
+    return this._client.post('/v1/identity/account-users', { query: { include }, body, ...options });
+  }
+
+  /**
+   * Returns a paginated list of account users for the current account.
+   *
+   * @example
+   * ```ts
+   * const response =
+   *   await client.identity.accountUsers.retrieveAccountUsers();
+   * ```
+   */
+  retrieveAccountUsers(
+    query: AccountUserRetrieveAccountUsersParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<AccountUserRetrieveAccountUsersResponse> {
+    return this._client.get('/v1/identity/account-users', { query, ...options });
+  }
 }
 
 /**
- * Request to create an account user.
+ * Account user with profile, role, and department.
  */
-export interface CreateAccountUserRequest {
+export interface AccountUser {
   /**
-   * ID of the department to assign to the user.
+   * Account user ID.
    */
-  department_id?: string;
+  id: string;
 
   /**
-   * User email address.
-   *
-   * Either `email` or `username` must be provided. If a user with this email already
-   * exists, that user is added to the account instead of a new user being created.
+   * When the account user was created.
    */
-  email?: string;
+  created_at: string;
 
   /**
-   * User display name.
+   * Department resource.
    */
-  name?: string;
+  department: DepartmentsAPI.Department | null;
 
   /**
-   * Password for scanning station users.
-   *
-   * Required when creating a scanning station user (username without email) and
-   * rejected for all other users, who instead receive a generated password in their
-   * welcome email. Must be 8–72 characters and include an uppercase letter, a
-   * lowercase letter, a number, and a special character.
+   * Email address.
    */
-  password?: string;
+  email: string | null;
 
   /**
-   * Notification preference toggles for the new user.
-   *
-   * Only applies when creating a user in another account you manage (cross-account);
-   * ignored when creating a user in your own account.
+   * Profile image URL.
    */
-  preferences?: Array<NotificationPreferenceItem>;
+  image_url: string | null;
 
   /**
-   * ID of the role to assign to the user.
-   *
-   * Ignored for scanning station users, which are always assigned the scanner role.
+   * When the user last used this account.
    */
-  role_id?: string;
+  last_used_at: string | null;
 
   /**
-   * Unique username.
-   *
-   * 3–255 characters; letters, numbers, underscores, and hyphens. Either `email` or
-   * `username` must be provided. Providing a username without an email creates a
-   * scanning station user.
+   * Display name.
    */
-  username?: string;
-}
-
-/**
- * List represents a paginated list of resources.
- */
-export interface ListAccountUser {
-  /**
-   * Resources in this page.
-   */
-  data: Array<CustomersAPI.AccountUser>;
+  name: string | null;
 
   /**
    * Resource type identifier.
    */
-  object: 'list';
+  object: 'account_user';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * Role resource.
    */
-  page_info: APIKeysAPI.PageInfo;
+  role: RolesAPI.Role | null;
+
+  /**
+   * Account user status.
+   */
+  status: 'active' | 'disabled' | 'removed';
+
+  /**
+   * When the account user was last updated.
+   */
+  updated_at: string;
+
+  /**
+   * Username.
+   */
+  username: string | null;
 }
 
 /**
@@ -210,98 +188,23 @@ export interface NotificationPreferenceItem {
 }
 
 /**
- * Request to partially update an account user.
+ * List represents a paginated list of resources.
  */
-export interface UpdateAccountUserRequest {
+export interface AccountUserRetrieveAccountUsersResponse {
   /**
-   * ID of the department to assign to the user.
-   *
-   * Set to `null` to clear the department.
+   * Resources in this page.
    */
-  department_id?: string | null;
+  data: Array<AccountUser>;
 
   /**
-   * User email address.
-   *
-   * Must not already be in use by another user.
+   * Resource type identifier.
    */
-  email?: string;
+  object: 'list';
 
   /**
-   * User display name.
+   * PageInfo contains URL-based pagination metadata.
    */
-  name?: string;
-
-  /**
-   * Notification preference toggles to apply.
-   *
-   * Only allowed when updating a user in another account you manage (cross-account);
-   * rejected otherwise. Notification types omitted from the list are left unchanged.
-   */
-  preferences?: Array<NotificationPreferenceItem>;
-
-  /**
-   * ID of the role to assign to the user.
-   *
-   * Set to `null` to clear the role.
-   */
-  role_id?: string | null;
-
-  /**
-   * Unique username.
-   *
-   * 3–255 characters; letters, numbers, underscores, and hyphens. Must not already
-   * be in use by another user.
-   */
-  username?: string;
-}
-
-export interface AccountUserListParams {
-  /**
-   * Opaque cursor token identifying where the page of results starts.
-   *
-   * Use the `cursor` value embedded in a previous response's `next_page_url` or
-   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
-   * page.
-   */
-  cursor?: string;
-
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'user' | 'role' | 'department'>;
-
-  /**
-   * Maximum number of results to return in a single page.
-   */
-  limit?: number;
-
-  /**
-   * Free-text search term used to filter results.
-   *
-   * Which fields are matched against the term varies by endpoint.
-   */
-  q?: string;
-
-  /**
-   * Controls whether removed (soft-deleted) account users appear in the list.
-   *
-   * - `excluded`: only active and disabled users (default).
-   * - `included`: removed users are listed as well.
-   */
-  removed_scope?: 'excluded' | 'included';
-
-  /**
-   * Filter by role type.
-   *
-   * - `admin`: account administrators.
-   * - `user`: users with a custom role.
-   * - `scanner`: scanning station users.
-   * - `sales_rep`: sales representatives.
-   * - `agent`: automated agents.
-   */
-  role_type?: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent';
+  page_info: AgentsAPI.PageInfo;
 }
 
 export interface AccountUserRetrieveParams {
@@ -309,67 +212,7 @@ export interface AccountUserRetrieveParams {
    * Sub-objects to expand in the response. When omitted, sub-objects are returned as
    * `null`.
    */
-  include?: Array<'user' | 'role' | 'department'>;
-}
-
-export interface AccountUserCreateParams {
-  /**
-   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
-   * are returned as `null`.
-   */
-  include?: Array<'user' | 'role' | 'department'>;
-
-  /**
-   * Body param: ID of the department to assign to the user.
-   */
-  department_id?: string;
-
-  /**
-   * Body param: User email address.
-   *
-   * Either `email` or `username` must be provided. If a user with this email already
-   * exists, that user is added to the account instead of a new user being created.
-   */
-  email?: string;
-
-  /**
-   * Body param: User display name.
-   */
-  name?: string;
-
-  /**
-   * Body param: Password for scanning station users.
-   *
-   * Required when creating a scanning station user (username without email) and
-   * rejected for all other users, who instead receive a generated password in their
-   * welcome email. Must be 8–72 characters and include an uppercase letter, a
-   * lowercase letter, a number, and a special character.
-   */
-  password?: string;
-
-  /**
-   * Body param: Notification preference toggles for the new user.
-   *
-   * Only applies when creating a user in another account you manage (cross-account);
-   * ignored when creating a user in your own account.
-   */
-  preferences?: Array<NotificationPreferenceItem>;
-
-  /**
-   * Body param: ID of the role to assign to the user.
-   *
-   * Ignored for scanning station users, which are always assigned the scanner role.
-   */
-  role_id?: string;
-
-  /**
-   * Body param: Unique username.
-   *
-   * 3–255 characters; letters, numbers, underscores, and hyphens. Either `email` or
-   * `username` must be provided. Providing a username without an email creates a
-   * scanning station user.
-   */
-  username?: string;
+  include?: Array<'role' | 'department'>;
 }
 
 export interface AccountUserUpdateParams {
@@ -377,19 +220,15 @@ export interface AccountUserUpdateParams {
    * Query param: Sub-objects to expand in the response. When omitted, sub-objects
    * are returned as `null`.
    */
-  include?: Array<'user' | 'role' | 'department'>;
+  include?: Array<'role' | 'department'>;
 
   /**
-   * Body param: ID of the department to assign to the user.
-   *
-   * Set to `null` to clear the department.
+   * Body param: Department assigned to the user.
    */
   department_id?: string | null;
 
   /**
    * Body param: User email address.
-   *
-   * Must not already be in use by another user.
    */
   email?: string;
 
@@ -399,47 +238,117 @@ export interface AccountUserUpdateParams {
   name?: string;
 
   /**
-   * Body param: Notification preference toggles to apply.
-   *
-   * Only allowed when updating a user in another account you manage (cross-account);
-   * rejected otherwise. Notification types omitted from the list are left unchanged.
+   * Body param: Notification preferences to update (external targets only).
    */
   preferences?: Array<NotificationPreferenceItem>;
 
   /**
-   * Body param: ID of the role to assign to the user.
-   *
-   * Set to `null` to clear the role.
+   * Body param: Role assigned to the user.
    */
   role_id?: string | null;
 
   /**
-   * Body param: Unique username.
-   *
-   * 3–255 characters; letters, numbers, underscores, and hyphens. Must not already
-   * be in use by another user.
+   * Body param: Unique username (3–255 chars; letters, numbers, underscores,
+   * hyphens).
    */
   username?: string;
+}
+
+export interface AccountUserAccountUsersParams {
+  /**
+   * Body param: User email address.
+   */
+  email: string | null;
+
+  /**
+   * Body param: User display name.
+   */
+  name: string | null;
+
+  /**
+   * Body param: Password. Only used for scanner-role users (scanning stations). Must
+   * be 8–72 chars and include upper, lower, number, and special character.
+   */
+  password: string | null;
+
+  /**
+   * Body param: Unique username (3–255 chars; letters, numbers, underscores,
+   * hyphens).
+   */
+  username: string | null;
+
+  /**
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
+   */
+  include?: Array<'role' | 'department'>;
+
+  /**
+   * Body param: Department assigned to the user.
+   */
+  department_id?: string | null;
+
+  /**
+   * Body param: Notification preferences for the user (external targets only).
+   */
+  preferences?: Array<NotificationPreferenceItem>;
+
+  /**
+   * Body param: Role assigned to the user.
+   */
+  role_id?: string | null;
+}
+
+export interface AccountUserRetrieveAccountUsersParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'role' | 'department'>;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+
+  /**
+   * Controls whether removed account users are included.
+   */
+  removed_scope?: 'excluded' | 'included';
+
+  /**
+   * Filter by role type code.
+   */
+  role_type?: 'admin' | 'user' | 'scanner' | 'sales_rep' | 'agent';
 }
 
 AccountUsers.Actions = Actions;
 
 export declare namespace AccountUsers {
   export {
-    type CreateAccountUserRequest as CreateAccountUserRequest,
-    type ListAccountUser as ListAccountUser,
+    type AccountUser as AccountUser,
     type NotificationPreferenceItem as NotificationPreferenceItem,
-    type UpdateAccountUserRequest as UpdateAccountUserRequest,
-    type AccountUserListParams as AccountUserListParams,
+    type AccountUserRetrieveAccountUsersResponse as AccountUserRetrieveAccountUsersResponse,
     type AccountUserRetrieveParams as AccountUserRetrieveParams,
-    type AccountUserCreateParams as AccountUserCreateParams,
     type AccountUserUpdateParams as AccountUserUpdateParams,
+    type AccountUserAccountUsersParams as AccountUserAccountUsersParams,
+    type AccountUserRetrieveAccountUsersParams as AccountUserRetrieveAccountUsersParams,
   };
 
   export {
     Actions as Actions,
-    type ActionActivateResponse as ActionActivateResponse,
-    type ActionDisableResponse as ActionDisableResponse,
-    type ActionRemoveResponse as ActionRemoveResponse,
+    type ActionUpdateActivateResponse as ActionUpdateActivateResponse,
+    type ActionUpdateDisableResponse as ActionUpdateDisableResponse,
+    type ActionUpdateRemoveResponse as ActionUpdateRemoveResponse,
   };
 }

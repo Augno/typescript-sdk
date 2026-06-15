@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as APIKeysAPI from '../auth/api-keys/api-keys';
-import * as CustomersAPI from '../sales/customers/customers';
+import * as AgentsAPI from '../ai/agents';
+import * as ItemCategoriesAPI from '../catalog/item-categories/item-categories';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -12,32 +12,13 @@ import { path } from '../../internal/utils/path';
  */
 export class PaymentTerms extends APIResource {
   /**
-   * Returns a paginated list of payment terms.
-   *
-   * The list includes both payment terms created by your account and Augno-provided
-   * system defaults.
-   *
-   * @example
-   * ```ts
-   * const listPaymentTerm =
-   *   await client.finance.paymentTerms.list();
-   * ```
-   */
-  list(
-    query: PaymentTermListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListPaymentTerm> {
-    return this._client.get('/v1/finance/payment-terms', { query, ...options });
-  }
-
-  /**
    * Returns a payment term by ID.
    *
    * @example
    * ```ts
    * const paymentTerm =
    *   await client.finance.paymentTerms.retrieve(
-   *     'pytm_018694d6601ea771cd1b52e890',
+   *     'pytm_01jm4r6700f8nwq3v5hx2d9ktp',
    *   );
    * ```
    */
@@ -45,39 +26,18 @@ export class PaymentTerms extends APIResource {
     id: string,
     query: PaymentTermRetrieveParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.PaymentTerm> {
+  ): APIPromise<PaymentTerm> {
     return this._client.get(path`/v1/finance/payment-terms/${id}`, { query, ...options });
   }
 
   /**
-   * Creates a payment term.
-   *
-   * The new term is owned by your account and starts with status `active`.
-   *
-   * @example
-   * ```ts
-   * const paymentTerm =
-   *   await client.finance.paymentTerms.create({
-   *     name: 'Net 30',
-   *   });
-   * ```
-   */
-  create(params: PaymentTermCreateParams, options?: RequestOptions): APIPromise<CustomersAPI.PaymentTerm> {
-    const { include, ...body } = params;
-    return this._client.post('/v1/finance/payment-terms', { query: { include }, body, ...options });
-  }
-
-  /**
-   * Partially updates a payment term.
-   *
-   * Only payment terms created by your account can be updated; system-owned default
-   * terms cannot be.
+   * Partially updates a payment term. Default payment terms cannot be updated.
    *
    * @example
    * ```ts
    * const paymentTerm =
    *   await client.finance.paymentTerms.update(
-   *     'pytm_018694d6601ea771cd1b52e890',
+   *     'pytm_01jm4r6700f8nwq3v5hx2d9ktp',
    *     { name: 'Net 60' },
    *   );
    * ```
@@ -86,7 +46,7 @@ export class PaymentTerms extends APIResource {
     id: string,
     params: PaymentTermUpdateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.PaymentTerm> {
+  ): APIPromise<PaymentTerm> {
     const { include, ...body } = params ?? {};
     return this._client.patch(path`/v1/finance/payment-terms/${id}`, {
       query: { include },
@@ -96,45 +56,104 @@ export class PaymentTerms extends APIResource {
   }
 
   /**
-   * Deletes a payment term.
-   *
-   * Only payment terms created by your account can be deleted; system-owned default
-   * terms cannot be.
+   * Deletes a payment term. Default payment terms cannot be deleted.
    *
    * @example
    * ```ts
    * const paymentTerm =
    *   await client.finance.paymentTerms.delete(
-   *     'pytm_018694d6601ea771cd1b52e890',
+   *     'pytm_01jm4r6700f8nwq3v5hx2d9ktp',
    *   );
    * ```
    */
   delete(id: string, options?: RequestOptions): APIPromise<PaymentTermDeleteResponse> {
     return this._client.delete(path`/v1/finance/payment-terms/${id}`, options);
   }
+
+  /**
+   * Creates a payment term.
+   *
+   * @example
+   * ```ts
+   * const paymentTerm =
+   *   await client.finance.paymentTerms.paymentTerms({
+   *     name: 'Net 30',
+   *   });
+   * ```
+   */
+  paymentTerms(params: PaymentTermPaymentTermsParams, options?: RequestOptions): APIPromise<PaymentTerm> {
+    const { include, ...body } = params;
+    return this._client.post('/v1/finance/payment-terms', { query: { include }, body, ...options });
+  }
+
+  /**
+   * Returns a paginated list of payment terms. Includes both account-specific and
+   * system default payment terms.
+   *
+   * @example
+   * ```ts
+   * const response =
+   *   await client.finance.paymentTerms.retrievePaymentTerms();
+   * ```
+   */
+  retrievePaymentTerms(
+    query: PaymentTermRetrievePaymentTermsParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<PaymentTermRetrievePaymentTermsResponse> {
+    return this._client.get('/v1/finance/payment-terms', { query, ...options });
+  }
 }
 
 /**
- * Request to create a payment term.
+ * Payment term resource.
  */
-export interface CreatePaymentTermRequest {
+export interface PaymentTerm {
   /**
-   * Display name (e.g. `Net 30`).
-   *
-   * Must be unique among the payment terms visible to your account, including system
-   * defaults.
+   * Payment term ID.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Display name.
    */
   name: string;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'payment_term';
+
+  /**
+   * Owner describes the provenance of a resource.
+   */
+  owner: ItemCategoriesAPI.Owner | null;
+
+  /**
+   * Payment term status.
+   */
+  status: 'active' | 'inactive';
+
+  /**
+   * Last-updated timestamp.
+   */
+  updated_at: string;
 }
+
+export interface PaymentTermDeleteResponse {}
 
 /**
  * List represents a paginated list of resources.
  */
-export interface ListPaymentTerm {
+export interface PaymentTermRetrievePaymentTermsResponse {
   /**
    * Resources in this page.
    */
-  data: Array<CustomersAPI.PaymentTerm>;
+  data: Array<PaymentTerm>;
 
   /**
    * Resource type identifier.
@@ -144,73 +163,13 @@ export interface ListPaymentTerm {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: APIKeysAPI.PageInfo;
-}
-
-/**
- * Request to partially update a payment term.
- */
-export interface UpdatePaymentTermRequest {
-  /**
-   * New display name for the payment term.
-   *
-   * Must be unique among the payment terms visible to your account, including system
-   * defaults.
-   */
-  name?: string;
-}
-
-export interface PaymentTermDeleteResponse {}
-
-export interface PaymentTermListParams {
-  /**
-   * Opaque cursor token identifying where the page of results starts.
-   *
-   * Use the `cursor` value embedded in a previous response's `next_page_url` or
-   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
-   * page.
-   */
-  cursor?: string;
-
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'owner' | 'owner.account'>;
-
-  /**
-   * Maximum number of results to return in a single page.
-   */
-  limit?: number;
-
-  /**
-   * Free-text search term used to filter results.
-   *
-   * Which fields are matched against the term varies by endpoint.
-   */
-  q?: string;
+  page_info: AgentsAPI.PageInfo;
 }
 
 export interface PaymentTermRetrieveParams {
   /**
    * Sub-objects to expand in the response. When omitted, sub-objects are returned as
    * `null`.
-   */
-  include?: Array<'owner' | 'owner.account'>;
-}
-
-export interface PaymentTermCreateParams {
-  /**
-   * Body param: Display name (e.g. `Net 30`).
-   *
-   * Must be unique among the payment terms visible to your account, including system
-   * defaults.
-   */
-  name: string;
-
-  /**
-   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
-   * are returned as `null`.
    */
   include?: Array<'owner' | 'owner.account'>;
 }
@@ -223,23 +182,55 @@ export interface PaymentTermUpdateParams {
   include?: Array<'owner' | 'owner.account'>;
 
   /**
-   * Body param: New display name for the payment term.
-   *
-   * Must be unique among the payment terms visible to your account, including system
-   * defaults.
+   * Body param: Display name.
    */
   name?: string;
 }
 
+export interface PaymentTermPaymentTermsParams {
+  /**
+   * Body param: Display name (e.g. "Net 30").
+   */
+  name: string;
+
+  /**
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
+   */
+  include?: Array<'owner' | 'owner.account'>;
+}
+
+export interface PaymentTermRetrievePaymentTermsParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'owner' | 'owner.account'>;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+}
+
 export declare namespace PaymentTerms {
   export {
-    type CreatePaymentTermRequest as CreatePaymentTermRequest,
-    type ListPaymentTerm as ListPaymentTerm,
-    type UpdatePaymentTermRequest as UpdatePaymentTermRequest,
+    type PaymentTerm as PaymentTerm,
     type PaymentTermDeleteResponse as PaymentTermDeleteResponse,
-    type PaymentTermListParams as PaymentTermListParams,
+    type PaymentTermRetrievePaymentTermsResponse as PaymentTermRetrievePaymentTermsResponse,
     type PaymentTermRetrieveParams as PaymentTermRetrieveParams,
-    type PaymentTermCreateParams as PaymentTermCreateParams,
     type PaymentTermUpdateParams as PaymentTermUpdateParams,
+    type PaymentTermPaymentTermsParams as PaymentTermPaymentTermsParams,
+    type PaymentTermRetrievePaymentTermsParams as PaymentTermRetrievePaymentTermsParams,
   };
 }

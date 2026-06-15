@@ -1,8 +1,14 @@
-# Changelog
+# @augno/sdk
 
-## [0.3.1](https://github.com/Augno/typescript-sdk/compare/v0.3.0...v0.3.1) (2026-06-15)
+## 0.1.2
 
+### Patch Changes
 
-### Bug Fixes
+- 252fa34: Sync SDK with deployed Augno API.
 
-* **sdk:** sync with deployed API v0.25.1 ([8394008](https://github.com/Augno/typescript-sdk/commit/83940085caada14660a6b4ab128bdd767148bdbf))
+  - v0.17.10: bug fixes from PR #5 (`fix(sdk): sync with deployed API v0.17.10`)
+  - v0.17.14: bug fixes from PR #6 (`fix(sdk): sync with deployed API v0.17.14`)
+    - Adds `finance` resource (`src/resources/finance/finance.ts`)
+    - Adds `sales.salesOrders` resource (`src/resources/sales/sales-orders/sales-orders.ts`)
+    - Extends `operations.purchaseOrders` (`src/resources/operations/purchase-orders/purchase-orders.ts`)
+    - `src/client.ts` refresh

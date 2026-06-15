@@ -4,180 +4,167 @@ import { APIResource } from '../../core/resource';
 import * as AccountGroupsAPI from './account-groups';
 import {
   AccountGroup,
-  AccountGroupCreateParams,
+  AccountGroupAccountGroupsParams,
   AccountGroupDeleteResponse,
-  AccountGroupListParams,
+  AccountGroupRetrieveAccountGroupsParams,
   AccountGroupUpdateParams,
   AccountGroups,
-  CreateAccountGroupRequest,
   ListAccountGroup,
-  UpdateAccountGroupRequest,
 } from './account-groups';
+import * as AccountPricesAPI from './account-prices';
+import { AccountPrices } from './account-prices';
 import * as AccountStatusesAPI from './account-statuses';
 import {
   AccountStatus,
-  AccountStatusListParams,
+  AccountStatusRetrieveAccountStatusesParams,
+  AccountStatusRetrieveAccountStatusesResponse,
   AccountStatusRetrieveParams,
   AccountStatuses,
-  ListAccountStatus,
 } from './account-statuses';
 import * as AddressesAPI from './addresses';
 import {
+  Address,
   AddressCreateParams,
   AddressDeleteResponse,
   AddressInput,
   AddressListParams,
+  AddressListResponse,
   AddressUpdateParams,
   Addresses,
-  ListAddress,
-  UpdateAddressRequest,
 } from './addresses';
 import * as PrioritiesAPI from './priorities';
-import { ListPriority, Priorities, Priority, PriorityListParams, PriorityRetrieveParams } from './priorities';
-import * as SalesOrdersAPI from './sales-orders';
 import {
-  ListSalesOrderStatus,
-  SalesOrderRetrieveStatusesParams,
-  SalesOrderStatus,
-  SalesOrders,
-} from './sales-orders';
+  Priorities,
+  Priority,
+  PriorityListParams,
+  PriorityListResponse,
+  PriorityRetrieveParams,
+} from './priorities';
+import * as RegistrationFlowsAPI from './registration-flows';
+import { RegistrationFlows } from './registration-flows';
+import * as VolumeDiscountsAPI from './volume-discounts';
+import { VolumeDiscounts } from './volume-discounts';
+import * as AccountUsersAPI from './account-users/account-users';
+import { AccountUsers } from './account-users/account-users';
+import * as AccountsAPI from './accounts/accounts';
+import { Accounts } from './accounts/accounts';
 import * as CustomersAPI from './customers/customers';
 import {
-  AccountUser,
-  Carrier,
-  Consumption,
-  CreateCustomerRequest,
   Customer,
-  CustomerContactInfo,
   CustomerCreateParams,
-  CustomerDefaults,
   CustomerDeleteResponse,
-  CustomerFreightPreferences,
   CustomerListParams,
-  CustomerNotificationPreferences,
   CustomerRetrieveParams,
   CustomerUpdateParams,
   Customers,
-  Department,
-  ListConsumption,
   ListCustomer,
-  ListLocation,
-  ListMachine,
-  ListProductionStep,
-  ListScanningStation,
-  ListServiceLevel,
-  Location,
-  LocationTypeCode,
-  Machine,
-  PaymentTerm,
-  ProductionOutput,
-  ProductionStep,
-  QuantityInput,
-  ScanningStation,
-  ServiceLevel,
-  ShippingTerm,
-  UpdateCustomerRequest,
-  User,
 } from './customers/customers';
+import * as OrderDiscountsAPI from './order-discounts/order-discounts';
+import { OrderDiscounts } from './order-discounts/order-discounts';
+import * as ProductLineAccessAPI from './product-line-access/product-line-access';
+import { ProductLineAccess } from './product-line-access/product-line-access';
+import * as SalesOrdersAPI from './sales-orders/sales-orders';
+import { SalesOrderRetrieveStatusesParams, SalesOrders } from './sales-orders/sales-orders';
 
 export class Sales extends APIResource {
   accountGroups: AccountGroupsAPI.AccountGroups = new AccountGroupsAPI.AccountGroups(this._client);
-  addresses: AddressesAPI.Addresses = new AddressesAPI.Addresses(this._client);
+  accountPrices: AccountPricesAPI.AccountPrices = new AccountPricesAPI.AccountPrices(this._client);
   accountStatuses: AccountStatusesAPI.AccountStatuses = new AccountStatusesAPI.AccountStatuses(this._client);
-  priorities: PrioritiesAPI.Priorities = new PrioritiesAPI.Priorities(this._client);
+  accountUsers: AccountUsersAPI.AccountUsers = new AccountUsersAPI.AccountUsers(this._client);
+  accounts: AccountsAPI.Accounts = new AccountsAPI.Accounts(this._client);
+  addresses: AddressesAPI.Addresses = new AddressesAPI.Addresses(this._client);
   customers: CustomersAPI.Customers = new CustomersAPI.Customers(this._client);
+  orderDiscounts: OrderDiscountsAPI.OrderDiscounts = new OrderDiscountsAPI.OrderDiscounts(this._client);
+  priorities: PrioritiesAPI.Priorities = new PrioritiesAPI.Priorities(this._client);
+  productLineAccess: ProductLineAccessAPI.ProductLineAccess = new ProductLineAccessAPI.ProductLineAccess(
+    this._client,
+  );
+  registrationFlows: RegistrationFlowsAPI.RegistrationFlows = new RegistrationFlowsAPI.RegistrationFlows(
+    this._client,
+  );
   salesOrders: SalesOrdersAPI.SalesOrders = new SalesOrdersAPI.SalesOrders(this._client);
+  volumeDiscounts: VolumeDiscountsAPI.VolumeDiscounts = new VolumeDiscountsAPI.VolumeDiscounts(this._client);
 }
 
 Sales.AccountGroups = AccountGroups;
-Sales.Addresses = Addresses;
+Sales.AccountPrices = AccountPrices;
 Sales.AccountStatuses = AccountStatuses;
-Sales.Priorities = Priorities;
+Sales.AccountUsers = AccountUsers;
+Sales.Accounts = Accounts;
+Sales.Addresses = Addresses;
 Sales.Customers = Customers;
+Sales.OrderDiscounts = OrderDiscounts;
+Sales.Priorities = Priorities;
+Sales.ProductLineAccess = ProductLineAccess;
+Sales.RegistrationFlows = RegistrationFlows;
 Sales.SalesOrders = SalesOrders;
+Sales.VolumeDiscounts = VolumeDiscounts;
 
 export declare namespace Sales {
   export {
     AccountGroups as AccountGroups,
     type AccountGroup as AccountGroup,
-    type CreateAccountGroupRequest as CreateAccountGroupRequest,
     type ListAccountGroup as ListAccountGroup,
-    type UpdateAccountGroupRequest as UpdateAccountGroupRequest,
     type AccountGroupDeleteResponse as AccountGroupDeleteResponse,
-    type AccountGroupListParams as AccountGroupListParams,
-    type AccountGroupCreateParams as AccountGroupCreateParams,
     type AccountGroupUpdateParams as AccountGroupUpdateParams,
+    type AccountGroupAccountGroupsParams as AccountGroupAccountGroupsParams,
+    type AccountGroupRetrieveAccountGroupsParams as AccountGroupRetrieveAccountGroupsParams,
   };
 
-  export {
-    Addresses as Addresses,
-    type AddressInput as AddressInput,
-    type ListAddress as ListAddress,
-    type UpdateAddressRequest as UpdateAddressRequest,
-    type AddressDeleteResponse as AddressDeleteResponse,
-    type AddressListParams as AddressListParams,
-    type AddressCreateParams as AddressCreateParams,
-    type AddressUpdateParams as AddressUpdateParams,
-  };
+  export { AccountPrices as AccountPrices };
 
   export {
     AccountStatuses as AccountStatuses,
     type AccountStatus as AccountStatus,
-    type ListAccountStatus as ListAccountStatus,
-    type AccountStatusListParams as AccountStatusListParams,
+    type AccountStatusRetrieveAccountStatusesResponse as AccountStatusRetrieveAccountStatusesResponse,
     type AccountStatusRetrieveParams as AccountStatusRetrieveParams,
+    type AccountStatusRetrieveAccountStatusesParams as AccountStatusRetrieveAccountStatusesParams,
   };
 
+  export { AccountUsers as AccountUsers };
+
+  export { Accounts as Accounts };
+
   export {
-    Priorities as Priorities,
-    type ListPriority as ListPriority,
-    type Priority as Priority,
-    type PriorityListParams as PriorityListParams,
-    type PriorityRetrieveParams as PriorityRetrieveParams,
+    Addresses as Addresses,
+    type Address as Address,
+    type AddressInput as AddressInput,
+    type AddressListResponse as AddressListResponse,
+    type AddressDeleteResponse as AddressDeleteResponse,
+    type AddressCreateParams as AddressCreateParams,
+    type AddressUpdateParams as AddressUpdateParams,
+    type AddressListParams as AddressListParams,
   };
 
   export {
     Customers as Customers,
-    type AccountUser as AccountUser,
-    type Carrier as Carrier,
-    type Consumption as Consumption,
-    type CreateCustomerRequest as CreateCustomerRequest,
     type Customer as Customer,
-    type CustomerContactInfo as CustomerContactInfo,
-    type CustomerDefaults as CustomerDefaults,
-    type CustomerFreightPreferences as CustomerFreightPreferences,
-    type CustomerNotificationPreferences as CustomerNotificationPreferences,
-    type Department as Department,
-    type ListConsumption as ListConsumption,
     type ListCustomer as ListCustomer,
-    type ListLocation as ListLocation,
-    type ListMachine as ListMachine,
-    type ListProductionStep as ListProductionStep,
-    type ListScanningStation as ListScanningStation,
-    type ListServiceLevel as ListServiceLevel,
-    type Location as Location,
-    type LocationTypeCode as LocationTypeCode,
-    type Machine as Machine,
-    type PaymentTerm as PaymentTerm,
-    type ProductionOutput as ProductionOutput,
-    type ProductionStep as ProductionStep,
-    type QuantityInput as QuantityInput,
-    type ScanningStation as ScanningStation,
-    type ServiceLevel as ServiceLevel,
-    type ShippingTerm as ShippingTerm,
-    type UpdateCustomerRequest as UpdateCustomerRequest,
-    type User as User,
     type CustomerDeleteResponse as CustomerDeleteResponse,
-    type CustomerListParams as CustomerListParams,
-    type CustomerRetrieveParams as CustomerRetrieveParams,
     type CustomerCreateParams as CustomerCreateParams,
+    type CustomerRetrieveParams as CustomerRetrieveParams,
     type CustomerUpdateParams as CustomerUpdateParams,
+    type CustomerListParams as CustomerListParams,
   };
+
+  export { OrderDiscounts as OrderDiscounts };
+
+  export {
+    Priorities as Priorities,
+    type Priority as Priority,
+    type PriorityListResponse as PriorityListResponse,
+    type PriorityRetrieveParams as PriorityRetrieveParams,
+    type PriorityListParams as PriorityListParams,
+  };
+
+  export { ProductLineAccess as ProductLineAccess };
+
+  export { RegistrationFlows as RegistrationFlows };
 
   export {
     SalesOrders as SalesOrders,
-    type ListSalesOrderStatus as ListSalesOrderStatus,
-    type SalesOrderStatus as SalesOrderStatus,
     type SalesOrderRetrieveStatusesParams as SalesOrderRetrieveStatusesParams,
   };
+
+  export { VolumeDiscounts as VolumeDiscounts };
 }

@@ -2,21 +2,12 @@
 
 export {
   APIKeys,
-  type Account,
-  type AccountBranding,
-  type AccountPortal,
-  type Address,
   type APIKey,
-  type CreateAPIKeyRequest,
   type CreatedAPIKey,
-  type Geolocation,
-  type ListAPIKey,
-  type Owner,
-  type PageInfo,
-  type Role,
   type APIKeyDeleteResponse,
+  type APIKeyRetrieveAPIKeysResponse,
   type APIKeyRetrieveParams,
-  type APIKeyListParams,
-  type APIKeyCreateParams,
+  type APIKeyAPIKeysParams,
+  type APIKeyRetrieveAPIKeysParams,
 } from './api-keys';
-export { Actions, type RotateAPIKeyRequest, type ActionRotateParams } from './actions';
+export { Actions, type ActionRotateParams } from './actions';

@@ -2,16 +2,14 @@
 
 export {
   ItemCategories,
-  type CreateItemCategoryRequest,
+  type ItemCategory,
   type ListItemCategory,
-  type UpdateItemCategoryRequest,
+  type Owner,
   type ItemCategoryDeleteResponse,
-  type ItemCategoryChangeUnitGroupResponse,
-  type ItemCategoryListParams,
   type ItemCategoryRetrieveParams,
-  type ItemCategoryCreateParams,
   type ItemCategoryUpdateParams,
-  type ItemCategoryChangeUnitGroupParams,
+  type ItemCategoryItemCategoriesParams,
+  type ItemCategoryRetrieveItemCategoriesParams,
 } from './item-categories';
 export {
   Properties,

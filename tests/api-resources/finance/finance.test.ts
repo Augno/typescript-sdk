@@ -8,8 +8,8 @@ const client = new Augno({
 });
 
 describe('resource finance', () => {
-  test('retrieveTransactionTypes', async () => {
-    const responsePromise = client.finance.retrieveTransactionTypes();
+  test('retrieveAdjustmentTypes', async () => {
+    const responsePromise = client.finance.retrieveAdjustmentTypes();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -19,12 +19,13 @@ describe('resource finance', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('retrieveTransactionTypes: request options and params are passed correctly', async () => {
+  test('retrieveAdjustmentTypes: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.finance.retrieveTransactionTypes(
+      client.finance.retrieveAdjustmentTypes(
         {
           cursor: 'cursor',
+          include: ['owner'],
           limit: 0,
           q: 'q',
         },
@@ -58,8 +59,8 @@ describe('resource finance', () => {
     ).rejects.toThrow(Augno.NotFoundError);
   });
 
-  test('retrieveAdjustmentTypes', async () => {
-    const responsePromise = client.finance.retrieveAdjustmentTypes();
+  test('retrieveTransactionTypes', async () => {
+    const responsePromise = client.finance.retrieveTransactionTypes();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -69,13 +70,12 @@ describe('resource finance', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('retrieveAdjustmentTypes: request options and params are passed correctly', async () => {
+  test('retrieveTransactionTypes: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.finance.retrieveAdjustmentTypes(
+      client.finance.retrieveTransactionTypes(
         {
           cursor: 'cursor',
-          include: ['owner'],
           limit: 0,
           q: 'q',
         },

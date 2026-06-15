@@ -1,7 +1,9 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as APIKeysAPI from '../auth/api-keys/api-keys';
+import * as AgentsAPI from '../ai/agents';
+import * as AccountsAPI from '../identity/accounts';
+import * as AlertsAPI from '../ai/alerts/alerts';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -11,27 +13,12 @@ import { path } from '../../internal/utils/path';
  */
 export class RequestLogs extends APIResource {
   /**
-   * Returns a paginated list of request logs for the current account.
-   *
-   * @example
-   * ```ts
-   * const listRequestLog = await client.core.requestLogs.list();
-   * ```
-   */
-  list(
-    query: RequestLogListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListRequestLog> {
-    return this._client.get('/v1/core/request-logs', { query, ...options });
-  }
-
-  /**
    * Returns a request log by ID.
    *
    * @example
    * ```ts
    * const requestLog = await client.core.requestLogs.retrieve(
-   *   'rq_01304bffe90e8cce9690cbefd4',
+   *   'rq_01jm4r6700f8nwq3v5hx2d9ktp',
    * );
    * ```
    */
@@ -42,75 +29,26 @@ export class RequestLogs extends APIResource {
   ): APIPromise<RequestLog> {
     return this._client.get(path`/v1/core/request-logs/${id}`, { query, ...options });
   }
+
+  /**
+   * Returns a paginated list of request logs.
+   *
+   * @example
+   * ```ts
+   * const response =
+   *   await client.core.requestLogs.retrieveRequestLogs();
+   * ```
+   */
+  retrieveRequestLogs(
+    query: RequestLogRetrieveRequestLogsParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<RequestLogRetrieveRequestLogsResponse> {
+    return this._client.get('/v1/core/request-logs', { query, ...options });
+  }
 }
 
 /**
- * Reference to an actor (user, API key, or agent).
- */
-export interface Actor {
-  /**
-   * Actor ID.
-   */
-  id: string;
-
-  /**
-   * Human-readable handle identifying the actor.
-   *
-   * - For `user` actors: the user's email address.
-   * - For `api_key` actors: the redacted key value.
-   *
-   * Agent actors carry no handle.
-   */
-  handle: string | null;
-
-  /**
-   * The actor's display name.
-   */
-  name: string | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'actor';
-
-  /**
-   * A named set of permissions that can be assigned to users to control what they
-   * can access.
-   */
-  role: APIKeysAPI.Role | null;
-
-  /**
-   * Actor type.
-   *
-   * - `user`: a human user account.
-   * - `api_key`: a programmatic caller authenticating with an API key.
-   * - `agent`: an automated agent acting on the account's behalf.
-   */
-  type: 'user' | 'api_key' | 'agent';
-}
-
-/**
- * List represents a paginated list of resources.
- */
-export interface ListRequestLog {
-  /**
-   * Resources in this page.
-   */
-  data: Array<RequestLog>;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'list';
-
-  /**
-   * PageInfo contains URL-based pagination metadata.
-   */
-  page_info: APIKeysAPI.PageInfo;
-}
-
-/**
- * A log of a single API request, capturing its route, outcome, latency, and actor.
+ * RequestLog is an API request log entry.
  */
 export interface RequestLog {
   /**
@@ -119,14 +57,14 @@ export interface RequestLog {
   id: string;
 
   /**
-   * A customer account, including its branding and customer portal sub-resources.
+   * Account with optional branding and portal sub-resources.
    */
-  account: APIKeysAPI.Account | null;
+  account: AccountsAPI.Account | null;
 
   /**
    * Reference to an actor (user, API key, or agent).
    */
-  actor: Actor | null;
+  actor: AlertsAPI.Actor | null;
 
   /**
    * API version used.
@@ -144,23 +82,17 @@ export interface RequestLog {
   created_at: string;
 
   /**
-   * Machine-readable API error code.
-   *
-   * Populated only for failed requests.
+   * API error code.
    */
   error_code: string | null;
 
   /**
-   * Human-readable error message.
-   *
-   * Populated only for failed requests.
+   * Error message.
    */
   error_message: string | null;
 
   /**
-   * Request host.
-   *
-   * Usually `api.augno.com`.
+   * Request host. Usually `api.augno.com`.
    */
   host: string;
 
@@ -180,12 +112,8 @@ export interface RequestLog {
   method: string;
 
   /**
-   * The route template the request matched, with path parameters left as
-   * placeholders.
-   *
-   * For example `/v1/sales/customers/{id}` is the normalized route for the request
-   * path `/v1/sales/customers/ac_...`. Falls back to the raw path when the request
-   * did not match a registered route.
+   * _Normalized_ route template. For example `PATCH /v1/sales/customers/{id}` is the
+   * normalized route for a request route `PUT /v1/sales/customers/ac_...`.
    */
   normalized_route: string;
 
@@ -228,7 +156,7 @@ export interface RequestLog {
   response_body: unknown | null;
 
   /**
-   * HTTP response status code (e.g. `200`, `404`).
+   * HTTP status code.
    */
   status_code: number;
 
@@ -238,23 +166,52 @@ export interface RequestLog {
   user_agent: string | null;
 }
 
-export interface RequestLogListParams {
+/**
+ * List represents a paginated list of resources.
+ */
+export interface RequestLogRetrieveRequestLogsResponse {
   /**
-   * Filter by the _acting_ account: the account the actor belongs to (the log's
-   * `account.id`).
-   *
-   * Results are always scoped to logs where your account is either the acting
-   * account or the target account; this narrows that set to specific acting
-   * accounts. For example, pass a customer's account ID to see only requests that
-   * customer's actors made against your account.
+   * Resources in this page.
    */
-  actor_account_ids?: Array<string>;
+  data: Array<RequestLog>;
 
   /**
-   * Filter by the actor identifier.
-   *
-   * Matches the log's `actor.id`: a user ID for `user` actors or an API key ID for
-   * `api_key` actors.
+   * Resource type identifier.
+   */
+  object: 'list';
+
+  /**
+   * PageInfo contains URL-based pagination metadata.
+   */
+  page_info: AgentsAPI.PageInfo;
+}
+
+export interface RequestLogRetrieveParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<
+    | 'account'
+    | 'actor'
+    | 'actor.role'
+    | 'actor.role.permissions'
+    | 'query_params'
+    | 'request_body'
+    | 'response_body'
+  >;
+}
+
+export interface RequestLogRetrieveRequestLogsParams {
+  /**
+   * Filter by the account ID _targeted_ by the request. The actor may be operating
+   * on behalf of a separate account.
+   */
+  account_ids?: Array<string>;
+
+  /**
+   * Filter by the actor identifier. `account_user.id` when `identity_type`=`user`,
+   * or an `api_key.id` when `identity_type`=`api_key`.
    */
   actor_ids?: Array<string>;
 
@@ -264,11 +221,7 @@ export interface RequestLogListParams {
   actor_types?: Array<'user' | 'api_key' | 'agent'>;
 
   /**
-   * Opaque cursor token identifying where the page of results starts.
-   *
-   * Use the `cursor` value embedded in a previous response's `next_page_url` or
-   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
-   * page.
+   * Cursor token used to retrieve the next or previous page of results.
    */
   cursor?: string;
 
@@ -316,9 +269,7 @@ export interface RequestLogListParams {
   >;
 
   /**
-   * Filter by the request host.
-   *
-   * Typically `api.augno.com`.
+   * Filter by the request host. Typically, `api.augno.com`.
    */
   hosts?: Array<string>;
 
@@ -334,7 +285,7 @@ export interface RequestLogListParams {
   include?: Array<'account' | 'actor' | 'actor.role'>;
 
   /**
-   * Maximum number of results to return in a single page.
+   * Maximum number of results per page (default: 100, max: 1000).
    */
   limit?: number;
 
@@ -344,23 +295,19 @@ export interface RequestLogListParams {
   methods?: Array<'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS'>;
 
   /**
-   * Restricts results to requests that took at least this many microseconds.
+   * Filter by the minimum latency in microseconds.
    */
   min_latency_us?: number;
 
   /**
-   * Filter by the _normalized_ route template.
-   *
-   * For example `/v1/sales/customers/{id}` matches every request to that route
-   * regardless of the specific customer ID. Parameter names inside `{}` are ignored
-   * when matching, so `{customer_id}` and `{id}` are equivalent.
+   * Filter by the _normalized_ route template. For example
+   * `PATCH /v1/sales/customers/{id}` is the normalized route for a request route
+   * `PUT /v1/sales/customers/ac_...`.
    */
   normalized_routes?: Array<string>;
 
   /**
-   * Free-text search term used to filter results.
-   *
-   * Which fields are matched against the term varies by endpoint.
+   * Search query used to filter results.
    */
   q?: string;
 
@@ -370,53 +317,16 @@ export interface RequestLogListParams {
   start_date?: string;
 
   /**
-   * Filter by the HTTP status class, expressed as the leading digit: `1`–`5` for
-   * 1xx–5xx.
-   *
-   * Combined with `status_codes` using OR — e.g. `status_codes=401` and
-   * `status_code_classes=5` matches 401 responses and any 5xx response.
-   */
-  status_code_classes?: Array<number>;
-
-  /**
    * Filter by the HTTP status code.
    */
   status_codes?: Array<number>;
-
-  /**
-   * Filter by the _target_ account: the account the request acted upon (the log's
-   * target account).
-   *
-   * Results are always scoped to logs where your account is either the acting
-   * account or the target account; this narrows that set to specific target
-   * accounts. For example, pass a supplier's account ID to see only requests your
-   * account made against that supplier.
-   */
-  target_account_ids?: Array<string>;
-}
-
-export interface RequestLogRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<
-    | 'account'
-    | 'actor'
-    | 'actor.role'
-    | 'actor.role.permissions'
-    | 'query_params'
-    | 'request_body'
-    | 'response_body'
-  >;
 }
 
 export declare namespace RequestLogs {
   export {
-    type Actor as Actor,
-    type ListRequestLog as ListRequestLog,
     type RequestLog as RequestLog,
-    type RequestLogListParams as RequestLogListParams,
+    type RequestLogRetrieveRequestLogsResponse as RequestLogRetrieveRequestLogsResponse,
     type RequestLogRetrieveParams as RequestLogRetrieveParams,
+    type RequestLogRetrieveRequestLogsParams as RequestLogRetrieveRequestLogsParams,
   };
 }

@@ -1,8 +1,9 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as AgentsAPI from '../ai/agents';
 import * as RequestLogsAPI from './request-logs';
-import * as APIKeysAPI from '../auth/api-keys/api-keys';
+import * as AlertsAPI from '../ai/alerts/alerts';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -12,27 +13,12 @@ import { path } from '../../internal/utils/path';
  */
 export class AuditEvents extends APIResource {
   /**
-   * Returns a paginated list of audit events for the current account.
-   *
-   * @example
-   * ```ts
-   * const listAuditEvent = await client.core.auditEvents.list();
-   * ```
-   */
-  list(
-    query: AuditEventListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListAuditEvent> {
-    return this._client.get('/v1/core/audit-events', { query, ...options });
-  }
-
-  /**
    * Returns an audit event by ID.
    *
    * @example
    * ```ts
    * const auditEvent = await client.core.auditEvents.retrieve(
-   *   'ae_01b1c07dc3085bbd84111edcbd',
+   *   'ae_01gq7s3f2m0y9h2t7z1w7q3v9k',
    * );
    * ```
    */
@@ -45,26 +31,38 @@ export class AuditEvents extends APIResource {
   }
 
   /**
-   * Returns the full set of resource types that may appear on audit events.
-   *
-   * Values are plain strings, suitable for the `resource_types` filter when listing
-   * audit events.
+   * Returns a paginated list of audit events for the current account.
    *
    * @example
    * ```ts
-   * const listObjectType =
+   * const response =
+   *   await client.core.auditEvents.retrieveAuditEvents();
+   * ```
+   */
+  retrieveAuditEvents(
+    query: AuditEventRetrieveAuditEventsParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<AuditEventRetrieveAuditEventsResponse> {
+    return this._client.get('/v1/core/audit-events', { query, ...options });
+  }
+
+  /**
+   * Returns the full set of resource types that may appear on audit events.
+   *
+   * @example
+   * ```ts
+   * const response =
    *   await client.core.auditEvents.retrieveResourceTypes();
    * ```
    */
-  retrieveResourceTypes(options?: RequestOptions): APIPromise<ListObjectType> {
+  retrieveResourceTypes(options?: RequestOptions): APIPromise<AuditEventRetrieveResourceTypesResponse> {
     return this._client.get('/v1/core/audit-events/resource-types', options);
   }
 }
 
 /**
- * Immutable audit event record.
- *
- * Captures the actor, changed resource, and timestamp.
+ * Immutable audit event record. Captures the actor, changed resource, and
+ * timestamp.
  */
 export interface AuditEvent {
   /**
@@ -73,30 +71,19 @@ export interface AuditEvent {
   id: string;
 
   /**
-   * A customer account, including its branding and customer portal sub-resources.
-   */
-  account: APIKeysAPI.Account | null;
-
-  /**
    * Mutation type.
-   *
-   * - `create`: the resource was created.
-   * - `update`: one or more fields were changed.
-   * - `delete`: the resource was deleted.
-   * - `restore`: a previously deleted resource was restored.
-   * - `archive`: the resource was archived.
    */
   action: 'create' | 'update' | 'delete' | 'restore' | 'archive';
 
   /**
    * Reference to an actor (user, API key, or agent).
    */
-  actor: RequestLogsAPI.Actor | null;
+  actor: AlertsAPI.Actor | null;
 
   /**
    * List represents a paginated list of resources.
    */
-  changes: ListAuditFieldChange | null;
+  changes: AuditEvent.Changes | null;
 
   /**
    * When the audit event record was created.
@@ -126,7 +113,7 @@ export interface AuditEvent {
   occurred_at: string;
 
   /**
-   * A log of a single API request, capturing its route, outcome, latency, and actor.
+   * RequestLog is an API request log entry.
    */
   request: RequestLogsAPI.RequestLog | null;
 
@@ -142,10 +129,6 @@ export interface AuditEvent {
     | 'account'
     | 'actor'
     | 'entity'
-    | 'record'
-    | 'freight'
-    | 'sales_order_totals'
-    | 'sales_order_related'
     | 'user'
     | 'address'
     | 'api_key'
@@ -155,12 +138,10 @@ export interface AuditEvent {
     | 'sandbox'
     | 'registration_session'
     | 'pricing_plan'
-    | 'account_plan'
     | 'plan_change'
     | 'enterprise_inquiry'
     | 'request_log'
     | 'audit_event'
-    | 'audit_field_change'
     | 'role'
     | 'unit'
     | 'account_affiliation'
@@ -222,6 +203,8 @@ export interface AuditEvent {
     | 'delivery'
     | 'delivery_line'
     | 'sales_order'
+    | 'sales_order_line'
+    | 'sales_order_type'
     | 'location'
     | 'location_type'
     | 'lot'
@@ -278,8 +261,6 @@ export interface AuditEvent {
     | 'customer_defaults'
     | 'customer_notification_preferences'
     | 'order_discount'
-    | 'sales_order_line'
-    | 'sales_order_type'
     | 'sales_order_status'
     | 'material'
     | 'supplier_material'
@@ -331,19 +312,7 @@ export interface AuditEvent {
     | 'rate_shop_result'
     | 'owner'
     | 'message'
-    | 'account_photo_upload_result'
-    | 'user_photo_upload_result'
-    | 'user_photo_url'
-    | 'batch_lot'
-    | 'check_duplicate_result'
-    | 'item_trend_point'
-    | 'pack_pick_response'
-    | 'pick_shipments_response'
-    | 'tenancy_pending_registration'
-    | 'invoice_allocation_entry'
-    | 'allocation_customer'
-    | 'checkout_sales_order_response'
-    | 'create_production_run_response';
+    | 'account_plan';
 
   /**
    * Originating client IP address.
@@ -351,41 +320,57 @@ export interface AuditEvent {
   source_ip: string | null;
 }
 
-/**
- * Field-level before/after transition recorded during a mutation.
- */
-export interface AuditFieldChange {
+export namespace AuditEvent {
   /**
-   * Name of the changed field.
+   * List represents a paginated list of resources.
    */
-  field: string;
+  export interface Changes {
+    /**
+     * Resources in this page.
+     */
+    data: Array<Changes.Data>;
 
-  /**
-   * New value as a JSON fragment.
-   *
-   * `null` for deletion events. Encoded as a JSON value (object, array, string,
-   * number, boolean, or null), not a JSON-encoded string.
-   */
-  new_value: unknown | null;
+    /**
+     * Resource type identifier.
+     */
+    object: 'list';
 
-  /**
-   * Resource type identifier.
-   */
-  object: 'audit_field_change';
+    /**
+     * PageInfo contains URL-based pagination metadata.
+     */
+    page_info: AgentsAPI.PageInfo;
+  }
 
-  /**
-   * Previous value as a JSON fragment.
-   *
-   * `null` for creation events. Encoded as a JSON value (object, array, string,
-   * number, boolean, or null), not a JSON-encoded string.
-   */
-  old_value: unknown | null;
+  export namespace Changes {
+    /**
+     * Field-level before/after transition recorded during a mutation.
+     */
+    export interface Data {
+      /**
+       * Name of the changed field.
+       */
+      field: string;
+
+      /**
+       * New value as a JSON fragment. Null for deletion events. Encoded as a JSON value
+       * (object, array, string, number, boolean, or null), not a JSON-encoded string.
+       */
+      new_value: unknown | null;
+
+      /**
+       * Previous value as a JSON fragment. Null for creation events. Encoded as a JSON
+       * value (object, array, string, number, boolean, or null), not a JSON-encoded
+       * string.
+       */
+      old_value: unknown | null;
+    }
+  }
 }
 
 /**
  * List represents a paginated list of resources.
  */
-export interface ListAuditEvent {
+export interface AuditEventRetrieveAuditEventsResponse {
   /**
    * Resources in this page.
    */
@@ -399,33 +384,13 @@ export interface ListAuditEvent {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: APIKeysAPI.PageInfo;
+  page_info: AgentsAPI.PageInfo;
 }
 
 /**
  * List represents a paginated list of resources.
  */
-export interface ListAuditFieldChange {
-  /**
-   * Resources in this page.
-   */
-  data: Array<AuditFieldChange>;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'list';
-
-  /**
-   * PageInfo contains URL-based pagination metadata.
-   */
-  page_info: APIKeysAPI.PageInfo;
-}
-
-/**
- * List represents a paginated list of resources.
- */
-export interface ListObjectType {
+export interface AuditEventRetrieveResourceTypesResponse {
   /**
    * Resources in this page.
    */
@@ -433,10 +398,6 @@ export interface ListObjectType {
     | 'account'
     | 'actor'
     | 'entity'
-    | 'record'
-    | 'freight'
-    | 'sales_order_totals'
-    | 'sales_order_related'
     | 'user'
     | 'address'
     | 'api_key'
@@ -446,12 +407,10 @@ export interface ListObjectType {
     | 'sandbox'
     | 'registration_session'
     | 'pricing_plan'
-    | 'account_plan'
     | 'plan_change'
     | 'enterprise_inquiry'
     | 'request_log'
     | 'audit_event'
-    | 'audit_field_change'
     | 'role'
     | 'unit'
     | 'account_affiliation'
@@ -513,6 +472,8 @@ export interface ListObjectType {
     | 'delivery'
     | 'delivery_line'
     | 'sales_order'
+    | 'sales_order_line'
+    | 'sales_order_type'
     | 'location'
     | 'location_type'
     | 'lot'
@@ -569,8 +530,6 @@ export interface ListObjectType {
     | 'customer_defaults'
     | 'customer_notification_preferences'
     | 'order_discount'
-    | 'sales_order_line'
-    | 'sales_order_type'
     | 'sales_order_status'
     | 'material'
     | 'supplier_material'
@@ -622,19 +581,7 @@ export interface ListObjectType {
     | 'rate_shop_result'
     | 'owner'
     | 'message'
-    | 'account_photo_upload_result'
-    | 'user_photo_upload_result'
-    | 'user_photo_url'
-    | 'batch_lot'
-    | 'check_duplicate_result'
-    | 'item_trend_point'
-    | 'pack_pick_response'
-    | 'pick_shipments_response'
-    | 'tenancy_pending_registration'
-    | 'invoice_allocation_entry'
-    | 'allocation_customer'
-    | 'checkout_sales_order_response'
-    | 'create_production_run_response'
+    | 'account_plan'
   >;
 
   /**
@@ -645,39 +592,33 @@ export interface ListObjectType {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: APIKeysAPI.PageInfo;
+  page_info: AgentsAPI.PageInfo;
 }
 
-export interface AuditEventListParams {
+export interface AuditEventRetrieveParams {
   /**
-   * Filter by the mutation type recorded on the event.
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'actor' | 'changes' | 'metadata' | 'request'>;
+}
+
+export interface AuditEventRetrieveAuditEventsParams {
+  /**
+   * Filter by the audit actions.
    */
   actions?: Array<'create' | 'update' | 'delete' | 'restore' | 'archive'>;
 
   /**
-   * Filter by the _acting_ account: the account that performed the mutation.
-   *
-   * Results are always scoped to events where your account is either the acting
-   * account or the target account; this narrows that set to specific acting accounts
-   * — for example a specific customer's account that mutated a resource on your
-   * account.
-   */
-  actor_account_ids?: Array<string>;
-
-  /**
    * Filter by the actor identifier.
    *
-   * Matches the event's `actor.id`: a user ID for `user` actors or an API key ID for
-   * `api_key` actors.
+   * Will be `account_user.id` when `identity_type`=`user` or an `api_key.id` when
+   * `identity_type`=`api_key`.
    */
   actor_ids?: Array<string>;
 
   /**
-   * Opaque cursor token identifying where the page of results starts.
-   *
-   * Use the `cursor` value embedded in a previous response's `next_page_url` or
-   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
-   * page.
+   * Cursor token used to retrieve the next or previous page of results.
    */
   cursor?: string;
 
@@ -690,17 +631,15 @@ export interface AuditEventListParams {
    * Sub-objects to expand in the response. When omitted, sub-objects are returned as
    * `null`.
    */
-  include?: Array<'account' | 'actor' | 'changes' | 'metadata' | 'request'>;
+  include?: Array<'actor' | 'changes' | 'metadata' | 'request'>;
 
   /**
-   * Maximum number of results to return in a single page.
+   * Maximum number of results per page (default: 100, max: 1000).
    */
   limit?: number;
 
   /**
-   * Free-text search term used to filter results.
-   *
-   * Which fields are matched against the term varies by endpoint.
+   * Search query used to filter results.
    */
   q?: string;
 
@@ -711,18 +650,11 @@ export interface AuditEventListParams {
 
   /**
    * Filter by the resource type of the audited entity.
-   *
-   * The full set of valid values is available from the List Audit Event Resource
-   * Types endpoint.
    */
   resource_types?: Array<
     | 'account'
     | 'actor'
     | 'entity'
-    | 'record'
-    | 'freight'
-    | 'sales_order_totals'
-    | 'sales_order_related'
     | 'user'
     | 'address'
     | 'api_key'
@@ -732,12 +664,10 @@ export interface AuditEventListParams {
     | 'sandbox'
     | 'registration_session'
     | 'pricing_plan'
-    | 'account_plan'
     | 'plan_change'
     | 'enterprise_inquiry'
     | 'request_log'
     | 'audit_event'
-    | 'audit_field_change'
     | 'role'
     | 'unit'
     | 'account_affiliation'
@@ -799,6 +729,8 @@ export interface AuditEventListParams {
     | 'delivery'
     | 'delivery_line'
     | 'sales_order'
+    | 'sales_order_line'
+    | 'sales_order_type'
     | 'location'
     | 'location_type'
     | 'lot'
@@ -855,8 +787,6 @@ export interface AuditEventListParams {
     | 'customer_defaults'
     | 'customer_notification_preferences'
     | 'order_discount'
-    | 'sales_order_line'
-    | 'sales_order_type'
     | 'sales_order_status'
     | 'material'
     | 'supplier_material'
@@ -908,53 +838,21 @@ export interface AuditEventListParams {
     | 'rate_shop_result'
     | 'owner'
     | 'message'
-    | 'account_photo_upload_result'
-    | 'user_photo_upload_result'
-    | 'user_photo_url'
-    | 'batch_lot'
-    | 'check_duplicate_result'
-    | 'item_trend_point'
-    | 'pack_pick_response'
-    | 'pick_shipments_response'
-    | 'tenancy_pending_registration'
-    | 'invoice_allocation_entry'
-    | 'allocation_customer'
-    | 'checkout_sales_order_response'
-    | 'create_production_run_response'
+    | 'account_plan'
   >;
 
   /**
    * Restricts results to audit events on or after this timestamp.
    */
   start_date?: string;
-
-  /**
-   * Filter by the _target_ account the mutation was performed against (the event's
-   * `account`).
-   *
-   * Results are always scoped to events where your account is either the acting
-   * account or the target account; this narrows that set to specific target accounts
-   * — for example a specific customer's or supplier's account.
-   */
-  target_account_ids?: Array<string>;
-}
-
-export interface AuditEventRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'account' | 'actor' | 'changes' | 'metadata' | 'request'>;
 }
 
 export declare namespace AuditEvents {
   export {
     type AuditEvent as AuditEvent,
-    type AuditFieldChange as AuditFieldChange,
-    type ListAuditEvent as ListAuditEvent,
-    type ListAuditFieldChange as ListAuditFieldChange,
-    type ListObjectType as ListObjectType,
-    type AuditEventListParams as AuditEventListParams,
+    type AuditEventRetrieveAuditEventsResponse as AuditEventRetrieveAuditEventsResponse,
+    type AuditEventRetrieveResourceTypesResponse as AuditEventRetrieveResourceTypesResponse,
     type AuditEventRetrieveParams as AuditEventRetrieveParams,
+    type AuditEventRetrieveAuditEventsParams as AuditEventRetrieveAuditEventsParams,
   };
 }

@@ -1,7 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as CustomersAPI from '../../sales/customers/customers';
+import * as AgentsAPI from '../../ai/agents';
+import * as ItemCategoriesAPI from '../../catalog/item-categories/item-categories';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
@@ -11,33 +12,14 @@ import { path } from '../../../internal/utils/path';
  */
 export class ServiceLevels extends APIResource {
   /**
-   * Returns a paginated list of service levels for a carrier.
-   *
-   * @example
-   * ```ts
-   * const listServiceLevel =
-   *   await client.operations.carriers.serviceLevels.list(
-   *     'cr_01784fd54c9ba197bb4e42f0e6',
-   *   );
-   * ```
-   */
-  list(
-    carrierID: string,
-    query: ServiceLevelListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<CustomersAPI.ListServiceLevel> {
-    return this._client.get(path`/v1/operations/carriers/${carrierID}/service-levels`, { query, ...options });
-  }
-
-  /**
    * Returns a service level by ID.
    *
    * @example
    * ```ts
    * const serviceLevel =
    *   await client.operations.carriers.serviceLevels.retrieve(
-   *     'crop_01cfaf03f104e90ef9680e2a30',
-   *     { carrier_id: 'cr_01784fd54c9ba197bb4e42f0e6' },
+   *     'crop_01jm4r6700f8nwq3v5hx2d9ktp',
+   *     { carrier_id: 'cr_01jm4r6700f8nwq3v5hx2d9ktp' },
    *   );
    * ```
    */
@@ -45,7 +27,7 @@ export class ServiceLevels extends APIResource {
     id: string,
     params: ServiceLevelRetrieveParams,
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.ServiceLevel> {
+  ): APIPromise<ServiceLevel> {
     const { carrier_id, ...query } = params;
     return this._client.get(path`/v1/operations/carriers/${carrier_id}/service-levels/${id}`, {
       query,
@@ -54,56 +36,21 @@ export class ServiceLevels extends APIResource {
   }
 
   /**
-   * Creates a service level for a carrier.
-   *
-   * @example
-   * ```ts
-   * const serviceLevel =
-   *   await client.operations.carriers.serviceLevels.create(
-   *     'cr_01784fd54c9ba197bb4e42f0e6',
-   *     {
-   *       code: 'ground',
-   *       is_default: false,
-   *       name: 'Ground Shipping',
-   *     },
-   *   );
-   * ```
-   */
-  create(
-    carrierID: string,
-    params: ServiceLevelCreateParams,
-    options?: RequestOptions,
-  ): APIPromise<CustomersAPI.ServiceLevel> {
-    const { include, ...body } = params;
-    return this._client.post(path`/v1/operations/carriers/${carrierID}/service-levels`, {
-      query: { include },
-      body,
-      ...options,
-    });
-  }
-
-  /**
    * Partially updates a service level.
-   *
-   * System-owned service levels cannot be updated.
    *
    * @example
    * ```ts
    * const serviceLevel =
    *   await client.operations.carriers.serviceLevels.update(
-   *     'crop_01cfaf03f104e90ef9680e2a30',
+   *     'crop_01jm4r6700f8nwq3v5hx2d9ktp',
    *     {
-   *       carrier_id: 'cr_01784fd54c9ba197bb4e42f0e6',
+   *       carrier_id: 'cr_01jm4r6700f8nwq3v5hx2d9ktp',
    *       name: 'Express Shipping',
    *     },
    *   );
    * ```
    */
-  update(
-    id: string,
-    params: ServiceLevelUpdateParams,
-    options?: RequestOptions,
-  ): APIPromise<CustomersAPI.ServiceLevel> {
+  update(id: string, params: ServiceLevelUpdateParams, options?: RequestOptions): APIPromise<ServiceLevel> {
     const { carrier_id, include, ...body } = params;
     return this._client.patch(path`/v1/operations/carriers/${carrier_id}/service-levels/${id}`, {
       query: { include },
@@ -113,17 +60,15 @@ export class ServiceLevels extends APIResource {
   }
 
   /**
-   * Permanently deletes a service level.
-   *
-   * System-owned service levels and the carrier's default service level cannot be
-   * deleted; unset `is_default` first to delete a default.
+   * Permanently deletes a service level. Fails if the service level is a default
+   * (system-synced) level.
    *
    * @example
    * ```ts
    * const serviceLevel =
    *   await client.operations.carriers.serviceLevels.delete(
-   *     'crop_01cfaf03f104e90ef9680e2a30',
-   *     { carrier_id: 'cr_01784fd54c9ba197bb4e42f0e6' },
+   *     'crop_01jm4r6700f8nwq3v5hx2d9ktp',
+   *     { carrier_id: 'cr_01jm4r6700f8nwq3v5hx2d9ktp' },
    *   );
    * ```
    */
@@ -135,107 +80,127 @@ export class ServiceLevels extends APIResource {
     const { carrier_id } = params;
     return this._client.delete(path`/v1/operations/carriers/${carrier_id}/service-levels/${id}`, options);
   }
+
+  /**
+   * Returns a paginated list of service levels for a carrier.
+   *
+   * @example
+   * ```ts
+   * const listServiceLevel =
+   *   await client.operations.carriers.serviceLevels.retrieveServiceLevels(
+   *     'cr_01jm4r6700f8nwq3v5hx2d9ktp',
+   *   );
+   * ```
+   */
+  retrieveServiceLevels(
+    carrierID: string,
+    query: ServiceLevelRetrieveServiceLevelsParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ListServiceLevel> {
+    return this._client.get(path`/v1/operations/carriers/${carrierID}/service-levels`, { query, ...options });
+  }
+
+  /**
+   * Creates a service level for a carrier.
+   *
+   * @example
+   * ```ts
+   * const serviceLevel =
+   *   await client.operations.carriers.serviceLevels.serviceLevels(
+   *     'cr_01jm4r6700f8nwq3v5hx2d9ktp',
+   *     {
+   *       code: 'ground',
+   *       is_default: false,
+   *       name: 'Ground Shipping',
+   *     },
+   *   );
+   * ```
+   */
+  serviceLevels(
+    carrierID: string,
+    params: ServiceLevelServiceLevelsParams,
+    options?: RequestOptions,
+  ): APIPromise<ServiceLevel> {
+    const { include, ...body } = params;
+    return this._client.post(path`/v1/operations/carriers/${carrierID}/service-levels`, {
+      query: { include },
+      body,
+      ...options,
+    });
+  }
 }
 
 /**
- * Request to create a service level.
+ * List represents a paginated list of resources.
  */
-export interface CreateServiceLevelRequest {
+export interface ListServiceLevel {
   /**
-   * Carrier-specific code identifying this service level (e.g. `fedex_ground`).
-   *
-   * Must be unique among the carrier's service levels.
+   * Resources in this page.
    */
-  code: string;
+  data: Array<ServiceLevel>;
 
   /**
-   * Whether this becomes the carrier's default service level, pre-selected when the
-   * carrier is chosen.
-   *
-   * Each carrier has at most one default; setting this to `true` clears the
-   * carrier's existing default.
+   * Resource type identifier.
+   */
+  object: 'list';
+
+  /**
+   * PageInfo contains URL-based pagination metadata.
+   */
+  page_info: AgentsAPI.PageInfo;
+}
+
+/**
+ * Shipping service level for a carrier.
+ */
+export interface ServiceLevel {
+  /**
+   * Service level ID.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Customer portal visibility.
+   */
+  customer_portal_visibility: 'visible' | 'hidden';
+
+  /**
+   * Default service level for the carrier.
    */
   is_default: boolean;
 
   /**
-   * Human-readable name for the service level, shown to customers at checkout when
-   * the service level is visible.
+   * Display name.
    */
   name: string;
 
   /**
-   * Service level visibility in the customer portal.
-   *
-   * A `visible` service level can be selected by your customers at checkout; a
-   * `hidden` one is not offered there. New service levels are visible unless set to
-   * `hidden`.
+   * Resource type identifier.
    */
-  customer_portal_visibility?: 'visible' | 'hidden';
-}
-
-/**
- * Request to update a service level.
- */
-export interface UpdateServiceLevelRequest {
-  /**
-   * Carrier-specific code identifying this service level (e.g. `fedex_ground`).
-   *
-   * Must be unique among the carrier's service levels.
-   */
-  code?: string;
+  object: 'service_level';
 
   /**
-   * Whether this service level will be available for customers to select in the
-   * customer portal.
+   * Owner describes the provenance of a resource.
    */
-  customer_portal_visibility?: 'visible' | 'hidden';
+  owner: ItemCategoriesAPI.Owner | null;
 
   /**
-   * Whether this is the carrier's default service level, pre-selected when the
-   * carrier is chosen.
-   *
-   * Each carrier has at most one default; setting this to `true` clears the
-   * carrier's existing default.
+   * Service level token.
    */
-  is_default?: boolean;
+  service_level_token: string;
 
   /**
-   * Human-readable name for the service level, shown to customers at checkout when
-   * the service level is visible.
+   * Last updated timestamp.
    */
-  name?: string;
+  updated_at: string;
 }
 
 export interface ServiceLevelDeleteResponse {}
-
-export interface ServiceLevelListParams {
-  /**
-   * Opaque cursor token identifying where the page of results starts.
-   *
-   * Use the `cursor` value embedded in a previous response's `next_page_url` or
-   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
-   * page.
-   */
-  cursor?: string;
-
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'owner' | 'owner.account'>;
-
-  /**
-   * Maximum number of results to return in a single page.
-   */
-  limit?: number;
-
-  /**
-   * Free-text search term used to filter results.
-   *
-   * Which fields are matched against the term varies by endpoint.
-   */
-  q?: string;
-}
 
 export interface ServiceLevelRetrieveParams {
   /**
@@ -248,46 +213,6 @@ export interface ServiceLevelRetrieveParams {
    * are returned as `null`.
    */
   include?: Array<'owner' | 'owner.account'>;
-}
-
-export interface ServiceLevelCreateParams {
-  /**
-   * Body param: Carrier-specific code identifying this service level (e.g.
-   * `fedex_ground`).
-   *
-   * Must be unique among the carrier's service levels.
-   */
-  code: string;
-
-  /**
-   * Body param: Whether this becomes the carrier's default service level,
-   * pre-selected when the carrier is chosen.
-   *
-   * Each carrier has at most one default; setting this to `true` clears the
-   * carrier's existing default.
-   */
-  is_default: boolean;
-
-  /**
-   * Body param: Human-readable name for the service level, shown to customers at
-   * checkout when the service level is visible.
-   */
-  name: string;
-
-  /**
-   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
-   * are returned as `null`.
-   */
-  include?: Array<'owner' | 'owner.account'>;
-
-  /**
-   * Body param: Service level visibility in the customer portal.
-   *
-   * A `visible` service level can be selected by your customers at checkout; a
-   * `hidden` one is not offered there. New service levels are visible unless set to
-   * `hidden`.
-   */
-  customer_portal_visibility?: 'visible' | 'hidden';
 }
 
 export interface ServiceLevelUpdateParams {
@@ -303,10 +228,7 @@ export interface ServiceLevelUpdateParams {
   include?: Array<'owner' | 'owner.account'>;
 
   /**
-   * Body param: Carrier-specific code identifying this service level (e.g.
-   * `fedex_ground`).
-   *
-   * Must be unique among the carrier's service levels.
+   * Body param: Service level code.
    */
   code?: string;
 
@@ -317,17 +239,13 @@ export interface ServiceLevelUpdateParams {
   customer_portal_visibility?: 'visible' | 'hidden';
 
   /**
-   * Body param: Whether this is the carrier's default service level, pre-selected
-   * when the carrier is chosen.
-   *
-   * Each carrier has at most one default; setting this to `true` clears the
-   * carrier's existing default.
+   * Body param: Default service levels are the default-selected service level for
+   * that carrier.
    */
   is_default?: boolean;
 
   /**
-   * Body param: Human-readable name for the service level, shown to customers at
-   * checkout when the service level is visible.
+   * Body param: Display name.
    */
   name?: string;
 }
@@ -339,15 +257,68 @@ export interface ServiceLevelDeleteParams {
   carrier_id: string;
 }
 
+export interface ServiceLevelRetrieveServiceLevelsParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'owner' | 'owner.account'>;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+}
+
+export interface ServiceLevelServiceLevelsParams {
+  /**
+   * Body param: Service level code.
+   */
+  code: string;
+
+  /**
+   * Body param: Default service levels are the default-selected service level for
+   * that carrier.
+   */
+  is_default: boolean;
+
+  /**
+   * Body param: Display name.
+   */
+  name: string;
+
+  /**
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
+   */
+  include?: Array<'owner' | 'owner.account'>;
+
+  /**
+   * Body param: Whether this service level will be available for customers to select
+   * in the customer portal.
+   */
+  customer_portal_visibility?: 'visible' | 'hidden';
+}
+
 export declare namespace ServiceLevels {
   export {
-    type CreateServiceLevelRequest as CreateServiceLevelRequest,
-    type UpdateServiceLevelRequest as UpdateServiceLevelRequest,
+    type ListServiceLevel as ListServiceLevel,
+    type ServiceLevel as ServiceLevel,
     type ServiceLevelDeleteResponse as ServiceLevelDeleteResponse,
-    type ServiceLevelListParams as ServiceLevelListParams,
     type ServiceLevelRetrieveParams as ServiceLevelRetrieveParams,
-    type ServiceLevelCreateParams as ServiceLevelCreateParams,
     type ServiceLevelUpdateParams as ServiceLevelUpdateParams,
     type ServiceLevelDeleteParams as ServiceLevelDeleteParams,
+    type ServiceLevelRetrieveServiceLevelsParams as ServiceLevelRetrieveServiceLevelsParams,
+    type ServiceLevelServiceLevelsParams as ServiceLevelServiceLevelsParams,
   };
 }

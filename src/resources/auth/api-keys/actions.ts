@@ -24,11 +24,8 @@ export class Actions extends APIResource {
    * ```ts
    * const createdAPIKey =
    *   await client.auth.apiKeys.actions.rotate(
-   *     'apke_01fba3a7db3996e3b3b1a07e00',
-   *     {
-   *       expires_at: '2026-12-31T23:59:59Z',
-   *       revoke_at: '2026-06-16T00:00:00Z',
-   *     },
+   *     'apke_01jm4r6700e3kxb9w2nqh7g5fp',
+   *     { expires_at: '2026-12-31T23:59:59Z' },
    *   );
    * ```
    */
@@ -46,27 +43,6 @@ export class Actions extends APIResource {
   }
 }
 
-/**
- * Request to rotate an API key.
- */
-export interface RotateAPIKeyRequest {
-  /**
-   * Expiration timestamp override for the new key.
-   *
-   * If omitted, the previous key's expiration is used.
-   */
-  expires_at?: string;
-
-  /**
-   * When to revoke the old key.
-   *
-   * If omitted, the old key is revoked immediately. A future timestamp schedules
-   * revocation (keeping the old key valid until then) up to a maximum of 30 days
-   * out.
-   */
-  revoke_at?: string;
-}
-
 export interface ActionRotateParams {
   /**
    * Query param: Sub-objects to expand in the response. When omitted, sub-objects
@@ -75,22 +51,12 @@ export interface ActionRotateParams {
   include?: Array<'role' | 'role.permissions'>;
 
   /**
-   * Body param: Expiration timestamp override for the new key.
-   *
-   * If omitted, the previous key's expiration is used.
+   * Body param: Expiration timestamp override. If omitted, the previous key's
+   * expiration is used.
    */
   expires_at?: string;
-
-  /**
-   * Body param: When to revoke the old key.
-   *
-   * If omitted, the old key is revoked immediately. A future timestamp schedules
-   * revocation (keeping the old key valid until then) up to a maximum of 30 days
-   * out.
-   */
-  revoke_at?: string;
 }
 
 export declare namespace Actions {
-  export { type RotateAPIKeyRequest as RotateAPIKeyRequest, type ActionRotateParams as ActionRotateParams };
+  export { type ActionRotateParams as ActionRotateParams };
 }

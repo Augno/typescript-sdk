@@ -12,18 +12,16 @@ processExportMap(pkgJson.exports);
 for (const key of ['types', 'main', 'module']) {
   if (typeof pkgJson[key] === 'string') pkgJson[key] = pkgJson[key].replace(/^(\.\/)?dist\//, './');
 }
-// Fix bin paths if present
-if (pkgJson.bin) {
-  for (const key in pkgJson.bin) {
-    if (typeof pkgJson.bin[key] === 'string') {
-      pkgJson.bin[key] = pkgJson.bin[key].replace(/^(\.\/)?dist\//, './');
-    }
-  }
-}
 
+delete pkgJson.private;
 delete pkgJson.devDependencies;
 delete pkgJson.scripts.prepack;
 delete pkgJson.scripts.prepublishOnly;
 delete pkgJson.scripts.prepare;
+delete pkgJson.scripts.release;
+
+if (pkgJson.publishConfig) {
+  delete pkgJson.publishConfig.directory;
+}
 
 console.log(JSON.stringify(pkgJson, null, 2));

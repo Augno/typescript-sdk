@@ -1,7 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as APIKeysAPI from '../auth/api-keys/api-keys';
+import * as AgentsAPI from '../ai/agents';
+import * as ItemCategoriesAPI from '../catalog/item-categories/item-categories';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -11,33 +12,13 @@ import { path } from '../../internal/utils/path';
  */
 export class AccountStatuses extends APIResource {
   /**
-   * Returns a paginated list of account statuses.
-   *
-   * Account statuses are system-provided lookup values shared across all accounts,
-   * used to set a customer's status (for example, placing a customer on a credit
-   * hold).
-   *
-   * @example
-   * ```ts
-   * const listAccountStatus =
-   *   await client.sales.accountStatuses.list();
-   * ```
-   */
-  list(
-    query: AccountStatusListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListAccountStatus> {
-    return this._client.get('/v1/sales/account-statuses', { query, ...options });
-  }
-
-  /**
    * Returns an account status by ID or code.
    *
    * @example
    * ```ts
    * const accountStatus =
    *   await client.sales.accountStatuses.retrieve(
-   *     'acss_01004f532c58d60514b685cb27',
+   *     'acss_01jm4r6700f8nwq3v5hx2d9ktp',
    *   );
    * ```
    */
@@ -48,11 +29,27 @@ export class AccountStatuses extends APIResource {
   ): APIPromise<AccountStatus> {
     return this._client.get(path`/v1/sales/account-statuses/${id}`, { query, ...options });
   }
+
+  /**
+   * Returns a paginated list of account statuses. Global lookup values for setting
+   * account relationship statuses.
+   *
+   * @example
+   * ```ts
+   * const response =
+   *   await client.sales.accountStatuses.retrieveAccountStatuses();
+   * ```
+   */
+  retrieveAccountStatuses(
+    query: AccountStatusRetrieveAccountStatusesParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<AccountStatusRetrieveAccountStatusesResponse> {
+    return this._client.get('/v1/sales/account-statuses', { query, ...options });
+  }
 }
 
 /**
- * AccountStatus is a lookup value describing the standing of a customer account,
- * such as whether shipments or all activity should be held.
+ * AccountStatus is an account status lookup value.
  */
 export interface AccountStatus {
   /**
@@ -62,14 +59,6 @@ export interface AccountStatus {
 
   /**
    * Machine-readable status code.
-   *
-   * This is the value used as a customer's `status`.
-   *
-   * - `normal`: standard account with no restrictions.
-   * - `preferred`: account flagged as preferred (e.g. for prioritized handling).
-   * - `hold_shipment`: shipments to this account are held; orders may still be
-   *   placed.
-   * - `hold_all`: all activity for this account is held.
    */
   code: 'normal' | 'preferred' | 'hold_shipment' | 'hold_all';
 
@@ -91,7 +80,7 @@ export interface AccountStatus {
   /**
    * Owner describes the provenance of a resource.
    */
-  owner: APIKeysAPI.Owner | null;
+  owner: ItemCategoriesAPI.Owner | null;
 
   /**
    * Last updated timestamp.
@@ -102,7 +91,7 @@ export interface AccountStatus {
 /**
  * List represents a paginated list of resources.
  */
-export interface ListAccountStatus {
+export interface AccountStatusRetrieveAccountStatusesResponse {
   /**
    * Resources in this page.
    */
@@ -116,36 +105,7 @@ export interface ListAccountStatus {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: APIKeysAPI.PageInfo;
-}
-
-export interface AccountStatusListParams {
-  /**
-   * Opaque cursor token identifying where the page of results starts.
-   *
-   * Use the `cursor` value embedded in a previous response's `next_page_url` or
-   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
-   * page.
-   */
-  cursor?: string;
-
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'owner'>;
-
-  /**
-   * Maximum number of results to return in a single page.
-   */
-  limit?: number;
-
-  /**
-   * Free-text search term used to filter results.
-   *
-   * Which fields are matched against the term varies by endpoint.
-   */
-  q?: string;
+  page_info: AgentsAPI.PageInfo;
 }
 
 export interface AccountStatusRetrieveParams {
@@ -156,11 +116,34 @@ export interface AccountStatusRetrieveParams {
   include?: Array<'owner'>;
 }
 
+export interface AccountStatusRetrieveAccountStatusesParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'owner'>;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+}
+
 export declare namespace AccountStatuses {
   export {
     type AccountStatus as AccountStatus,
-    type ListAccountStatus as ListAccountStatus,
-    type AccountStatusListParams as AccountStatusListParams,
+    type AccountStatusRetrieveAccountStatusesResponse as AccountStatusRetrieveAccountStatusesResponse,
     type AccountStatusRetrieveParams as AccountStatusRetrieveParams,
+    type AccountStatusRetrieveAccountStatusesParams as AccountStatusRetrieveAccountStatusesParams,
   };
 }

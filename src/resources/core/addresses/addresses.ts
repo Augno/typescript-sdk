@@ -1,14 +1,13 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as APIKeysAPI from '../../auth/api-keys/api-keys';
+import * as AgentsAPI from '../../ai/agents';
 import * as ActionsAPI from './actions';
 import {
-  ActionValidateParams,
+  ActionUpdateValidateParams,
+  ActionUpdateValidateResponse,
   Actions,
   AddressComponents,
-  ValidateAddressRequest,
-  ValidatedAddress,
 } from './actions';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
@@ -24,7 +23,7 @@ export class Addresses extends APIResource {
    *
    * @example
    * ```ts
-   * const listAddressSuggestion =
+   * const response =
    *   await client.core.addresses.retrieveSuggestions({
    *     input: 'input',
    *   });
@@ -33,49 +32,19 @@ export class Addresses extends APIResource {
   retrieveSuggestions(
     query: AddressRetrieveSuggestionsParams,
     options?: RequestOptions,
-  ): APIPromise<ListAddressSuggestion> {
+  ): APIPromise<AddressRetrieveSuggestionsResponse> {
     return this._client.get('/v1/core/addresses/suggestions', { query, ...options });
   }
 }
 
 /**
- * Autocomplete address suggestion.
- */
-export interface AddressSuggestion {
-  /**
-   * Address suggestion ID.
-   */
-  id: string;
-
-  /**
-   * Full description of the address.
-   */
-  description: string;
-
-  /**
-   * Main text (typically the street address).
-   */
-  main_text: string;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'address_suggestion';
-
-  /**
-   * Secondary text (typically city, state, country).
-   */
-  secondary_text: string;
-}
-
-/**
  * List represents a paginated list of resources.
  */
-export interface ListAddressSuggestion {
+export interface AddressRetrieveSuggestionsResponse {
   /**
    * Resources in this page.
    */
-  data: Array<AddressSuggestion>;
+  data: Array<AddressRetrieveSuggestionsResponse.Data>;
 
   /**
    * Resource type identifier.
@@ -85,20 +54,49 @@ export interface ListAddressSuggestion {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: APIKeysAPI.PageInfo;
+  page_info: AgentsAPI.PageInfo;
+}
+
+export namespace AddressRetrieveSuggestionsResponse {
+  /**
+   * Autocomplete address suggestion.
+   */
+  export interface Data {
+    /**
+     * Address suggestion ID.
+     */
+    id: string;
+
+    /**
+     * Full description of the address.
+     */
+    description: string;
+
+    /**
+     * Main text (typically the street address).
+     */
+    main_text: string;
+
+    /**
+     * Resource type identifier.
+     */
+    object: 'address_suggestion';
+
+    /**
+     * Secondary text (typically city, state, country).
+     */
+    secondary_text: string;
+  }
 }
 
 export interface AddressRetrieveSuggestionsParams {
   /**
-   * Partial address text to generate suggestions for.
+   * Autocomplete input text.
    */
   input: string;
 
   /**
-   * Opaque token that groups a series of related autocomplete requests into a single
-   * session.
-   *
-   * Reuse the same token for each keystroke of one address entry.
+   * Session token for grouping autocomplete requests.
    */
   session_token?: string;
 }
@@ -107,16 +105,14 @@ Addresses.Actions = Actions;
 
 export declare namespace Addresses {
   export {
-    type AddressSuggestion as AddressSuggestion,
-    type ListAddressSuggestion as ListAddressSuggestion,
+    type AddressRetrieveSuggestionsResponse as AddressRetrieveSuggestionsResponse,
     type AddressRetrieveSuggestionsParams as AddressRetrieveSuggestionsParams,
   };
 
   export {
     Actions as Actions,
     type AddressComponents as AddressComponents,
-    type ValidateAddressRequest as ValidateAddressRequest,
-    type ValidatedAddress as ValidatedAddress,
-    type ActionValidateParams as ActionValidateParams,
+    type ActionUpdateValidateResponse as ActionUpdateValidateResponse,
+    type ActionUpdateValidateParams as ActionUpdateValidateParams,
   };
 }

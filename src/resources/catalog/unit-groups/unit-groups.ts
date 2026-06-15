@@ -1,20 +1,21 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as UnitsAPI from '../units';
-import * as APIKeysAPI from '../../auth/api-keys/api-keys';
-import * as UnitGroupsUnitsAPI from './units';
+import * as AgentsAPI from '../../ai/agents';
+import * as ItemCategoriesAPI from '../item-categories/item-categories';
+import * as UnitsAPI from './units';
 import {
-  CreateUnitGroupUnitRequest,
+  ListUnitGroupUnit,
   UnitCreateParams,
   UnitDeleteParams,
   UnitDeleteResponse,
+  UnitGroupUnit,
   UnitListParams,
   UnitRetrieveParams,
   UnitUpdateParams,
   Units,
-  UpdateUnitGroupUnitRequest,
 } from './units';
+import * as CatalogUnitsAPI from '../units/units';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
@@ -23,23 +24,7 @@ import { path } from '../../../internal/utils/path';
  * List and manage unit groups and their associated units.
  */
 export class UnitGroups extends APIResource {
-  units: UnitGroupsUnitsAPI.Units = new UnitGroupsUnitsAPI.Units(this._client);
-
-  /**
-   * Returns a paginated list of unit groups, including system unit groups.
-   *
-   * @example
-   * ```ts
-   * const listUnitGroup =
-   *   await client.catalog.unitGroups.list();
-   * ```
-   */
-  list(
-    query: UnitGroupListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ListUnitGroup> {
-    return this._client.get('/v1/catalog/unit-groups', { query, ...options });
-  }
+  units: UnitsAPI.Units = new UnitsAPI.Units(this._client);
 
   /**
    * Returns a unit group by ID.
@@ -47,7 +32,7 @@ export class UnitGroups extends APIResource {
    * @example
    * ```ts
    * const unitGroup = await client.catalog.unitGroups.retrieve(
-   *   'ug_01aad07abb8e41fd392d2d7013',
+   *   'ug_01jm4r6700f8nwq3v5hx2d9ktp',
    * );
    * ```
    */
@@ -60,39 +45,14 @@ export class UnitGroups extends APIResource {
   }
 
   /**
-   * Creates a unit group with optional associated units.
-   *
-   * @example
-   * ```ts
-   * const unitGroup = await client.catalog.unitGroups.create({
-   *   base_unit_id: 'un_01966263f74a5a0cae356000a1',
-   *   name: 'Weight Units',
-   *   type: 'mass',
-   *   associated_units: [
-   *     {
-   *       unit_id: 'un_01966263f74a5a0cae356000a1',
-   *       discount_percentage: 1,
-   *       discount_fixed: 0,
-   *       customer_portal_visibility: 'visible',
-   *     },
-   *   ],
-   * });
-   * ```
-   */
-  create(params: UnitGroupCreateParams, options?: RequestOptions): APIPromise<UnitGroup> {
-    const { include, ...body } = params;
-    return this._client.post('/v1/catalog/unit-groups', { query: { include }, body, ...options });
-  }
-
-  /**
    * Partially updates a unit group. System unit groups cannot be updated.
    *
    * @example
    * ```ts
    * const unitGroup = await client.catalog.unitGroups.update(
-   *   'ug_01aad07abb8e41fd392d2d7013',
+   *   'ug_01jm4r6700f8nwq3v5hx2d9ktp',
    *   {
-   *     base_unit_id: 'un_01966263f74a5a0cae356000a1',
+   *     base_unit_id: 'un_01jm4r6700f8nwq3v5hx2d9ktp',
    *     name: 'Weight Units (Updated)',
    *   },
    * );
@@ -114,82 +74,143 @@ export class UnitGroups extends APIResource {
    * @example
    * ```ts
    * const unitGroup = await client.catalog.unitGroups.delete(
-   *   'ug_01aad07abb8e41fd392d2d7013',
+   *   'ug_01jm4r6700f8nwq3v5hx2d9ktp',
    * );
    * ```
    */
   delete(id: string, options?: RequestOptions): APIPromise<UnitGroupDeleteResponse> {
     return this._client.delete(path`/v1/catalog/unit-groups/${id}`, options);
   }
+
+  /**
+   * Returns a paginated list of unit groups, including system unit groups.
+   *
+   * @example
+   * ```ts
+   * const response =
+   *   await client.catalog.unitGroups.retrieveUnitGroups();
+   * ```
+   */
+  retrieveUnitGroups(
+    query: UnitGroupRetrieveUnitGroupsParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<UnitGroupRetrieveUnitGroupsResponse> {
+    return this._client.get('/v1/catalog/unit-groups', { query, ...options });
+  }
+
+  /**
+   * Creates a unit group with optional associated units.
+   *
+   * @example
+   * ```ts
+   * const unitGroup =
+   *   await client.catalog.unitGroups.unitGroups({
+   *     base_unit_id: 'un_01jm4r6700f8nwq3v5hx2d9ktp',
+   *     name: 'Weight Units',
+   *     type: 'mass',
+   *     associated_units: [
+   *       {
+   *         unit_id: 'un_01jm4r6700f8nwq3v5hx2d9ktp',
+   *         discount_percentage: 1,
+   *         discount_fixed: 0,
+   *         customer_portal_visibility: 'visible',
+   *       },
+   *     ],
+   *   });
+   * ```
+   */
+  unitGroups(params: UnitGroupUnitGroupsParams, options?: RequestOptions): APIPromise<UnitGroup> {
+    const { include, ...body } = params;
+    return this._client.post('/v1/catalog/unit-groups', { query: { include }, body, ...options });
+  }
 }
 
 /**
- * Request to create a unit group.
- */
-export interface CreateUnitGroupRequest {
-  /**
-   * ID of the unit to designate as the group's reference unit.
-   */
-  base_unit_id: string;
-
-  /**
-   * Display name of the unit group.
-   *
-   * Must be unique within the account.
-   */
-  name: string;
-
-  /**
-   * Dimension shared by every unit in this group (e.g. `mass`, `volume`).
-   *
-   * All associated units must be of this dimension.
-   */
-  type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area';
-
-  /**
-   * Associated units to create with the group.
-   */
-  associated_units?: Array<CreateUnitGroupUnitParam>;
-
-  /**
-   * Free-form notes about the unit group.
-   */
-  notes?: string;
-}
-
-/**
- * Parameters for associating a unit with a unit group.
+ * CreateUnitGroupUnitParam contains parameters for an associated unit.
  */
 export interface CreateUnitGroupUnitParam {
   /**
-   * ID of the unit to associate with the group.
-   *
-   * The unit's dimension must match the group's `type`.
+   * Unit ID.
    */
   unit_id: string;
 
   /**
-   * Whether the unit is shown to customers in the customer portal.
+   * Customer portal visibility.
    */
   customer_portal_visibility?: 'visible' | 'hidden';
 
   /**
-   * Flat amount subtracted from the unit's price when an order is placed in this
-   * unit.
+   * Fixed discount amount.
    */
   discount_fixed?: number;
 
   /**
-   * Percentage discount applied to the unit's price when an order is placed in this
-   * unit (e.g. `10` is a 10% discount).
+   * Discount percentage.
    */
   discount_percentage?: number;
 }
 
 /**
+ * UnitGroup is a unit group resource.
+ */
+export interface UnitGroup {
+  /**
+   * Unit group ID.
+   */
+  id: string;
+
+  /**
+   * List represents a paginated list of resources.
+   */
+  associated_units: UnitsAPI.ListUnitGroupUnit | null;
+
+  /**
+   * Unit of measurement used for conversions and product quantities.
+   */
+  base_unit: CatalogUnitsAPI.Unit | null;
+
+  /**
+   * Creation timestamp.
+   */
+  created_at: string;
+
+  /**
+   * Display name.
+   */
+  name: string;
+
+  /**
+   * Notes.
+   */
+  notes: string | null;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'unit_group';
+
+  /**
+   * Owner describes the provenance of a resource.
+   */
+  owner: ItemCategoriesAPI.Owner | null;
+
+  /**
+   * Unit type.
+   */
+  type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area';
+
+  /**
+   * Last updated timestamp.
+   */
+  updated_at: string;
+}
+
+export interface UnitGroupDeleteResponse {}
+
+/**
  * List represents a paginated list of resources.
  */
-export interface ListUnitGroup {
+export interface UnitGroupRetrieveUnitGroupsResponse {
   /**
    * Resources in this page.
    */
@@ -203,202 +224,7 @@ export interface ListUnitGroup {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: APIKeysAPI.PageInfo;
-}
-
-/**
- * List represents a paginated list of resources.
- */
-export interface ListUnitGroupUnit {
-  /**
-   * Resources in this page.
-   */
-  data: Array<UnitGroupUnit>;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'list';
-
-  /**
-   * PageInfo contains URL-based pagination metadata.
-   */
-  page_info: APIKeysAPI.PageInfo;
-}
-
-/**
- * Named collection of units sharing one dimension, defining which units products
- * can be ordered in along with per-unit discounts and customer portal visibility.
- */
-export interface UnitGroup {
-  /**
-   * Unit group ID.
-   */
-  id: string;
-
-  /**
-   * List represents a paginated list of resources.
-   */
-  associated_units: ListUnitGroupUnit | null;
-
-  /**
-   * Unit of measurement used for conversions and product quantities.
-   */
-  base_unit: UnitsAPI.Unit | null;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Display name.
-   */
-  name: string;
-
-  /**
-   * Free-form notes about the unit group.
-   */
-  notes: string | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'unit_group';
-
-  /**
-   * Owner describes the provenance of a resource.
-   */
-  owner: APIKeysAPI.Owner | null;
-
-  /**
-   * Physical dimension shared by every unit in this group, such as mass, volume, or
-   * currency.
-   *
-   * Only units of this dimension can belong to the group.
-   */
-  type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area';
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
-}
-
-/**
- * Membership of a unit in a unit group, carrying the discount and customer portal
- * visibility settings applied when ordering in that unit.
- */
-export interface UnitGroupUnit {
-  /**
-   * Unit group unit ID.
-   */
-  id: string;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Whether this unit is shown to customers in the customer portal.
-   */
-  customer_portal_visibility: 'visible' | 'hidden';
-
-  /**
-   * Flat amount subtracted from the unit's price when an order is placed in this
-   * unit.
-   */
-  discount_fixed: number;
-
-  /**
-   * Percentage discount applied to the unit's price when an order is placed in this
-   * unit (e.g. `10` is a 10% discount).
-   */
-  discount_percentage: number;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'unit_group_unit';
-
-  /**
-   * Unit of measurement used for conversions and product quantities.
-   */
-  unit: UnitsAPI.Unit | null;
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
-}
-
-/**
- * Request to partially update a unit group.
- */
-export interface UpdateUnitGroupRequest {
-  /**
-   * Associated units to add or update in the group.
-   *
-   * Upserted by unit: a listed unit already in the group has its association
-   * updated, otherwise it is added. Existing units not in the list are preserved.
-   */
-  associated_units?: Array<CreateUnitGroupUnitParam>;
-
-  /**
-   * ID of the group's base unit.
-   */
-  base_unit_id?: string;
-
-  /**
-   * Display name of the unit group.
-   *
-   * Must be unique within the account.
-   */
-  name?: string;
-
-  /**
-   * Free-form notes about the unit group.
-   *
-   * Set to `null` to clear.
-   */
-  notes?: string | null;
-}
-
-export interface UnitGroupDeleteResponse {}
-
-export interface UnitGroupListParams {
-  /**
-   * Opaque cursor token identifying where the page of results starts.
-   *
-   * Use the `cursor` value embedded in a previous response's `next_page_url` or
-   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
-   * page.
-   */
-  cursor?: string;
-
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'owner' | 'owner.account' | 'base_unit' | 'associated_units'>;
-
-  /**
-   * Maximum number of results to return in a single page.
-   */
-  limit?: number;
-
-  /**
-   * Free-text search term used to filter results.
-   *
-   * Which fields are matched against the term varies by endpoint.
-   */
-  q?: string;
-
-  /**
-   * Filter by unit dimension (e.g. `mass`).
-   */
-  type?: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area';
+  page_info: AgentsAPI.PageInfo;
 }
 
 export interface UnitGroupRetrieveParams {
@@ -409,24 +235,76 @@ export interface UnitGroupRetrieveParams {
   include?: Array<'owner' | 'owner.account' | 'base_unit' | 'associated_units'>;
 }
 
-export interface UnitGroupCreateParams {
+export interface UnitGroupUpdateParams {
   /**
-   * Body param: ID of the unit to designate as the group's reference unit.
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
+   */
+  include?: Array<'owner' | 'owner.account' | 'base_unit' | 'associated_units'>;
+
+  /**
+   * Body param: Upserts associated units when provided. Existing units not in the
+   * list are preserved.
+   */
+  associated_units?: Array<CreateUnitGroupUnitParam>;
+
+  /**
+   * Body param: Base unit ID.
+   */
+  base_unit_id?: string;
+
+  /**
+   * Body param: Display name.
+   */
+  name?: string;
+
+  /**
+   * Body param: Notes. Set to null to clear.
+   */
+  notes?: string | null;
+}
+
+export interface UnitGroupRetrieveUnitGroupsParams {
+  /**
+   * Cursor token used to retrieve the next or previous page of results.
+   */
+  cursor?: string;
+
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'owner' | 'owner.account' | 'base_unit' | 'associated_units'>;
+
+  /**
+   * Maximum number of results per page (default: 100, max: 1000).
+   */
+  limit?: number;
+
+  /**
+   * Search query used to filter results.
+   */
+  q?: string;
+
+  /**
+   * Filter by the unit type.
+   */
+  type?: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area';
+}
+
+export interface UnitGroupUnitGroupsParams {
+  /**
+   * Body param: Base unit ID.
    */
   base_unit_id: string;
 
   /**
-   * Body param: Display name of the unit group.
-   *
-   * Must be unique within the account.
+   * Body param: Display name.
    */
   name: string;
 
   /**
-   * Body param: Dimension shared by every unit in this group (e.g. `mass`,
-   * `volume`).
-   *
-   * All associated units must be of this dimension.
+   * Body param: Unit type.
    */
   type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area';
 
@@ -442,73 +320,34 @@ export interface UnitGroupCreateParams {
   associated_units?: Array<CreateUnitGroupUnitParam>;
 
   /**
-   * Body param: Free-form notes about the unit group.
+   * Body param: Notes.
    */
   notes?: string;
-}
-
-export interface UnitGroupUpdateParams {
-  /**
-   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
-   * are returned as `null`.
-   */
-  include?: Array<'owner' | 'owner.account' | 'base_unit' | 'associated_units'>;
-
-  /**
-   * Body param: Associated units to add or update in the group.
-   *
-   * Upserted by unit: a listed unit already in the group has its association
-   * updated, otherwise it is added. Existing units not in the list are preserved.
-   */
-  associated_units?: Array<CreateUnitGroupUnitParam>;
-
-  /**
-   * Body param: ID of the group's base unit.
-   */
-  base_unit_id?: string;
-
-  /**
-   * Body param: Display name of the unit group.
-   *
-   * Must be unique within the account.
-   */
-  name?: string;
-
-  /**
-   * Body param: Free-form notes about the unit group.
-   *
-   * Set to `null` to clear.
-   */
-  notes?: string | null;
 }
 
 UnitGroups.Units = Units;
 
 export declare namespace UnitGroups {
   export {
-    type CreateUnitGroupRequest as CreateUnitGroupRequest,
     type CreateUnitGroupUnitParam as CreateUnitGroupUnitParam,
-    type ListUnitGroup as ListUnitGroup,
-    type ListUnitGroupUnit as ListUnitGroupUnit,
     type UnitGroup as UnitGroup,
-    type UnitGroupUnit as UnitGroupUnit,
-    type UpdateUnitGroupRequest as UpdateUnitGroupRequest,
     type UnitGroupDeleteResponse as UnitGroupDeleteResponse,
-    type UnitGroupListParams as UnitGroupListParams,
+    type UnitGroupRetrieveUnitGroupsResponse as UnitGroupRetrieveUnitGroupsResponse,
     type UnitGroupRetrieveParams as UnitGroupRetrieveParams,
-    type UnitGroupCreateParams as UnitGroupCreateParams,
     type UnitGroupUpdateParams as UnitGroupUpdateParams,
+    type UnitGroupRetrieveUnitGroupsParams as UnitGroupRetrieveUnitGroupsParams,
+    type UnitGroupUnitGroupsParams as UnitGroupUnitGroupsParams,
   };
 
   export {
     Units as Units,
-    type CreateUnitGroupUnitRequest as CreateUnitGroupUnitRequest,
-    type UpdateUnitGroupUnitRequest as UpdateUnitGroupUnitRequest,
+    type ListUnitGroupUnit as ListUnitGroupUnit,
+    type UnitGroupUnit as UnitGroupUnit,
     type UnitDeleteResponse as UnitDeleteResponse,
-    type UnitListParams as UnitListParams,
-    type UnitRetrieveParams as UnitRetrieveParams,
     type UnitCreateParams as UnitCreateParams,
+    type UnitRetrieveParams as UnitRetrieveParams,
     type UnitUpdateParams as UnitUpdateParams,
+    type UnitListParams as UnitListParams,
     type UnitDeleteParams as UnitDeleteParams,
   };
 }

@@ -10,19 +10,15 @@ import { path } from '../../../internal/utils/path';
  */
 export class Properties extends APIResource {
   /**
-   * Adds a property to an item category, making the property available to items in
-   * that category.
-   *
-   * Each property name can appear only once per category; adding a property whose
-   * name duplicates one already in the category returns a conflict error. Default
-   * system categories cannot be modified.
+   * Adds a property to an item category. Default system categories cannot be
+   * modified.
    *
    * @example
    * ```ts
    * const property =
    *   await client.catalog.itemCategories.properties.update(
-   *     'pp_01e21344878064372f69e67093',
-   *     { id: 'ic_01ae7bd7bfd21ca0ab81e1357e' },
+   *     'pp_01jm4r6700f8nwq3v5hx2d9ktp',
+   *     { id: 'ic_01jm4r6700f8nwq3v5hx2d9ktp' },
    *   );
    * ```
    */
@@ -36,16 +32,15 @@ export class Properties extends APIResource {
   }
 
   /**
-   * Removes a property from an item category.
-   *
-   * Default system categories cannot be modified.
+   * Removes a property from an item category. Default system categories cannot be
+   * modified.
    *
    * @example
    * ```ts
    * const property =
    *   await client.catalog.itemCategories.properties.delete(
-   *     'pp_01e21344878064372f69e67093',
-   *     { id: 'ic_01ae7bd7bfd21ca0ab81e1357e' },
+   *     'pp_01jm4r6700f8nwq3v5hx2d9ktp',
+   *     { id: 'ic_01jm4r6700f8nwq3v5hx2d9ktp' },
    *   );
    * ```
    */

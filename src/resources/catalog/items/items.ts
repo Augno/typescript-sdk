@@ -1,12 +1,16 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as UnitsAPI from '../units';
-import * as APIKeysAPI from '../../auth/api-keys/api-keys';
+import * as AgentsAPI from '../../ai/agents';
+import * as OperationsAPI from '../../operations/operations';
+import * as ItemCategoriesAPI from '../item-categories/item-categories';
+import * as ActionsAPI from './actions';
+import { Actions } from './actions';
 import * as AttributesAPI from './attributes';
 import { AttributeDeleteParams, AttributeUpdateParams, Attributes } from './attributes';
-import * as PropertiesAPI from '../properties/properties';
-import * as UnitGroupsAPI from '../unit-groups/unit-groups';
+import * as InventoryAPI from './inventory';
+import { Inventory, InventoryListParams, InventoryListResponse } from './inventory';
+import * as PropertiesAttributesAPI from '../properties/attributes';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
@@ -15,19 +19,9 @@ import { path } from '../../../internal/utils/path';
  * List and manage inventory items.
  */
 export class Items extends APIResource {
+  actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
   attributes: AttributesAPI.Attributes = new AttributesAPI.Attributes(this._client);
-
-  /**
-   * Returns a paginated list of items.
-   *
-   * @example
-   * ```ts
-   * const listItem = await client.catalog.items.list();
-   * ```
-   */
-  list(query: ItemListParams | null | undefined = {}, options?: RequestOptions): APIPromise<ListItem> {
-    return this._client.get('/v1/catalog/items', { query, ...options });
-  }
+  inventory: InventoryAPI.Inventory = new InventoryAPI.Inventory(this._client);
 
   /**
    * Returns an item by ID.
@@ -35,7 +29,7 @@ export class Items extends APIResource {
    * @example
    * ```ts
    * const item = await client.catalog.items.retrieve(
-   *   'it_0131e386ac683e8c29a71f6f1f',
+   *   'it_01jm4r6700f8nwq3v5hx2d9ktp',
    * );
    * ```
    */
@@ -48,50 +42,38 @@ export class Items extends APIResource {
   }
 
   /**
-   * Returns inventory quantities for an item, including on-hand, reserved,
-   * available-to-promise, and short amounts.
+   * Changes the category of an item. When the category changes, the item's rate
+   * units are updated to the new category's base unit.
    *
    * @example
    * ```ts
-   * const itemInventory =
-   *   await client.catalog.items.retrieveInventory(
-   *     'it_0131e386ac683e8c29a71f6f1f',
-   *   );
-   * ```
-   */
-  retrieveInventory(
-    id: string,
-    query: ItemRetrieveInventoryParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ItemInventory> {
-    return this._client.get(path`/v1/catalog/items/${id}/inventory`, { query, ...options });
-  }
-
-  /**
-   * Moves an item to a different category.
-   *
-   * The item's rate units (unit value, unit cost, burn rate) and any related
-   * order-point, consumption, and production quantity units are updated to the new
-   * category's base unit. Re-assigning the item's current category is a no-op.
-   *
-   * @example
-   * ```ts
-   * const item = await client.catalog.items.changeCategory(
-   *   'ic_01ae7bd7bfd21ca0ab81e1357e',
-   *   { id: 'it_0131e386ac683e8c29a71f6f1f' },
+   * const item = await client.catalog.items.update(
+   *   'ic_01jm4r6700f8nwq3v5hx2d9ktp',
+   *   { id: 'it_01jm4r6700f8nwq3v5hx2d9ktp' },
    * );
    * ```
    */
-  changeCategory(
-    categoryID: string,
-    params: ItemChangeCategoryParams,
-    options?: RequestOptions,
-  ): APIPromise<Item> {
+  update(categoryID: string, params: ItemUpdateParams, options?: RequestOptions): APIPromise<Item> {
     const { id, include } = params;
     return this._client.put(path`/v1/catalog/items/${id}/category/${categoryID}`, {
       query: { include },
       ...options,
     });
+  }
+
+  /**
+   * Returns a paginated list of items.
+   *
+   * @example
+   * ```ts
+   * const items = await client.catalog.items.list();
+   * ```
+   */
+  list(
+    query: ItemListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ItemListResponse> {
+    return this._client.get('/v1/catalog/items', { query, ...options });
   }
 }
 
@@ -107,19 +89,17 @@ export interface Item {
   /**
    * List represents a paginated list of resources.
    */
-  attributes: PropertiesAPI.ListAttribute | null;
+  attributes: PropertiesAttributesAPI.ListAttribute | null;
 
   /**
-   * Value expressed as a ratio of two units, such as a price per kilogram or a
-   * throughput per hour.
+   * Rate resource.
    */
-  burn_rate: Rate | null;
+  burn_rate: OperationsAPI.Rate | null;
 
   /**
-   * A grouping of related catalog items that defines the unit group and properties
-   * available to the items within it.
+   * ItemCategory resource.
    */
-  category: ItemCategory | null;
+  category: ItemCategoriesAPI.ItemCategory | null;
 
   /**
    * Creation timestamp.
@@ -132,7 +112,7 @@ export interface Item {
   description: string | null;
 
   /**
-   * Free-form notes about the item.
+   * Notes.
    */
   notes: string | null;
 
@@ -142,135 +122,35 @@ export interface Item {
   object: 'item';
 
   /**
-   * Stock keeping unit code, unique within the account.
+   * Stock keeping unit code.
    */
   sku: string;
 
   /**
-   * What kind of item this is.
-   *
-   * - `product`: a finished product.
-   * - `material`: a raw material or component consumed in production.
-   * - `part`: a part used in production.
+   * Item type code.
    */
   type: 'product' | 'material' | 'part';
 
   /**
-   * Value expressed as a ratio of two units, such as a price per kilogram or a
-   * throughput per hour.
+   * Rate resource.
    */
-  unit_cost: Rate | null;
+  unit_cost: OperationsAPI.Rate | null;
 
   /**
-   * Value expressed as a ratio of two units, such as a price per kilogram or a
-   * throughput per hour.
+   * Rate resource.
    */
-  unit_value: Rate | null;
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
-}
-
-/**
- * A grouping of related catalog items that defines the unit group and properties
- * available to the items within it.
- */
-export interface ItemCategory {
-  /**
-   * Item category ID.
-   */
-  id: string;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Display name of the item category.
-   */
-  name: string;
-
-  /**
-   * Free-form notes about the item category.
-   */
-  notes: string | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'item_category';
-
-  /**
-   * Owner describes the provenance of a resource.
-   */
-  owner: APIKeysAPI.Owner | null;
-
-  /**
-   * List represents a paginated list of resources.
-   */
-  properties: PropertiesAPI.ListProperty | null;
-
-  /**
-   * What kind of items this category groups.
-   *
-   * An item can only be assigned to a category whose type matches the item's `type`.
-   *
-   * - `material_category`: groups raw materials and components (items of type
-   *   `material`).
-   * - `product_category`: groups finished products and parts (items of type
-   *   `product` or `part`).
-   */
-  type: 'material_category' | 'product_category';
-
-  /**
-   * Named collection of units sharing one dimension, defining which units products
-   * can be ordered in along with per-unit discounts and customer portal visibility.
-   */
-  unit_group: UnitGroupsAPI.UnitGroup | null;
+  unit_value: OperationsAPI.Rate | null;
 
   /**
    * Last updated timestamp.
    */
   updated_at: string;
-}
-
-/**
- * ItemInventory contains inventory quantities for an item.
- */
-export interface ItemInventory {
-  /**
-   * Value with an associated unit.
-   */
-  available_to_promise: Quantity | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'item_inventory';
-
-  /**
-   * Value with an associated unit.
-   */
-  on_hand: Quantity | null;
-
-  /**
-   * Value with an associated unit.
-   */
-  reserved: Quantity | null;
-
-  /**
-   * Value with an associated unit.
-   */
-  short: Quantity | null;
 }
 
 /**
  * List represents a paginated list of resources.
  */
-export interface ListItem {
+export interface ItemListResponse {
   /**
    * Resources in this page.
    */
@@ -284,88 +164,50 @@ export interface ListItem {
   /**
    * PageInfo contains URL-based pagination metadata.
    */
-  page_info: APIKeysAPI.PageInfo;
+  page_info: AgentsAPI.PageInfo;
 }
 
-/**
- * Value with an associated unit.
- */
-export interface Quantity {
+export interface ItemRetrieveParams {
   /**
-   * Quantity ID.
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<
+    | 'category'
+    | 'unit_value'
+    | 'unit_cost'
+    | 'burn_rate'
+    | 'attributes'
+    | 'category.unit_group'
+    | 'category.properties'
+    | 'category.unit_group.base_unit'
+    | 'category.unit_group.associated_units'
+    | 'category.unit_group.associated_units.unit'
+  >;
+}
+
+export interface ItemUpdateParams {
+  /**
+   * Path param: Item ID.
    */
   id: string;
 
   /**
-   * Formatted value with unit abbreviation (e.g. "$1,234.56" or "100 kg").
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
    */
-  display_value: string;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'quantity';
-
-  /**
-   * Unit of measurement used for conversions and product quantities.
-   */
-  unit: UnitsAPI.Unit | null;
-
-  /**
-   * Raw decimal value of the quantity, as a string to preserve precision.
-   *
-   * This is the unformatted machine value; see `display_value` for the
-   * human-readable rendering with unit and thousands separators.
-   */
-  value: string;
-}
-
-/**
- * Value expressed as a ratio of two units, such as a price per kilogram or a
- * throughput per hour.
- */
-export interface Rate {
-  /**
-   * Rate ID.
-   */
-  id: string;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Unit of measurement used for conversions and product quantities.
-   */
-  denominator_unit: UnitsAPI.Unit | null;
-
-  /**
-   * Human-readable formatted value (e.g. "$25.50 / kg" or "100 kg / hr").
-   */
-  display_value: string;
-
-  /**
-   * Unit of measurement used for conversions and product quantities.
-   */
-  numerator_unit: UnitsAPI.Unit | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'rate';
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
-
-  /**
-   * Decimal value of the rate, as a string to preserve precision.
-   *
-   * Expressed as the amount of the numerator unit per one denominator unit.
-   */
-  value: string;
+  include?: Array<
+    | 'category'
+    | 'unit_value'
+    | 'unit_cost'
+    | 'burn_rate'
+    | 'attributes'
+    | 'category.unit_group'
+    | 'category.properties'
+    | 'category.unit_group.base_unit'
+    | 'category.unit_group.associated_units'
+    | 'category.unit_group.associated_units.unit'
+  >;
 }
 
 export interface ItemListParams {
@@ -380,11 +222,7 @@ export interface ItemListParams {
   category_ids?: Array<string>;
 
   /**
-   * Opaque cursor token identifying where the page of results starts.
-   *
-   * Use the `cursor` value embedded in a previous response's `next_page_url` or
-   * `previous_page_url` to fetch the adjacent page. Omit to start from the first
-   * page.
+   * Cursor token used to retrieve the next or previous page of results.
    */
   cursor?: string;
 
@@ -417,7 +255,7 @@ export interface ItemListParams {
   >;
 
   /**
-   * Maximum number of results to return in a single page.
+   * Maximum number of results per page (default: 100, max: 1000).
    */
   limit?: number;
 
@@ -428,9 +266,7 @@ export interface ItemListParams {
   product_line_ids?: Array<string>;
 
   /**
-   * Free-text search term used to filter results.
-   *
-   * Which fields are matched against the term varies by endpoint.
+   * Search query used to filter results.
    */
   q?: string;
 
@@ -440,11 +276,7 @@ export interface ItemListParams {
   start_date?: string;
 
   /**
-   * Restricts results based on where the item is produced in its production flow.
-   *
-   * - `all`: no restriction.
-   * - `initial_only`: only items produced by an initial production step, i.e. a step
-   *   with no upstream steps feeding into it.
+   * Which subassemblies to include when listing (default: all).
    */
   subassembly_filter?: 'all' | 'initial_only';
 
@@ -454,81 +286,35 @@ export interface ItemListParams {
   supplier_id?: string;
 
   /**
-   * Filter to items of these types (`product`, `material`, `part`).
+   * Filter by item type codes.
    */
   types?: Array<string>;
 }
 
-export interface ItemRetrieveParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<
-    | 'category'
-    | 'unit_value'
-    | 'unit_cost'
-    | 'burn_rate'
-    | 'attributes'
-    | 'category.unit_group'
-    | 'category.properties'
-    | 'category.unit_group.base_unit'
-    | 'category.unit_group.associated_units'
-    | 'category.unit_group.associated_units.unit'
-  >;
-}
-
-export interface ItemRetrieveInventoryParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'on_hand' | 'reserved' | 'available_to_promise' | 'short'>;
-}
-
-export interface ItemChangeCategoryParams {
-  /**
-   * Path param: Item ID.
-   */
-  id: string;
-
-  /**
-   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
-   * are returned as `null`.
-   */
-  include?: Array<
-    | 'category'
-    | 'unit_value'
-    | 'unit_cost'
-    | 'burn_rate'
-    | 'attributes'
-    | 'category.unit_group'
-    | 'category.properties'
-    | 'category.unit_group.base_unit'
-    | 'category.unit_group.associated_units'
-    | 'category.unit_group.associated_units.unit'
-  >;
-}
-
+Items.Actions = Actions;
 Items.Attributes = Attributes;
+Items.Inventory = Inventory;
 
 export declare namespace Items {
   export {
     type Item as Item,
-    type ItemCategory as ItemCategory,
-    type ItemInventory as ItemInventory,
-    type ListItem as ListItem,
-    type Quantity as Quantity,
-    type Rate as Rate,
-    type ItemListParams as ItemListParams,
+    type ItemListResponse as ItemListResponse,
     type ItemRetrieveParams as ItemRetrieveParams,
-    type ItemRetrieveInventoryParams as ItemRetrieveInventoryParams,
-    type ItemChangeCategoryParams as ItemChangeCategoryParams,
+    type ItemUpdateParams as ItemUpdateParams,
+    type ItemListParams as ItemListParams,
   };
+
+  export { Actions as Actions };
 
   export {
     Attributes as Attributes,
     type AttributeUpdateParams as AttributeUpdateParams,
     type AttributeDeleteParams as AttributeDeleteParams,
+  };
+
+  export {
+    Inventory as Inventory,
+    type InventoryListResponse as InventoryListResponse,
+    type InventoryListParams as InventoryListParams,
   };
 }
