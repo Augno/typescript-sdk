@@ -625,22 +625,6 @@ Methods:
 - <code title="put /v1/identity/account-users/{id}/actions/disable">client.identity.accountUsers.actions.<a href="./src/resources/identity/account-users/actions.ts">disable</a>(id) -> ActionDisableResponse</code>
 - <code title="put /v1/identity/account-users/{id}/actions/remove">client.identity.accountUsers.actions.<a href="./src/resources/identity/account-users/actions.ts">remove</a>(id) -> ActionRemoveResponse</code>
 
-## Integrations
-
-Types:
-
-- <code><a href="./src/resources/identity/integrations.ts">AccountIntegration</a></code>
-- <code><a href="./src/resources/identity/integrations.ts">CreateAccountIntegrationRequest</a></code>
-- <code><a href="./src/resources/identity/integrations.ts">ListAccountIntegration</a></code>
-- <code><a href="./src/resources/identity/integrations.ts">UpdateAccountIntegrationRequest</a></code>
-
-Methods:
-
-- <code title="get /v1/identity/integrations">client.identity.integrations.<a href="./src/resources/identity/integrations.ts">list</a>({ ...params }) -> ListAccountIntegration</code>
-- <code title="post /v1/identity/integrations">client.identity.integrations.<a href="./src/resources/identity/integrations.ts">create</a>({ ...params }) -> AccountIntegration</code>
-- <code title="put /v1/identity/integrations/{id}">client.identity.integrations.<a href="./src/resources/identity/integrations.ts">update</a>(id, { ...params }) -> AccountIntegration</code>
-- <code title="delete /v1/identity/integrations/{id}">client.identity.integrations.<a href="./src/resources/identity/integrations.ts">delete</a>(id) -> AccountIntegration</code>
-
 ## Roles
 
 Types:
@@ -657,3 +641,21 @@ Methods:
 - <code title="post /v1/identity/roles">client.identity.roles.<a href="./src/resources/identity/roles.ts">create</a>({ ...params }) -> Role</code>
 - <code title="patch /v1/identity/roles/{id}">client.identity.roles.<a href="./src/resources/identity/roles.ts">update</a>(id, { ...params }) -> Role</code>
 - <code title="delete /v1/identity/roles/{id}">client.identity.roles.<a href="./src/resources/identity/roles.ts">delete</a>(id) -> RoleDeleteResponse</code>
+
+# Settings
+
+## Integrations
+
+Types:
+
+- <code><a href="./src/resources/settings/integrations.ts">AccountIntegration</a></code>
+- <code><a href="./src/resources/settings/integrations.ts">CreateAccountIntegrationRequest</a></code>
+- <code><a href="./src/resources/settings/integrations.ts">ListAccountIntegration</a></code>
+- <code><a href="./src/resources/settings/integrations.ts">UpdateAccountIntegrationRequest</a></code>
+
+Methods:
+
+- <code title="get /v1/settings/integrations">client.settings.integrations.<a href="./src/resources/settings/integrations.ts">list</a>({ ...params }) -> ListAccountIntegration</code>
+- <code title="post /v1/settings/integrations">client.settings.integrations.<a href="./src/resources/settings/integrations.ts">create</a>({ ...params }) -> AccountIntegration</code>
+- <code title="put /v1/settings/integrations/{id}">client.settings.integrations.<a href="./src/resources/settings/integrations.ts">update</a>(id, { ...params }) -> AccountIntegration</code>
+- <code title="delete /v1/settings/integrations/{id}">client.settings.integrations.<a href="./src/resources/settings/integrations.ts">delete</a>(id) -> AccountIntegration</code>

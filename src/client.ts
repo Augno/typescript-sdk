@@ -34,6 +34,7 @@ import {
 import { Identity } from './resources/identity/identity';
 import { Operations } from './resources/operations/operations';
 import { Sales } from './resources/sales/sales';
+import { Settings } from './resources/settings/settings';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -784,6 +785,7 @@ export class Augno {
   finance: API.Finance = new API.Finance(this);
   operations: API.Operations = new API.Operations(this);
   identity: API.Identity = new API.Identity(this);
+  settings: API.Settings = new API.Settings(this);
 }
 
 Augno.Auth = Auth;
@@ -793,6 +795,7 @@ Augno.Sales = Sales;
 Augno.Finance = Finance;
 Augno.Operations = Operations;
 Augno.Identity = Identity;
+Augno.Settings = Settings;
 
 export declare namespace Augno {
   export type RequestOptions = Opts.RequestOptions;
@@ -821,4 +824,6 @@ export declare namespace Augno {
   export { Operations as Operations };
 
   export { Identity as Identity };
+
+  export { Settings as Settings };
 }

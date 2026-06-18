@@ -857,30 +857,6 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/identity/account-users/{id}/actions/remove',
   },
   {
-    clientCallName: 'client.identity.integrations.list',
-    fullyQualifiedName: 'identity.integrations.list',
-    httpMethod: 'get',
-    httpPath: '/v1/identity/integrations',
-  },
-  {
-    clientCallName: 'client.identity.integrations.create',
-    fullyQualifiedName: 'identity.integrations.create',
-    httpMethod: 'post',
-    httpPath: '/v1/identity/integrations',
-  },
-  {
-    clientCallName: 'client.identity.integrations.update',
-    fullyQualifiedName: 'identity.integrations.update',
-    httpMethod: 'put',
-    httpPath: '/v1/identity/integrations/{id}',
-  },
-  {
-    clientCallName: 'client.identity.integrations.delete',
-    fullyQualifiedName: 'identity.integrations.delete',
-    httpMethod: 'delete',
-    httpPath: '/v1/identity/integrations/{id}',
-  },
-  {
     clientCallName: 'client.identity.roles.list',
     fullyQualifiedName: 'identity.roles.list',
     httpMethod: 'get',
@@ -909,6 +885,30 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'identity.roles.delete',
     httpMethod: 'delete',
     httpPath: '/v1/identity/roles/{id}',
+  },
+  {
+    clientCallName: 'client.settings.integrations.list',
+    fullyQualifiedName: 'settings.integrations.list',
+    httpMethod: 'get',
+    httpPath: '/v1/settings/integrations',
+  },
+  {
+    clientCallName: 'client.settings.integrations.create',
+    fullyQualifiedName: 'settings.integrations.create',
+    httpMethod: 'post',
+    httpPath: '/v1/settings/integrations',
+  },
+  {
+    clientCallName: 'client.settings.integrations.update',
+    fullyQualifiedName: 'settings.integrations.update',
+    httpMethod: 'put',
+    httpPath: '/v1/settings/integrations/{id}',
+  },
+  {
+    clientCallName: 'client.settings.integrations.delete',
+    fullyQualifiedName: 'settings.integrations.delete',
+    httpMethod: 'delete',
+    httpPath: '/v1/settings/integrations/{id}',
   },
 ];
 

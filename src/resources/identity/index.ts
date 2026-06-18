@@ -13,16 +13,6 @@ export {
 } from './account-users/index';
 export { Identity } from './identity';
 export {
-  Integrations,
-  type AccountIntegration,
-  type CreateAccountIntegrationRequest,
-  type ListAccountIntegration,
-  type UpdateAccountIntegrationRequest,
-  type IntegrationListParams,
-  type IntegrationCreateParams,
-  type IntegrationUpdateParams,
-} from './integrations';
-export {
   Roles,
   type CreateRoleRequest,
   type ListRole,

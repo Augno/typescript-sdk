@@ -18,3 +18,4 @@ export {
 export { Identity } from './identity/identity';
 export { Operations } from './operations/operations';
 export { Sales } from './sales/sales';
+export { Settings } from './settings/settings';
