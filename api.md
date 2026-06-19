@@ -456,12 +456,29 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/sales/sales-orders.ts">CreateSalesOrderLineInput</a></code>
+- <code><a href="./src/resources/sales/sales-orders.ts">CreateSalesOrderRequest</a></code>
+- <code><a href="./src/resources/sales/sales-orders.ts">CreatedBy</a></code>
+- <code><a href="./src/resources/sales/sales-orders.ts">Freight</a></code>
+- <code><a href="./src/resources/sales/sales-orders.ts">ListRecord</a></code>
+- <code><a href="./src/resources/sales/sales-orders.ts">ListSalesOrder</a></code>
+- <code><a href="./src/resources/sales/sales-orders.ts">ListSalesOrderLine</a></code>
 - <code><a href="./src/resources/sales/sales-orders.ts">ListSalesOrderStatus</a></code>
+- <code><a href="./src/resources/sales/sales-orders.ts">OrderContact</a></code>
+- <code><a href="./src/resources/sales/sales-orders.ts">OrderDiscount</a></code>
+- <code><a href="./src/resources/sales/sales-orders.ts">Record</a></code>
+- <code><a href="./src/resources/sales/sales-orders.ts">SalesOrder</a></code>
+- <code><a href="./src/resources/sales/sales-orders.ts">SalesOrderEmailContactInput</a></code>
+- <code><a href="./src/resources/sales/sales-orders.ts">SalesOrderLine</a></code>
+- <code><a href="./src/resources/sales/sales-orders.ts">SalesOrderRelated</a></code>
 - <code><a href="./src/resources/sales/sales-orders.ts">SalesOrderStatus</a></code>
+- <code><a href="./src/resources/sales/sales-orders.ts">SalesOrderTotals</a></code>
 
 Methods:
 
 - <code title="get /v1/sales/sales-orders/statuses">client.sales.salesOrders.<a href="./src/resources/sales/sales-orders.ts">retrieveStatuses</a>({ ...params }) -> ListSalesOrderStatus</code>
+- <code title="get /v1/sales/sales-orders">client.sales.salesOrders.<a href="./src/resources/sales/sales-orders.ts">list</a>({ ...params }) -> ListSalesOrder</code>
+- <code title="post /v1/sales/sales-orders">client.sales.salesOrders.<a href="./src/resources/sales/sales-orders.ts">create</a>({ ...params }) -> SalesOrder</code>
 
 # Finance
 

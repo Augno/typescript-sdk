@@ -206,6 +206,8 @@ const fuse = new Fuse(
     'client.sales.customers.retrieve',
     'client.sales.customers.update',
     'client.sales.customers.actions.merge',
+    'client.sales.salesOrders.create',
+    'client.sales.salesOrders.list',
     'client.sales.salesOrders.retrieveStatuses',
     'client.finance.retrieveAdjustmentTypes',
     'client.finance.retrieveTransactionMethods',

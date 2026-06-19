@@ -605,6 +605,18 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/sales/sales-orders/statuses',
   },
   {
+    clientCallName: 'client.sales.salesOrders.list',
+    fullyQualifiedName: 'sales.salesOrders.list',
+    httpMethod: 'get',
+    httpPath: '/v1/sales/sales-orders',
+  },
+  {
+    clientCallName: 'client.sales.salesOrders.create',
+    fullyQualifiedName: 'sales.salesOrders.create',
+    httpMethod: 'post',
+    httpPath: '/v1/sales/sales-orders',
+  },
+  {
     clientCallName: 'client.finance.retrieveTransactionTypes',
     fullyQualifiedName: 'finance.retrieveTransactionTypes',
     httpMethod: 'get',
