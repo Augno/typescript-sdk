@@ -15,6 +15,9 @@ export class Parts extends APIResource {
   /**
    * Returns a paginated list of parts for the current account.
    *
+   * This endpoint requires the permissions: `parts:read`, `customers:read`,
+   * `suppliers:read`.
+   *
    * @example
    * ```ts
    * const listPart = await client.catalog.parts.list();
@@ -26,6 +29,9 @@ export class Parts extends APIResource {
 
   /**
    * Returns a part by ID.
+   *
+   * This endpoint requires the permissions: `parts:read`, `customers:read`,
+   * `suppliers:read`.
    *
    * @example
    * ```ts
@@ -48,6 +54,9 @@ export class Parts extends APIResource {
    * Inventory tracking for the new part starts at a zero on-hand quantity in the
    * category's base unit.
    *
+   * This endpoint requires the permissions: `parts:create`, `customers:update`,
+   * `suppliers:update`.
+   *
    * @example
    * ```ts
    * const part = await client.catalog.parts.create({
@@ -66,6 +75,9 @@ export class Parts extends APIResource {
    * Partially updates a part.
    *
    * Fields not provided retain their current values.
+   *
+   * This endpoint requires the permissions: `parts:update`, `customers:update`,
+   * `suppliers:update`.
    *
    * @example
    * ```ts
@@ -93,6 +105,9 @@ export class Parts extends APIResource {
    * This is a soft delete: the part is marked deleted and no longer returned by
    * other endpoints, but the record is retained. Deleting an already-deleted part
    * returns an error.
+   *
+   * This endpoint requires the permissions: `parts:delete`, `customers:update`,
+   * `suppliers:update`.
    *
    * @example
    * ```ts

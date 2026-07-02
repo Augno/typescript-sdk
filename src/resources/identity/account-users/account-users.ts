@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
+import * as BlocksAPI from '../../messaging/blocks';
 import * as APIKeysAPI from '../../auth/api-keys/api-keys';
 import * as ActionsAPI from './actions';
 import { ActionActivateResponse, ActionDisableResponse, ActionRemoveResponse, Actions } from './actions';
-import * as CustomersAPI from '../../sales/customers/customers';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
@@ -17,6 +17,9 @@ export class AccountUsers extends APIResource {
 
   /**
    * Returns a paginated list of account users for the current account.
+   *
+   * This endpoint requires the permissions: `team:read`, `customers:read`,
+   * `suppliers:read`.
    *
    * @example
    * ```ts
@@ -34,6 +37,9 @@ export class AccountUsers extends APIResource {
   /**
    * Returns an account user by ID.
    *
+   * This endpoint requires the permissions: `team:read`, `customers:read`,
+   * `suppliers:read`.
+   *
    * @example
    * ```ts
    * const accountUser =
@@ -46,7 +52,7 @@ export class AccountUsers extends APIResource {
     id: string,
     query: AccountUserRetrieveParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.AccountUser> {
+  ): APIPromise<BlocksAPI.AccountUser> {
     return this._client.get(path`/v1/identity/account-users/${id}`, { query, ...options });
   }
 
@@ -56,6 +62,9 @@ export class AccountUsers extends APIResource {
    * If no user with the given email or username exists, a new user is created and
    * sent a welcome email containing a generated password. If a matching user already
    * exists, that user is added to the account instead.
+   *
+   * This endpoint requires the permissions: `team:create`, `customers:update`,
+   * `suppliers:update`.
    *
    * @example
    * ```ts
@@ -78,7 +87,7 @@ export class AccountUsers extends APIResource {
   create(
     params: AccountUserCreateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.AccountUser> {
+  ): APIPromise<BlocksAPI.AccountUser> {
     const { include, ...body } = params ?? {};
     return this._client.post('/v1/identity/account-users', { query: { include }, body, ...options });
   }
@@ -89,6 +98,9 @@ export class AccountUsers extends APIResource {
    * Omitted fields are left unchanged. Profile fields (`name`, `email`, `username`)
    * update the underlying user, which is shared across every account the user
    * belongs to.
+   *
+   * This endpoint requires the permissions: `team:update`, `customers:update`,
+   * `suppliers:update`.
    *
    * @example
    * ```ts
@@ -107,7 +119,7 @@ export class AccountUsers extends APIResource {
     id: string,
     params: AccountUserUpdateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.AccountUser> {
+  ): APIPromise<BlocksAPI.AccountUser> {
     const { include, ...body } = params ?? {};
     return this._client.patch(path`/v1/identity/account-users/${id}`, {
       query: { include },
@@ -181,7 +193,7 @@ export interface ListAccountUser {
   /**
    * Resources in this page.
    */
-  data: Array<CustomersAPI.AccountUser>;
+  data: Array<BlocksAPI.AccountUser>;
 
   /**
    * Resource type identifier.

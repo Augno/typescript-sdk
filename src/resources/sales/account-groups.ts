@@ -13,6 +13,8 @@ export class AccountGroups extends APIResource {
   /**
    * Returns a paginated list of account groups.
    *
+   * This endpoint requires the permission: `customer_groups:read`.
+   *
    * @example
    * ```ts
    * const listAccountGroup =
@@ -28,6 +30,8 @@ export class AccountGroups extends APIResource {
 
   /**
    * Returns an account group by ID.
+   *
+   * This endpoint requires the permission: `customer_groups:read`.
    *
    * @example
    * ```ts
@@ -45,6 +49,8 @@ export class AccountGroups extends APIResource {
    * Creates an account group.
    *
    * Returns a conflict error if an account group with the same name already exists.
+   *
+   * This endpoint requires the permission: `customer_groups:create`.
    *
    * @example
    * ```ts
@@ -64,6 +70,8 @@ export class AccountGroups extends APIResource {
    *
    * Only the provided fields are changed. The account group's `type` cannot be
    * changed after creation.
+   *
+   * This endpoint requires the permission: `customer_groups:update`.
    *
    * @example
    * ```ts
@@ -88,6 +96,8 @@ export class AccountGroups extends APIResource {
    * Deletion fails with a validation error while the account group is still in use —
    * for example by customer records, product line access, volume discounts, pricing
    * assignments, or an active registration flow.
+   *
+   * This endpoint requires the permission: `customer_groups:delete`.
    *
    * @example
    * ```ts

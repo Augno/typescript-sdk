@@ -58,10 +58,7 @@ describe('resource roles', () => {
   });
 
   test('create: only required params', async () => {
-    const responsePromise = client.identity.roles.create({
-      name: 'Warehouse Manager',
-      permissions: ['customers:create', 'customers:read', 'customers:update', 'invoices:read'],
-    });
+    const responsePromise = client.identity.roles.create({ name: 'Warehouse Manager' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -74,8 +71,8 @@ describe('resource roles', () => {
   test('create: required and optional params', async () => {
     const response = await client.identity.roles.create({
       name: 'Warehouse Manager',
-      permissions: ['customers:create', 'customers:read', 'customers:update', 'invoices:read'],
       include: ['owner'],
+      permissions: ['customers:create', 'customers:read', 'customers:update', 'invoices:read'],
     });
   });
 

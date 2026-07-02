@@ -14,6 +14,9 @@ export class Materials extends APIResource {
   /**
    * Returns a paginated list of materials.
    *
+   * This endpoint requires the permissions: `materials:read`, `customers:read`,
+   * `suppliers:read`.
+   *
    * @example
    * ```ts
    * const listMaterial = await client.catalog.materials.list();
@@ -28,6 +31,9 @@ export class Materials extends APIResource {
 
   /**
    * Returns a material by ID.
+   *
+   * This endpoint requires the permissions: `materials:read`, `customers:read`,
+   * `suppliers:read`.
    *
    * @example
    * ```ts
@@ -50,6 +56,9 @@ export class Materials extends APIResource {
    * Inventory tracking for the new material starts at a zero on-hand quantity in the
    * category's base unit.
    *
+   * This endpoint requires the permissions: `materials:create`, `customers:update`,
+   * `suppliers:update`.
+   *
    * @example
    * ```ts
    * const material = await client.catalog.materials.create({
@@ -67,6 +76,9 @@ export class Materials extends APIResource {
    * Partially updates a material.
    *
    * Fields not provided retain their current values.
+   *
+   * This endpoint requires the permissions: `materials:update`, `customers:update`,
+   * `suppliers:update`.
    *
    * @example
    * ```ts
@@ -91,6 +103,9 @@ export class Materials extends APIResource {
    * This is a soft delete: the material is marked deleted and no longer returned by
    * other endpoints, but the record is retained. Deleting an already-deleted
    * material returns an error.
+   *
+   * This endpoint requires the permissions: `materials:delete`, `customers:update`,
+   * `suppliers:update`.
    *
    * @example
    * ```ts
@@ -135,7 +150,7 @@ export interface CreateMaterialRequest {
   description?: string;
 
   /**
-   * QuantityInputRequest is a quantity value and unit.
+   * A quantity, given as a decimal value and the unit it is measured in.
    */
   lead_time?: QuantityInputRequest;
 
@@ -145,7 +160,7 @@ export interface CreateMaterialRequest {
   notes?: string;
 
   /**
-   * QuantityInputRequest is a quantity value and unit.
+   * A quantity, given as a decimal value and the unit it is measured in.
    */
   order_point?: QuantityInputRequest;
 
@@ -228,7 +243,7 @@ export interface Material {
 }
 
 /**
- * QuantityInputRequest is a quantity value and unit.
+ * A quantity, given as a decimal value and the unit it is measured in.
  */
 export interface QuantityInputRequest {
   /**
@@ -274,7 +289,7 @@ export interface UpdateMaterialRequest {
   description?: string;
 
   /**
-   * QuantityInputRequest is a quantity value and unit.
+   * A quantity, given as a decimal value and the unit it is measured in.
    */
   lead_time?: QuantityInputRequest;
 
@@ -284,7 +299,7 @@ export interface UpdateMaterialRequest {
   notes?: string;
 
   /**
-   * QuantityInputRequest is a quantity value and unit.
+   * A quantity, given as a decimal value and the unit it is measured in.
    */
   order_point?: QuantityInputRequest;
 
@@ -421,7 +436,7 @@ export interface MaterialCreateParams {
   description?: string;
 
   /**
-   * Body param: QuantityInputRequest is a quantity value and unit.
+   * Body param: A quantity, given as a decimal value and the unit it is measured in.
    */
   lead_time?: QuantityInputRequest;
 
@@ -431,7 +446,7 @@ export interface MaterialCreateParams {
   notes?: string;
 
   /**
-   * Body param: QuantityInputRequest is a quantity value and unit.
+   * Body param: A quantity, given as a decimal value and the unit it is measured in.
    */
   order_point?: QuantityInputRequest;
 
@@ -470,7 +485,7 @@ export interface MaterialUpdateParams {
   description?: string;
 
   /**
-   * Body param: QuantityInputRequest is a quantity value and unit.
+   * Body param: A quantity, given as a decimal value and the unit it is measured in.
    */
   lead_time?: QuantityInputRequest;
 
@@ -480,7 +495,7 @@ export interface MaterialUpdateParams {
   notes?: string;
 
   /**
-   * Body param: QuantityInputRequest is a quantity value and unit.
+   * Body param: A quantity, given as a decimal value and the unit it is measured in.
    */
   order_point?: QuantityInputRequest;
 

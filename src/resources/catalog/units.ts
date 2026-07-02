@@ -14,6 +14,8 @@ export class Units extends APIResource {
    * Returns a paginated list of units for the current account, including both
    * account-owned and global system units.
    *
+   * This endpoint requires the permission: `units:read`.
+   *
    * @example
    * ```ts
    * const listUnit = await client.catalog.units.list();
@@ -25,6 +27,8 @@ export class Units extends APIResource {
 
   /**
    * Returns a unit by ID, including both account-owned and global system units.
+   *
+   * This endpoint requires the permission: `units:read`.
    *
    * @example
    * ```ts
@@ -43,6 +47,8 @@ export class Units extends APIResource {
 
   /**
    * Creates an account-owned unit.
+   *
+   * This endpoint requires the permission: `units:create`.
    *
    * @example
    * ```ts
@@ -65,6 +71,8 @@ export class Units extends APIResource {
   /**
    * Partially updates an account-owned unit; system units cannot be updated.
    *
+   * This endpoint requires the permission: `units:update`.
+   *
    * @example
    * ```ts
    * const unit = await client.catalog.units.update(
@@ -83,8 +91,12 @@ export class Units extends APIResource {
   }
 
   /**
-   * Deletes an account-owned unit. Associated unit group memberships are also
-   * removed, and system units cannot be deleted.
+   * Deletes an account-owned unit.
+   *
+   * Associated unit group memberships are also removed, and system units cannot be
+   * deleted.
+   *
+   * This endpoint requires the permission: `units:delete`.
    *
    * @example
    * ```ts
@@ -117,28 +129,31 @@ export interface CreateUnitRequest {
   name: string;
 
   /**
-   * Conversion offset denominator, as a decimal string. Must not be zero.
+   * Conversion offset denominator.
+   *
+   * Must not be zero.
    */
   offset_denominator: string;
 
   /**
-   * Conversion offset numerator, as a decimal string.
+   * Conversion offset numerator, used for temperature-like conversions.
    */
   offset_numerator: string;
 
   /**
-   * Conversion ratio denominator relative to the base unit, as a decimal string.
+   * Conversion ratio denominator relative to the base unit.
+   *
    * Must not be zero.
    */
   ratio_denominator: string;
 
   /**
-   * Conversion ratio numerator relative to the base unit, as a decimal string.
+   * Conversion ratio numerator relative to the base unit.
    */
   ratio_numerator: string;
 
   /**
-   * Unit dimension (e.g. `mass`, `volume`, `currency`).
+   * Unit dimension.
    *
    * Units can only be converted to other units of the same dimension.
    */
@@ -267,22 +282,26 @@ export interface UpdateUnitRequest {
   name?: string;
 
   /**
-   * Conversion offset denominator, as a decimal string. Must not be zero.
+   * Conversion offset denominator.
+   *
+   * Must not be zero.
    */
   offset_denominator?: string;
 
   /**
-   * Conversion offset numerator, as a decimal string.
+   * Conversion offset numerator, used for temperature-like conversions.
    */
   offset_numerator?: string;
 
   /**
-   * Conversion ratio denominator, as a decimal string. Must not be zero.
+   * Conversion ratio denominator relative to the base unit.
+   *
+   * Must not be zero.
    */
   ratio_denominator?: string;
 
   /**
-   * Conversion ratio numerator, as a decimal string.
+   * Conversion ratio numerator relative to the base unit.
    */
   ratio_numerator?: string;
 }
@@ -318,7 +337,7 @@ export interface UnitListParams {
   q?: string;
 
   /**
-   * Filter by unit dimension (e.g. `mass`).
+   * Filter by unit dimension.
    */
   type?: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area';
 
@@ -352,30 +371,31 @@ export interface UnitCreateParams {
   name: string;
 
   /**
-   * Body param: Conversion offset denominator, as a decimal string. Must not be
-   * zero.
+   * Body param: Conversion offset denominator.
+   *
+   * Must not be zero.
    */
   offset_denominator: string;
 
   /**
-   * Body param: Conversion offset numerator, as a decimal string.
+   * Body param: Conversion offset numerator, used for temperature-like conversions.
    */
   offset_numerator: string;
 
   /**
-   * Body param: Conversion ratio denominator relative to the base unit, as a decimal
-   * string. Must not be zero.
+   * Body param: Conversion ratio denominator relative to the base unit.
+   *
+   * Must not be zero.
    */
   ratio_denominator: string;
 
   /**
-   * Body param: Conversion ratio numerator relative to the base unit, as a decimal
-   * string.
+   * Body param: Conversion ratio numerator relative to the base unit.
    */
   ratio_numerator: string;
 
   /**
-   * Body param: Unit dimension (e.g. `mass`, `volume`, `currency`).
+   * Body param: Unit dimension.
    *
    * Units can only be converted to other units of the same dimension.
    */
@@ -410,23 +430,26 @@ export interface UnitUpdateParams {
   name?: string;
 
   /**
-   * Body param: Conversion offset denominator, as a decimal string. Must not be
-   * zero.
+   * Body param: Conversion offset denominator.
+   *
+   * Must not be zero.
    */
   offset_denominator?: string;
 
   /**
-   * Body param: Conversion offset numerator, as a decimal string.
+   * Body param: Conversion offset numerator, used for temperature-like conversions.
    */
   offset_numerator?: string;
 
   /**
-   * Body param: Conversion ratio denominator, as a decimal string. Must not be zero.
+   * Body param: Conversion ratio denominator relative to the base unit.
+   *
+   * Must not be zero.
    */
   ratio_denominator?: string;
 
   /**
-   * Body param: Conversion ratio numerator, as a decimal string.
+   * Body param: Conversion ratio numerator relative to the base unit.
    */
   ratio_numerator?: string;
 }

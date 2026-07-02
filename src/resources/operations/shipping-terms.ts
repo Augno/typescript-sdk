@@ -15,6 +15,8 @@ export class ShippingTerms extends APIResource {
    * Returns a paginated list of shipping terms for the account, including default
    * system shipping terms.
    *
+   * This endpoint requires the permission: `shipping_terms:read`.
+   *
    * @example
    * ```ts
    * const listShippingTerm =
@@ -30,6 +32,8 @@ export class ShippingTerms extends APIResource {
 
   /**
    * Returns a shipping term by ID.
+   *
+   * This endpoint requires the permission: `shipping_terms:read`.
    *
    * @example
    * ```ts
@@ -50,6 +54,8 @@ export class ShippingTerms extends APIResource {
   /**
    * Creates an account-owned shipping term.
    *
+   * This endpoint requires the permission: `shipping_terms:create`.
+   *
    * @example
    * ```ts
    * const shippingTerm =
@@ -68,6 +74,8 @@ export class ShippingTerms extends APIResource {
    * Partially updates an account-owned shipping term.
    *
    * System-provided default shipping terms cannot be updated.
+   *
+   * This endpoint requires the permission: `shipping_terms:update`.
    *
    * @example
    * ```ts
@@ -95,6 +103,8 @@ export class ShippingTerms extends APIResource {
    * Deletes an account-owned shipping term.
    *
    * System-provided default shipping terms cannot be deleted.
+   *
+   * This endpoint requires the permission: `shipping_terms:delete`.
    *
    * @example
    * ```ts

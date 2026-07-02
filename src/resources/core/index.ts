@@ -16,7 +16,7 @@ export {
   type AuditEventListParams,
   type AuditEventRetrieveParams,
 } from './audit-events';
-export { Core } from './core';
+export { Core, type Entity, type ListEntity, type CoreRetrieveSearchParams } from './core';
 export {
   EmailLogs,
   type EmailLog,

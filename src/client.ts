@@ -18,7 +18,7 @@ import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { Auth } from './resources/auth/auth';
 import { Catalog } from './resources/catalog/catalog';
-import { Core } from './resources/core/core';
+import { Core, CoreRetrieveSearchParams, Entity, ListEntity } from './resources/core/core';
 import {
   AdjustmentType,
   Finance,
@@ -32,6 +32,7 @@ import {
   TransactionType,
 } from './resources/finance/finance';
 import { Identity } from './resources/identity/identity';
+import { ListActor, Messaging, MessagingRetrieveContactsParams } from './resources/messaging/messaging';
 import { Operations } from './resources/operations/operations';
 import { Sales } from './resources/sales/sales';
 import { Settings } from './resources/settings/settings';
@@ -776,8 +777,15 @@ export class Augno {
   static toFile = Uploads.toFile;
 
   auth: API.Auth = new API.Auth(this);
+  /**
+   * Unified free-text search across resource types, returning lightweight entity references.
+   */
   core: API.Core = new API.Core(this);
   catalog: API.Catalog = new API.Catalog(this);
+  /**
+   * List messageable contacts (the messaging directory).
+   */
+  messaging: API.Messaging = new API.Messaging(this);
   sales: API.Sales = new API.Sales(this);
   /**
    * Create, view, update, and delete transactions.
@@ -791,6 +799,7 @@ export class Augno {
 Augno.Auth = Auth;
 Augno.Core = Core;
 Augno.Catalog = Catalog;
+Augno.Messaging = Messaging;
 Augno.Sales = Sales;
 Augno.Finance = Finance;
 Augno.Operations = Operations;
@@ -802,9 +811,20 @@ export declare namespace Augno {
 
   export { Auth as Auth };
 
-  export { Core as Core };
+  export {
+    Core as Core,
+    type Entity as Entity,
+    type ListEntity as ListEntity,
+    type CoreRetrieveSearchParams as CoreRetrieveSearchParams,
+  };
 
   export { Catalog as Catalog };
+
+  export {
+    Messaging as Messaging,
+    type ListActor as ListActor,
+    type MessagingRetrieveContactsParams as MessagingRetrieveContactsParams,
+  };
 
   export { Sales as Sales };
 

@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
+import * as BlocksAPI from '../../messaging/blocks';
 import * as AccountGroupsAPI from '../account-groups';
 import * as AddressesAPI from '../addresses';
 import * as PrioritiesAPI from '../priorities';
@@ -21,6 +22,8 @@ export class Customers extends APIResource {
   /**
    * Returns a paginated list of customers for the current account.
    *
+   * This endpoint requires the permission: `customers:read`.
+   *
    * @example
    * ```ts
    * const listCustomer = await client.sales.customers.list();
@@ -35,6 +38,8 @@ export class Customers extends APIResource {
 
   /**
    * Returns a customer by ID.
+   *
+   * This endpoint requires the permissions: `customers:read`, `suppliers:read`.
    *
    * @example
    * ```ts
@@ -57,6 +62,8 @@ export class Customers extends APIResource {
    *
    * If `number` is omitted, the next sequential customer number is assigned
    * automatically.
+   *
+   * This endpoint requires the permission: `customers:create`.
    *
    * @example
    * ```ts
@@ -99,6 +106,8 @@ export class Customers extends APIResource {
    * Only the fields provided in the request are changed. Nullable fields can be set
    * to `null` to clear their current value.
    *
+   * This endpoint requires the permission: `customers:update`.
+   *
    * @example
    * ```ts
    * const customer = await client.sales.customers.update(
@@ -127,6 +136,8 @@ export class Customers extends APIResource {
    * Fails with a conflict error if any sales orders still reference the customer;
    * delete or reassign those orders, or merge the customer into another first.
    *
+   * This endpoint requires the permission: `customers:delete`.
+   *
    * @example
    * ```ts
    * const customer = await client.sales.customers.delete(
@@ -137,69 +148,6 @@ export class Customers extends APIResource {
   delete(id: string, options?: RequestOptions): APIPromise<CustomerDeleteResponse> {
     return this._client.delete(path`/v1/sales/customers/${id}`, options);
   }
-}
-
-/**
- * A user's membership in an account, carrying the account-specific status, role,
- * and department.
- *
- * Profile fields (name, email, username, image URL) live on the expandable `user`
- * sub-resource, which is shared across every account the user belongs to.
- */
-export interface AccountUser {
-  /**
-   * Account user ID.
-   */
-  id: string;
-
-  /**
-   * When the account user was created.
-   */
-  created_at: string;
-
-  /**
-   * A functional area of a production operation, such as fabrication or packaging,
-   * that groups scanning stations and machines.
-   */
-  department: Department | null;
-
-  /**
-   * When the user last accessed this account.
-   */
-  last_used_at: string | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'account_user';
-
-  /**
-   * A named set of permissions that can be assigned to users to control what they
-   * can access.
-   */
-  role: APIKeysAPI.Role | null;
-
-  /**
-   * Account user status.
-   *
-   * - `active`: the user can access the account.
-   * - `disabled`: the user is locked out of the account.
-   * - `removed`: the user has been removed (soft-deleted) from the account.
-   */
-  status: 'active' | 'disabled' | 'removed';
-
-  /**
-   * When the account user was last updated.
-   */
-  updated_at: string;
-
-  /**
-   * A user's global profile, shared across every account they belong to.
-   *
-   * Account-specific settings (status, role, department) live on the account user
-   * resource that links the user to each account.
-   */
-  user: User | null;
 }
 
 /**
@@ -273,55 +221,6 @@ export interface Carrier {
    * Last updated timestamp.
    */
   updated_at: string;
-}
-
-/**
- * Material consumed by a production step.
- *
- * Each consumption records one input item and how much of it the step uses.
- * Consumptions also determine the production flow: when another step produces the
- * consumed item, the two steps are linked upstream/downstream automatically.
- */
-export interface Consumption {
-  /**
-   * Consumption ID.
-   */
-  id: string;
-
-  /**
-   * Item is an inventory item (product, material, or part).
-   */
-  consumed_item: ItemsAPI.Item | null;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Instructions for how this material is consumed.
-   */
-  instructions: string | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'consumption';
-
-  /**
-   * Value with an associated unit.
-   */
-  quantity: ItemsAPI.Quantity | null;
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
-
-  /**
-   * Value with an associated unit.
-   */
-  waste_quantity: ItemsAPI.Quantity | null;
 }
 
 /**
@@ -657,7 +556,7 @@ export interface CustomerDefaults {
    * Profile fields (name, email, username, image URL) live on the expandable `user`
    * sub-resource, which is shared across every account the user belongs to.
    */
-  sales_rep: AccountUser | null;
+  sales_rep: BlocksAPI.AccountUser | null;
 
   /**
    * A shipping term defining how freight charges are calculated for an order.
@@ -727,80 +626,6 @@ export interface CustomerNotificationPreferences {
 }
 
 /**
- * A functional area of a production operation, such as fabrication or packaging,
- * that groups scanning stations and machines.
- */
-export interface Department {
-  /**
-   * Department ID.
-   */
-  id: string;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * A physical storage location, such as a warehouse, aisle, or bin, arranged in a
-   * parent-child hierarchy.
-   */
-  location: Location | null;
-
-  /**
-   * List represents a paginated list of resources.
-   */
-  machines: ListMachine | null;
-
-  /**
-   * Display name of the department.
-   *
-   * Unique within the account.
-   */
-  name: string;
-
-  /**
-   * Free-form notes about the department.
-   */
-  notes: string | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'department';
-
-  /**
-   * List represents a paginated list of resources.
-   */
-  scanning_stations: ListScanningStation | null;
-
-  /**
-   * Last update timestamp.
-   */
-  updated_at: string;
-}
-
-/**
- * List represents a paginated list of resources.
- */
-export interface ListConsumption {
-  /**
-   * Resources in this page.
-   */
-  data: Array<Consumption>;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'list';
-
-  /**
-   * PageInfo contains URL-based pagination metadata.
-   */
-  page_info: APIKeysAPI.PageInfo;
-}
-
-/**
  * List represents a paginated list of resources.
  */
 export interface ListCustomer {
@@ -808,86 +633,6 @@ export interface ListCustomer {
    * Resources in this page.
    */
   data: Array<Customer>;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'list';
-
-  /**
-   * PageInfo contains URL-based pagination metadata.
-   */
-  page_info: APIKeysAPI.PageInfo;
-}
-
-/**
- * List represents a paginated list of resources.
- */
-export interface ListLocation {
-  /**
-   * Resources in this page.
-   */
-  data: Array<Location>;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'list';
-
-  /**
-   * PageInfo contains URL-based pagination metadata.
-   */
-  page_info: APIKeysAPI.PageInfo;
-}
-
-/**
- * List represents a paginated list of resources.
- */
-export interface ListMachine {
-  /**
-   * Resources in this page.
-   */
-  data: Array<Machine>;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'list';
-
-  /**
-   * PageInfo contains URL-based pagination metadata.
-   */
-  page_info: APIKeysAPI.PageInfo;
-}
-
-/**
- * List represents a paginated list of resources.
- */
-export interface ListProductionStep {
-  /**
-   * Resources in this page.
-   */
-  data: Array<ProductionStep>;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'list';
-
-  /**
-   * PageInfo contains URL-based pagination metadata.
-   */
-  page_info: APIKeysAPI.PageInfo;
-}
-
-/**
- * List represents a paginated list of resources.
- */
-export interface ListScanningStation {
-  /**
-   * Resources in this page.
-   */
-  data: Array<ScanningStation>;
 
   /**
    * Resource type identifier.
@@ -918,111 +663,6 @@ export interface ListServiceLevel {
    * PageInfo contains URL-based pagination metadata.
    */
   page_info: APIKeysAPI.PageInfo;
-}
-
-/**
- * A physical storage location, such as a warehouse, aisle, or bin, arranged in a
- * parent-child hierarchy.
- */
-export interface Location {
-  /**
-   * Location ID.
-   */
-  id: string;
-
-  /**
-   * List represents a paginated list of resources.
-   */
-  children: ListLocation | null;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Display name of the location.
-   */
-  name: string;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'location';
-
-  /**
-   * A physical storage location, such as a warehouse, aisle, or bin, arranged in a
-   * parent-child hierarchy.
-   */
-  parent: Location | null;
-
-  /**
-   * Location type code, identifying this location's level in the storage hierarchy.
-   *
-   * - `building`: a building-level location.
-   * - `section`: a section within a building.
-   * - `aisle`: an aisle within a section.
-   * - `rack`: a rack within an aisle.
-   * - `shelf`: a shelf within a rack.
-   * - `bin`: a bin within a shelf.
-   */
-  type: LocationTypeCode;
-
-  /**
-   * Last-updated timestamp.
-   */
-  updated_at: string;
-}
-
-export type LocationTypeCode = 'building' | 'section' | 'aisle' | 'rack' | 'shelf' | 'bin';
-
-/**
- * A piece of production equipment, such as a CNC router or press, assigned to a
- * department.
- */
-export interface Machine {
-  /**
-   * Machine ID.
-   */
-  id: string;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * A functional area of a production operation, such as fabrication or packaging,
-   * that groups scanning stations and machines.
-   */
-  department: Department | null;
-
-  /**
-   * Display name of the machine.
-   *
-   * Unique within the account.
-   */
-  name: string;
-
-  /**
-   * Free-form notes about the machine.
-   */
-  notes: string | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'machine';
-
-  /**
-   * Serial number of the machine.
-   */
-  serial_number: string;
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
 }
 
 /**
@@ -1067,150 +707,6 @@ export interface PaymentTerm {
 }
 
 /**
- * The output of a production step: the item it produces and the quantity produced.
- */
-export interface ProductionOutput {
-  /**
-   * Production ID.
-   */
-  id: string;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'production';
-
-  /**
-   * Item is an inventory item (product, material, or part).
-   */
-  produced_item: ItemsAPI.Item | null;
-
-  /**
-   * Value with an associated unit.
-   */
-  quantity: ItemsAPI.Quantity | null;
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
-}
-
-/**
- * A single stage of work in an item's production flow, with its output, material
- * inputs, cost rates, and graph connections.
- */
-export interface ProductionStep {
-  /**
-   * Production step ID.
-   */
-  id: string;
-
-  /**
-   * Allowance correction factor applied to labor time in cost calculations, as a
-   * decimal string.
-   *
-   * Effective labor time per unit is
-   * `labor_time × (1 + leveling_factor) × (1 + allowances)`.
-   */
-  allowances: string;
-
-  /**
-   * List represents a paginated list of resources.
-   */
-  consumptions: ListConsumption | null;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * A functional area of a production operation, such as fabrication or packaging,
-   * that groups scanning stations and machines.
-   */
-  department: Department | null;
-
-  /**
-   * List represents a paginated list of resources.
-   */
-  in_steps: ListProductionStep | null;
-
-  /**
-   * Value expressed as a ratio of two units, such as a price per kilogram or a
-   * throughput per hour.
-   */
-  labor_rate: ItemsAPI.Rate | null;
-
-  /**
-   * Value expressed as a ratio of two units, such as a price per kilogram or a
-   * throughput per hour.
-   */
-  labor_time: ItemsAPI.Rate | null;
-
-  /**
-   * Leveling correction factor applied to labor time in cost calculations, as a
-   * decimal string.
-   *
-   * Effective labor time per unit is
-   * `labor_time × (1 + leveling_factor) × (1 + allowances)`.
-   */
-  leveling_factor: string;
-
-  /**
-   * List represents a paginated list of resources.
-   */
-  machines: ListMachine | null;
-
-  /**
-   * Display name of the step.
-   */
-  name: string;
-
-  /**
-   * Free-form notes about the step.
-   */
-  notes: string | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'production_step';
-
-  /**
-   * List represents a paginated list of resources.
-   */
-  out_steps: ListProductionStep | null;
-
-  /**
-   * Value expressed as a ratio of two units, such as a price per kilogram or a
-   * throughput per hour.
-   */
-  overhead_rate: ItemsAPI.Rate | null;
-
-  /**
-   * The output of a production step: the item it produces and the quantity produced.
-   */
-  production: ProductionOutput | null;
-
-  /**
-   * A station on the production floor where operators scan batches to perform a
-   * batch operation, such as initializing or moving a batch.
-   */
-  scanning_station: ScanningStation | null;
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
-}
-
-/**
  * A value with an associated unit, used in create and update requests.
  */
 export interface QuantityInput {
@@ -1223,88 +719,6 @@ export interface QuantityInput {
    * Decimal value, as a string to preserve precision.
    */
   value: string;
-}
-
-/**
- * A station on the production floor where operators scan batches to perform a
- * batch operation, such as initializing or moving a batch.
- */
-export interface ScanningStation {
-  /**
-   * Scanning station ID.
-   */
-  id: string;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * A functional area of a production operation, such as fabrication or packaging,
-   * that groups scanning stations and machines.
-   */
-  department: Department | null;
-
-  /**
-   * Size of the labels printed at this station, given as width-by-height (for
-   * example, `1x1`).
-   */
-  label_size: '1x1' | '1x3' | '1x4' | '2x4' | null;
-
-  /**
-   * Type of label printed at this station.
-   *
-   * - `tag`: a label attached to the physical product.
-   * - `traveler`: a routing sheet that accompanies the batch through every
-   *   production step.
-   */
-  label_type: 'tag' | 'traveler' | null;
-
-  /**
-   * Display name of the scanning station.
-   *
-   * Unique within the account.
-   */
-  name: string;
-
-  /**
-   * Free-form notes about the scanning station.
-   */
-  notes: string | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'scanning_station';
-
-  /**
-   * Whether operators must perform a material check at this station.
-   *
-   * - `none`: no additional operator check is required.
-   * - `material_check`: a material check is expected before the operation.
-   */
-  operator_requirement: 'none' | 'material_check';
-
-  /**
-   * List represents a paginated list of resources.
-   */
-  production_steps: ListProductionStep | null;
-
-  /**
-   * Scanning station type, determining which batch operation the station performs.
-   *
-   * - `init_batch`: initializes a new batch.
-   * - `merge_batch`: merges multiple batches into one.
-   * - `move_batch`: moves a batch to another location or step.
-   * - `split_batch`: splits a batch into multiple batches.
-   */
-  type: 'init_batch' | 'merge_batch' | 'move_batch' | 'split_batch';
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
 }
 
 /**
@@ -1573,59 +987,6 @@ export interface UpdateCustomerRequest {
   url?: string | null;
 }
 
-/**
- * A user's global profile, shared across every account they belong to.
- *
- * Account-specific settings (status, role, department) live on the account user
- * resource that links the user to each account.
- */
-export interface User {
-  /**
-   * User ID.
-   */
-  id: string;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Email address.
-   */
-  email: string | null;
-
-  /**
-   * When the user verified their email address.
-   */
-  email_verified_at: string | null;
-
-  /**
-   * URL of the user's profile image.
-   */
-  image_url: string | null;
-
-  /**
-   * User's full display name.
-   */
-  name: string | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'user';
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
-
-  /**
-   * Username.
-   */
-  username: string | null;
-}
-
 export interface CustomerDeleteResponse {}
 
 export interface CustomerListParams {
@@ -1682,6 +1043,7 @@ export interface CustomerListParams {
     | 'type'
     | 'parent_account'
     | 'freight_preferences.carrier'
+    | 'freight_preferences.carrier.service_levels'
     | 'freight_preferences.service_level'
     | 'defaults.payment_term'
     | 'defaults.shipping_term'
@@ -1695,6 +1057,7 @@ export interface CustomerListParams {
     | 'price_groups'
     | 'child_accounts'
     | 'credit_limit'
+    | 'credit_limit.unit'
   >;
 
   /**
@@ -1771,6 +1134,7 @@ export interface CustomerRetrieveParams {
     | 'type'
     | 'parent_account'
     | 'freight_preferences.carrier'
+    | 'freight_preferences.carrier.service_levels'
     | 'freight_preferences.service_level'
     | 'defaults.payment_term'
     | 'defaults.shipping_term'
@@ -1784,6 +1148,7 @@ export interface CustomerRetrieveParams {
     | 'price_groups'
     | 'child_accounts'
     | 'credit_limit'
+    | 'credit_limit.unit'
   >;
 }
 
@@ -1837,6 +1202,7 @@ export interface CustomerCreateParams {
     | 'type'
     | 'parent_account'
     | 'freight_preferences.carrier'
+    | 'freight_preferences.carrier.service_levels'
     | 'freight_preferences.service_level'
     | 'defaults.payment_term'
     | 'defaults.shipping_term'
@@ -1850,6 +1216,7 @@ export interface CustomerCreateParams {
     | 'price_groups'
     | 'child_accounts'
     | 'credit_limit'
+    | 'credit_limit.unit'
   >;
 
   /**
@@ -1967,6 +1334,7 @@ export interface CustomerUpdateParams {
     | 'type'
     | 'parent_account'
     | 'freight_preferences.carrier'
+    | 'freight_preferences.carrier.service_levels'
     | 'freight_preferences.service_level'
     | 'defaults.payment_term'
     | 'defaults.shipping_term'
@@ -1980,6 +1348,7 @@ export interface CustomerUpdateParams {
     | 'price_groups'
     | 'child_accounts'
     | 'credit_limit'
+    | 'credit_limit.unit'
   >;
 
   /**
@@ -2128,35 +1497,20 @@ Customers.Actions = Actions;
 
 export declare namespace Customers {
   export {
-    type AccountUser as AccountUser,
     type Carrier as Carrier,
-    type Consumption as Consumption,
     type CreateCustomerRequest as CreateCustomerRequest,
     type Customer as Customer,
     type CustomerContactInfo as CustomerContactInfo,
     type CustomerDefaults as CustomerDefaults,
     type CustomerFreightPreferences as CustomerFreightPreferences,
     type CustomerNotificationPreferences as CustomerNotificationPreferences,
-    type Department as Department,
-    type ListConsumption as ListConsumption,
     type ListCustomer as ListCustomer,
-    type ListLocation as ListLocation,
-    type ListMachine as ListMachine,
-    type ListProductionStep as ListProductionStep,
-    type ListScanningStation as ListScanningStation,
     type ListServiceLevel as ListServiceLevel,
-    type Location as Location,
-    type LocationTypeCode as LocationTypeCode,
-    type Machine as Machine,
     type PaymentTerm as PaymentTerm,
-    type ProductionOutput as ProductionOutput,
-    type ProductionStep as ProductionStep,
     type QuantityInput as QuantityInput,
-    type ScanningStation as ScanningStation,
     type ServiceLevel as ServiceLevel,
     type ShippingTerm as ShippingTerm,
     type UpdateCustomerRequest as UpdateCustomerRequest,
-    type User as User,
     type CustomerDeleteResponse as CustomerDeleteResponse,
     type CustomerListParams as CustomerListParams,
     type CustomerRetrieveParams as CustomerRetrieveParams,

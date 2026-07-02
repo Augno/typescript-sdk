@@ -18,6 +18,8 @@ export class Actions extends APIResource {
    * line access, addresses, and users are consolidated without duplicates; the
    * source customers are then deleted.
    *
+   * This endpoint requires the permissions: `customers:update`, `customers:delete`.
+   *
    * @example
    * ```ts
    * const customer = await client.sales.customers.actions.merge(
@@ -70,6 +72,7 @@ export interface ActionMergeParams {
     | 'type'
     | 'parent_account'
     | 'freight_preferences.carrier'
+    | 'freight_preferences.carrier.service_levels'
     | 'freight_preferences.service_level'
     | 'defaults.payment_term'
     | 'defaults.shipping_term'
@@ -83,6 +86,7 @@ export interface ActionMergeParams {
     | 'price_groups'
     | 'child_accounts'
     | 'credit_limit'
+    | 'credit_limit.unit'
   >;
 }
 

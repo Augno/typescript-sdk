@@ -27,6 +27,8 @@ export class Properties extends APIResource {
   /**
    * Returns a paginated list of properties for the target account.
    *
+   * This endpoint requires the permission: `properties:read`.
+   *
    * @example
    * ```ts
    * const listProperty = await client.catalog.properties.list();
@@ -41,6 +43,8 @@ export class Properties extends APIResource {
 
   /**
    * Returns a property by ID.
+   *
+   * This endpoint requires the permission: `properties:read`.
    *
    * @example
    * ```ts
@@ -60,6 +64,8 @@ export class Properties extends APIResource {
   /**
    * Creates a property.
    *
+   * This endpoint requires the permission: `properties:create`.
+   *
    * @example
    * ```ts
    * const property = await client.catalog.properties.create({
@@ -74,6 +80,8 @@ export class Properties extends APIResource {
 
   /**
    * Partially updates a property.
+   *
+   * This endpoint requires the permission: `properties:update`.
    *
    * @example
    * ```ts
@@ -94,6 +102,8 @@ export class Properties extends APIResource {
 
   /**
    * Deletes a property and all associated attributes.
+   *
+   * This endpoint requires the permission: `properties:delete`.
    *
    * @example
    * ```ts

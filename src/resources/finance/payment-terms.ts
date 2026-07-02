@@ -17,6 +17,8 @@ export class PaymentTerms extends APIResource {
    * The list includes both payment terms created by your account and Augno-provided
    * system defaults.
    *
+   * This endpoint requires the permission: `payment_terms:read`.
+   *
    * @example
    * ```ts
    * const listPaymentTerm =
@@ -32,6 +34,8 @@ export class PaymentTerms extends APIResource {
 
   /**
    * Returns a payment term by ID.
+   *
+   * This endpoint requires the permission: `payment_terms:read`.
    *
    * @example
    * ```ts
@@ -54,6 +58,8 @@ export class PaymentTerms extends APIResource {
    *
    * The new term is owned by your account and starts with status `active`.
    *
+   * This endpoint requires the permission: `payment_terms:create`.
+   *
    * @example
    * ```ts
    * const paymentTerm =
@@ -72,6 +78,8 @@ export class PaymentTerms extends APIResource {
    *
    * Only payment terms created by your account can be updated; system-owned default
    * terms cannot be.
+   *
+   * This endpoint requires the permission: `payment_terms:update`.
    *
    * @example
    * ```ts
@@ -100,6 +108,8 @@ export class PaymentTerms extends APIResource {
    *
    * Only payment terms created by your account can be deleted; system-owned default
    * terms cannot be.
+   *
+   * This endpoint requires the permission: `payment_terms:delete`.
    *
    * @example
    * ```ts

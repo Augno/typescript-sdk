@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as CustomersAPI from '../sales/customers/customers';
+import * as BlocksAPI from '../messaging/blocks';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -13,6 +13,8 @@ export class ScanningStations extends APIResource {
   /**
    * Returns a paginated list of scanning stations in your account.
    *
+   * This endpoint requires the permission: `scanners:read`.
+   *
    * @example
    * ```ts
    * const listScanningStation =
@@ -22,12 +24,14 @@ export class ScanningStations extends APIResource {
   list(
     query: ScanningStationListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.ListScanningStation> {
+  ): APIPromise<BlocksAPI.ListScanningStation> {
     return this._client.get('/v1/operations/scanning-stations', { query, ...options });
   }
 
   /**
    * Returns a scanning station by ID.
+   *
+   * This endpoint requires the permission: `scanners:read`.
    *
    * @example
    * ```ts
@@ -41,7 +45,7 @@ export class ScanningStations extends APIResource {
     id: string,
     query: ScanningStationRetrieveParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.ScanningStation> {
+  ): APIPromise<BlocksAPI.ScanningStation> {
     return this._client.get(path`/v1/operations/scanning-stations/${id}`, { query, ...options });
   }
 
@@ -50,6 +54,8 @@ export class ScanningStations extends APIResource {
    *
    * Returns a conflict error if a scanning station with the same name already
    * exists.
+   *
+   * This endpoint requires the permission: `scanners:create`.
    *
    * @example
    * ```ts
@@ -67,7 +73,7 @@ export class ScanningStations extends APIResource {
   create(
     params: ScanningStationCreateParams,
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.ScanningStation> {
+  ): APIPromise<BlocksAPI.ScanningStation> {
     const { include, ...body } = params;
     return this._client.post('/v1/operations/scanning-stations', { query: { include }, body, ...options });
   }
@@ -77,6 +83,8 @@ export class ScanningStations extends APIResource {
    *
    * Only the fields provided in the request are changed. Returns a conflict error if
    * the new name is already in use by another scanning station.
+   *
+   * This endpoint requires the permission: `scanners:update`.
    *
    * @example
    * ```ts
@@ -91,7 +99,7 @@ export class ScanningStations extends APIResource {
     id: string,
     params: ScanningStationUpdateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.ScanningStation> {
+  ): APIPromise<BlocksAPI.ScanningStation> {
     const { include, ...body } = params ?? {};
     return this._client.patch(path`/v1/operations/scanning-stations/${id}`, {
       query: { include },
@@ -102,6 +110,8 @@ export class ScanningStations extends APIResource {
 
   /**
    * Deletes a scanning station.
+   *
+   * This endpoint requires the permission: `scanners:delete`.
    *
    * @example
    * ```ts

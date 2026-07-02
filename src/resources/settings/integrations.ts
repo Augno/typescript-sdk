@@ -13,6 +13,8 @@ export class Integrations extends APIResource {
   /**
    * Returns a paginated list of account integrations for the target account.
    *
+   * This endpoint requires the `admin` role type.
+   *
    * @example
    * ```ts
    * const listAccountIntegration =
@@ -33,6 +35,8 @@ export class Integrations extends APIResource {
    * Credentials are validated for the provider, encrypted at rest, and never
    * returned in API responses. An account can have at most one integration per
    * integration code.
+   *
+   * This endpoint requires the `admin` role type.
    *
    * @example
    * ```ts
@@ -56,6 +60,8 @@ export class Integrations extends APIResource {
    * endpoint; to rotate credentials, call Create Account Integration again with the
    * same integration code.
    *
+   * This endpoint requires the `admin` role type.
+   *
    * @example
    * ```ts
    * const accountIntegration =
@@ -75,6 +81,8 @@ export class Integrations extends APIResource {
 
   /**
    * Deletes an account integration and returns the deleted resource.
+   *
+   * This endpoint requires the `admin` role type.
    *
    * @example
    * ```ts

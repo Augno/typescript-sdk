@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as CustomersAPI from '../sales/customers/customers';
+import * as BlocksAPI from '../messaging/blocks';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -13,6 +13,8 @@ export class Locations extends APIResource {
   /**
    * Returns a paginated list of locations in your account.
    *
+   * This endpoint requires the permission: `locations:read`.
+   *
    * @example
    * ```ts
    * const listLocation =
@@ -22,12 +24,14 @@ export class Locations extends APIResource {
   list(
     query: LocationListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.ListLocation> {
+  ): APIPromise<BlocksAPI.ListLocation> {
     return this._client.get('/v1/operations/locations', { query, ...options });
   }
 
   /**
    * Returns a location by ID.
+   *
+   * This endpoint requires the permission: `locations:read`.
    *
    * @example
    * ```ts
@@ -40,12 +44,14 @@ export class Locations extends APIResource {
     id: string,
     query: LocationRetrieveParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.Location> {
+  ): APIPromise<BlocksAPI.Location> {
     return this._client.get(path`/v1/operations/locations/${id}`, { query, ...options });
   }
 
   /**
    * Creates a storage location, optionally placing it in the location hierarchy.
+   *
+   * This endpoint requires the permission: `locations:create`.
    *
    * @example
    * ```ts
@@ -55,13 +61,15 @@ export class Locations extends APIResource {
    * });
    * ```
    */
-  create(params: LocationCreateParams, options?: RequestOptions): APIPromise<CustomersAPI.Location> {
+  create(params: LocationCreateParams, options?: RequestOptions): APIPromise<BlocksAPI.Location> {
     const { include, ...body } = params;
     return this._client.post('/v1/operations/locations', { query: { include }, body, ...options });
   }
 
   /**
    * Partially updates a location.
+   *
+   * This endpoint requires the permission: `locations:update`.
    *
    * @example
    * ```ts
@@ -75,7 +83,7 @@ export class Locations extends APIResource {
     id: string,
     params: LocationUpdateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.Location> {
+  ): APIPromise<BlocksAPI.Location> {
     const { include, ...body } = params ?? {};
     return this._client.patch(path`/v1/operations/locations/${id}`, { query: { include }, body, ...options });
   }
@@ -85,6 +93,8 @@ export class Locations extends APIResource {
    *
    * Fails if the location has child locations; remove or reassign the children
    * first.
+   *
+   * This endpoint requires the permission: `locations:delete`.
    *
    * @example
    * ```ts
@@ -119,7 +129,7 @@ export interface CreateLocationRequest {
    * - `shelf`: a shelf within a rack.
    * - `bin`: a bin within a shelf.
    */
-  type: CustomersAPI.LocationTypeCode;
+  type: BlocksAPI.LocationTypeCode;
 
   /**
    * IDs of existing locations to attach as children of the new location.
@@ -173,7 +183,7 @@ export interface UpdateLocationRequest {
    * - `shelf`: a shelf within a rack.
    * - `bin`: a bin within a shelf.
    */
-  type?: CustomersAPI.LocationTypeCode;
+  type?: BlocksAPI.LocationTypeCode;
 }
 
 export interface LocationDeleteResponse {}
@@ -234,7 +244,7 @@ export interface LocationCreateParams {
    * - `shelf`: a shelf within a rack.
    * - `bin`: a bin within a shelf.
    */
-  type: CustomersAPI.LocationTypeCode;
+  type: BlocksAPI.LocationTypeCode;
 
   /**
    * Query param: Sub-objects to expand in the response. When omitted, sub-objects
@@ -298,7 +308,7 @@ export interface LocationUpdateParams {
    * - `shelf`: a shelf within a rack.
    * - `bin`: a bin within a shelf.
    */
-  type?: CustomersAPI.LocationTypeCode;
+  type?: BlocksAPI.LocationTypeCode;
 }
 
 export declare namespace Locations {

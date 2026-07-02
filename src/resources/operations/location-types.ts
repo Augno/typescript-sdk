@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as BlocksAPI from '../messaging/blocks';
 import * as APIKeysAPI from '../auth/api-keys/api-keys';
-import * as CustomersAPI from '../sales/customers/customers';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -13,6 +13,8 @@ import { path } from '../../internal/utils/path';
 export class LocationTypes extends APIResource {
   /**
    * Returns a paginated list of location types.
+   *
+   * This endpoint requires the permission: `locations:read`.
    *
    * @example
    * ```ts
@@ -29,6 +31,8 @@ export class LocationTypes extends APIResource {
 
   /**
    * Returns a location type by ID or code.
+   *
+   * This endpoint requires the permission: `locations:read`.
    *
    * @example
    * ```ts
@@ -83,7 +87,7 @@ export interface LocationType {
    * - `shelf`: a shelf within a rack.
    * - `bin`: a bin within a shelf.
    */
-  code: CustomersAPI.LocationTypeCode;
+  code: BlocksAPI.LocationTypeCode;
 
   /**
    * Creation timestamp.

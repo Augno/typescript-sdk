@@ -58,11 +58,11 @@ import {
   SalesOrderTotals,
   SalesOrders,
 } from './sales-orders';
+import * as ContactsAPI from './contacts/contacts';
+import { Contacts } from './contacts/contacts';
 import * as CustomersAPI from './customers/customers';
 import {
-  AccountUser,
   Carrier,
-  Consumption,
   CreateCustomerRequest,
   Customer,
   CustomerContactInfo,
@@ -75,26 +75,13 @@ import {
   CustomerRetrieveParams,
   CustomerUpdateParams,
   Customers,
-  Department,
-  ListConsumption,
   ListCustomer,
-  ListLocation,
-  ListMachine,
-  ListProductionStep,
-  ListScanningStation,
   ListServiceLevel,
-  Location,
-  LocationTypeCode,
-  Machine,
   PaymentTerm,
-  ProductionOutput,
-  ProductionStep,
   QuantityInput,
-  ScanningStation,
   ServiceLevel,
   ShippingTerm,
   UpdateCustomerRequest,
-  User,
 } from './customers/customers';
 
 export class Sales extends APIResource {
@@ -103,6 +90,7 @@ export class Sales extends APIResource {
   accountStatuses: AccountStatusesAPI.AccountStatuses = new AccountStatusesAPI.AccountStatuses(this._client);
   priorities: PrioritiesAPI.Priorities = new PrioritiesAPI.Priorities(this._client);
   customers: CustomersAPI.Customers = new CustomersAPI.Customers(this._client);
+  contacts: ContactsAPI.Contacts = new ContactsAPI.Contacts(this._client);
   salesOrders: SalesOrdersAPI.SalesOrders = new SalesOrdersAPI.SalesOrders(this._client);
 }
 
@@ -111,6 +99,7 @@ Sales.Addresses = Addresses;
 Sales.AccountStatuses = AccountStatuses;
 Sales.Priorities = Priorities;
 Sales.Customers = Customers;
+Sales.Contacts = Contacts;
 Sales.SalesOrders = SalesOrders;
 
 export declare namespace Sales {
@@ -155,41 +144,28 @@ export declare namespace Sales {
 
   export {
     Customers as Customers,
-    type AccountUser as AccountUser,
     type Carrier as Carrier,
-    type Consumption as Consumption,
     type CreateCustomerRequest as CreateCustomerRequest,
     type Customer as Customer,
     type CustomerContactInfo as CustomerContactInfo,
     type CustomerDefaults as CustomerDefaults,
     type CustomerFreightPreferences as CustomerFreightPreferences,
     type CustomerNotificationPreferences as CustomerNotificationPreferences,
-    type Department as Department,
-    type ListConsumption as ListConsumption,
     type ListCustomer as ListCustomer,
-    type ListLocation as ListLocation,
-    type ListMachine as ListMachine,
-    type ListProductionStep as ListProductionStep,
-    type ListScanningStation as ListScanningStation,
     type ListServiceLevel as ListServiceLevel,
-    type Location as Location,
-    type LocationTypeCode as LocationTypeCode,
-    type Machine as Machine,
     type PaymentTerm as PaymentTerm,
-    type ProductionOutput as ProductionOutput,
-    type ProductionStep as ProductionStep,
     type QuantityInput as QuantityInput,
-    type ScanningStation as ScanningStation,
     type ServiceLevel as ServiceLevel,
     type ShippingTerm as ShippingTerm,
     type UpdateCustomerRequest as UpdateCustomerRequest,
-    type User as User,
     type CustomerDeleteResponse as CustomerDeleteResponse,
     type CustomerListParams as CustomerListParams,
     type CustomerRetrieveParams as CustomerRetrieveParams,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
   };
+
+  export { Contacts as Contacts };
 
   export {
     SalesOrders as SalesOrders,

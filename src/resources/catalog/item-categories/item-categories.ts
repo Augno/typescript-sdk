@@ -25,6 +25,8 @@ export class ItemCategories extends APIResource {
    * Returns a paginated list of item categories for the current account, including
    * account-specific and global system categories.
    *
+   * This endpoint requires the permission: `item_categories:read`.
+   *
    * @example
    * ```ts
    * const listItemCategory =
@@ -42,6 +44,8 @@ export class ItemCategories extends APIResource {
    * Returns an item category by ID.
    *
    * Both account-owned categories and global system categories can be retrieved.
+   *
+   * This endpoint requires the permission: `item_categories:read`.
    *
    * @example
    * ```ts
@@ -61,6 +65,8 @@ export class ItemCategories extends APIResource {
 
   /**
    * Creates an account-owned item category.
+   *
+   * This endpoint requires the permission: `item_categories:create`.
    *
    * @example
    * ```ts
@@ -82,6 +88,8 @@ export class ItemCategories extends APIResource {
    *
    * Only the fields provided in the request body are changed. Default system
    * categories cannot be updated.
+   *
+   * This endpoint requires the permission: `item_categories:update`.
    *
    * @example
    * ```ts
@@ -110,6 +118,8 @@ export class ItemCategories extends APIResource {
    *
    * Default system categories cannot be deleted.
    *
+   * This endpoint requires the permission: `item_categories:delete`.
+   *
    * @example
    * ```ts
    * const itemCategory =
@@ -128,6 +138,8 @@ export class ItemCategories extends APIResource {
    * The new unit group must have the same unit type as the current one — for
    * example, a category measured in `mass` units can only switch to another `mass`
    * unit group. Default system categories cannot be modified.
+   *
+   * This endpoint requires the permission: `item_categories:update`.
    *
    * @example
    * ```ts

@@ -20,6 +20,8 @@ export class Items extends APIResource {
   /**
    * Returns a paginated list of items.
    *
+   * This endpoint requires the permission: `items:read`.
+   *
    * @example
    * ```ts
    * const listItem = await client.catalog.items.list();
@@ -31,6 +33,8 @@ export class Items extends APIResource {
 
   /**
    * Returns an item by ID.
+   *
+   * This endpoint requires the permission: `items:read`.
    *
    * @example
    * ```ts
@@ -50,6 +54,8 @@ export class Items extends APIResource {
   /**
    * Returns inventory quantities for an item, including on-hand, reserved,
    * available-to-promise, and short amounts.
+   *
+   * This endpoint requires the permission: `items:read`.
    *
    * @example
    * ```ts
@@ -73,6 +79,8 @@ export class Items extends APIResource {
    * The item's rate units (unit value, unit cost, burn rate) and any related
    * order-point, consumption, and production quantity units are updated to the new
    * category's base unit. Re-assigning the item's current category is a no-op.
+   *
+   * This endpoint requires the permission: `items:update`.
    *
    * @example
    * ```ts

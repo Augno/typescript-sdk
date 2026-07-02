@@ -30,6 +30,9 @@ export class SalesOrders extends APIResource {
   /**
    * Returns a paginated list of sales orders for the current account.
    *
+   * This endpoint requires the permissions: `sales_orders:read`, `customers:read`,
+   * `suppliers:read`.
+   *
    * @example
    * ```ts
    * const listSalesOrder =
@@ -49,6 +52,8 @@ export class SalesOrders extends APIResource {
    * The order number is assigned automatically, and a sales rep is auto-assigned
    * when none is provided. A shipping line is always added to the order, plus a
    * discount line when an order discount is supplied.
+   *
+   * This endpoint requires the permission: `sales_orders:create`.
    *
    * @example
    * ```ts
@@ -97,18 +102,16 @@ export interface CreateSalesOrderLineInput {
   quantity: CustomersAPI.QuantityInput;
 
   /**
-   * EDI line item ID.
-   */
-  edi_line_item_id?: string;
-
-  /**
-   * Description recorded on the line. Defaults to the product's description when
-   * omitted.
+   * Description recorded on the line.
+   *
+   * Defaults to the product's description when omitted.
    */
   product_description?: string;
 
   /**
-   * SKU recorded on the line. Defaults to the product's SKU when omitted.
+   * SKU recorded on the line.
+   *
+   * Defaults to the product's SKU when omitted.
    */
   product_sku?: string;
 
@@ -124,8 +127,9 @@ export interface CreateSalesOrderLineInput {
  */
 export interface CreateSalesOrderRequest {
   /**
-   * Bill-to address ID. Must reference an existing address on the order's owner or
-   * buyer account.
+   * Bill-to address ID.
+   *
+   * Must reference an existing address on the order's owner or buyer account.
    */
   bill_to_address_id: string;
 
@@ -145,8 +149,9 @@ export interface CreateSalesOrderRequest {
   priority_code: string;
 
   /**
-   * Ship-to address ID. Must reference an existing address on the order's owner or
-   * buyer account.
+   * Ship-to address ID.
+   *
+   * Must reference an existing address on the order's owner or buyer account.
    */
   ship_to_address_id: string;
 
@@ -230,12 +235,14 @@ export interface CreateSalesOrderRequest {
 
 /**
  * CreatedBy describes who created a resource and their relationship to the account
- * that owns it. Resolved from the resource's create audit event when the
- * `created_by` field is included.
+ * that owns it.
+ *
+ * It is resolved from the resource's create audit event.
  */
 export interface CreatedBy {
   /**
-   * Reference to an actor (user, API key, or agent).
+   * Reference to an actor — the user, API key, agent, or group identity associated
+   * with an action.
    */
   actor: RequestLogsAPI.Actor | null;
 
@@ -258,10 +265,8 @@ export interface CreatedBy {
  * Freight describes the carrier selection and freight billing for a record.
  *
  * It is a generic, reusable sub-resource shared by anything that carries shipping
- * configuration — e.g. a sales order's chosen freight, or a customer's default
- * freight preferences. It is itself expanded via its parent (e.g.
- * include[]=freight); when present, the full carrier and service level are
- * included.
+ * configuration — for example a sales order's chosen freight, or a customer's
+ * default freight preferences.
  */
 export interface Freight {
   /**
@@ -292,9 +297,10 @@ export interface Freight {
   object: 'freight';
 
   /**
-   * Freight policy (who arranges and pays for freight).
+   * How freight is arranged and billed for the record.
    *
-   * Populated where a policy applies, such as customer defaults; null otherwise.
+   * Populated where a freight policy applies, such as a customer's default
+   * preferences.
    *
    * - `free_freight`: no shipping cost to the buyer.
    * - `billed_freight`: freight is billed to the buyer.
@@ -448,7 +454,7 @@ export interface OrderDiscount {
   discount_type: 'percentage' | 'amount';
 
   /**
-   * Display name.
+   * Display name of the discount.
    */
   name: string;
 
@@ -486,7 +492,7 @@ export interface OrderDiscount {
  */
 export interface Record {
   /**
-   * Record ID.
+   * Unique identifier for the record.
    */
   id: string;
 
@@ -579,8 +585,9 @@ export interface SalesOrder {
 
   /**
    * CreatedBy describes who created a resource and their relationship to the account
-   * that owns it. Resolved from the resource's create audit event when the
-   * `created_by` field is included.
+   * that owns it.
+   *
+   * It is resolved from the resource's create audit event.
    */
   created_by: CreatedBy | null;
 
@@ -611,10 +618,8 @@ export interface SalesOrder {
    * Freight describes the carrier selection and freight billing for a record.
    *
    * It is a generic, reusable sub-resource shared by anything that carries shipping
-   * configuration — e.g. a sales order's chosen freight, or a customer's default
-   * freight preferences. It is itself expanded via its parent (e.g.
-   * include[]=freight); when present, the full carrier and service level are
-   * included.
+   * configuration — for example a sales order's chosen freight, or a customer's
+   * default freight preferences.
    */
   freight: Freight | null;
 
@@ -691,7 +696,8 @@ export interface SalesOrder {
   related: SalesOrderRelated | null;
 
   /**
-   * Reference to an actor (user, API key, or agent).
+   * Reference to an actor — the user, API key, agent, or group identity associated
+   * with an action.
    */
   sales_rep: RequestLogsAPI.Actor | null;
 
@@ -854,7 +860,8 @@ export interface SalesOrderRelated {
 }
 
 /**
- * Sales order status lookup value.
+ * A lookup value describing where a sales order is in its lifecycle, from estimate
+ * through fulfillment.
  */
 export interface SalesOrderStatus {
   /**
@@ -877,7 +884,7 @@ export interface SalesOrderStatus {
   created_at: string;
 
   /**
-   * Display name.
+   * Human-readable name of the status.
    */
   name: string;
 
@@ -978,14 +985,6 @@ export interface SalesOrderListParams {
   end_date?: string;
 
   /**
-   * Whether to exclude internal orders.
-   *
-   * When `true`, omits orders the account placed with itself (the buyer is the same
-   * account that owns the order).
-   */
-  exclude_internal_orders?: boolean;
-
-  /**
    * Sub-objects to expand in the response. When omitted, sub-objects are returned as
    * `null`.
    */
@@ -1054,8 +1053,9 @@ export interface SalesOrderListParams {
 
 export interface SalesOrderCreateParams {
   /**
-   * Body param: Bill-to address ID. Must reference an existing address on the
-   * order's owner or buyer account.
+   * Body param: Bill-to address ID.
+   *
+   * Must reference an existing address on the order's owner or buyer account.
    */
   bill_to_address_id: string;
 
@@ -1075,8 +1075,9 @@ export interface SalesOrderCreateParams {
   priority_code: string;
 
   /**
-   * Body param: Ship-to address ID. Must reference an existing address on the
-   * order's owner or buyer account.
+   * Body param: Ship-to address ID.
+   *
+   * Must reference an existing address on the order's owner or buyer account.
    */
   ship_to_address_id: string;
 
