@@ -100,7 +100,7 @@ describe('resource itemCategories', () => {
         {
           include: ['owner'],
           name: 'Electronic Components',
-          notes: 'notes',
+          notes: 'Covers passive and active components; excludes assemblies.',
         },
         { path: '/_stainless_unknown_path' },
       ),
