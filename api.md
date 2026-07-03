@@ -437,6 +437,7 @@ Types:
 - <code><a href="./src/resources/messaging/conversations/conversations.ts">MessageAttachment</a></code>
 - <code><a href="./src/resources/messaging/conversations/conversations.ts">MessagingGroup</a></code>
 - <code><a href="./src/resources/messaging/conversations/conversations.ts">MessagingGroupMember</a></code>
+- <code><a href="./src/resources/messaging/conversations/conversations.ts">ReadCursor</a></code>
 - <code><a href="./src/resources/messaging/conversations/conversations.ts">TriggerConfig</a></code>
 - <code><a href="./src/resources/messaging/conversations/conversations.ts">UpdateConversationRequest</a></code>
 

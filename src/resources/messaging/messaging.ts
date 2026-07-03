@@ -85,6 +85,7 @@ import {
   MessageAttachment,
   MessagingGroup,
   MessagingGroupMember,
+  ReadCursor,
   TriggerConfig,
   UpdateConversationRequest,
 } from './conversations/conversations';
@@ -271,6 +272,7 @@ export declare namespace Messaging {
     type MessageAttachment as MessageAttachment,
     type MessagingGroup as MessagingGroup,
     type MessagingGroupMember as MessagingGroupMember,
+    type ReadCursor as ReadCursor,
     type TriggerConfig as TriggerConfig,
     type UpdateConversationRequest as UpdateConversationRequest,
     type ConversationCreateParams as ConversationCreateParams,

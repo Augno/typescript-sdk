@@ -46,6 +46,7 @@ export {
   type MessageAttachment,
   type MessagingGroup,
   type MessagingGroupMember,
+  type ReadCursor,
   type TriggerConfig,
   type UpdateConversationRequest,
   type ConversationCreateParams,

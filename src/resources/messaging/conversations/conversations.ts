@@ -930,6 +930,12 @@ export interface ConversationParticipant {
   object: 'conversation_participant';
 
   /**
+   * A participant's read position in a conversation — the basis for read receipts
+   * ("who has seen this").
+   */
+  read_cursor: ReadCursor;
+
+  /**
    * The participant's permission level in the conversation.
    *
    * - `owner`: can rename or delete the conversation and manage its members and
@@ -1035,6 +1041,7 @@ export interface CreateConversationRequest {
     | 'announcement'
     | 'conversation'
     | 'conversation_participant'
+    | 'read_cursor'
     | 'chat_message'
     | 'notification_unread_summary_account'
     | 'messaging_block'
@@ -1659,6 +1666,40 @@ export interface MessagingGroupMember {
 }
 
 /**
+ * A participant's read position in a conversation — the basis for read receipts
+ * ("who has seen this").
+ */
+export interface ReadCursor {
+  /**
+   * The id of the last message the participant has read.
+   *
+   * `null` if they have not read any message yet.
+   */
+  message_id: string | null;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'read_cursor';
+
+  /**
+   * When the participant last advanced their read cursor.
+   *
+   * `null` if they have not read any message yet.
+   */
+  read_at: string | null;
+
+  /**
+   * The sequence number of the last message the participant has read in the
+   * conversation.
+   *
+   * A message is "seen" by this participant when its `sequence` is `<=` this value.
+   * `0` means they have not read any message in the conversation yet.
+   */
+  sequence: number;
+}
+
+/**
  * Trigger-type-specific configuration.
  *
  * Which fields are populated depends on the agent's `trigger_type`:
@@ -1800,6 +1841,7 @@ export interface ConversationCreateParams {
     | 'announcement'
     | 'conversation'
     | 'conversation_participant'
+    | 'read_cursor'
     | 'chat_message'
     | 'notification_unread_summary_account'
     | 'messaging_block'
@@ -2108,6 +2150,7 @@ export interface ConversationListParams {
     | 'announcement'
     | 'conversation'
     | 'conversation_participant'
+    | 'read_cursor'
     | 'chat_message'
     | 'notification_unread_summary_account'
     | 'messaging_block'
@@ -2393,6 +2436,7 @@ export declare namespace Conversations {
     type MessageAttachment as MessageAttachment,
     type MessagingGroup as MessagingGroup,
     type MessagingGroupMember as MessagingGroupMember,
+    type ReadCursor as ReadCursor,
     type TriggerConfig as TriggerConfig,
     type UpdateConversationRequest as UpdateConversationRequest,
     type ConversationCreateParams as ConversationCreateParams,
