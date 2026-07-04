@@ -245,6 +245,7 @@ const fuse = new Fuse(
     'client.messaging.preferences.list',
     'client.messaging.preferences.update',
     'client.messaging.emailDomains.create',
+    'client.messaging.emailDomains.delete',
     'client.messaging.emailDomains.list',
     'client.messaging.emailDomains.retrieve',
     'client.messaging.emailDomains.actions.verify',

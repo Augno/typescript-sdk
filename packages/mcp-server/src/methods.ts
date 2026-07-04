@@ -845,6 +845,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/messaging/email-domains/{id}',
   },
   {
+    clientCallName: 'client.messaging.emailDomains.delete',
+    fullyQualifiedName: 'messaging.emailDomains.delete',
+    httpMethod: 'delete',
+    httpPath: '/v1/messaging/email-domains/{id}',
+  },
+  {
     clientCallName: 'client.messaging.emailDomains.actions.verify',
     fullyQualifiedName: 'messaging.emailDomains.actions.verify',
     httpMethod: 'post',
