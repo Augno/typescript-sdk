@@ -1313,6 +1313,36 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/identity/roles/{id}',
   },
   {
+    clientCallName: 'client.settings.portalDomains.create',
+    fullyQualifiedName: 'settings.portalDomains.create',
+    httpMethod: 'post',
+    httpPath: '/v1/settings/portal-domains',
+  },
+  {
+    clientCallName: 'client.settings.portalDomains.list',
+    fullyQualifiedName: 'settings.portalDomains.list',
+    httpMethod: 'get',
+    httpPath: '/v1/settings/portal-domains',
+  },
+  {
+    clientCallName: 'client.settings.portalDomains.retrieve',
+    fullyQualifiedName: 'settings.portalDomains.retrieve',
+    httpMethod: 'get',
+    httpPath: '/v1/settings/portal-domains/{id}',
+  },
+  {
+    clientCallName: 'client.settings.portalDomains.delete',
+    fullyQualifiedName: 'settings.portalDomains.delete',
+    httpMethod: 'delete',
+    httpPath: '/v1/settings/portal-domains/{id}',
+  },
+  {
+    clientCallName: 'client.settings.portalDomains.actions.verify',
+    fullyQualifiedName: 'settings.portalDomains.actions.verify',
+    httpMethod: 'post',
+    httpPath: '/v1/settings/portal-domains/{id}/actions/verify',
+  },
+  {
     clientCallName: 'client.settings.integrations.list',
     fullyQualifiedName: 'settings.integrations.list',
     httpMethod: 'get',

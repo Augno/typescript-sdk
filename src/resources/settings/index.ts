@@ -10,4 +10,14 @@ export {
   type IntegrationCreateParams,
   type IntegrationUpdateParams,
 } from './integrations';
+export {
+  PortalDomains,
+  type CreatePortalDomainRequest,
+  type DNSRecord,
+  type ListDNSRecord,
+  type ListPortalDomain,
+  type PortalDomain,
+  type PortalDomainDeleteResponse,
+  type PortalDomainCreateParams,
+} from './portal-domains/index';
 export { Settings } from './settings';

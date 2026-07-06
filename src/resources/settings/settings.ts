@@ -12,14 +12,38 @@ import {
   ListAccountIntegration,
   UpdateAccountIntegrationRequest,
 } from './integrations';
+import * as PortalDomainsAPI from './portal-domains/portal-domains';
+import {
+  CreatePortalDomainRequest,
+  DNSRecord,
+  ListDNSRecord,
+  ListPortalDomain,
+  PortalDomain,
+  PortalDomainCreateParams,
+  PortalDomainDeleteResponse,
+  PortalDomains,
+} from './portal-domains/portal-domains';
 
 export class Settings extends APIResource {
+  portalDomains: PortalDomainsAPI.PortalDomains = new PortalDomainsAPI.PortalDomains(this._client);
   integrations: IntegrationsAPI.Integrations = new IntegrationsAPI.Integrations(this._client);
 }
 
+Settings.PortalDomains = PortalDomains;
 Settings.Integrations = Integrations;
 
 export declare namespace Settings {
+  export {
+    PortalDomains as PortalDomains,
+    type CreatePortalDomainRequest as CreatePortalDomainRequest,
+    type DNSRecord as DNSRecord,
+    type ListDNSRecord as ListDNSRecord,
+    type ListPortalDomain as ListPortalDomain,
+    type PortalDomain as PortalDomain,
+    type PortalDomainDeleteResponse as PortalDomainDeleteResponse,
+    type PortalDomainCreateParams as PortalDomainCreateParams,
+  };
+
   export {
     Integrations as Integrations,
     type AccountIntegration as AccountIntegration,

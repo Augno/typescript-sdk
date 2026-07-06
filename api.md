@@ -993,6 +993,30 @@ Methods:
 
 # Settings
 
+## PortalDomains
+
+Types:
+
+- <code><a href="./src/resources/settings/portal-domains/portal-domains.ts">CreatePortalDomainRequest</a></code>
+- <code><a href="./src/resources/settings/portal-domains/portal-domains.ts">DNSRecord</a></code>
+- <code><a href="./src/resources/settings/portal-domains/portal-domains.ts">ListDNSRecord</a></code>
+- <code><a href="./src/resources/settings/portal-domains/portal-domains.ts">ListPortalDomain</a></code>
+- <code><a href="./src/resources/settings/portal-domains/portal-domains.ts">PortalDomain</a></code>
+- <code><a href="./src/resources/settings/portal-domains/portal-domains.ts">PortalDomainDeleteResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/settings/portal-domains">client.settings.portalDomains.<a href="./src/resources/settings/portal-domains/portal-domains.ts">create</a>({ ...params }) -> PortalDomain</code>
+- <code title="get /v1/settings/portal-domains">client.settings.portalDomains.<a href="./src/resources/settings/portal-domains/portal-domains.ts">list</a>() -> ListPortalDomain</code>
+- <code title="get /v1/settings/portal-domains/{id}">client.settings.portalDomains.<a href="./src/resources/settings/portal-domains/portal-domains.ts">retrieve</a>(id) -> PortalDomain</code>
+- <code title="delete /v1/settings/portal-domains/{id}">client.settings.portalDomains.<a href="./src/resources/settings/portal-domains/portal-domains.ts">delete</a>(id) -> PortalDomainDeleteResponse</code>
+
+### Actions
+
+Methods:
+
+- <code title="post /v1/settings/portal-domains/{id}/actions/verify">client.settings.portalDomains.actions.<a href="./src/resources/settings/portal-domains/actions.ts">verify</a>(id) -> PortalDomain</code>
+
 ## Integrations
 
 Types:
