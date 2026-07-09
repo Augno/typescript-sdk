@@ -840,6 +840,11 @@ export interface SalesOrderLine {
  */
 export interface SalesOrderRelated {
   /**
+   * List represents a paginated list of resources.
+   */
+  invoices: ListRecord | null;
+
+  /**
    * Resource type identifier.
    */
   object: 'sales_order_related';
@@ -1016,6 +1021,7 @@ export interface SalesOrderListParams {
     | 'related.pick'
     | 'related.production_run'
     | 'related.shipments'
+    | 'related.invoices'
     | 'lines'
     | 'lines.product'
     | 'lines.product.item'
@@ -1117,6 +1123,7 @@ export interface SalesOrderCreateParams {
     | 'related.pick'
     | 'related.production_run'
     | 'related.shipments'
+    | 'related.invoices'
     | 'lines'
     | 'lines.product'
     | 'lines.quantity_ordered'
