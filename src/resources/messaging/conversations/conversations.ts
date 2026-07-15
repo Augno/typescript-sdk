@@ -80,11 +80,11 @@ export class Conversations extends APIResource {
    * ```ts
    * const conversation =
    *   await client.messaging.conversations.create({
-   *     type: 'group',
-   *     group_id: 'cvgp_018e88072d1320808dc97abc',
    *     participant_account_user_ids: [
    *       'acus_01ea9983ddb41dacc44ecf997c',
    *     ],
+   *     type: 'group',
+   *     group_id: 'cvgp_018e88072d1320808dc97abc',
    *     title: 'Order #1042 — shipping question',
    *     topic_resource_id: 'or_01d5034136c3ccc048abecc312',
    *     topic_resource_type: 'sales_order',
@@ -962,6 +962,15 @@ export interface ConversationParticipant {
  */
 export interface CreateConversationRequest {
   /**
+   * The other participant(s).
+   *
+   * For a direct message, exactly one account_user ID. For a group, the members to
+   * add — optional when `group_id` seeds the roster or the conversation is anchored
+   * to a `topic_resource` (a record discussion can start solo).
+   */
+  participant_account_user_ids: Array<string>;
+
+  /**
    * The kind of conversation to create.
    */
   type: 'direct_message' | 'group' | 'system';
@@ -974,14 +983,6 @@ export interface CreateConversationRequest {
    * Ignored for direct messages.
    */
   group_id?: string;
-
-  /**
-   * The other participant(s).
-   *
-   * For a direct message, exactly one account_user ID. For a group, the members to
-   * add — optional when `group_id` seeds the roster.
-   */
-  participant_account_user_ids?: Array<string>;
 
   /**
    * Title for a group conversation.
@@ -1005,6 +1006,7 @@ export interface CreateConversationRequest {
     | 'record'
     | 'freight'
     | 'sales_order_totals'
+    | 'sales_order_stage_total'
     | 'sales_order_related'
     | 'order_contact'
     | 'user'
@@ -1040,6 +1042,7 @@ export interface CreateConversationRequest {
     | 'notification_unread_summary'
     | 'announcement'
     | 'conversation'
+    | 'support_case'
     | 'conversation_participant'
     | 'read_cursor'
     | 'chat_message'
@@ -1075,6 +1078,7 @@ export interface CreateConversationRequest {
     | 'account_branding'
     | 'account_portal'
     | 'account_logo_url'
+    | 'account_favicon_url'
     | 'public_account'
     | 'property'
     | 'carrier'
@@ -1160,6 +1164,7 @@ export interface CreateConversationRequest {
     | 'customer_freight_preferences'
     | 'customer_defaults'
     | 'customer_notification_preferences'
+    | 'order_notification_recipient'
     | 'order_discount'
     | 'sales_order_line'
     | 'sales_order_type'
@@ -1226,9 +1231,11 @@ export interface CreateConversationRequest {
     | 'tenancy_pending_registration'
     | 'invoice_allocation_entry'
     | 'allocation_customer'
-    | 'checkout_sales_order_response'
-    | 'create_production_run_response'
+    | 'checkout_sales_order'
     | 'sales_order_price_quote'
+    | 'sales_order_freight_quote'
+    | 'sales_order_price_quote_line'
+    | 'sales_order_quote_rate'
     | 'hubspot_sync_job'
     | 'hubspot_sync_report'
     | 'hubspot_company_review'
@@ -1240,7 +1247,12 @@ export interface CreateConversationRequest {
     | 'messaging_group_member'
     | 'portal_profile'
     | 'portal_registration_session'
-    | 'portal_registration_session_data';
+    | 'portal_registration_session_data'
+    | 'pack_list'
+    | 'pack_list_party'
+    | 'pack_list_line_item'
+    | 'pack_list_back_order'
+    | 'pack_list_case';
 }
 
 /**
@@ -1393,9 +1405,22 @@ export interface Message {
   id: string;
 
   /**
+   * Machine-readable error code for a failed agent reply (e.g.
+   * `agent_spending_cap_reached`).
+   *
+   * `null` when the reply did not fail or carried no specific code.
+   */
+  agent_error_code: string | null;
+
+  /**
    * A single execution of an agent, from trigger through completion.
    */
   agent_run: AgentRun | null;
+
+  /**
+   * Whether this message is an agent reply that resolved a failed run.
+   */
+  agent_run_failed: boolean;
 
   /**
    * List represents a paginated list of resources.
@@ -1753,6 +1778,15 @@ export interface UpdateConversationRequest {
 
 export interface ConversationCreateParams {
   /**
+   * Body param: The other participant(s).
+   *
+   * For a direct message, exactly one account_user ID. For a group, the members to
+   * add — optional when `group_id` seeds the roster or the conversation is anchored
+   * to a `topic_resource` (a record discussion can start solo).
+   */
+  participant_account_user_ids: Array<string>;
+
+  /**
    * Body param: The kind of conversation to create.
    */
   type: 'direct_message' | 'group' | 'system';
@@ -1784,14 +1818,6 @@ export interface ConversationCreateParams {
   group_id?: string;
 
   /**
-   * Body param: The other participant(s).
-   *
-   * For a direct message, exactly one account_user ID. For a group, the members to
-   * add — optional when `group_id` seeds the roster.
-   */
-  participant_account_user_ids?: Array<string>;
-
-  /**
    * Body param: Title for a group conversation.
    *
    * Ignored for direct messages.
@@ -1813,6 +1839,7 @@ export interface ConversationCreateParams {
     | 'record'
     | 'freight'
     | 'sales_order_totals'
+    | 'sales_order_stage_total'
     | 'sales_order_related'
     | 'order_contact'
     | 'user'
@@ -1848,6 +1875,7 @@ export interface ConversationCreateParams {
     | 'notification_unread_summary'
     | 'announcement'
     | 'conversation'
+    | 'support_case'
     | 'conversation_participant'
     | 'read_cursor'
     | 'chat_message'
@@ -1883,6 +1911,7 @@ export interface ConversationCreateParams {
     | 'account_branding'
     | 'account_portal'
     | 'account_logo_url'
+    | 'account_favicon_url'
     | 'public_account'
     | 'property'
     | 'carrier'
@@ -1968,6 +1997,7 @@ export interface ConversationCreateParams {
     | 'customer_freight_preferences'
     | 'customer_defaults'
     | 'customer_notification_preferences'
+    | 'order_notification_recipient'
     | 'order_discount'
     | 'sales_order_line'
     | 'sales_order_type'
@@ -2034,9 +2064,11 @@ export interface ConversationCreateParams {
     | 'tenancy_pending_registration'
     | 'invoice_allocation_entry'
     | 'allocation_customer'
-    | 'checkout_sales_order_response'
-    | 'create_production_run_response'
+    | 'checkout_sales_order'
     | 'sales_order_price_quote'
+    | 'sales_order_freight_quote'
+    | 'sales_order_price_quote_line'
+    | 'sales_order_quote_rate'
     | 'hubspot_sync_job'
     | 'hubspot_sync_report'
     | 'hubspot_company_review'
@@ -2048,7 +2080,12 @@ export interface ConversationCreateParams {
     | 'messaging_group_member'
     | 'portal_profile'
     | 'portal_registration_session'
-    | 'portal_registration_session_data';
+    | 'portal_registration_session_data'
+    | 'pack_list'
+    | 'pack_list_party'
+    | 'pack_list_line_item'
+    | 'pack_list_back_order'
+    | 'pack_list_case';
 }
 
 export interface ConversationListParams {
@@ -2127,6 +2164,7 @@ export interface ConversationListParams {
     | 'record'
     | 'freight'
     | 'sales_order_totals'
+    | 'sales_order_stage_total'
     | 'sales_order_related'
     | 'order_contact'
     | 'user'
@@ -2162,6 +2200,7 @@ export interface ConversationListParams {
     | 'notification_unread_summary'
     | 'announcement'
     | 'conversation'
+    | 'support_case'
     | 'conversation_participant'
     | 'read_cursor'
     | 'chat_message'
@@ -2197,6 +2236,7 @@ export interface ConversationListParams {
     | 'account_branding'
     | 'account_portal'
     | 'account_logo_url'
+    | 'account_favicon_url'
     | 'public_account'
     | 'property'
     | 'carrier'
@@ -2282,6 +2322,7 @@ export interface ConversationListParams {
     | 'customer_freight_preferences'
     | 'customer_defaults'
     | 'customer_notification_preferences'
+    | 'order_notification_recipient'
     | 'order_discount'
     | 'sales_order_line'
     | 'sales_order_type'
@@ -2348,9 +2389,11 @@ export interface ConversationListParams {
     | 'tenancy_pending_registration'
     | 'invoice_allocation_entry'
     | 'allocation_customer'
-    | 'checkout_sales_order_response'
-    | 'create_production_run_response'
+    | 'checkout_sales_order'
     | 'sales_order_price_quote'
+    | 'sales_order_freight_quote'
+    | 'sales_order_price_quote_line'
+    | 'sales_order_quote_rate'
     | 'hubspot_sync_job'
     | 'hubspot_sync_report'
     | 'hubspot_company_review'
@@ -2362,7 +2405,12 @@ export interface ConversationListParams {
     | 'messaging_group_member'
     | 'portal_profile'
     | 'portal_registration_session'
-    | 'portal_registration_session_data';
+    | 'portal_registration_session_data'
+    | 'pack_list'
+    | 'pack_list_party'
+    | 'pack_list_line_item'
+    | 'pack_list_back_order'
+    | 'pack_list_case';
 
   /**
    * Filter by conversation type.

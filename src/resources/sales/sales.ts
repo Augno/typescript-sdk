@@ -34,30 +34,6 @@ import {
 } from './addresses';
 import * as PrioritiesAPI from './priorities';
 import { ListPriority, Priorities, Priority, PriorityListParams, PriorityRetrieveParams } from './priorities';
-import * as SalesOrdersAPI from './sales-orders';
-import {
-  CreateSalesOrderLineInput,
-  CreateSalesOrderRequest,
-  CreatedBy,
-  Freight,
-  ListRecord,
-  ListSalesOrder,
-  ListSalesOrderLine,
-  ListSalesOrderStatus,
-  OrderContact,
-  OrderDiscount,
-  Record,
-  SalesOrder,
-  SalesOrderCreateParams,
-  SalesOrderEmailContactInput,
-  SalesOrderLine,
-  SalesOrderListParams,
-  SalesOrderRelated,
-  SalesOrderRetrieveStatusesParams,
-  SalesOrderStatus,
-  SalesOrderTotals,
-  SalesOrders,
-} from './sales-orders';
 import * as ContactsAPI from './contacts/contacts';
 import { Contacts } from './contacts/contacts';
 import * as CustomersAPI from './customers/customers';
@@ -83,6 +59,45 @@ import {
   ShippingTerm,
   UpdateCustomerRequest,
 } from './customers/customers';
+import * as SalesOrdersAPI from './sales-orders/sales-orders';
+import {
+  CheckoutSalesOrderRequest,
+  CheckoutSalesOrderResponse,
+  CreateSalesOrderLineInput,
+  CreateSalesOrderRequest,
+  CreatedBy,
+  Freight,
+  ListQuotedSalesOrderLine,
+  ListRecord,
+  ListSalesOrder,
+  ListSalesOrderLine,
+  ListSalesOrderStatus,
+  OrderContact,
+  OrderDiscount,
+  QuoteSalesOrderLineInput,
+  QuoteSalesOrderPricesRequest,
+  QuoteSalesOrderPricesResponse,
+  QuotedSalesOrderLine,
+  Record,
+  SalesOrder,
+  SalesOrderCheckoutParams,
+  SalesOrderCreateParams,
+  SalesOrderDeleteResponse,
+  SalesOrderEmailContactInput,
+  SalesOrderLine,
+  SalesOrderListParams,
+  SalesOrderPriceQuoteParams,
+  SalesOrderQuoteRate,
+  SalesOrderRelated,
+  SalesOrderRetrieveParams,
+  SalesOrderRetrieveStatusesParams,
+  SalesOrderStageTotal,
+  SalesOrderStatus,
+  SalesOrderTotals,
+  SalesOrderUpdateParams,
+  SalesOrders,
+  UpdateSalesOrderRequest,
+} from './sales-orders/sales-orders';
 
 export class Sales extends APIResource {
   accountGroups: AccountGroupsAPI.AccountGroups = new AccountGroupsAPI.AccountGroups(this._client);
@@ -169,25 +184,40 @@ export declare namespace Sales {
 
   export {
     SalesOrders as SalesOrders,
+    type CheckoutSalesOrderRequest as CheckoutSalesOrderRequest,
+    type CheckoutSalesOrderResponse as CheckoutSalesOrderResponse,
     type CreateSalesOrderLineInput as CreateSalesOrderLineInput,
     type CreateSalesOrderRequest as CreateSalesOrderRequest,
     type CreatedBy as CreatedBy,
     type Freight as Freight,
+    type ListQuotedSalesOrderLine as ListQuotedSalesOrderLine,
     type ListRecord as ListRecord,
     type ListSalesOrder as ListSalesOrder,
     type ListSalesOrderLine as ListSalesOrderLine,
     type ListSalesOrderStatus as ListSalesOrderStatus,
     type OrderContact as OrderContact,
     type OrderDiscount as OrderDiscount,
+    type QuoteSalesOrderLineInput as QuoteSalesOrderLineInput,
+    type QuoteSalesOrderPricesRequest as QuoteSalesOrderPricesRequest,
+    type QuoteSalesOrderPricesResponse as QuoteSalesOrderPricesResponse,
+    type QuotedSalesOrderLine as QuotedSalesOrderLine,
     type Record as Record,
     type SalesOrder as SalesOrder,
     type SalesOrderEmailContactInput as SalesOrderEmailContactInput,
     type SalesOrderLine as SalesOrderLine,
+    type SalesOrderQuoteRate as SalesOrderQuoteRate,
     type SalesOrderRelated as SalesOrderRelated,
+    type SalesOrderStageTotal as SalesOrderStageTotal,
     type SalesOrderStatus as SalesOrderStatus,
     type SalesOrderTotals as SalesOrderTotals,
+    type UpdateSalesOrderRequest as UpdateSalesOrderRequest,
+    type SalesOrderDeleteResponse as SalesOrderDeleteResponse,
     type SalesOrderRetrieveStatusesParams as SalesOrderRetrieveStatusesParams,
     type SalesOrderListParams as SalesOrderListParams,
+    type SalesOrderRetrieveParams as SalesOrderRetrieveParams,
     type SalesOrderCreateParams as SalesOrderCreateParams,
+    type SalesOrderUpdateParams as SalesOrderUpdateParams,
+    type SalesOrderCheckoutParams as SalesOrderCheckoutParams,
+    type SalesOrderPriceQuoteParams as SalesOrderPriceQuoteParams,
   };
 }

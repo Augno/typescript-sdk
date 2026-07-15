@@ -788,29 +788,90 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/sales/sales-orders.ts">CreateSalesOrderLineInput</a></code>
-- <code><a href="./src/resources/sales/sales-orders.ts">CreateSalesOrderRequest</a></code>
-- <code><a href="./src/resources/sales/sales-orders.ts">CreatedBy</a></code>
-- <code><a href="./src/resources/sales/sales-orders.ts">Freight</a></code>
-- <code><a href="./src/resources/sales/sales-orders.ts">ListRecord</a></code>
-- <code><a href="./src/resources/sales/sales-orders.ts">ListSalesOrder</a></code>
-- <code><a href="./src/resources/sales/sales-orders.ts">ListSalesOrderLine</a></code>
-- <code><a href="./src/resources/sales/sales-orders.ts">ListSalesOrderStatus</a></code>
-- <code><a href="./src/resources/sales/sales-orders.ts">OrderContact</a></code>
-- <code><a href="./src/resources/sales/sales-orders.ts">OrderDiscount</a></code>
-- <code><a href="./src/resources/sales/sales-orders.ts">Record</a></code>
-- <code><a href="./src/resources/sales/sales-orders.ts">SalesOrder</a></code>
-- <code><a href="./src/resources/sales/sales-orders.ts">SalesOrderEmailContactInput</a></code>
-- <code><a href="./src/resources/sales/sales-orders.ts">SalesOrderLine</a></code>
-- <code><a href="./src/resources/sales/sales-orders.ts">SalesOrderRelated</a></code>
-- <code><a href="./src/resources/sales/sales-orders.ts">SalesOrderStatus</a></code>
-- <code><a href="./src/resources/sales/sales-orders.ts">SalesOrderTotals</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">CheckoutSalesOrderRequest</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">CheckoutSalesOrderResponse</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">CreateSalesOrderLineInput</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">CreateSalesOrderRequest</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">CreatedBy</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">Freight</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">ListQuotedSalesOrderLine</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">ListRecord</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">ListSalesOrder</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">ListSalesOrderLine</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">ListSalesOrderStatus</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">OrderContact</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">OrderDiscount</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">QuoteSalesOrderLineInput</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">QuoteSalesOrderPricesRequest</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">QuoteSalesOrderPricesResponse</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">QuotedSalesOrderLine</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">Record</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">SalesOrder</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">SalesOrderEmailContactInput</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">SalesOrderLine</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">SalesOrderQuoteRate</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">SalesOrderRelated</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">SalesOrderStageTotal</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">SalesOrderStatus</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">SalesOrderTotals</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">UpdateSalesOrderRequest</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">SalesOrderDeleteResponse</a></code>
 
 Methods:
 
-- <code title="get /v1/sales/sales-orders/statuses">client.sales.salesOrders.<a href="./src/resources/sales/sales-orders.ts">retrieveStatuses</a>({ ...params }) -> ListSalesOrderStatus</code>
-- <code title="get /v1/sales/sales-orders">client.sales.salesOrders.<a href="./src/resources/sales/sales-orders.ts">list</a>({ ...params }) -> ListSalesOrder</code>
-- <code title="post /v1/sales/sales-orders">client.sales.salesOrders.<a href="./src/resources/sales/sales-orders.ts">create</a>({ ...params }) -> SalesOrder</code>
+- <code title="get /v1/sales/sales-orders/statuses">client.sales.salesOrders.<a href="./src/resources/sales/sales-orders/sales-orders.ts">retrieveStatuses</a>({ ...params }) -> ListSalesOrderStatus</code>
+- <code title="get /v1/sales/sales-orders">client.sales.salesOrders.<a href="./src/resources/sales/sales-orders/sales-orders.ts">list</a>({ ...params }) -> ListSalesOrder</code>
+- <code title="get /v1/sales/sales-orders/{id}">client.sales.salesOrders.<a href="./src/resources/sales/sales-orders/sales-orders.ts">retrieve</a>(id, { ...params }) -> SalesOrder</code>
+- <code title="post /v1/sales/sales-orders">client.sales.salesOrders.<a href="./src/resources/sales/sales-orders/sales-orders.ts">create</a>({ ...params }) -> SalesOrder</code>
+- <code title="patch /v1/sales/sales-orders/{id}">client.sales.salesOrders.<a href="./src/resources/sales/sales-orders/sales-orders.ts">update</a>(id, { ...params }) -> SalesOrder</code>
+- <code title="delete /v1/sales/sales-orders/{id}">client.sales.salesOrders.<a href="./src/resources/sales/sales-orders/sales-orders.ts">delete</a>(id) -> SalesOrderDeleteResponse</code>
+- <code title="post /v1/sales/sales-orders/{id}/checkout">client.sales.salesOrders.<a href="./src/resources/sales/sales-orders/sales-orders.ts">checkout</a>(id, { ...params }) -> CheckoutSalesOrderResponse</code>
+- <code title="post /v1/sales/sales-orders/price-quote">client.sales.salesOrders.<a href="./src/resources/sales/sales-orders/sales-orders.ts">priceQuote</a>({ ...params }) -> QuoteSalesOrderPricesResponse</code>
+
+### Actions
+
+Types:
+
+- <code><a href="./src/resources/sales/sales-orders/actions.ts">BulkDeleteSalesOrdersRequest</a></code>
+- <code><a href="./src/resources/sales/sales-orders/actions.ts">IssueSalesOrderRequest</a></code>
+- <code><a href="./src/resources/sales/sales-orders/actions.ts">ProductionRun</a></code>
+- <code><a href="./src/resources/sales/sales-orders/actions.ts">QuoteSalesOrderFreightResponse</a></code>
+- <code><a href="./src/resources/sales/sales-orders/actions.ts">ActionBulkDeleteResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/sales/sales-orders/actions/bulk-delete">client.sales.salesOrders.actions.<a href="./src/resources/sales/sales-orders/actions.ts">bulkDelete</a>({ ...params }) -> ActionBulkDeleteResponse</code>
+- <code title="put /v1/sales/sales-orders/{id}/actions/issue">client.sales.salesOrders.actions.<a href="./src/resources/sales/sales-orders/actions.ts">issue</a>(id, { ...params }) -> SalesOrder</code>
+- <code title="put /v1/sales/sales-orders/{id}/actions/unissue">client.sales.salesOrders.actions.<a href="./src/resources/sales/sales-orders/actions.ts">unissue</a>(id) -> SalesOrder</code>
+- <code title="put /v1/sales/sales-orders/{id}/actions/close">client.sales.salesOrders.actions.<a href="./src/resources/sales/sales-orders/actions.ts">close</a>(id) -> SalesOrder</code>
+- <code title="put /v1/sales/sales-orders/{id}/actions/open">client.sales.salesOrders.actions.<a href="./src/resources/sales/sales-orders/actions.ts">open</a>(id) -> SalesOrder</code>
+- <code title="post /v1/sales/sales-orders/{id}/actions/quote-freight">client.sales.salesOrders.actions.<a href="./src/resources/sales/sales-orders/actions.ts">quoteFreight</a>(id) -> QuoteSalesOrderFreightResponse</code>
+- <code title="post /v1/sales/sales-orders/{id}/actions/create-production-run">client.sales.salesOrders.actions.<a href="./src/resources/sales/sales-orders/actions.ts">createProductionRun</a>(id, { ...params }) -> ProductionRun</code>
+
+### Lines
+
+Types:
+
+- <code><a href="./src/resources/sales/sales-orders/lines/lines.ts">CreateSalesOrderLineRequest</a></code>
+- <code><a href="./src/resources/sales/sales-orders/lines/lines.ts">UpdateSalesOrderLineRequest</a></code>
+- <code><a href="./src/resources/sales/sales-orders/lines/lines.ts">LineDeleteResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/sales/sales-orders/{id}/lines">client.sales.salesOrders.lines.<a href="./src/resources/sales/sales-orders/lines/lines.ts">create</a>(id, { ...params }) -> SalesOrderLine</code>
+- <code title="patch /v1/sales/sales-orders/{id}/lines/{line_id}">client.sales.salesOrders.lines.<a href="./src/resources/sales/sales-orders/lines/lines.ts">update</a>(lineID, { ...params }) -> SalesOrderLine</code>
+- <code title="delete /v1/sales/sales-orders/{id}/lines/{line_id}">client.sales.salesOrders.lines.<a href="./src/resources/sales/sales-orders/lines/lines.ts">delete</a>(lineID, { ...params }) -> LineDeleteResponse</code>
+
+#### Actions
+
+Types:
+
+- <code><a href="./src/resources/sales/sales-orders/lines/actions.ts">ReorderSalesOrderLinesRequest</a></code>
+- <code><a href="./src/resources/sales/sales-orders/lines/actions.ts">ActionReorderResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/sales/sales-orders/{id}/lines/actions/reorder">client.sales.salesOrders.lines.actions.<a href="./src/resources/sales/sales-orders/lines/actions.ts">reorder</a>(id, { ...params }) -> ActionReorderResponse</code>
 
 # Finance
 
@@ -973,6 +1034,16 @@ Methods:
 - <code title="put /v1/identity/account-users/{id}/actions/activate">client.identity.accountUsers.actions.<a href="./src/resources/identity/account-users/actions.ts">activate</a>(id) -> ActionActivateResponse</code>
 - <code title="put /v1/identity/account-users/{id}/actions/disable">client.identity.accountUsers.actions.<a href="./src/resources/identity/account-users/actions.ts">disable</a>(id) -> ActionDisableResponse</code>
 - <code title="put /v1/identity/account-users/{id}/actions/remove">client.identity.accountUsers.actions.<a href="./src/resources/identity/account-users/actions.ts">remove</a>(id) -> ActionRemoveResponse</code>
+
+## Accounts
+
+Types:
+
+- <code><a href="./src/resources/identity/accounts.ts">AccountUpdateFaviconResponse</a></code>
+
+Methods:
+
+- <code title="put /v1/identity/accounts/{id}/favicon">client.identity.accounts.<a href="./src/resources/identity/accounts.ts">updateFavicon</a>(id) -> AccountUpdateFaviconResponse</code>
 
 ## Roles
 

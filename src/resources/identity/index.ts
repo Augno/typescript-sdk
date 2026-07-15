@@ -11,6 +11,7 @@ export {
   type AccountUserCreateParams,
   type AccountUserUpdateParams,
 } from './account-users/index';
+export { Accounts, type AccountUpdateFaviconResponse } from './accounts';
 export { Identity } from './identity';
 export {
   Roles,

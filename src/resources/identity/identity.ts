@@ -1,6 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as AccountsAPI from './accounts';
+import { AccountUpdateFaviconResponse, Accounts } from './accounts';
 import * as RolesAPI from './roles';
 import {
   CreateRoleRequest,
@@ -28,10 +30,12 @@ import {
 
 export class Identity extends APIResource {
   accountUsers: AccountUsersAPI.AccountUsers = new AccountUsersAPI.AccountUsers(this._client);
+  accounts: AccountsAPI.Accounts = new AccountsAPI.Accounts(this._client);
   roles: RolesAPI.Roles = new RolesAPI.Roles(this._client);
 }
 
 Identity.AccountUsers = AccountUsers;
+Identity.Accounts = Accounts;
 Identity.Roles = Roles;
 
 export declare namespace Identity {
@@ -46,6 +50,8 @@ export declare namespace Identity {
     type AccountUserCreateParams as AccountUserCreateParams,
     type AccountUserUpdateParams as AccountUserUpdateParams,
   };
+
+  export { Accounts as Accounts, type AccountUpdateFaviconResponse as AccountUpdateFaviconResponse };
 
   export {
     Roles as Roles,
