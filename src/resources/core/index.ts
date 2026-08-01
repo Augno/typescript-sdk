@@ -7,6 +7,24 @@ export {
   type AddressRetrieveSuggestionsParams,
 } from './addresses/index';
 export {
+  Analytics,
+  type AnalyzeOeeRequest,
+  type AnalyzeOeeResponse,
+  type AnalyzeScheduleAttainmentRequest,
+  type AnalyzeScheduleAttainmentResponse,
+  type AttainmentBucket,
+  type FrozenAdherence,
+  type ListAttainmentBucket,
+  type ListFrozenAdherence,
+  type ListOeeDepartment,
+  type ListOeeDowntimeReason,
+  type OeeDepartment,
+  type OeeDepartmentPlannedTime,
+  type OeeDowntimeReason,
+  type AnalyticsUpdateOeeParams,
+  type AnalyticsUpdateScheduleAttainmentParams,
+} from './analytics';
+export {
   AuditEvents,
   type AuditEvent,
   type AuditFieldChange,

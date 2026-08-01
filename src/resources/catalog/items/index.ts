@@ -6,11 +6,13 @@ export {
   type Item,
   type ItemCategory,
   type ItemInventory,
+  type ItemLotDefault,
   type ListItem,
   type Quantity,
   type Rate,
   type ItemListParams,
   type ItemRetrieveParams,
   type ItemRetrieveInventoryParams,
+  type ItemRetrieveLotDefaultParams,
   type ItemChangeCategoryParams,
 } from './items';

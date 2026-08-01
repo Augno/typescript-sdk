@@ -33,7 +33,21 @@ import {
 } from './resources/finance/finance';
 import { Identity } from './resources/identity/identity';
 import { ListActor, Messaging, MessagingRetrieveContactsParams } from './resources/messaging/messaging';
-import { Operations } from './resources/operations/operations';
+import {
+  DemandOverrideType,
+  ListDemandOverrideType,
+  ListMachineDowntimeReason,
+  ListMachineStatus,
+  ListScheduleDeviationType,
+  MachineCampaign,
+  MachineDowntimeReason,
+  MachineDowntimeReasonSummary,
+  MachineDowntimeSummary,
+  MachineStatus,
+  OperationRetrieveMachineStatusParams,
+  Operations,
+  ScheduleDeviationType,
+} from './resources/operations/operations';
 import { Sales } from './resources/sales/sales';
 import { Settings } from './resources/settings/settings';
 import { type Fetch } from './internal/builtin-types';
@@ -841,7 +855,21 @@ export declare namespace Augno {
     type FinanceRetrieveAdjustmentTypesParams as FinanceRetrieveAdjustmentTypesParams,
   };
 
-  export { Operations as Operations };
+  export {
+    Operations as Operations,
+    type DemandOverrideType as DemandOverrideType,
+    type ListDemandOverrideType as ListDemandOverrideType,
+    type ListMachineDowntimeReason as ListMachineDowntimeReason,
+    type ListMachineStatus as ListMachineStatus,
+    type ListScheduleDeviationType as ListScheduleDeviationType,
+    type MachineCampaign as MachineCampaign,
+    type MachineDowntimeReason as MachineDowntimeReason,
+    type MachineDowntimeReasonSummary as MachineDowntimeReasonSummary,
+    type MachineDowntimeSummary as MachineDowntimeSummary,
+    type MachineStatus as MachineStatus,
+    type ScheduleDeviationType as ScheduleDeviationType,
+    type OperationRetrieveMachineStatusParams as OperationRetrieveMachineStatusParams,
+  };
 
   export { Identity as Identity };
 

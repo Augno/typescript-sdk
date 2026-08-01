@@ -7,9 +7,9 @@ const client = new Augno({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource items', () => {
+describe('resource machineDowntimeEvents', () => {
   test('list', async () => {
-    const responsePromise = client.catalog.items.list();
+    const responsePromise = client.operations.machineDowntimeEvents.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -22,21 +22,18 @@ describe('resource items', () => {
   test('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.catalog.items.list(
+      client.operations.machineDowntimeEvents.list(
         {
-          attribute_ids: ['string'],
-          category_ids: ['string'],
           cursor: 'cursor',
-          customer_ids: ['string'],
-          end_date: '2019-12-27T18:11:19.117Z',
-          include: ['category'],
+          department_ids: ['string'],
+          end_date: 'end_date',
+          include: ['machine'],
           limit: 0,
-          product_line_ids: ['string'],
+          machine_ids: ['string'],
+          open: true,
           q: 'q',
-          start_date: '2019-12-27T18:11:19.117Z',
-          subassembly_filter: 'all',
-          supplier_id: 'supplier_id',
-          types: ['string'],
+          reasons: ['breakdown'],
+          start_date: 'start_date',
         },
         { path: '/_stainless_unknown_path' },
       ),
@@ -44,7 +41,9 @@ describe('resource items', () => {
   });
 
   test('retrieve', async () => {
-    const responsePromise = client.catalog.items.retrieve('it_0131e386ac683e8c29a71f6f1f');
+    const responsePromise = client.operations.machineDowntimeEvents.retrieve(
+      'mcdt_0192a4c17b3e4f8a91c2d05e77',
+    );
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -57,61 +56,19 @@ describe('resource items', () => {
   test('retrieve: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.catalog.items.retrieve(
-        'it_0131e386ac683e8c29a71f6f1f',
-        { include: ['category'] },
+      client.operations.machineDowntimeEvents.retrieve(
+        'mcdt_0192a4c17b3e4f8a91c2d05e77',
+        { include: ['machine'] },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Augno.NotFoundError);
   });
 
-  test('retrieveInventory', async () => {
-    const responsePromise = client.catalog.items.retrieveInventory('it_0131e386ac683e8c29a71f6f1f');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('retrieveInventory: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.catalog.items.retrieveInventory(
-        'it_0131e386ac683e8c29a71f6f1f',
-        { include: ['on_hand'] },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
-  });
-
-  test('retrieveLotDefault', async () => {
-    const responsePromise = client.catalog.items.retrieveLotDefault('it_0131e386ac683e8c29a71f6f1f');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('retrieveLotDefault: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.catalog.items.retrieveLotDefault(
-        'it_0131e386ac683e8c29a71f6f1f',
-        { include: ['unit'] },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Augno.NotFoundError);
-  });
-
-  test('changeCategory: only required params', async () => {
-    const responsePromise = client.catalog.items.changeCategory('ic_01ae7bd7bfd21ca0ab81e1357e', {
-      id: 'it_0131e386ac683e8c29a71f6f1f',
+  test('create: only required params', async () => {
+    const responsePromise = client.operations.machineDowntimeEvents.create({
+      machine_id: 'mc_0177d18f55a1615f783d3bf8d0',
+      reason: 'breakdown',
+      started_at: '2026-05-10T00:00:00Z',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -122,10 +79,60 @@ describe('resource items', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('changeCategory: required and optional params', async () => {
-    const response = await client.catalog.items.changeCategory('ic_01ae7bd7bfd21ca0ab81e1357e', {
-      id: 'it_0131e386ac683e8c29a71f6f1f',
-      include: ['category'],
+  test('create: required and optional params', async () => {
+    const response = await client.operations.machineDowntimeEvents.create({
+      machine_id: 'mc_0177d18f55a1615f783d3bf8d0',
+      reason: 'breakdown',
+      started_at: '2026-05-10T00:00:00Z',
+      include: ['machine'],
+      batch_id: 'batch_id',
+      ended_at: '2019-12-27T18:11:19.117Z',
+      item_id: 'item_id',
+      note: 'note',
+      production_run_id: 'production_run_id',
+      source: 'manual',
     });
+  });
+
+  test('update', async () => {
+    const responsePromise = client.operations.machineDowntimeEvents.update('mcdt_0192a4c17b3e4f8a91c2d05e77');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('update: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.operations.machineDowntimeEvents.update(
+        'mcdt_0192a4c17b3e4f8a91c2d05e77',
+        {
+          include: ['machine'],
+          batch_id: 'batch_id',
+          ended_at: '2026-05-10T00:23:00Z',
+          item_id: 'item_id',
+          note: 'note',
+          production_run_id: 'production_run_id',
+          reason: 'breakdown',
+          started_at: '2019-12-27T18:11:19.117Z',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Augno.NotFoundError);
+  });
+
+  test('delete', async () => {
+    const responsePromise = client.operations.machineDowntimeEvents.delete('mcdt_0192a4c17b3e4f8a91c2d05e77');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
   });
 });

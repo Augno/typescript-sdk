@@ -1,6 +1,25 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as AnalyticsAPI from './analytics';
+import {
+  Analytics,
+  AnalyticsUpdateOeeParams,
+  AnalyticsUpdateScheduleAttainmentParams,
+  AnalyzeOeeRequest,
+  AnalyzeOeeResponse,
+  AnalyzeScheduleAttainmentRequest,
+  AnalyzeScheduleAttainmentResponse,
+  AttainmentBucket,
+  FrozenAdherence,
+  ListAttainmentBucket,
+  ListFrozenAdherence,
+  ListOeeDepartment,
+  ListOeeDowntimeReason,
+  OeeDepartment,
+  OeeDepartmentPlannedTime,
+  OeeDowntimeReason,
+} from './analytics';
 import * as AuditEventsAPI from './audit-events';
 import {
   AuditEvent,
@@ -54,6 +73,7 @@ export class Core extends APIResource {
   auditEvents: AuditEventsAPI.AuditEvents = new AuditEventsAPI.AuditEvents(this._client);
   addresses: AddressesAPI.Addresses = new AddressesAPI.Addresses(this._client);
   emailLogs: EmailLogsAPI.EmailLogs = new EmailLogsAPI.EmailLogs(this._client);
+  analytics: AnalyticsAPI.Analytics = new AnalyticsAPI.Analytics(this._client);
 
   /**
    * Search returns lightweight `entity` references matching the query across the
@@ -728,6 +748,7 @@ Core.RequestLogs = RequestLogs;
 Core.AuditEvents = AuditEvents;
 Core.Addresses = Addresses;
 Core.EmailLogs = EmailLogs;
+Core.Analytics = Analytics;
 
 export declare namespace Core {
   export {
@@ -780,5 +801,24 @@ export declare namespace Core {
     type ListEmailLog as ListEmailLog,
     type EmailLogListParams as EmailLogListParams,
     type EmailLogRetrieveParams as EmailLogRetrieveParams,
+  };
+
+  export {
+    Analytics as Analytics,
+    type AnalyzeOeeRequest as AnalyzeOeeRequest,
+    type AnalyzeOeeResponse as AnalyzeOeeResponse,
+    type AnalyzeScheduleAttainmentRequest as AnalyzeScheduleAttainmentRequest,
+    type AnalyzeScheduleAttainmentResponse as AnalyzeScheduleAttainmentResponse,
+    type AttainmentBucket as AttainmentBucket,
+    type FrozenAdherence as FrozenAdherence,
+    type ListAttainmentBucket as ListAttainmentBucket,
+    type ListFrozenAdherence as ListFrozenAdherence,
+    type ListOeeDepartment as ListOeeDepartment,
+    type ListOeeDowntimeReason as ListOeeDowntimeReason,
+    type OeeDepartment as OeeDepartment,
+    type OeeDepartmentPlannedTime as OeeDepartmentPlannedTime,
+    type OeeDowntimeReason as OeeDowntimeReason,
+    type AnalyticsUpdateOeeParams as AnalyticsUpdateOeeParams,
+    type AnalyticsUpdateScheduleAttainmentParams as AnalyticsUpdateScheduleAttainmentParams,
   };
 }

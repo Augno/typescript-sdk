@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../../core/resource';
 import * as UnitsAPI from '../units';
+import * as CoreAPI from '../../core/core';
 import * as APIKeysAPI from '../../auth/api-keys/api-keys';
 import * as AttributesAPI from './attributes';
 import { AttributeDeleteParams, AttributeUpdateParams, Attributes } from './attributes';
@@ -71,6 +72,40 @@ export class Items extends APIResource {
     options?: RequestOptions,
   ): APIPromise<ItemInventory> {
     return this._client.get(path`/v1/catalog/items/${id}/inventory`, { query, ...options });
+  }
+
+  /**
+   * Returns the lot this item is made in — how many, counted in what.
+   *
+   * A lot is a doff, a pallet, a batch: the quantity production is issued in. The
+   * unit is what makes it meaningful, since 60 pairs and 60 eaches are different
+   * lots, so `quantity` should never be read without `unit`.
+   *
+   * Resolved through the same chain the production schedule uses, most specific
+   * first: a per-item override, then the item's own product line, then the product
+   * lines of the finished goods it becomes, then the account-wide default. `source`
+   * names which rule applied. Intermediate items like greige are not sold and have
+   * no product line of their own, which is why they inherit from what they become.
+   *
+   * `quantity` is `0` when nothing in the chain supplies a lot. That means the item
+   * has no lot convention, not that its lot is zero.
+   *
+   * This endpoint requires the permission: `items:read`.
+   *
+   * @example
+   * ```ts
+   * const itemLotDefault =
+   *   await client.catalog.items.retrieveLotDefault(
+   *     'it_0131e386ac683e8c29a71f6f1f',
+   *   );
+   * ```
+   */
+  retrieveLotDefault(
+    id: string,
+    query: ItemRetrieveLotDefaultParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ItemLotDefault> {
+    return this._client.get(path`/v1/catalog/items/${id}/lot-default`, { query, ...options });
   }
 
   /**
@@ -273,6 +308,53 @@ export interface ItemInventory {
    * Value with an associated unit.
    */
   short: Quantity | null;
+}
+
+/**
+ * The lot an item is made in — how many, counted in what.
+ *
+ * A lot is the quantity production is issued in: a doff, a pallet, a batch. The
+ * unit is what makes it meaningful, since 60 pairs and 60 eaches are different
+ * lots.
+ */
+export interface ItemLotDefault {
+  /**
+   * Entity is a polymorphic reference to any resource in the system.
+   */
+  item: CoreAPI.Entity | null;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'item_lot_default';
+
+  /**
+   * Entity is a polymorphic reference to any resource in the system.
+   */
+  product_line: CoreAPI.Entity | null;
+
+  /**
+   * Units in one lot.
+   *
+   * `0` means the item has no lot convention, not that its lot is zero.
+   */
+  quantity: number;
+
+  /**
+   * Which rule in the chain produced this lot.
+   *
+   * - `item_override`: a lot size set on the item itself.
+   * - `product_line`: the convention of the line the item sells under.
+   * - `downstream_product_line`: inherited from the finished goods this item
+   *   becomes, for intermediates that are not themselves sold.
+   * - `account_default`: the account-wide fallback.
+   */
+  source: 'item_override' | 'product_line' | 'downstream_product_line' | 'account_default' | '';
+
+  /**
+   * Unit of measurement used for conversions and product quantities.
+   */
+  unit: UnitsAPI.Unit | null;
 }
 
 /**
@@ -494,6 +576,14 @@ export interface ItemRetrieveInventoryParams {
   include?: Array<'on_hand' | 'reserved' | 'available_to_promise' | 'short'>;
 }
 
+export interface ItemRetrieveLotDefaultParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'unit'>;
+}
+
 export interface ItemChangeCategoryParams {
   /**
    * Path param: Item ID.
@@ -525,12 +615,14 @@ export declare namespace Items {
     type Item as Item,
     type ItemCategory as ItemCategory,
     type ItemInventory as ItemInventory,
+    type ItemLotDefault as ItemLotDefault,
     type ListItem as ListItem,
     type Quantity as Quantity,
     type Rate as Rate,
     type ItemListParams as ItemListParams,
     type ItemRetrieveParams as ItemRetrieveParams,
     type ItemRetrieveInventoryParams as ItemRetrieveInventoryParams,
+    type ItemRetrieveLotDefaultParams as ItemRetrieveLotDefaultParams,
     type ItemChangeCategoryParams as ItemChangeCategoryParams,
   };
 

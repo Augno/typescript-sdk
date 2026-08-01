@@ -17,6 +17,20 @@ export {
 } from './finance/finance';
 export { Identity } from './identity/identity';
 export { Messaging, type ListActor, type MessagingRetrieveContactsParams } from './messaging/messaging';
-export { Operations } from './operations/operations';
+export {
+  Operations,
+  type DemandOverrideType,
+  type ListDemandOverrideType,
+  type ListMachineDowntimeReason,
+  type ListMachineStatus,
+  type ListScheduleDeviationType,
+  type MachineCampaign,
+  type MachineDowntimeReason,
+  type MachineDowntimeReasonSummary,
+  type MachineDowntimeSummary,
+  type MachineStatus,
+  type ScheduleDeviationType,
+  type OperationRetrieveMachineStatusParams,
+} from './operations/operations';
 export { Sales } from './sales/sales';
 export { Settings } from './settings/settings';

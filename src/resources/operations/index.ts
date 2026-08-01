@@ -12,6 +12,18 @@ export {
   type CarrierUpdateParams,
 } from './carriers/index';
 export {
+  DemandOverrides,
+  type CreateDemandOverrideRequest,
+  type DemandOverride,
+  type ListDemandOverride,
+  type UpdateDemandOverrideRequest,
+  type DemandOverrideDeleteResponse,
+  type DemandOverrideListParams,
+  type DemandOverrideRetrieveParams,
+  type DemandOverrideCreateParams,
+  type DemandOverrideUpdateParams,
+} from './demand-overrides';
+export {
   LocationTypes,
   type ListLocationType,
   type LocationType,
@@ -27,7 +39,66 @@ export {
   type LocationCreateParams,
   type LocationUpdateParams,
 } from './locations';
-export { Operations } from './operations';
+export {
+  MachineDowntimeEvents,
+  type CreateMachineDowntimeEventRequest,
+  type ListMachineDowntimeEvent,
+  type MachineDowntimeEvent,
+  type UpdateMachineDowntimeEventRequest,
+  type MachineDowntimeEventDeleteResponse,
+  type MachineDowntimeEventListParams,
+  type MachineDowntimeEventRetrieveParams,
+  type MachineDowntimeEventCreateParams,
+  type MachineDowntimeEventUpdateParams,
+} from './machine-downtime-events';
+export {
+  Operations,
+  type DemandOverrideType,
+  type ListDemandOverrideType,
+  type ListMachineDowntimeReason,
+  type ListMachineStatus,
+  type ListScheduleDeviationType,
+  type MachineCampaign,
+  type MachineDowntimeReason,
+  type MachineDowntimeReasonSummary,
+  type MachineDowntimeSummary,
+  type MachineStatus,
+  type ScheduleDeviationType,
+  type OperationRetrieveMachineStatusParams,
+} from './operations';
+export {
+  ProductionScheduleSettings,
+  type UpdateProductionScheduleSettingsRequest,
+  type ProductionScheduleSettingUpdateParams,
+} from './production-schedule-settings/index';
+export {
+  ProductionSchedules,
+  type GenerateProductionScheduleRequest,
+  type ListProductionSchedule,
+  type ListProductionScheduleDerivedLine,
+  type ListProductionScheduleDeviation,
+  type ListProductionScheduleFinishedPolicy,
+  type ListProductionScheduleItemPolicy,
+  type ListReleaseScheduleBatch,
+  type ListReleasedScheduleLine,
+  type ListScheduleAppliedOverride,
+  type ProductionSchedule,
+  type ProductionScheduleDerivedLine,
+  type ProductionScheduleDeviation,
+  type ProductionScheduleFinishedPolicy,
+  type ProductionScheduleItemPolicy,
+  type ReleaseScheduleBatch,
+  type ReleaseScheduleWeekPreview,
+  type ReleasedScheduleLine,
+  type ScheduleAppliedOverride,
+  type ScheduleDiagnostics,
+  type ProductionScheduleDeleteResponse,
+  type ProductionScheduleListParams,
+  type ProductionScheduleCreateParams,
+  type ProductionScheduleRetrieveDerivedLinesParams,
+  type ProductionScheduleRetrieveDeviationsParams,
+  type ProductionScheduleRetrieveWeekReleasePreviewParams,
+} from './production-schedules/index';
 export {
   ScanningStations,
   type CreateScanningStationRequest,
