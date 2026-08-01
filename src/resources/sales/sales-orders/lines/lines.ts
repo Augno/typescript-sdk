@@ -2,7 +2,7 @@
 
 import { APIResource } from '../../../../core/resource';
 import * as MaterialsAPI from '../../../catalog/materials';
-import * as CustomersAPI from '../../customers/customers';
+import * as ProductLinesAPI from '../../../catalog/product-lines';
 import * as SalesOrdersAPI from '../sales-orders';
 import * as ActionsAPI from './actions';
 import {
@@ -134,7 +134,7 @@ export interface CreateSalesOrderLineRequest {
   /**
    * A value with an associated unit, used in create and update requests.
    */
-  quantity: CustomersAPI.QuantityInput;
+  quantity: ProductLinesAPI.QuantityInput;
 
   /**
    * The product description recorded on the line.
@@ -165,7 +165,7 @@ export interface UpdateSalesOrderLineRequest {
   /**
    * A value with an associated unit, used in create and update requests.
    */
-  quantity?: CustomersAPI.QuantityInput;
+  quantity?: ProductLinesAPI.QuantityInput;
 
   /**
    * A rate value with its numerator and denominator units, used in create and update
@@ -196,7 +196,7 @@ export interface LineCreateParams {
   /**
    * Body param: A value with an associated unit, used in create and update requests.
    */
-  quantity: CustomersAPI.QuantityInput;
+  quantity: ProductLinesAPI.QuantityInput;
 
   /**
    * Query param: Sub-objects to expand in the response. When omitted, sub-objects
@@ -241,7 +241,7 @@ export interface LineUpdateParams {
   /**
    * Body param: A value with an associated unit, used in create and update requests.
    */
-  quantity?: CustomersAPI.QuantityInput;
+  quantity?: ProductLinesAPI.QuantityInput;
 
   /**
    * Body param: A rate value with its numerator and denominator units, used in

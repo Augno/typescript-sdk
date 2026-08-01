@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
+import * as ProductLinesAPI from '../../catalog/product-lines';
 import * as BlocksAPI from '../../messaging/blocks';
 import * as AccountGroupsAPI from '../account-groups';
 import * as AddressesAPI from '../addresses';
@@ -320,7 +321,7 @@ export interface CreateCustomerRequest {
   /**
    * A value with an associated unit, used in create and update requests.
    */
-  credit_limit?: QuantityInput;
+  credit_limit?: ProductLinesAPI.QuantityInput;
 
   /**
    * IDs of the account groups of type `pricing_group` to assign to this customer,
@@ -736,21 +737,6 @@ export interface PaymentTerm {
 }
 
 /**
- * A value with an associated unit, used in create and update requests.
- */
-export interface QuantityInput {
-  /**
-   * ID of the unit of measure for the value.
-   */
-  unit_id: string;
-
-  /**
-   * Decimal value, as a string to preserve precision.
-   */
-  value: string;
-}
-
-/**
  * Shipping service level for a carrier.
  */
 export interface ServiceLevel {
@@ -906,7 +892,7 @@ export interface UpdateCustomerRequest {
   /**
    * A value with an associated unit, used in create and update requests.
    */
-  credit_limit?: QuantityInput | null;
+  credit_limit?: ProductLinesAPI.QuantityInput | null;
 
   /**
    * IDs of the account groups of type `pricing_group` to assign to this customer,
@@ -1274,7 +1260,7 @@ export interface CustomerCreateParams {
   /**
    * Body param: A value with an associated unit, used in create and update requests.
    */
-  credit_limit?: QuantityInput;
+  credit_limit?: ProductLinesAPI.QuantityInput;
 
   /**
    * Body param: IDs of the account groups of type `pricing_group` to assign to this
@@ -1411,7 +1397,7 @@ export interface CustomerUpdateParams {
   /**
    * Body param: A value with an associated unit, used in create and update requests.
    */
-  credit_limit?: QuantityInput | null;
+  credit_limit?: ProductLinesAPI.QuantityInput | null;
 
   /**
    * Body param: IDs of the account groups of type `pricing_group` to assign to this
@@ -1536,7 +1522,6 @@ export declare namespace Customers {
     type ListCustomer as ListCustomer,
     type ListServiceLevel as ListServiceLevel,
     type PaymentTerm as PaymentTerm,
-    type QuantityInput as QuantityInput,
     type ServiceLevel as ServiceLevel,
     type ShippingTerm as ShippingTerm,
     type UpdateCustomerRequest as UpdateCustomerRequest,

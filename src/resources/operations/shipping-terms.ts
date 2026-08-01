@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ProductLinesAPI from '../catalog/product-lines';
 import * as APIKeysAPI from '../auth/api-keys/api-keys';
 import * as CustomersAPI from '../sales/customers/customers';
 import { APIPromise } from '../../core/api-promise';
@@ -168,7 +169,7 @@ export interface CreateShippingTermRequest {
   /**
    * A value with an associated unit, used in create and update requests.
    */
-  flat_rate?: CustomersAPI.QuantityInput;
+  flat_rate?: ProductLinesAPI.QuantityInput;
 
   /**
    * IDs of service levels that ship for free under this term (typically once
@@ -179,7 +180,7 @@ export interface CreateShippingTermRequest {
   /**
    * A value with an associated unit, used in create and update requests.
    */
-  minimum_order_value?: CustomersAPI.QuantityInput;
+  minimum_order_value?: ProductLinesAPI.QuantityInput;
 }
 
 /**
@@ -213,7 +214,7 @@ export interface UpdateShippingTermRequest {
   /**
    * A value with an associated unit, used in create and update requests.
    */
-  flat_rate?: CustomersAPI.QuantityInput | null;
+  flat_rate?: ProductLinesAPI.QuantityInput | null;
 
   /**
    * IDs of service levels that ship for free under this term (typically once
@@ -226,7 +227,7 @@ export interface UpdateShippingTermRequest {
   /**
    * A value with an associated unit, used in create and update requests.
    */
-  minimum_order_value?: CustomersAPI.QuantityInput | null;
+  minimum_order_value?: ProductLinesAPI.QuantityInput | null;
 
   /**
    * Human-readable name for the shipping term, used to identify it when assigning
@@ -318,7 +319,7 @@ export interface ShippingTermCreateParams {
   /**
    * Body param: A value with an associated unit, used in create and update requests.
    */
-  flat_rate?: CustomersAPI.QuantityInput;
+  flat_rate?: ProductLinesAPI.QuantityInput;
 
   /**
    * Body param: IDs of service levels that ship for free under this term (typically
@@ -329,7 +330,7 @@ export interface ShippingTermCreateParams {
   /**
    * Body param: A value with an associated unit, used in create and update requests.
    */
-  minimum_order_value?: CustomersAPI.QuantityInput;
+  minimum_order_value?: ProductLinesAPI.QuantityInput;
 }
 
 export interface ShippingTermUpdateParams {
@@ -344,7 +345,7 @@ export interface ShippingTermUpdateParams {
   /**
    * Body param: A value with an associated unit, used in create and update requests.
    */
-  flat_rate?: CustomersAPI.QuantityInput | null;
+  flat_rate?: ProductLinesAPI.QuantityInput | null;
 
   /**
    * Body param: IDs of service levels that ship for free under this term (typically
@@ -357,7 +358,7 @@ export interface ShippingTermUpdateParams {
   /**
    * Body param: A value with an associated unit, used in create and update requests.
    */
-  minimum_order_value?: CustomersAPI.QuantityInput | null;
+  minimum_order_value?: ProductLinesAPI.QuantityInput | null;
 
   /**
    * Body param: Human-readable name for the shipping term, used to identify it when

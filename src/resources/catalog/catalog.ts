@@ -38,6 +38,7 @@ import {
   ProductLineRetrieveParams,
   ProductLineUpdateParams,
   ProductLines,
+  QuantityInput,
   UpdateProductLineRequest,
 } from './product-lines';
 import * as ProductsAPI from './products';
@@ -253,6 +254,7 @@ export declare namespace Catalog {
     type CreateProductLineRequest as CreateProductLineRequest,
     type ListProductLine as ListProductLine,
     type ProductLine as ProductLine,
+    type QuantityInput as QuantityInput,
     type UpdateProductLineRequest as UpdateProductLineRequest,
     type ProductLineDeleteResponse as ProductLineDeleteResponse,
     type ProductLineListParams as ProductLineListParams,

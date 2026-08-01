@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as APIKeysAPI from '../auth/api-keys/api-keys';
+import * as ItemsAPI from './items/items';
 import * as UnitGroupsAPI from './unit-groups/unit-groups';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
@@ -42,7 +43,7 @@ export class ProductLines extends APIResource {
    * ```ts
    * const productLine =
    *   await client.catalog.productLines.retrieve(
-   *     'pl_01996357326a0d3f7b129542ea',
+   *     'pdln_01996357326a0d3f7b129542ea',
    *   );
    * ```
    */
@@ -87,7 +88,7 @@ export class ProductLines extends APIResource {
    * ```ts
    * const productLine =
    *   await client.catalog.productLines.update(
-   *     'pl_01996357326a0d3f7b129542ea',
+   *     'pdln_01996357326a0d3f7b129542ea',
    *     {
    *       commission_policy: 'commission_applied',
    *       freight_policy: 'billed_freight',
@@ -122,7 +123,7 @@ export class ProductLines extends APIResource {
    * ```ts
    * const productLine =
    *   await client.catalog.productLines.delete(
-   *     'pl_01996357326a0d3f7b129542ea',
+   *     'pdln_01996357326a0d3f7b129542ea',
    *   );
    * ```
    */
@@ -168,6 +169,11 @@ export interface CreateProductLineRequest {
    * line.
    */
   unit_group_id: string;
+
+  /**
+   * A value with an associated unit, used in create and update requests.
+   */
+  default_lot?: QuantityInput;
 }
 
 /**
@@ -217,6 +223,11 @@ export interface ProductLine {
   created_at: string;
 
   /**
+   * Value with an associated unit.
+   */
+  default_lot: ItemsAPI.Quantity | null;
+
+  /**
    * Free-form description of the product line.
    */
   description: string | null;
@@ -263,6 +274,21 @@ export interface ProductLine {
 }
 
 /**
+ * A value with an associated unit, used in create and update requests.
+ */
+export interface QuantityInput {
+  /**
+   * ID of the unit of measure for the value.
+   */
+  unit_id: string;
+
+  /**
+   * Decimal value, as a string to preserve precision.
+   */
+  value: string;
+}
+
+/**
  * Request to partially update a product line.
  */
 export interface UpdateProductLineRequest {
@@ -274,6 +300,11 @@ export interface UpdateProductLineRequest {
    *   elsewhere.
    */
   commission_policy?: 'commission_applied' | 'commission_exempt';
+
+  /**
+   * A value with an associated unit, used in create and update requests.
+   */
+  default_lot?: QuantityInput | null;
 
   /**
    * Default freight policy for products in this product line.
@@ -317,7 +348,7 @@ export interface ProductLineListParams {
    * Sub-objects to expand in the response. When omitted, sub-objects are returned as
    * `null`.
    */
-  include?: Array<'owner' | 'owner.account' | 'unit_group'>;
+  include?: Array<'owner' | 'owner.account' | 'unit_group' | 'default_lot' | 'default_lot.unit'>;
 
   /**
    * Maximum number of results to return in a single page.
@@ -337,7 +368,7 @@ export interface ProductLineRetrieveParams {
    * Sub-objects to expand in the response. When omitted, sub-objects are returned as
    * `null`.
    */
-  include?: Array<'owner' | 'owner.account' | 'unit_group'>;
+  include?: Array<'owner' | 'owner.account' | 'unit_group' | 'default_lot' | 'default_lot.unit'>;
 }
 
 export interface ProductLineCreateParams {
@@ -379,7 +410,12 @@ export interface ProductLineCreateParams {
    * Query param: Sub-objects to expand in the response. When omitted, sub-objects
    * are returned as `null`.
    */
-  include?: Array<'owner' | 'owner.account' | 'unit_group'>;
+  include?: Array<'owner' | 'owner.account' | 'unit_group' | 'default_lot' | 'default_lot.unit'>;
+
+  /**
+   * Body param: A value with an associated unit, used in create and update requests.
+   */
+  default_lot?: QuantityInput;
 }
 
 export interface ProductLineUpdateParams {
@@ -387,7 +423,7 @@ export interface ProductLineUpdateParams {
    * Query param: Sub-objects to expand in the response. When omitted, sub-objects
    * are returned as `null`.
    */
-  include?: Array<'owner' | 'owner.account' | 'unit_group'>;
+  include?: Array<'owner' | 'owner.account' | 'unit_group' | 'default_lot' | 'default_lot.unit'>;
 
   /**
    * Body param: Default commission policy for products in this product line.
@@ -397,6 +433,11 @@ export interface ProductLineUpdateParams {
    *   elsewhere.
    */
   commission_policy?: 'commission_applied' | 'commission_exempt';
+
+  /**
+   * Body param: A value with an associated unit, used in create and update requests.
+   */
+  default_lot?: QuantityInput | null;
 
   /**
    * Body param: Default freight policy for products in this product line.
@@ -429,6 +470,7 @@ export declare namespace ProductLines {
     type CreateProductLineRequest as CreateProductLineRequest,
     type ListProductLine as ListProductLine,
     type ProductLine as ProductLine,
+    type QuantityInput as QuantityInput,
     type UpdateProductLineRequest as UpdateProductLineRequest,
     type ProductLineDeleteResponse as ProductLineDeleteResponse,
     type ProductLineListParams as ProductLineListParams,

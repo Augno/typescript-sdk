@@ -13,7 +13,6 @@ export {
   type ListCustomer,
   type ListServiceLevel,
   type PaymentTerm,
-  type QuantityInput,
   type ServiceLevel,
   type ShippingTerm,
   type UpdateCustomerRequest,

@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../../core/resource';
 import * as MaterialsAPI from '../../catalog/materials';
+import * as ProductLinesAPI from '../../catalog/product-lines';
 import * as ProductsAPI from '../../catalog/products';
 import * as UnitsAPI from '../../catalog/units';
 import * as RequestLogsAPI from '../../core/request-logs';
@@ -288,7 +289,7 @@ export interface CreateSalesOrderLineInput {
   /**
    * A value with an associated unit, used in create and update requests.
    */
-  quantity: CustomersAPI.QuantityInput;
+  quantity: ProductLinesAPI.QuantityInput;
 
   /**
    * Description recorded on the line.
@@ -702,7 +703,7 @@ export interface QuoteSalesOrderLineInput {
   /**
    * A value with an associated unit, used in create and update requests.
    */
-  quantity: CustomersAPI.QuantityInput;
+  quantity: ProductLinesAPI.QuantityInput;
 }
 
 /**

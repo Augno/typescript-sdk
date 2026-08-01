@@ -56,6 +56,7 @@ export {
   type CreateProductLineRequest,
   type ListProductLine,
   type ProductLine,
+  type QuantityInput,
   type UpdateProductLineRequest,
   type ProductLineDeleteResponse,
   type ProductLineListParams,

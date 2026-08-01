@@ -318,6 +318,7 @@ Types:
 - <code><a href="./src/resources/catalog/product-lines.ts">CreateProductLineRequest</a></code>
 - <code><a href="./src/resources/catalog/product-lines.ts">ListProductLine</a></code>
 - <code><a href="./src/resources/catalog/product-lines.ts">ProductLine</a></code>
+- <code><a href="./src/resources/catalog/product-lines.ts">QuantityInput</a></code>
 - <code><a href="./src/resources/catalog/product-lines.ts">UpdateProductLineRequest</a></code>
 - <code><a href="./src/resources/catalog/product-lines.ts">ProductLineDeleteResponse</a></code>
 
@@ -746,7 +747,6 @@ Types:
 - <code><a href="./src/resources/sales/customers/customers.ts">ListCustomer</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">ListServiceLevel</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">PaymentTerm</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">QuantityInput</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">ServiceLevel</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">ShippingTerm</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">UpdateCustomerRequest</a></code>
