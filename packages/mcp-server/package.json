@@ -1,6 +1,6 @@
 {
   "name": "@augno/sdk-mcp",
-  "version": "0.13.2",
+  "version": "0.13.3",
   "description": "The official MCP Server for the Augno API",
   "author": "Augno <support@augno.com>",
   "types": "dist/index.d.ts",
