@@ -3,6 +3,7 @@
 import { APIResource } from '../../../core/resource';
 import * as CoreAPI from '../../core/core';
 import * as RequestLogsAPI from '../../core/request-logs';
+import * as RunsAPI from '../../ai/runs/runs';
 import * as APIKeysAPI from '../../auth/api-keys/api-keys';
 import * as ActionsAPI from './actions';
 import {
@@ -72,7 +73,11 @@ export class Conversations extends APIResource {
   attachments: AttachmentsAPI.Attachments = new AttachmentsAPI.Attachments(this._client);
 
   /**
-   * Starts a conversation between participants.
+   * Starts a direct message or group conversation.
+   *
+   * Requesting a direct message that already exists returns the existing thread
+   * instead of creating a duplicate, and a direct message is refused when either
+   * user has blocked the other. Conversation creation is rate limited per user.
    *
    * This endpoint requires the permission: `messaging:create`.
    *
@@ -80,13 +85,11 @@ export class Conversations extends APIResource {
    * ```ts
    * const conversation =
    *   await client.messaging.conversations.create({
-   *     participant_account_user_ids: [
-   *       'acus_01ea9983ddb41dacc44ecf997c',
-   *     ],
+   *     participant_account_user_ids: ['acus_e5zu8bde0z3h'],
    *     type: 'group',
-   *     group_id: 'cvgp_018e88072d1320808dc97abc',
+   *     group_id: 'cvgp_wjlypugna7s4',
    *     title: 'Order #1042 — shipping question',
-   *     topic_resource_id: 'or_01d5034136c3ccc048abecc312',
+   *     topic_resource_id: 'or_9lqo07quiwyb',
    *     topic_resource_type: 'sales_order',
    *   });
    * ```
@@ -97,7 +100,10 @@ export class Conversations extends APIResource {
   }
 
   /**
-   * Returns the caller's conversations, most-recently-active first.
+   * Returns the caller's conversations, most recently active first.
+   *
+   * A customer portal user sees only their own support case with the vendor, and an
+   * empty list until they have contacted support.
    *
    * This endpoint requires the permission: `messaging:read`.
    *
@@ -115,7 +121,11 @@ export class Conversations extends APIResource {
   }
 
   /**
-   * Returns one conversation (with participants) the caller belongs to.
+   * Returns a single conversation the caller participates in.
+   *
+   * Someone who has left the conversation can still read it back; it comes back
+   * marked hidden for them. A team member who opens a customer-facing case they are
+   * not yet part of is seated in it as a participant.
    *
    * This endpoint requires the permission: `messaging:read`.
    *
@@ -123,7 +133,7 @@ export class Conversations extends APIResource {
    * ```ts
    * const conversation =
    *   await client.messaging.conversations.retrieve(
-   *     'cv_01h9z8q1w2e3r4t5y6u7i8cv',
+   *     'cv_w35z4ck68yq7',
    *   );
    * ```
    */
@@ -136,7 +146,10 @@ export class Conversations extends APIResource {
   }
 
   /**
-   * Renames a conversation.
+   * Renames a group conversation.
+   *
+   * Only an owner or admin of the conversation can rename it, and direct messages
+   * cannot be renamed.
    *
    * This endpoint requires the permission: `messaging:update`.
    *
@@ -144,7 +157,7 @@ export class Conversations extends APIResource {
    * ```ts
    * const conversation =
    *   await client.messaging.conversations.update(
-   *     'cv_01h9z8q1w2e3r4t5y6u7i8cv',
+   *     'cv_w35z4ck68yq7',
    *     { title: 'Fulfillment war room' },
    *   );
    * ```
@@ -161,588 +174,6 @@ export class Conversations extends APIResource {
       ...options,
     });
   }
-}
-
-/**
- * A single tool invocation performed by an agent during a run.
- *
- * Each action records the tool that was called, its input and output, and any
- * human review decision.
- */
-export interface AgentAction {
-  /**
-   * Agent action ID.
-   */
-  id: string;
-
-  /**
-   * When this action was created.
-   */
-  created_at: string;
-
-  /**
-   * Longer description of what the action does.
-   */
-  description: string | null;
-
-  /**
-   * Entity is a polymorphic reference to any resource in the system.
-   */
-  entity: CoreAPI.Entity | null;
-
-  /**
-   * Error message if the action failed.
-   */
-  error_message: string | null;
-
-  /**
-   * When the action was executed.
-   */
-  executed_at: string | null;
-
-  /**
-   * Arguments passed to the tool, as JSON.
-   *
-   * Shape depends on `tool`. Encoded as a JSON value (object, array, string, number,
-   * boolean, or null), not a JSON-encoded string.
-   */
-  input: unknown | null;
-
-  /**
-   * Short human-readable label summarizing the action.
-   */
-  label: string | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'agent_action';
-
-  /**
-   * Result returned by the tool, as JSON.
-   *
-   * Recorded when the tool runs, so it is present even while the action is still
-   * `pending_review` or `auto_approved`; the shape depends on `tool`, and it is `{}`
-   * when the tool returned no output. Encoded as a JSON value (object, array,
-   * string, number, boolean, or null), not a JSON-encoded string.
-   */
-  output: unknown | null;
-
-  /**
-   * Whether this action must be reviewed by a human before it can execute.
-   */
-  review_requirement: 'not_required' | 'required';
-
-  /**
-   * When a human review decision was recorded for the action.
-   */
-  reviewed_at: string | null;
-
-  /**
-   * Reference to an actor — the user, API key, agent, or group identity associated
-   * with an action.
-   */
-  reviewed_by: RequestLogsAPI.Actor | null;
-
-  /**
-   * A single execution of an agent, from trigger through completion.
-   */
-  run: AgentRun | null;
-
-  /**
-   * Current action status.
-   *
-   * - `pending_review`: awaiting human review before it can execute.
-   * - `auto_approved`: automatically approved by policy.
-   * - `approved`: manually approved by a user.
-   * - `rejected`: rejected by a user; will not execute.
-   * - `executed`: successfully executed.
-   * - `failed`: errored during execution; see `error_message`.
-   */
-  status: 'pending_review' | 'auto_approved' | 'approved' | 'rejected' | 'executed' | 'failed';
-
-  /**
-   * The tool the agent invoked for this action.
-   *
-   * - `create_artifact`: create an artifact such as a report, document, or data
-   *   export.
-   * - `read_doc`: read Augno documentation pages.
-   * - `fetch_url`: fetch content from a public URL.
-   * - `draft_reply`: propose a reply to the case's external party as a draft held
-   *   for human approval (not sent).
-   * - `send_email`: send an email reply through the conversation's bound inbox.
-   */
-  tool: 'create_artifact' | 'read_doc' | 'fetch_url' | 'send_email' | 'draft_reply';
-
-  /**
-   * When this action was last updated.
-   */
-  updated_at: string;
-}
-
-/**
- * An AI agent available to the account.
- *
- * The definition describes what the agent does, how its runs are triggered, the
- * tools it can use, and whether it is currently enabled for the account.
- */
-export interface AgentDefinition {
-  /**
-   * Agent definition ID.
-   */
-  id: string;
-
-  /**
-   * Category grouping for the agent (e.g. `order_processing`), used to organize
-   * agents in the UI.
-   */
-  category_code: string;
-
-  /**
-   * Agent-level configuration controlling LLM behavior and trigger settings.
-   *
-   * Distinct from per-tool configuration (`tools[].config`), which configures
-   * individual tools attached to the agent.
-   */
-  config: AgentDefinitionConfig | null;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Whether the agent is provided by Augno or created in this account.
-   *
-   * - `system`: provided by Augno; cannot be edited or deleted.
-   * - `custom`: created by a user in this account.
-   */
-  definition_type: 'system' | 'custom';
-
-  /**
-   * Description of what the agent does.
-   */
-  description: string | null;
-
-  /**
-   * Whether the current user can edit this agent definition.
-   *
-   * Always `read_only` for `system` definitions.
-   */
-  editability: 'editable' | 'read_only';
-
-  /**
-   * Human-readable name of the agent.
-   */
-  name: string;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'agent_definition';
-
-  /**
-   * A named set of permissions that can be assigned to users to control what they
-   * can access.
-   */
-  role: APIKeysAPI.Role | null;
-
-  /**
-   * URL-friendly identifier for the agent.
-   */
-  slug: string;
-
-  /**
-   * Whether this agent is enabled for the current account.
-   *
-   * Activation is per-account: a `system` agent shared across accounts can be
-   * `active` for one account and `inactive` for another. An `inactive` agent does
-   * not run.
-   */
-  status: 'active' | 'inactive';
-
-  /**
-   * List represents a paginated list of resources.
-   */
-  tools: ListAgentDefinitionTool | null;
-
-  /**
-   * How runs of this agent are initiated.
-   *
-   * - `scheduled`: runs on a cron schedule (see
-   *   `config.trigger_config.cron_schedule`).
-   * - `event`: runs in response to platform events (see
-   *   `config.trigger_config.event_filters`).
-   * - `manual`: runs only when explicitly invoked.
-   * - `chat`: runs in response to a chat message; the run is linked to a
-   *   conversation and posts its reply back into it.
-   */
-  trigger_type: 'scheduled' | 'manual' | 'event' | 'chat';
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
-}
-
-/**
- * Agent-level configuration controlling LLM behavior and trigger settings.
- *
- * Distinct from per-tool configuration (`tools[].config`), which configures
- * individual tools attached to the agent.
- */
-export interface AgentDefinitionConfig {
-  /**
-   * Per-endpoint-tool human-review overrides, keyed by tool slug.
-   *
-   * When an entry is `true`, the run pauses in `awaiting_approval` each time the
-   * agent calls that endpoint-tool until it is approved via the Continue Agent Run
-   * endpoint. Slugs absent from the map do not require review.
-   */
-  endpoint_tool_review: { [key: string]: boolean };
-
-  /**
-   * API-endpoint tools the agent may discover and use, by slug (e.g.
-   * `create_account_group`).
-   *
-   * These correspond to tools listed by the List Tools endpoint with category
-   * `api_endpoint`. A single entry `*` grants the entire endpoint-tool catalog.
-   */
-  endpoint_tool_slugs: Array<string>;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'agent_definition_config';
-
-  /**
-   * System prompt / instructions for the agent.
-   */
-  system_prompt: string | null;
-
-  /**
-   * LLM sampling temperature between 0 and 1.
-   */
-  temperature: number | null;
-
-  /**
-   * Intelligence and cost tier for the agent's reasoning.
-   *
-   * Selects how capable and expensive a model the agent uses without pinning a
-   * specific model; higher tiers reason better but cost more. Leaving it unset uses
-   * the default tier.
-   *
-   * - `frontier`: the most capable tier, for multi-step planning, ambiguous agent
-   *   work, and hard coding or architecture tasks.
-   * - `high`: the default tier, for normal planning, code edits, synthesis, and
-   *   customer-facing reasoning.
-   * - `balanced`: for research, summarization, classification, structured
-   *   extraction, and light tool use.
-   * - `cheap`: for simple transforms, validation, formatting, and routing.
-   */
-  tier: 'frontier' | 'high' | 'balanced' | 'cheap' | 'legacy' | null;
-
-  /**
-   * Trigger-type-specific configuration.
-   *
-   * Which fields are populated depends on the agent's `trigger_type`:
-   *
-   * - `scheduled`: `cron_schedule` (and optionally `timezone`) is set.
-   * - `event`: `event_filters` is set.
-   * - `manual`: all fields are empty.
-   */
-  trigger_config: TriggerConfig | null;
-}
-
-/**
- * Tool attached to an agent definition.
- *
- * Pairs an AvailableTool with agent-specific config values.
- */
-export interface AgentDefinitionTool {
-  /**
-   * Agent definition tool ID.
-   */
-  id: string;
-
-  /**
-   * Instance-specific configuration for this tool.
-   *
-   * Must conform to the tool's `config_schema`. Encoded as a JSON value (object,
-   * array, string, number, boolean, or null), not a JSON-encoded string.
-   */
-  config: unknown | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'agent_definition_tool';
-
-  /**
-   * Whether calls to this tool must be approved by a user before they execute.
-   *
-   * When `required`, the run pauses in the `awaiting_approval` status each time the
-   * agent invokes this tool; approve or allow the tool via the Continue Agent Run
-   * endpoint to proceed.
-   */
-  review_requirement: 'not_required' | 'required';
-
-  /**
-   * Sort order within the agent.
-   */
-  sort_order: number;
-
-  /**
-   * Platform tool that can be attached to agents.
-   */
-  tool: AvailableTool;
-}
-
-/**
- * A single execution of an agent, from trigger through completion.
- */
-export interface AgentRun {
-  /**
-   * Agent run ID.
-   */
-  id: string;
-
-  /**
-   * List represents a paginated list of resources.
-   */
-  actions: ListAgentAction | null;
-
-  /**
-   * When the run completed.
-   */
-  completed_at: string | null;
-
-  /**
-   * When this run was created.
-   */
-  created_at: string;
-
-  /**
-   * An AI agent available to the account.
-   *
-   * The definition describes what the agent does, how its runs are triggered, the
-   * tools it can use, and whether it is currently enabled for the account.
-   */
-  definition: AgentDefinition | null;
-
-  /**
-   * Duration in milliseconds.
-   */
-  duration_ms: number | null;
-
-  /**
-   * Error message if the run failed.
-   */
-  error_message: string | null;
-
-  /**
-   * Input provided to the agent at the start of the run, as JSON. Encoded as a JSON
-   * value (object, array, string, number, boolean, or null), not a JSON-encoded
-   * string.
-   */
-  input: unknown | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'agent_run';
-
-  /**
-   * Final output produced by the agent, as JSON.
-   *
-   * Populated only once the run has completed successfully. Encoded as a JSON value
-   * (object, array, string, number, boolean, or null), not a JSON-encoded string.
-   */
-  output: unknown | null;
-
-  /**
-   * When the run started executing.
-   */
-  started_at: string | null;
-
-  /**
-   * Current run status.
-   *
-   * - `pending`: queued but not yet started.
-   * - `running`: currently executing.
-   * - `awaiting_input`: paused, waiting for user input before continuing.
-   * - `awaiting_approval`: paused, waiting for a pending action to be approved.
-   * - `completed`: finished successfully.
-   * - `failed`: stopped after an error; see `error_message`.
-   * - `cancelled`: stopped before completion by a user.
-   */
-  status:
-    | 'pending'
-    | 'running'
-    | 'completed'
-    | 'failed'
-    | 'cancelled'
-    | 'awaiting_input'
-    | 'awaiting_approval';
-
-  /**
-   * List represents a paginated list of resources.
-   */
-  steps: ListAgentRunStep | null;
-
-  /**
-   * How this run was initiated.
-   *
-   * - `scheduled`: started by the agent's cron schedule.
-   * - `event`: started in response to a platform event.
-   * - `manual`: started by an explicit request; see `triggered_by`.
-   * - `chat`: started by a message in a conversation, with the agent's reply posted
-   *   back into that conversation.
-   */
-  trigger_type: 'scheduled' | 'manual' | 'event' | 'chat';
-
-  /**
-   * Reference to an actor — the user, API key, agent, or group identity associated
-   * with an action.
-   */
-  triggered_by: RequestLogsAPI.Actor | null;
-
-  /**
-   * When this run was last updated.
-   */
-  updated_at: string;
-}
-
-/**
- * A single event in an agent run's execution timeline.
- */
-export interface AgentRunStep {
-  /**
-   * Agent run step ID.
-   */
-  id: string;
-
-  /**
-   * Reference to an actor — the user, API key, agent, or group identity associated
-   * with an action.
-   */
-  actor: RequestLogsAPI.Actor | null;
-
-  /**
-   * Text payload for the step, such as a message body or a tool result.
-   */
-  content: string | null;
-
-  /**
-   * When this step was created.
-   */
-  created_at: string;
-
-  /**
-   * Duration in milliseconds.
-   */
-  duration_ms: number | null;
-
-  /**
-   * Additional structured data for the step, as JSON. Encoded as a JSON value
-   * (object, array, string, number, boolean, or null), not a JSON-encoded string.
-   */
-  metadata: unknown | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'agent_run_step';
-
-  /**
-   * Zero-based position of this step within the run's timeline.
-   */
-  sequence: number;
-
-  /**
-   * The kind of timeline event (e.g. `trigger_received`, `user_message`,
-   * `assistant_message`, `tool_call`, `tool_result`, `awaiting_approval`,
-   * `completion`, `error`).
-   */
-  step_type: string;
-
-  /**
-   * Short title for the step.
-   */
-  title: string;
-}
-
-/**
- * Platform tool that can be attached to agents.
- */
-export interface AvailableTool {
-  /**
-   * Category grouping for the tool (e.g. `built_in`).
-   */
-  category: string;
-
-  /**
-   * JSON schema describing the configuration options this tool accepts.
-   *
-   * Defines the shape of the `config` field on AgentDefinitionTool.
-   *
-   * For example:
-   *
-   * ````json
-   * {
-   *   "type": "object",
-   *   "properties": {
-   *     "max_results": {
-   *       "type": "integer",
-   *       "default": 10
-   *     }
-   *   }
-   * }
-   * ``` Encoded as a JSON value (object, array, string, number, boolean, or null), not a JSON-encoded string.
-   * ````
-   */
-  config_schema: unknown | null;
-
-  /**
-   * Tool description.
-   */
-  description: string | null;
-
-  /**
-   * Whether invoking this tool changes server state.
-   *
-   * True for any `api_endpoint` tool whose underlying operation is not a read
-   * (non-GET); always false for `built_in` tools. The agent-configuration UI uses
-   * this to default such tools to requiring human review.
-   */
-  mutating: boolean;
-
-  /**
-   * Tool name.
-   */
-  name: string;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'available_tool';
-
-  /**
-   * Permission scopes the agent's role must hold for this tool to be usable (e.g.
-   * `products:read`).
-   */
-  required_permissions: Array<string>;
-
-  /**
-   * Role type the caller must have for this tool, when the operation is gated by
-   * role rather than a permission (e.g. `admin`).
-   */
-  required_role_type: string | null;
-
-  /**
-   * A stable identifier used when attaching the tool to an agent.
-   */
-  slug: string;
 }
 
 /**
@@ -763,6 +194,10 @@ export interface Conversation {
   /**
    * Whether this is a team-only conversation (`internal`) or a customer-facing case
    * (`customer`).
+   *
+   * A customer never sees an `internal` conversation, even one that is about them;
+   * within a `customer` case they see only the messages that were sent to them, not
+   * the team's internal notes on the case.
    */
   audience: 'internal' | 'customer';
 
@@ -784,20 +219,23 @@ export interface Conversation {
 
   /**
    * A chat message within a conversation.
+   *
+   * One resource covers every stage of a message's life: a delivered timeline
+   * message, a message queued for a future send, and a customer-reply draft awaiting
+   * approval. Read `status` to tell them apart.
    */
   last_message: Message | null;
 
   /**
    * When the most recent message was sent.
-   *
-   * `null` when the conversation has no messages yet.
    */
   last_message_at: string | null;
 
   /**
    * Whether the conversation is under legal hold.
    *
-   * Exempts the conversation from retention purging and redaction.
+   * While held, the conversation is exempt from automatic retention purging and from
+   * redaction until the hold is released.
    */
   legal_hold: 'released' | 'held';
 
@@ -807,23 +245,26 @@ export interface Conversation {
   object: 'conversation';
 
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   participants: ListConversationParticipant | null;
 
   /**
-   * The caller's effective status.
+   * The conversation's state from the caller's point of view.
    *
-   * - `hidden` when the caller has hidden the conversation
-   * - otherwise the account-level lifecycle state
+   * - `active`: a normal, visible conversation.
+   * - `archived`: archived for the whole account.
+   * - `hidden`: the caller dismissed the conversation from their own list while
+   *   everyone else still sees it, which takes precedence over an account-level
+   *   archive.
    */
   status: 'active' | 'archived' | 'hidden';
 
   /**
    * The display title of a group conversation.
    *
-   * `null` for direct messages, where the client derives a title from the
-   * participants.
+   * Direct messages carry no stored title; clients derive one from the participants.
    */
   title: string | null;
 
@@ -855,7 +296,9 @@ export interface Conversation {
   /**
    * The triage lane of a customer-facing case.
    *
-   * Only set for customer-audience conversations.
+   * Only conversations with a `customer` audience have a triage lane. It drives the
+   * support inbox and is independent of `status`, which is about visibility rather
+   * than progress.
    *
    * - `new`: opened but not yet triaged.
    * - `open`: actively being worked.
@@ -890,15 +333,18 @@ export interface ConversationParticipant {
   actor: RequestLogsAPI.Actor | null;
 
   /**
-   * For agent participants with a keyword/mention policy, the keywords that trigger
-   * it.
+   * For agent participants with a keyword or mention policy, the keywords that
+   * trigger it.
+   *
+   * Matching is case-insensitive and looks anywhere in the message body: under
+   * `keyword` the bare word is matched, under `mention` it must appear as
+   * `@keyword`. Replying directly to one of the agent's own messages always reaches
+   * it, so an agent with no keywords still answers replies but nothing else.
    */
   agent_trigger_keywords: Array<string>;
 
   /**
    * For agent participants, when the agent is invoked in response to messages.
-   *
-   * `null` for non-agent participants.
    *
    * - `mention`: only when the agent is @mentioned.
    * - `keyword`: when a message contains one of the agent's trigger keywords.
@@ -913,14 +359,20 @@ export interface ConversationParticipant {
    * - `left`: voluntarily left the conversation.
    * - `removed`: removed by an admin.
    * - `hidden`: still a member but has hidden the conversation from their own list.
+   *
+   * Membership records are kept rather than deleted, so re-adding someone who left
+   * or was removed reactivates their original record and their earlier messages stay
+   * attributed to them.
    */
   membership: 'active' | 'left' | 'removed' | 'hidden';
 
   /**
    * The participant's notification preference for the conversation.
    *
-   * - `unmuted`: receives normal notifications.
-   * - `muted`: notifications are suppressed (mentions may still pierce the mute).
+   * - `unmuted`: receives notifications for new messages.
+   * - `muted`: new-message notifications are suppressed, though a direct @mention
+   *   still raises an in-app alert (never an email), and the conversation still
+   *   counts toward the unread total.
    */
   notifications: 'unmuted' | 'muted';
 
@@ -962,16 +414,26 @@ export interface ConversationParticipant {
  */
 export interface CreateConversationRequest {
   /**
-   * The other participant(s).
+   * The other participants to add.
    *
-   * For a direct message, exactly one account_user ID. For a group, the members to
-   * add — optional when `group_id` seeds the roster or the conversation is anchored
-   * to a `topic_resource` (a record discussion can start solo).
+   * For a direct message, exactly one account user. For a group, the members to seed
+   * — these can be omitted when `group_id` supplies a roster, or when the
+   * conversation is anchored to a topic resource, since a record discussion may
+   * start solo and pull people in later.
+   *
+   * The caller is always a participant and does not need to be listed; on a group
+   * they become its owner and every other member seeded at creation is notified.
    */
   participant_account_user_ids: Array<string>;
 
   /**
    * The kind of conversation to create.
+   *
+   * - `direct_message`: a 1:1 thread with exactly one other user. Addressing
+   *   yourself is allowed and gives you a private notes thread.
+   * - `group`: a named thread with any number of user and agent members.
+   *
+   * `system` channels are created by the platform and cannot be requested here.
    */
   type: 'direct_message' | 'group' | 'system';
 
@@ -987,7 +449,7 @@ export interface CreateConversationRequest {
   /**
    * Title for a group conversation.
    *
-   * Ignored for direct messages.
+   * A direct message is identified by its participants rather than by a title.
    */
   title?: string;
 
@@ -998,6 +460,9 @@ export interface CreateConversationRequest {
 
   /**
    * The type of business record to anchor this conversation to.
+   *
+   * An anchored conversation is returned when conversations are listed for that
+   * record, which is how a discussion shows up on an order or invoice.
    */
   topic_resource_type?:
     | 'account'
@@ -1278,67 +743,8 @@ export interface CreateConversationRequest {
 }
 
 /**
- * List represents a paginated list of resources.
- */
-export interface ListAgentAction {
-  /**
-   * Resources in this page.
-   */
-  data: Array<AgentAction>;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'list';
-
-  /**
-   * PageInfo contains URL-based pagination metadata.
-   */
-  page_info: APIKeysAPI.PageInfo;
-}
-
-/**
- * List represents a paginated list of resources.
- */
-export interface ListAgentDefinitionTool {
-  /**
-   * Resources in this page.
-   */
-  data: Array<AgentDefinitionTool>;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'list';
-
-  /**
-   * PageInfo contains URL-based pagination metadata.
-   */
-  page_info: APIKeysAPI.PageInfo;
-}
-
-/**
- * List represents a paginated list of resources.
- */
-export interface ListAgentRunStep {
-  /**
-   * Resources in this page.
-   */
-  data: Array<AgentRunStep>;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'list';
-
-  /**
-   * PageInfo contains URL-based pagination metadata.
-   */
-  page_info: APIKeysAPI.PageInfo;
-}
-
-/**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListConversation {
   /**
@@ -1352,13 +758,20 @@ export interface ListConversation {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListConversationParticipant {
   /**
@@ -1372,13 +785,20 @@ export interface ListConversationParticipant {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListMessageAttachment {
   /**
@@ -1392,13 +812,20 @@ export interface ListMessageAttachment {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListMessagingGroupMember {
   /**
@@ -1412,13 +839,23 @@ export interface ListMessagingGroupMember {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
 
 /**
  * A chat message within a conversation.
+ *
+ * One resource covers every stage of a message's life: a delivered timeline
+ * message, a message queued for a future send, and a customer-reply draft awaiting
+ * approval. Read `status` to tell them apart.
  */
 export interface Message {
   /**
@@ -1427,25 +864,29 @@ export interface Message {
   id: string;
 
   /**
-   * Machine-readable error code for a failed agent reply (e.g.
-   * `agent_spending_cap_reached`).
+   * Machine-readable reason an agent reply failed.
    *
-   * `null` when the reply did not fail or carried no specific code.
+   * A client can react to the specific code rather than just showing the body —
+   * `agent_spending_cap_reached`, for example, is a cue to offer raising the agent
+   * spending limit.
    */
   agent_error_code: string | null;
 
   /**
    * A single execution of an agent, from trigger through completion.
    */
-  agent_run: AgentRun | null;
+  agent_run: RunsAPI.AgentRun | null;
 
   /**
-   * Whether this message is an agent reply that resolved a failed run.
+   * Whether this message is an agent reply reporting that the agent's run failed.
+   *
+   * The body explains the failure to the reader rather than answering the request.
    */
   agent_run_failed: boolean;
 
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   attachments: ListMessageAttachment | null;
 
@@ -1458,22 +899,23 @@ export interface Message {
   /**
    * Message body.
    *
-   * `null` for templated or deleted messages.
+   * A message made up of nothing but attachments or a linked record carries no body,
+   * and a deleted message has its body cleared.
    */
   body: string | null;
 
   /**
-   * How the message was delivered (or, for a draft, how it will be on approve).
+   * How the message reached its audience, or how a draft will be sent once it is
+   * approved.
    *
-   * - `message`: delivered as an in-conversation chat message.
-   * - `email`: delivered as email through the conversation's bridged inbox.
+   * - `message`: appears in the conversation itself.
+   * - `email`: goes out as email on the thread of the inbox the case is bridged to.
    */
   channel: 'message' | 'email';
 
   /**
-   * The client-supplied dedupe key echoed back for optimistic-UI reconciliation.
-   *
-   * `null` for server-generated messages.
+   * The dedupe key the client supplied when sending, echoed back so an optimistic
+   * local copy can be matched to the stored message.
    */
   client_message_id: string | null;
 
@@ -1488,7 +930,10 @@ export interface Message {
   created_at: string;
 
   /**
-   * When the message was deleted (tombstone).
+   * When the message was deleted.
+   *
+   * A deleted message keeps its place in the timeline with its body cleared, so
+   * surrounding ordering and replies stay intact.
    */
   deleted_at: string | null;
 
@@ -1498,15 +943,16 @@ export interface Message {
   edited_at: string | null;
 
   /**
-   * The kind of message.
+   * What this message represents.
    *
-   * - `chat`: a user-authored chat message.
-   * - `system_event`: a system-generated event message.
-   * - `agent`: a message authored by an AI agent participant.
-   * - `scheduled`: a message materialized from a scheduled send.
-   * - `alert`: a system or producer alert rendered as a message.
-   * - `email`: an inbound email materialized into the conversation by the email
-   *   bridge.
+   * - `chat`: written by a person.
+   * - `system_event`: a record of something that happened in the conversation, such
+   *   as someone joining or a record being linked.
+   * - `agent`: written by an AI agent taking part in the conversation.
+   * - `scheduled`: came from a send queued ahead of time.
+   * - `alert`: an automated alert surfaced in the conversation.
+   * - `email`: a message carried over the case's bridged email thread, either one
+   *   that arrived from the customer or a reply sent back out to them.
    */
   kind: 'chat' | 'system_event' | 'agent' | 'scheduled' | 'alert' | 'email';
 
@@ -1517,6 +963,10 @@ export interface Message {
 
   /**
    * A chat message within a conversation.
+   *
+   * One resource covers every stage of a message's life: a delivered timeline
+   * message, a message queued for a future send, and a customer-reply draft awaiting
+   * approval. Read `status` to tell them apart.
    */
   reply_to: Message | null;
 
@@ -1526,7 +976,7 @@ export interface Message {
   resource: CoreAPI.Entity | null;
 
   /**
-   * When a `scheduled` message is due to be delivered.
+   * When a message queued for a future send is due to go out.
    */
   scheduled_at: string | null;
 
@@ -1537,39 +987,45 @@ export interface Message {
   sender: RequestLogsAPI.Actor | null;
 
   /**
-   * Monotonic per-conversation ordering sequence.
+   * The message's position in the conversation timeline, counting up from the first
+   * message.
+   *
+   * A sequence is assigned only when a message is delivered, so a draft or a
+   * not-yet-sent scheduled message reports `0`. Listing a conversation's messages
+   * pages backwards through this ordering.
    */
   sequence: number;
 
   /**
-   * The lifecycle state of the message.
+   * Where the message stands in its life.
    *
-   * - `draft`: an editable customer-reply draft awaiting approval; not in the
-   *   timeline.
-   * - `scheduled`: queued for delivery at a future time; not yet in the timeline.
-   * - `sent`: a delivered timeline message; only `sent` messages carry a `sequence`.
-   * - `canceled`: a scheduled message canceled before delivery.
-   * - `rejected`: a draft discarded without sending.
-   * - `failed`: a scheduled message that exhausted delivery attempts.
-   * - `superseded`: a draft replaced by a newer one for the same source thread.
+   * - `draft`: a proposed reply to the customer, still editable and waiting for
+   *   approval before anyone outside sees it.
+   * - `scheduled`: queued to go out at a future time.
+   * - `sent`: delivered, and part of the conversation everyone reads.
+   * - `canceled`: a scheduled message stopped before it went out.
+   * - `rejected`: a draft discarded instead of being sent.
+   * - `failed`: a scheduled message that could not be delivered.
+   * - `superseded`: a draft replaced by a newer one for the same thread.
+   *
+   * Only a `sent` message occupies a place in the conversation; the others are
+   * records of messages that never reached it.
    */
   status: 'draft' | 'scheduled' | 'sent' | 'canceled' | 'rejected' | 'failed' | 'superseded';
 
   /**
-   * The streaming state of a reply.
+   * The streaming state of an agent reply.
    *
-   * `streaming` while the body is still being generated (it fills in via realtime
-   * updates); `complete` once finalized.
-   *
-   * `null` for ordinary messages.
+   * `streaming` means the body is still being generated and keeps growing as
+   * realtime updates arrive; `complete` means it is final.
    */
   streaming_state: string | null;
 
   /**
-   * The email subject line
+   * The email subject line.
    *
-   * On an email-bridged case, the original subject of an inbound email, or the
-   * subject a customer-reply `draft`/outbound message is sent with.
+   * On an email-bridged case, this is the subject of the inbound email, or the
+   * subject a customer reply is sent out with.
    */
   subject: string | null;
 
@@ -1581,13 +1037,12 @@ export interface Message {
   /**
    * Who can see this message.
    *
-   * - `internal`: a team-only note.
-   * - `external`: sent to or received from an external party (e.g. the customer on a
-   *   support case).
-   * - `system`: an event shown to both the team and the customer.
+   * - `internal`: a note only your team can see.
+   * - `external`: sent to or received from an outside party, such as the customer on
+   *   a support case, and part of the official record of that exchange.
+   * - `system`: an event both your team and the customer see.
    *
-   * On a customer-facing conversation, customer payloads only ever carry `external`
-   * and `system` messages.
+   * A customer reading their own case is never served `internal` messages.
    */
   visibility: 'internal' | 'external' | 'system';
 }
@@ -1602,9 +1057,9 @@ export interface MessageAttachment {
   id: string;
 
   /**
-   * The MIME content type for uploaded attachments.
+   * The MIME type of the uploaded content.
    *
-   * `null` for link/resource attachments.
+   * Carried only by `file` and `image` attachments.
    */
   content_type: string | null;
 
@@ -1614,9 +1069,9 @@ export interface MessageAttachment {
   created_at: string;
 
   /**
-   * The original filename for uploaded attachments.
+   * The filename the attachment was uploaded under.
    *
-   * `null` for link/resource attachments.
+   * Carried only by `file` and `image` attachments.
    */
   filename: string | null;
 
@@ -1642,17 +1097,20 @@ export interface MessageAttachment {
   resource: CoreAPI.Entity | null;
 
   /**
-   * The size in bytes for uploaded attachments.
+   * The size of the uploaded content in bytes.
    *
-   * `null` when unknown or for link/resource attachments.
+   * Carried only by `file` and `image` attachments, and only when the sender
+   * supplied it with the message.
    */
   size_bytes: number | null;
 
   /**
-   * A time-limited download URL for uploaded (file/image) attachments, or the link
-   * URL.
+   * Where to fetch the attachment: a signed download URL for `file` and `image`
+   * attachments, or the target address for `link` attachments.
    *
-   * `null` for resource attachments.
+   * Download URLs are signed for one hour and regenerated each time the message is
+   * read, so follow the URL promptly instead of persisting it. `resource`
+   * attachments have no URL — use `resource` to resolve them.
    */
   url: string | null;
 }
@@ -1678,7 +1136,8 @@ export interface MessagingGroup {
   created_at: string;
 
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   members: ListMessagingGroupMember | null;
 
@@ -1704,7 +1163,10 @@ export interface MessagingGroup {
  */
 export interface MessagingGroupMember {
   /**
-   * Membership ID (used to remove the member from the roster).
+   * Membership ID.
+   *
+   * This identifies the member's place on the roster, not the user or agent
+   * themselves; it is the id to pass when removing them from the roster.
    */
   id: string;
 
@@ -1727,8 +1189,6 @@ export interface MessagingGroupMember {
 export interface ReadCursor {
   /**
    * The id of the last message the participant has read.
-   *
-   * `null` if they have not read any message yet.
    */
   message_id: string | null;
 
@@ -1739,8 +1199,6 @@ export interface ReadCursor {
 
   /**
    * When the participant last advanced their read cursor.
-   *
-   * `null` if they have not read any message yet.
    */
   read_at: string | null;
 
@@ -1755,61 +1213,39 @@ export interface ReadCursor {
 }
 
 /**
- * Trigger-type-specific configuration.
- *
- * Which fields are populated depends on the agent's `trigger_type`:
- *
- * - `scheduled`: `cron_schedule` (and optionally `timezone`) is set.
- * - `event`: `event_filters` is set.
- * - `manual`: all fields are empty.
- */
-export interface TriggerConfig {
-  /**
-   * Cron expression for scheduled triggers (e.g. `0 9 * * *`).
-   */
-  cron_schedule: string | null;
-
-  /**
-   * Event types that trigger this agent (e.g.
-   * `["email.received", "order.created"]`).
-   */
-  event_filters: Array<string>;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'trigger_config';
-
-  /**
-   * IANA timezone for the cron schedule (e.g. `America/New_York`).
-   */
-  timezone: string | null;
-}
-
-/**
- * Request to rename a conversation (owner/admin; groups only).
+ * Request to rename a conversation.
  */
 export interface UpdateConversationRequest {
   /**
-   * New group title.
+   * The group conversation's new display title.
    *
-   * Send `null` to clear the title; omit to leave it unchanged.
+   * Send `null` to clear the title and leave the conversation unnamed.
    */
   title?: string | null;
 }
 
 export interface ConversationCreateParams {
   /**
-   * Body param: The other participant(s).
+   * Body param: The other participants to add.
    *
-   * For a direct message, exactly one account_user ID. For a group, the members to
-   * add — optional when `group_id` seeds the roster or the conversation is anchored
-   * to a `topic_resource` (a record discussion can start solo).
+   * For a direct message, exactly one account user. For a group, the members to seed
+   * — these can be omitted when `group_id` supplies a roster, or when the
+   * conversation is anchored to a topic resource, since a record discussion may
+   * start solo and pull people in later.
+   *
+   * The caller is always a participant and does not need to be listed; on a group
+   * they become its owner and every other member seeded at creation is notified.
    */
   participant_account_user_ids: Array<string>;
 
   /**
    * Body param: The kind of conversation to create.
+   *
+   * - `direct_message`: a 1:1 thread with exactly one other user. Addressing
+   *   yourself is allowed and gives you a private notes thread.
+   * - `group`: a named thread with any number of user and agent members.
+   *
+   * `system` channels are created by the platform and cannot be requested here.
    */
   type: 'direct_message' | 'group' | 'system';
 
@@ -1842,7 +1278,7 @@ export interface ConversationCreateParams {
   /**
    * Body param: Title for a group conversation.
    *
-   * Ignored for direct messages.
+   * A direct message is identified by its participants rather than by a title.
    */
   title?: string;
 
@@ -1853,6 +1289,9 @@ export interface ConversationCreateParams {
 
   /**
    * Body param: The type of business record to anchor this conversation to.
+   *
+   * An anchored conversation is returned when conversations are listed for that
+   * record, which is how a discussion shows up on an order or invoice.
    */
   topic_resource_type?:
     | 'account'
@@ -2134,13 +1573,18 @@ export interface ConversationCreateParams {
 
 export interface ConversationListParams {
   /**
-   * Support inbox: filter to cases owned by this assignee (a user or a team),
-   * matched by id.
+   * Filter the support inbox to cases owned by this assignee, an account user or an
+   * account group.
    */
   assignee_resource_id?: string;
 
   /**
-   * Filter by conversation audience direction.
+   * Filter by whether the conversation is team-only or customer-facing.
+   *
+   * - `internal`: threads the customer never sees — direct messages, group threads,
+   *   and record discussions.
+   * - `customer`: external customer-service cases the customer takes part in, from
+   *   the portal or a bridged email thread.
    */
   audience?: 'internal' | 'customer';
 
@@ -2171,7 +1615,10 @@ export interface ConversationListParams {
   >;
 
   /**
-   * Support inbox: include archived (resolved-and-closed) cases.
+   * Return the archived support inbox instead of the working one.
+   *
+   * This swaps the view rather than widening it: archived cases are returned and
+   * unarchived ones are left out.
    */
   include_archived?: boolean;
 
@@ -2188,18 +1635,21 @@ export interface ConversationListParams {
   q?: string;
 
   /**
-   * Filter by conversation visibility.
+   * Filter by whether the caller has hidden the conversation from their own list.
    */
   status?: 'active' | 'hidden';
 
   /**
-   * The id of the anchoring business record (with `topic_resource_type`).
+   * The id of the business record, together with `topic_resource_type`.
    */
   topic_resource_id?: string;
 
   /**
-   * Restrict to conversations anchored to a business record of this type (with
-   * `topic_resource_id`).
+   * Restrict to conversations attached to a business record of this type, together
+   * with `topic_resource_id`.
+   *
+   * Matches both conversations anchored to the record and conversations that merely
+   * link it, which is what powers the "discussions on this record" view.
    */
   topic_resource_type?:
     | 'account'
@@ -2484,12 +1934,21 @@ export interface ConversationListParams {
   type?: 'direct_message' | 'group' | 'system';
 
   /**
-   * Support inbox: restrict to cases with no assignee.
+   * Restrict the support inbox to cases nobody has been assigned yet.
    */
   unassigned?: boolean;
 
   /**
-   * Support inbox: filter external cases to a single triage lane.
+   * Filter the support inbox to a single triage lane.
+   *
+   * - `new`: opened but nobody has triaged it yet.
+   * - `open`: actively being worked.
+   * - `waiting_internal`: blocked on the internal team.
+   * - `waiting_external`: blocked on a reply from the customer.
+   * - `needs_approval`: a drafted reply is waiting for a human to approve it.
+   * - `resolved`: closed out.
+   *
+   * The working inbox hides resolved cases unless you ask for this lane explicitly.
    */
   workflow_status?: 'new' | 'open' | 'waiting_internal' | 'waiting_external' | 'needs_approval' | 'resolved';
 }
@@ -2532,9 +1991,9 @@ export interface ConversationUpdateParams {
   >;
 
   /**
-   * Body param: New group title.
+   * Body param: The group conversation's new display title.
    *
-   * Send `null` to clear the title; omit to leave it unchanged.
+   * Send `null` to clear the title and leave the conversation unnamed.
    */
   title?: string | null;
 }
@@ -2547,19 +2006,9 @@ Conversations.Attachments = Attachments;
 
 export declare namespace Conversations {
   export {
-    type AgentAction as AgentAction,
-    type AgentDefinition as AgentDefinition,
-    type AgentDefinitionConfig as AgentDefinitionConfig,
-    type AgentDefinitionTool as AgentDefinitionTool,
-    type AgentRun as AgentRun,
-    type AgentRunStep as AgentRunStep,
-    type AvailableTool as AvailableTool,
     type Conversation as Conversation,
     type ConversationParticipant as ConversationParticipant,
     type CreateConversationRequest as CreateConversationRequest,
-    type ListAgentAction as ListAgentAction,
-    type ListAgentDefinitionTool as ListAgentDefinitionTool,
-    type ListAgentRunStep as ListAgentRunStep,
     type ListConversation as ListConversation,
     type ListConversationParticipant as ListConversationParticipant,
     type ListMessageAttachment as ListMessageAttachment,
@@ -2569,7 +2018,6 @@ export declare namespace Conversations {
     type MessagingGroup as MessagingGroup,
     type MessagingGroupMember as MessagingGroupMember,
     type ReadCursor as ReadCursor,
-    type TriggerConfig as TriggerConfig,
     type UpdateConversationRequest as UpdateConversationRequest,
     type ConversationCreateParams as ConversationCreateParams,
     type ConversationListParams as ConversationListParams,

@@ -46,7 +46,7 @@ describe('resource auditEvents', () => {
   });
 
   test('retrieve', async () => {
-    const responsePromise = client.core.auditEvents.retrieve('ae_01b1c07dc3085bbd84111edcbd');
+    const responsePromise = client.core.auditEvents.retrieve('ae_emripvn8t1xl');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -60,7 +60,7 @@ describe('resource auditEvents', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.core.auditEvents.retrieve(
-        'ae_01b1c07dc3085bbd84111edcbd',
+        'ae_emripvn8t1xl',
         { include: ['account'] },
         { path: '/_stainless_unknown_path' },
       ),

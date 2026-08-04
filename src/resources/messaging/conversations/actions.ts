@@ -13,13 +13,16 @@ export class Actions extends APIResource {
   /**
    * Places a conversation under legal hold or releases it.
    *
+   * Holding it exempts the conversation from automatic retention purging, and any
+   * attempt to redact it is refused until the hold is released.
+   *
    * This endpoint requires the permission: `messaging:update`.
    *
    * @example
    * ```ts
    * const conversation =
    *   await client.messaging.conversations.actions.setLegalHold(
-   *     'cv_01h9z8q1w2e3r4t5y6u7i8cv',
+   *     'cv_w35z4ck68yq7',
    *     { legal_hold: 'held' },
    *   );
    * ```
@@ -38,8 +41,12 @@ export class Actions extends APIResource {
   }
 
   /**
-   * Permanently redacts the content of every message in a conversation (GDPR
-   * right-to-erasure).
+   * Permanently erases the content of every message in a conversation, for
+   * right-to-erasure requests.
+   *
+   * Message bodies are cleared and attachments are deleted from storage, leaving the
+   * messages behind as an empty audit shell. This cannot be undone, and it is
+   * refused while the conversation is under legal hold.
    *
    * This endpoint requires the permission: `messaging:delete`.
    *
@@ -47,7 +54,7 @@ export class Actions extends APIResource {
    * ```ts
    * const conversation =
    *   await client.messaging.conversations.actions.redact(
-   *     'cv_01h9z8q1w2e3r4t5y6u7i8cv',
+   *     'cv_w35z4ck68yq7',
    *   );
    * ```
    */
@@ -64,8 +71,11 @@ export class Actions extends APIResource {
   }
 
   /**
-   * Advances the caller's read cursor and returns the refreshed conversation (with
-   * new unread count).
+   * Advances the caller's read position in a conversation and returns it with the
+   * recalculated unread count.
+   *
+   * Reading also dismisses the caller's outstanding notifications for this
+   * conversation, and updates the read receipt the other participants see.
    *
    * This endpoint requires the permission: `messaging:update`.
    *
@@ -73,7 +83,7 @@ export class Actions extends APIResource {
    * ```ts
    * const conversation =
    *   await client.messaging.conversations.actions.read(
-   *     'cv_01h9z8q1w2e3r4t5y6u7i8cv',
+   *     'cv_w35z4ck68yq7',
    *     { up_to_sequence: 42 },
    *   );
    * ```
@@ -92,8 +102,11 @@ export class Actions extends APIResource {
   }
 
   /**
-   * Archives a conversation at the account level so it drops out of active lists for
-   * everyone until it is unarchived.
+   * Archives a conversation for the whole account rather than just for the caller.
+   *
+   * Only an owner or admin of the conversation can archive it, and direct messages
+   * cannot be archived. An archived customer-facing case leaves the working support
+   * inbox and is returned only by the archived view.
    *
    * This endpoint requires the permission: `messaging:update`.
    *
@@ -101,7 +114,7 @@ export class Actions extends APIResource {
    * ```ts
    * const conversation =
    *   await client.messaging.conversations.actions.archive(
-   *     'cv_01h9z8q1w2e3r4t5y6u7i8cv',
+   *     'cv_w35z4ck68yq7',
    *   );
    * ```
    */
@@ -118,8 +131,12 @@ export class Actions extends APIResource {
   }
 
   /**
-   * Returns an archived conversation to the active state so it appears in active
-   * lists again.
+   * Returns an archived conversation to the active state for the whole account.
+   *
+   * Only an owner or admin of the conversation can unarchive it. An unarchived
+   * customer-facing case comes back to the working support inbox, and participants
+   * who had separately hidden the conversation still see it hidden until they unhide
+   * it themselves.
    *
    * This endpoint requires the permission: `messaging:update`.
    *
@@ -127,7 +144,7 @@ export class Actions extends APIResource {
    * ```ts
    * const conversation =
    *   await client.messaging.conversations.actions.unarchive(
-   *     'cv_01h9z8q1w2e3r4t5y6u7i8cv',
+   *     'cv_w35z4ck68yq7',
    *   );
    * ```
    */
@@ -144,7 +161,11 @@ export class Actions extends APIResource {
   }
 
   /**
-   * Removes the caller from a conversation, marking their membership as left.
+   * Removes the caller from a conversation.
+   *
+   * An owner cannot leave — hand ownership to someone else first. Leaving posts a
+   * "left the conversation" note to the thread and hides the conversation for the
+   * caller, who can still read it back but can no longer post.
    *
    * This endpoint requires the permission: `messaging:update`.
    *
@@ -152,7 +173,7 @@ export class Actions extends APIResource {
    * ```ts
    * const conversation =
    *   await client.messaging.conversations.actions.leave(
-   *     'cv_01h9z8q1w2e3r4t5y6u7i8cv',
+   *     'cv_w35z4ck68yq7',
    *   );
    * ```
    */
@@ -172,13 +193,17 @@ export class Actions extends APIResource {
    * Hides a conversation from the caller's own list without affecting other
    * participants.
    *
+   * The caller stays a member and keeps receiving notifications; the conversation
+   * simply stops appearing in their list until they unhide it, and new messages do
+   * not bring it back on their own. The owner of a conversation cannot hide it.
+   *
    * This endpoint requires the permission: `messaging:update`.
    *
    * @example
    * ```ts
    * const conversation =
    *   await client.messaging.conversations.actions.hide(
-   *     'cv_01h9z8q1w2e3r4t5y6u7i8cv',
+   *     'cv_w35z4ck68yq7',
    *   );
    * ```
    */
@@ -203,7 +228,7 @@ export class Actions extends APIResource {
    * ```ts
    * const conversation =
    *   await client.messaging.conversations.actions.unhide(
-   *     'cv_01h9z8q1w2e3r4t5y6u7i8cv',
+   *     'cv_w35z4ck68yq7',
    *   );
    * ```
    */
@@ -220,7 +245,12 @@ export class Actions extends APIResource {
   }
 
   /**
-   * Mutes a conversation for the calling actor.
+   * Mutes a conversation's notifications for the caller only, leaving the other
+   * participants unaffected.
+   *
+   * While muted the caller gets no notification or email for new messages, though
+   * the conversation still accumulates an unread count. A direct @mention pierces
+   * the mute and still raises a notification.
    *
    * This endpoint requires the permission: `messaging:update`.
    *
@@ -228,7 +258,7 @@ export class Actions extends APIResource {
    * ```ts
    * const conversation =
    *   await client.messaging.conversations.actions.mute(
-   *     'cv_01h9z8q1w2e3r4t5y6u7i8cv',
+   *     'cv_w35z4ck68yq7',
    *     { muted_until: '2026-01-02T15:04:05Z' },
    *   );
    * ```
@@ -255,7 +285,7 @@ export class Actions extends APIResource {
    * ```ts
    * const conversation =
    *   await client.messaging.conversations.actions.unmute(
-   *     'cv_01h9z8q1w2e3r4t5y6u7i8cv',
+   *     'cv_w35z4ck68yq7',
    *   );
    * ```
    */
@@ -272,7 +302,13 @@ export class Actions extends APIResource {
   }
 
   /**
-   * Sets the triage lane of an external customer-service case.
+   * Moves a customer-service case to a triage lane in the support inbox.
+   *
+   * Only customer-facing cases have a triage lane; an internal conversation is
+   * rejected. The lane also advances on its own as the case progresses — an inbound
+   * customer message moves it to `waiting_internal`, a drafted reply to
+   * `needs_approval`, and an approved reply to `waiting_external` — so a lane set by
+   * hand can be overtaken by later activity.
    *
    * This endpoint requires the permission: `messaging:update`.
    *
@@ -280,7 +316,7 @@ export class Actions extends APIResource {
    * ```ts
    * const conversation =
    *   await client.messaging.conversations.actions.setStatus(
-   *     'cv_01h9z8q1w2e3r4t5y6u7i8cv',
+   *     'cv_w35z4ck68yq7',
    *     { workflow_status: 'open' },
    *   );
    * ```
@@ -302,16 +338,19 @@ export class Actions extends APIResource {
    * Assigns an external customer-service case to an owner — a user or a team — or
    * clears the assignment.
    *
+   * Only customer-facing cases can be assigned; assigning an internal conversation
+   * is rejected. The support inbox can then be filtered to a single assignee, or to
+   * the cases nobody owns yet.
+   *
    * This endpoint requires the permission: `messaging:update`.
    *
    * @example
    * ```ts
    * const conversation =
    *   await client.messaging.conversations.actions.assign(
-   *     'cv_01h9z8q1w2e3r4t5y6u7i8cv',
+   *     'cv_w35z4ck68yq7',
    *     {
-   *       assignee_resource_id:
-   *         'acus_01ea9983ddb41dacc44ecf997c',
+   *       assignee_resource_id: 'acus_e5zu8bde0z3h',
    *       assignee_resource_type: 'account_user',
    *     },
    *   );
@@ -331,8 +370,12 @@ export class Actions extends APIResource {
   }
 
   /**
-   * Files an abuse report against a conversation (optionally a specific message) and
-   * returns the conversation.
+   * Files an abuse report against a conversation, or against one message within it,
+   * and returns the conversation.
+   *
+   * Only an active participant can report a conversation. The report is recorded for
+   * review and changes nothing about the conversation itself — it is not hidden,
+   * muted, or removed.
    *
    * This endpoint requires the permission: `messaging:create`.
    *
@@ -340,11 +383,8 @@ export class Actions extends APIResource {
    * ```ts
    * const conversation =
    *   await client.messaging.conversations.actions.report(
-   *     'cv_01h9z8q1w2e3r4t5y6u7i8cv',
-   *     {
-   *       reason: 'spam',
-   *       message_id: 'mg_01h9z8q1w2e3r4t5y6u7i8mg',
-   *     },
+   *     'cv_w35z4ck68yq7',
+   *     { reason: 'spam', message_id: 'mg_fdny8633ebgw' },
    *   );
    * ```
    */
@@ -378,8 +418,10 @@ export interface AssignConversationRequest {
   assignee_resource_id?: string;
 
   /**
-   * The owner's resource type: `account_user` (a teammate) or `account_group` (a
-   * team).
+   * What kind of owner the case is being assigned to.
+   *
+   * - `account_user`: an individual teammate takes the case.
+   * - `account_group`: a team takes the case, so anyone on it can pick it up.
    */
   assignee_resource_type?: string;
 }
@@ -389,7 +431,10 @@ export interface AssignConversationRequest {
  */
 export interface MarkConversationReadRequest {
   /**
-   * Mark all messages up to and including this sequence as read.
+   * Mark every message up to and including this sequence number as read.
+   *
+   * A sequence past the conversation's latest message is clamped to it, and the read
+   * position never moves backwards, so replaying an older value is harmless.
    */
   up_to_sequence: number;
 }
@@ -411,7 +456,7 @@ export interface MuteConversationRequest {
  */
 export interface ReportConversationRequest {
   /**
-   * The reason the conversation/message is being reported.
+   * Why the conversation or message is being reported, in free-form text.
    */
   reason: string;
 
@@ -425,13 +470,14 @@ export interface ReportConversationRequest {
 
 /**
  * Request to place a conversation under legal hold or release it.
- *
- * While held, the conversation is exempt from automatic retention purging and from
- * GDPR redaction.
  */
 export interface SetLegalHoldRequest {
   /**
-   * The legal-hold status to set.
+   * Whether to place the conversation under legal hold or release it.
+   *
+   * - `held`: the conversation is preserved — exempt from automatic retention
+   *   purging and from redaction.
+   * - `released`: normal retention and redaction apply again.
    */
   legal_hold: 'released' | 'held';
 }
@@ -442,13 +488,24 @@ export interface SetLegalHoldRequest {
 export interface SetWorkflowStatusRequest {
   /**
    * The triage lane to move the case to.
+   *
+   * - `new`: opened but nobody has triaged it yet.
+   * - `open`: actively being worked.
+   * - `waiting_internal`: blocked on the internal team.
+   * - `waiting_external`: blocked on a reply from the customer.
+   * - `needs_approval`: a drafted reply is waiting for a human to approve it.
+   * - `resolved`: closed out.
    */
   workflow_status: 'new' | 'open' | 'waiting_internal' | 'waiting_external' | 'needs_approval' | 'resolved';
 }
 
 export interface ActionSetLegalHoldParams {
   /**
-   * Body param: The legal-hold status to set.
+   * Body param: Whether to place the conversation under legal hold or release it.
+   *
+   * - `held`: the conversation is preserved — exempt from automatic retention
+   *   purging and from redaction.
+   * - `released`: normal retention and redaction apply again.
    */
   legal_hold: 'released' | 'held';
 
@@ -491,7 +548,10 @@ export interface ActionRedactParams {
 
 export interface ActionReadParams {
   /**
-   * Body param: Mark all messages up to and including this sequence as read.
+   * Body param: Mark every message up to and including this sequence number as read.
+   *
+   * A sequence past the conversation's latest message is clamped to it, and the read
+   * position never moves backwards, so replaying an older value is harmless.
    */
   up_to_sequence: number;
 
@@ -656,6 +716,13 @@ export interface ActionUnmuteParams {
 export interface ActionSetStatusParams {
   /**
    * Body param: The triage lane to move the case to.
+   *
+   * - `new`: opened but nobody has triaged it yet.
+   * - `open`: actively being worked.
+   * - `waiting_internal`: blocked on the internal team.
+   * - `waiting_external`: blocked on a reply from the customer.
+   * - `needs_approval`: a drafted reply is waiting for a human to approve it.
+   * - `resolved`: closed out.
    */
   workflow_status: 'new' | 'open' | 'waiting_internal' | 'waiting_external' | 'needs_approval' | 'resolved';
 
@@ -704,15 +771,18 @@ export interface ActionAssignParams {
   assignee_resource_id?: string;
 
   /**
-   * Body param: The owner's resource type: `account_user` (a teammate) or
-   * `account_group` (a team).
+   * Body param: What kind of owner the case is being assigned to.
+   *
+   * - `account_user`: an individual teammate takes the case.
+   * - `account_group`: a team takes the case, so anyone on it can pick it up.
    */
   assignee_resource_type?: string;
 }
 
 export interface ActionReportParams {
   /**
-   * Body param: The reason the conversation/message is being reported.
+   * Body param: Why the conversation or message is being reported, in free-form
+   * text.
    */
   reason: string;
 

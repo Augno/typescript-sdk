@@ -26,7 +26,7 @@ export class Analytics extends APIResource {
    *   await client.core.analytics.updateOee({
    *     end_date: '2026-05-10T00:23:00Z',
    *     start_date: '2026-05-10T00:00:00Z',
-   *     department_ids: ['dp_01791c25ab59da4704cba61874'],
+   *     department_ids: ['dp_m0jayebxnkos'],
    *   });
    * ```
    */
@@ -103,7 +103,8 @@ export interface AnalyzeOeeRequest {
  */
 export interface AnalyzeOeeResponse {
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   departments: ListOeeDepartment | null;
 
@@ -154,7 +155,8 @@ export interface AnalyzeScheduleAttainmentRequest {
  */
 export interface AnalyzeScheduleAttainmentResponse {
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   baseline_schedules: CoreAPI.ListEntity | null;
 
@@ -165,7 +167,8 @@ export interface AnalyzeScheduleAttainmentResponse {
   baseline_status: 'measured' | 'no_baseline';
 
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   buckets: ListAttainmentBucket | null;
 
@@ -175,7 +178,8 @@ export interface AnalyzeScheduleAttainmentResponse {
   ends_at: string;
 
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   frozen_adherence: ListFrozenAdherence | null;
 
@@ -337,7 +341,8 @@ export interface FrozenAdherence {
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListAttainmentBucket {
   /**
@@ -351,13 +356,20 @@ export interface ListAttainmentBucket {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListFrozenAdherence {
   /**
@@ -371,13 +383,20 @@ export interface ListFrozenAdherence {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListOeeDepartment {
   /**
@@ -391,13 +410,20 @@ export interface ListOeeDepartment {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListOeeDowntimeReason {
   /**
@@ -411,7 +437,13 @@ export interface ListOeeDowntimeReason {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
@@ -447,7 +479,8 @@ export interface OeeDepartment {
   department: CoreAPI.Entity | null;
 
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   downtime_breakdown: ListOeeDowntimeReason | null;
 

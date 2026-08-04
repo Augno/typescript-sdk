@@ -9,7 +9,7 @@ const client = new Augno({
 
 describe('resource units', () => {
   test('list', async () => {
-    const responsePromise = client.catalog.unitGroups.units.list('ug_01aad07abb8e41fd392d2d7013');
+    const responsePromise = client.catalog.unitGroups.units.list('ug_andst6m79n41');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -23,7 +23,7 @@ describe('resource units', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.catalog.unitGroups.units.list(
-        'ug_01aad07abb8e41fd392d2d7013',
+        'ug_andst6m79n41',
         { include: ['unit'] },
         { path: '/_stainless_unknown_path' },
       ),
@@ -31,8 +31,8 @@ describe('resource units', () => {
   });
 
   test('retrieve: only required params', async () => {
-    const responsePromise = client.catalog.unitGroups.units.retrieve('un_01966263f74a5a0cae356000a1', {
-      unit_group_id: 'ug_01aad07abb8e41fd392d2d7013',
+    const responsePromise = client.catalog.unitGroups.units.retrieve('un_82bd37dae5po', {
+      unit_group_id: 'ug_andst6m79n41',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -44,15 +44,15 @@ describe('resource units', () => {
   });
 
   test('retrieve: required and optional params', async () => {
-    const response = await client.catalog.unitGroups.units.retrieve('un_01966263f74a5a0cae356000a1', {
-      unit_group_id: 'ug_01aad07abb8e41fd392d2d7013',
+    const response = await client.catalog.unitGroups.units.retrieve('un_82bd37dae5po', {
+      unit_group_id: 'ug_andst6m79n41',
       include: ['unit'],
     });
   });
 
   test('create: only required params', async () => {
-    const responsePromise = client.catalog.unitGroups.units.create('ug_01aad07abb8e41fd392d2d7013', {
-      unit_id: 'un_01966263f74a5a0cae356000a1',
+    const responsePromise = client.catalog.unitGroups.units.create('ug_andst6m79n41', {
+      unit_id: 'un_82bd37dae5po',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -64,8 +64,8 @@ describe('resource units', () => {
   });
 
   test('create: required and optional params', async () => {
-    const response = await client.catalog.unitGroups.units.create('ug_01aad07abb8e41fd392d2d7013', {
-      unit_id: 'un_01966263f74a5a0cae356000a1',
+    const response = await client.catalog.unitGroups.units.create('ug_andst6m79n41', {
+      unit_id: 'un_82bd37dae5po',
       include: ['unit'],
       customer_portal_visibility: 'visible',
       discount_fixed: 0,
@@ -74,8 +74,8 @@ describe('resource units', () => {
   });
 
   test('update: only required params', async () => {
-    const responsePromise = client.catalog.unitGroups.units.update('un_01966263f74a5a0cae356000a1', {
-      unit_group_id: 'ug_01aad07abb8e41fd392d2d7013',
+    const responsePromise = client.catalog.unitGroups.units.update('un_82bd37dae5po', {
+      unit_group_id: 'ug_andst6m79n41',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -87,19 +87,19 @@ describe('resource units', () => {
   });
 
   test('update: required and optional params', async () => {
-    const response = await client.catalog.unitGroups.units.update('un_01966263f74a5a0cae356000a1', {
-      unit_group_id: 'ug_01aad07abb8e41fd392d2d7013',
+    const response = await client.catalog.unitGroups.units.update('un_82bd37dae5po', {
+      unit_group_id: 'ug_andst6m79n41',
       include: ['unit'],
       customer_portal_visibility: 'visible',
       discount_fixed: 2.5,
       discount_percentage: 0.9,
-      unit_id: 'un_01966263f74a5a0cae356000a1',
+      unit_id: 'un_82bd37dae5po',
     });
   });
 
   test('delete: only required params', async () => {
-    const responsePromise = client.catalog.unitGroups.units.delete('un_01966263f74a5a0cae356000a1', {
-      unit_group_id: 'ug_01aad07abb8e41fd392d2d7013',
+    const responsePromise = client.catalog.unitGroups.units.delete('un_82bd37dae5po', {
+      unit_group_id: 'ug_andst6m79n41',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -111,8 +111,8 @@ describe('resource units', () => {
   });
 
   test('delete: required and optional params', async () => {
-    const response = await client.catalog.unitGroups.units.delete('un_01966263f74a5a0cae356000a1', {
-      unit_group_id: 'ug_01aad07abb8e41fd392d2d7013',
+    const response = await client.catalog.unitGroups.units.delete('un_82bd37dae5po', {
+      unit_group_id: 'ug_andst6m79n41',
     });
   });
 });

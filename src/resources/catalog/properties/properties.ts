@@ -27,6 +27,9 @@ export class Properties extends APIResource {
   /**
    * Returns a paginated list of properties for the target account.
    *
+   * Properties come back newest first. The `q` search term is matched against the
+   * property name.
+   *
    * This endpoint requires the permission: `properties:read`.
    *
    * @example
@@ -49,7 +52,7 @@ export class Properties extends APIResource {
    * @example
    * ```ts
    * const property = await client.catalog.properties.retrieve(
-   *   'pp_01e21344878064372f69e67093',
+   *   'pp_fhnnvtt3q3ov',
    * );
    * ```
    */
@@ -63,6 +66,10 @@ export class Properties extends APIResource {
 
   /**
    * Creates a property.
+   *
+   * The property starts with no attributes; add its selectable values afterwards
+   * with the create attribute endpoint. Returns a conflict error if a property with
+   * the same name already exists.
    *
    * This endpoint requires the permission: `properties:create`.
    *
@@ -86,7 +93,7 @@ export class Properties extends APIResource {
    * @example
    * ```ts
    * const property = await client.catalog.properties.update(
-   *   'pp_01e21344878064372f69e67093',
+   *   'pp_fhnnvtt3q3ov',
    *   { name: 'Size' },
    * );
    * ```
@@ -101,14 +108,16 @@ export class Properties extends APIResource {
   }
 
   /**
-   * Deletes a property and all associated attributes.
+   * Deletes a property and every attribute defined under it.
+   *
+   * Items previously classified by those attributes lose that classification.
    *
    * This endpoint requires the permission: `properties:delete`.
    *
    * @example
    * ```ts
    * const property = await client.catalog.properties.delete(
-   *   'pp_01e21344878064372f69e67093',
+   *   'pp_fhnnvtt3q3ov',
    * );
    * ```
    */
@@ -181,12 +190,15 @@ export interface Attribute {
 export interface CreatePropertyRequest {
   /**
    * Display name of the property, such as `Color` or `Size`.
+   *
+   * Must be unique within your account.
    */
   name: string;
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListAttribute {
   /**
@@ -200,13 +212,20 @@ export interface ListAttribute {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListProperty {
   /**
@@ -220,7 +239,13 @@ export interface ListProperty {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
@@ -238,7 +263,8 @@ export interface Property {
   id: string;
 
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   attributes: ListAttribute | null;
 
@@ -249,6 +275,8 @@ export interface Property {
 
   /**
    * Display name of the property, such as `Color` or `Size`.
+   *
+   * Unique within the account.
    */
   name: string;
 
@@ -269,6 +297,8 @@ export interface Property {
 export interface UpdatePropertyRequest {
   /**
    * Display name of the property, such as `Color` or `Size`.
+   *
+   * Must be unique within your account.
    */
   name?: string;
 }
@@ -315,6 +345,8 @@ export interface PropertyRetrieveParams {
 export interface PropertyCreateParams {
   /**
    * Body param: Display name of the property, such as `Color` or `Size`.
+   *
+   * Must be unique within your account.
    */
   name: string;
 
@@ -334,6 +366,8 @@ export interface PropertyUpdateParams {
 
   /**
    * Body param: Display name of the property, such as `Color` or `Size`.
+   *
+   * Must be unique within your account.
    */
   name?: string;
 }

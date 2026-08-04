@@ -35,7 +35,7 @@ describe('resource accountStatuses', () => {
   });
 
   test('retrieve', async () => {
-    const responsePromise = client.sales.accountStatuses.retrieve('acss_01004f532c58d60514b685cb27');
+    const responsePromise = client.sales.accountStatuses.retrieve('acss_st5zyjmzm30k');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -49,7 +49,7 @@ describe('resource accountStatuses', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.sales.accountStatuses.retrieve(
-        'acss_01004f532c58d60514b685cb27',
+        'acss_st5zyjmzm30k',
         { include: ['owner'] },
         { path: '/_stainless_unknown_path' },
       ),

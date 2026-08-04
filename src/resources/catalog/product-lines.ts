@@ -13,8 +13,10 @@ import { path } from '../../internal/utils/path';
  */
 export class ProductLines extends APIResource {
   /**
-   * Returns a paginated list of product lines, including account-owned and system
-   * product lines.
+   * Returns a paginated list of product lines, newest first.
+   *
+   * Covers both the product lines your account owns and the shared system lines. The
+   * `q` search term is matched against the product line name.
    *
    * This endpoint requires the permissions: `product_lines:read`, `customers:read`,
    * `suppliers:read`.
@@ -33,8 +35,10 @@ export class ProductLines extends APIResource {
   }
 
   /**
-   * Returns a product line by ID, including system-owned product lines accessible to
-   * the account.
+   * Returns a single product line by ID.
+   *
+   * Both the product lines your account owns and the shared system lines can be
+   * retrieved.
    *
    * This endpoint requires the permissions: `product_lines:read`, `customers:read`,
    * `suppliers:read`.
@@ -43,7 +47,7 @@ export class ProductLines extends APIResource {
    * ```ts
    * const productLine =
    *   await client.catalog.productLines.retrieve(
-   *     'pdln_01996357326a0d3f7b129542ea',
+   *     'pdln_k9bnlgvxhxjh',
    *   );
    * ```
    */
@@ -56,7 +60,12 @@ export class ProductLines extends APIResource {
   }
 
   /**
-   * Creates an account-owned product line.
+   * Creates a product line owned by your account.
+   *
+   * The new line starts with no products; assign products to it by setting their
+   * product line. Customers and account groups can only be granted access to lines
+   * your account owns, so this is the starting point for scoping a customer's
+   * catalog.
    *
    * This endpoint requires the permission: `product_lines:create`.
    *
@@ -67,7 +76,7 @@ export class ProductLines extends APIResource {
    *     commission_policy: 'commission_exempt',
    *     freight_policy: 'billed_freight',
    *     name: 'Industrial Fasteners',
-   *     unit_group_id: 'ug_01aad07abb8e41fd392d2d7013',
+   *     unit_group_id: 'ug_andst6m79n41',
    *   });
    * ```
    */
@@ -77,10 +86,11 @@ export class ProductLines extends APIResource {
   }
 
   /**
-   * Partially updates an account-owned product line.
+   * Partially updates a product line your account owns.
    *
-   * Only the provided fields are changed. The reserved default product lines
-   * (shipping, service, credit, tax) cannot be updated.
+   * Only the provided fields are changed. The reserved `shipping`, `service`,
+   * `credit`, and `tax` lines cannot be updated, and neither can the shared system
+   * lines, which belong to no single account.
    *
    * This endpoint requires the permission: `product_lines:update`.
    *
@@ -88,12 +98,12 @@ export class ProductLines extends APIResource {
    * ```ts
    * const productLine =
    *   await client.catalog.productLines.update(
-   *     'pdln_01996357326a0d3f7b129542ea',
+   *     'pdln_k9bnlgvxhxjh',
    *     {
    *       commission_policy: 'commission_applied',
    *       freight_policy: 'billed_freight',
    *       name: 'Updated Product Line',
-   *       unit_group_id: 'ug_01aad07abb8e41fd392d2d7013',
+   *       unit_group_id: 'ug_andst6m79n41',
    *     },
    *   );
    * ```
@@ -112,10 +122,12 @@ export class ProductLines extends APIResource {
   }
 
   /**
-   * Permanently deletes an account-owned product line.
+   * Permanently deletes a product line your account owns.
    *
-   * The reserved default product lines (shipping, service, credit, tax) cannot be
-   * deleted.
+   * The reserved `shipping`, `service`, `credit`, and `tax` lines cannot be deleted,
+   * and neither can the shared system lines, which belong to no single account.
+   * Deleting a line that was already deleted returns an already-deleted error rather
+   * than succeeding silently.
    *
    * This endpoint requires the permission: `product_lines:delete`.
    *
@@ -123,7 +135,7 @@ export class ProductLines extends APIResource {
    * ```ts
    * const productLine =
    *   await client.catalog.productLines.delete(
-   *     'pdln_01996357326a0d3f7b129542ea',
+   *     'pdln_k9bnlgvxhxjh',
    *   );
    * ```
    */
@@ -155,10 +167,10 @@ export interface CreateProductLineRequest {
   freight_policy: 'free_freight' | 'billed_freight';
 
   /**
-   * Display name.
+   * Display name of the product line.
    *
-   * Must be unique among the account's product lines; a duplicate name returns a
-   * conflict error.
+   * Must be unique among the product lines visible to your account, including the
+   * shared system lines; a duplicate name returns a conflict error.
    */
   name: string;
 
@@ -166,18 +178,23 @@ export interface CreateProductLineRequest {
    * ID of the unit group to associate with this product line.
    *
    * The unit group determines the set of units available to products in this product
-   * line.
+   * line. It must be a unit group your account owns or one of the shared system unit
+   * groups.
    */
   unit_group_id: string;
 
   /**
-   * A value with an associated unit, used in create and update requests.
+   * An amount together with the unit it is expressed in.
+   *
+   * The unit may be a currency, so money amounts such as a credit limit are written
+   * the same way as physical amounts like weights or counts.
    */
   default_lot?: QuantityInput;
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListProductLine {
   /**
@@ -191,16 +208,24 @@ export interface ListProductLine {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
 
 /**
- * Product line resource.
+ * A named grouping of related products in your catalog.
  *
- * A product line groups related products in your catalog and carries the default
- * commission policy, freight policy, and unit group for those products.
+ * A product line carries the default commission and freight policies for the
+ * products assigned to it, along with the unit group that determines how those
+ * products are measured. Product lines are also the unit that catalog access is
+ * granted over, for both customers and account groups.
  */
 export interface ProductLine {
   /**
@@ -223,7 +248,11 @@ export interface ProductLine {
   created_at: string;
 
   /**
-   * Value with an associated unit.
+   * A measured amount: a numeric value together with the unit it is expressed in.
+   *
+   * Quantities are shared building blocks rather than standalone records — other
+   * resources point at them to report stock levels, ordered and packed amounts,
+   * money, weights, and durations.
    */
   default_lot: ItemsAPI.Quantity | null;
 
@@ -243,6 +272,9 @@ export interface ProductLine {
 
   /**
    * Display name of the product line.
+   *
+   * Unique among the product lines visible to your account, which includes the
+   * shared system lines.
    */
   name: string;
 
@@ -262,8 +294,12 @@ export interface ProductLine {
   owner: APIKeysAPI.Owner | null;
 
   /**
-   * Named collection of units sharing one dimension, defining which units products
-   * can be ordered in along with per-unit discounts and customer portal visibility.
+   * A named collection of units that share one dimension, defining which units a
+   * product can be ordered in.
+   *
+   * Each associated unit carries its own discount and customer portal visibility,
+   * applied when an order line is priced in that unit. A product takes its unit
+   * group from its product line, falling back to its item category.
    */
   unit_group: UnitGroupsAPI.UnitGroup | null;
 
@@ -274,7 +310,10 @@ export interface ProductLine {
 }
 
 /**
- * A value with an associated unit, used in create and update requests.
+ * An amount together with the unit it is expressed in.
+ *
+ * The unit may be a currency, so money amounts such as a credit limit are written
+ * the same way as physical amounts like weights or counts.
  */
 export interface QuantityInput {
   /**
@@ -302,7 +341,10 @@ export interface UpdateProductLineRequest {
   commission_policy?: 'commission_applied' | 'commission_exempt';
 
   /**
-   * A value with an associated unit, used in create and update requests.
+   * An amount together with the unit it is expressed in.
+   *
+   * The unit may be a currency, so money amounts such as a credit limit are written
+   * the same way as physical amounts like weights or counts.
    */
   default_lot?: QuantityInput | null;
 
@@ -316,10 +358,10 @@ export interface UpdateProductLineRequest {
   freight_policy?: 'free_freight' | 'billed_freight';
 
   /**
-   * Display name.
+   * Display name of the product line.
    *
-   * Must be unique among the account's product lines; a duplicate name returns a
-   * conflict error.
+   * Must be unique among the product lines visible to your account, including the
+   * shared system lines; a duplicate name returns a conflict error.
    */
   name?: string;
 
@@ -327,7 +369,9 @@ export interface UpdateProductLineRequest {
    * ID of the unit group to associate with this product line.
    *
    * The unit group determines the set of units available to products in this product
-   * line.
+   * line. It must be a unit group your account owns or one of the shared system unit
+   * groups. A lot already stored on the line is not rechecked when the group
+   * changes, so send `default_lot` alongside to keep the two consistent.
    */
   unit_group_id?: string;
 }
@@ -391,10 +435,10 @@ export interface ProductLineCreateParams {
   freight_policy: 'free_freight' | 'billed_freight';
 
   /**
-   * Body param: Display name.
+   * Body param: Display name of the product line.
    *
-   * Must be unique among the account's product lines; a duplicate name returns a
-   * conflict error.
+   * Must be unique among the product lines visible to your account, including the
+   * shared system lines; a duplicate name returns a conflict error.
    */
   name: string;
 
@@ -402,7 +446,8 @@ export interface ProductLineCreateParams {
    * Body param: ID of the unit group to associate with this product line.
    *
    * The unit group determines the set of units available to products in this product
-   * line.
+   * line. It must be a unit group your account owns or one of the shared system unit
+   * groups.
    */
   unit_group_id: string;
 
@@ -413,7 +458,10 @@ export interface ProductLineCreateParams {
   include?: Array<'owner' | 'owner.account' | 'unit_group' | 'default_lot' | 'default_lot.unit'>;
 
   /**
-   * Body param: A value with an associated unit, used in create and update requests.
+   * Body param: An amount together with the unit it is expressed in.
+   *
+   * The unit may be a currency, so money amounts such as a credit limit are written
+   * the same way as physical amounts like weights or counts.
    */
   default_lot?: QuantityInput;
 }
@@ -435,7 +483,10 @@ export interface ProductLineUpdateParams {
   commission_policy?: 'commission_applied' | 'commission_exempt';
 
   /**
-   * Body param: A value with an associated unit, used in create and update requests.
+   * Body param: An amount together with the unit it is expressed in.
+   *
+   * The unit may be a currency, so money amounts such as a credit limit are written
+   * the same way as physical amounts like weights or counts.
    */
   default_lot?: QuantityInput | null;
 
@@ -449,10 +500,10 @@ export interface ProductLineUpdateParams {
   freight_policy?: 'free_freight' | 'billed_freight';
 
   /**
-   * Body param: Display name.
+   * Body param: Display name of the product line.
    *
-   * Must be unique among the account's product lines; a duplicate name returns a
-   * conflict error.
+   * Must be unique among the product lines visible to your account, including the
+   * shared system lines; a duplicate name returns a conflict error.
    */
   name?: string;
 
@@ -460,7 +511,9 @@ export interface ProductLineUpdateParams {
    * Body param: ID of the unit group to associate with this product line.
    *
    * The unit group determines the set of units available to products in this product
-   * line.
+   * line. It must be a unit group your account owns or one of the shared system unit
+   * groups. A lot already stored on the line is not rechecked when the group
+   * changes, so send `default_lot` alongside to keep the two consistent.
    */
   unit_group_id?: string;
 }

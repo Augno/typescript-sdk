@@ -11,7 +11,9 @@ import { path } from '../../internal/utils/path';
  */
 export class AccountGroups extends APIResource {
   /**
-   * Returns a paginated list of account groups.
+   * Returns a paginated list of account groups, newest first.
+   *
+   * The `q` search term matches the group's name and description.
    *
    * This endpoint requires the permission: `customer_groups:read`.
    *
@@ -37,7 +39,7 @@ export class AccountGroups extends APIResource {
    * ```ts
    * const accountGroup =
    *   await client.sales.accountGroups.retrieve(
-   *     'acgp_018e88072d1320808dc979cfac',
+   *     'acgp_6p4z57e9alaf',
    *   );
    * ```
    */
@@ -73,7 +75,11 @@ export class AccountGroups extends APIResource {
    * Partially updates an account group.
    *
    * Only the provided fields are changed. The account group's `type` cannot be
-   * changed after creation.
+   * changed after creation, and renaming the group to a name another group in your
+   * account already uses returns a conflict error.
+   *
+   * A new commission or freight policy takes effect for every account already in the
+   * group, not just accounts added afterwards.
    *
    * This endpoint requires the permission: `customer_groups:update`.
    *
@@ -81,7 +87,7 @@ export class AccountGroups extends APIResource {
    * ```ts
    * const accountGroup =
    *   await client.sales.accountGroups.update(
-   *     'acgp_018e88072d1320808dc979cfac',
+   *     'acgp_6p4z57e9alaf',
    *     {
    *       commission_policy: 'commission_exempt',
    *       description:
@@ -103,9 +109,13 @@ export class AccountGroups extends APIResource {
   /**
    * Deletes an account group.
    *
-   * Deletion fails with a validation error while the account group is still in use —
-   * for example by customer records, product line access, volume discounts, pricing
-   * assignments, or an active registration flow.
+   * Deletion fails with a validation error while the group is still in use: a
+   * `type_group` that is set as a customer's type cannot be deleted, and no group
+   * can be deleted while it grants product line access, backs a volume discount, or
+   * is attached to a customer registration flow.
+   *
+   * Deleting a `pricing_group` first unassigns it from every customer it was applied
+   * to, so those customers immediately stop receiving its pricing.
    *
    * This endpoint requires the permission: `customer_groups:delete`.
    *
@@ -113,7 +123,7 @@ export class AccountGroups extends APIResource {
    * ```ts
    * const accountGroup =
    *   await client.sales.accountGroups.delete(
-   *     'acgp_018e88072d1320808dc979cfac',
+   *     'acgp_6p4z57e9alaf',
    *   );
    * ```
    */
@@ -125,6 +135,11 @@ export class AccountGroups extends APIResource {
 /**
  * A named grouping of customer accounts, used for pricing rules or to categorize
  * accounts.
+ *
+ * A customer carries at most one group of type `type_group` as its customer type,
+ * plus any number of groups of type `pricing_group`. Membership of either kind can
+ * scope a volume discount to the customer and open up product lines for it to
+ * order from.
  */
 export interface AccountGroup {
   /**
@@ -180,6 +195,8 @@ export interface AccountGroup {
    *   receives a special discount.
    * - `type_group`: used to categorize accounts, such as "Consumers" or
    *   "Distributors".
+   *
+   * A group's type is fixed when it is created and cannot be changed afterwards.
    */
   type: 'pricing_group' | 'type_group';
 
@@ -196,7 +213,7 @@ export interface CreateAccountGroupRequest {
   /**
    * Display name of the account group.
    *
-   * Must be unique within your account; maximum 255 characters.
+   * Must be unique within your account.
    */
   name: string;
 
@@ -219,6 +236,9 @@ export interface CreateAccountGroupRequest {
    *   in this group.
    * - `commission_exempt`: orders from accounts in this group are exempt from
    *   commission.
+   *
+   * Leave this out and the group is created commission-exempt, so orders from its
+   * accounts earn no sales commission until you change it.
    */
   commission_policy?: 'commission_applied' | 'commission_exempt';
 
@@ -238,7 +258,8 @@ export interface CreateAccountGroupRequest {
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListAccountGroup {
   /**
@@ -252,7 +273,13 @@ export interface ListAccountGroup {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
@@ -288,7 +315,7 @@ export interface UpdateAccountGroupRequest {
   /**
    * Display name of the account group.
    *
-   * Must be unique within your account; maximum 255 characters.
+   * Must be unique within your account.
    */
   name?: string;
 }
@@ -327,7 +354,7 @@ export interface AccountGroupCreateParams {
   /**
    * Display name of the account group.
    *
-   * Must be unique within your account; maximum 255 characters.
+   * Must be unique within your account.
    */
   name: string;
 
@@ -350,6 +377,9 @@ export interface AccountGroupCreateParams {
    *   in this group.
    * - `commission_exempt`: orders from accounts in this group are exempt from
    *   commission.
+   *
+   * Leave this out and the group is created commission-exempt, so orders from its
+   * accounts earn no sales commission until you change it.
    */
   commission_policy?: 'commission_applied' | 'commission_exempt';
 
@@ -396,7 +426,7 @@ export interface AccountGroupUpdateParams {
   /**
    * Display name of the account group.
    *
-   * Must be unique within your account; maximum 255 characters.
+   * Must be unique within your account.
    */
   name?: string;
 }

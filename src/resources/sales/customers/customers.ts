@@ -45,7 +45,7 @@ export class Customers extends APIResource {
    * @example
    * ```ts
    * const customer = await client.sales.customers.retrieve(
-   *   'ac_0170df1ac58e4d24c66fc89f5f',
+   *   'ac_opnlh43ymyee',
    * );
    * ```
    */
@@ -77,10 +77,10 @@ export class Customers extends APIResource {
    *     postal_code: '10001',
    *     country: 'US',
    *   },
-   *   customer_type_group_id: 'acgp_018e88072d1320808dc979cfac',
-   *   default_carrier_id: 'cr_01784fd54c9ba197bb4e42f0e6',
-   *   default_payment_term_id: 'pytm_018694d6601ea771cd1b52e890',
-   *   default_shipping_term_id: 'shtm_014341ab4bb5bf94d5b6936f86',
+   *   customer_type_group_id: 'acgp_6p4z57e9alaf',
+   *   default_carrier_id: 'cr_tv5vfjtgu1n3',
+   *   default_payment_term_id: 'pytm_skssmsy21lem',
+   *   default_shipping_term_id: 'shtm_c5gxy05whw6r',
    *   name: 'Acme Inc.',
    *   ship_to_address: {
    *     name: 'Acme Inc.',
@@ -93,11 +93,11 @@ export class Customers extends APIResource {
    *   carrier_billing_account: '123456789',
    *   carrier_billing_type: 'sender',
    *   commission_policy: 'commission_applied',
-   *   credit_limit: { value: '10000.00', unit_id: 'un_01966263f74a5a0cae356000a1' },
-   *   customer_price_group_ids: ['acgp_018e88072d1320808dc979cfac'],
+   *   credit_limit: { value: '10000.00', unit_id: 'un_82bd37dae5po' },
+   *   customer_price_group_ids: ['acgp_6p4z57e9alaf'],
    *   default_priority: 'normal',
-   *   default_sales_rep_id: 'acus_01ea9983ddb41dacc44ecf997c',
-   *   default_service_level_id: 'crop_01cfaf03f104e90ef9680e2a30',
+   *   default_sales_rep_id: 'acus_e5zu8bde0z3h',
+   *   default_service_level_id: 'crop_4ilk9p6gccrx',
    *   edi_status: 'disabled',
    *   email: 'orders@acme.com',
    *   freight_policy: 'billed_freight',
@@ -124,20 +124,20 @@ export class Customers extends APIResource {
    *
    * @example
    * ```ts
-   * const customer = await client.sales.customers.update('ac_0170df1ac58e4d24c66fc89f5f', {
-   *   bill_to_address_id: 'ad_012c2e4aeeb20f56c1a3d06cc7',
+   * const customer = await client.sales.customers.update('ac_opnlh43ymyee', {
+   *   bill_to_address_id: 'ad_npqa5y43q26z',
    *   carrier_billing_account: '123456789',
    *   carrier_billing_type: 'sender',
    *   commission_policy: 'commission_applied',
-   *   credit_limit: { value: '10000.00', unit_id: 'un_01966263f74a5a0cae356000a1' },
-   *   customer_price_group_ids: ['acgp_018e88072d1320808dc979cfac'],
-   *   customer_type_group_id: 'acgp_018e88072d1320808dc979cfac',
-   *   default_carrier_id: 'cr_01784fd54c9ba197bb4e42f0e6',
-   *   default_payment_term_id: 'pytm_018694d6601ea771cd1b52e890',
+   *   credit_limit: { value: '10000.00', unit_id: 'un_82bd37dae5po' },
+   *   customer_price_group_ids: ['acgp_6p4z57e9alaf'],
+   *   customer_type_group_id: 'acgp_6p4z57e9alaf',
+   *   default_carrier_id: 'cr_tv5vfjtgu1n3',
+   *   default_payment_term_id: 'pytm_skssmsy21lem',
    *   default_priority: 'normal',
-   *   default_sales_rep_id: 'acus_01ea9983ddb41dacc44ecf997c',
-   *   default_service_level_id: 'crop_01cfaf03f104e90ef9680e2a30',
-   *   default_shipping_term_id: 'shtm_014341ab4bb5bf94d5b6936f86',
+   *   default_sales_rep_id: 'acus_e5zu8bde0z3h',
+   *   default_service_level_id: 'crop_4ilk9p6gccrx',
+   *   default_shipping_term_id: 'shtm_c5gxy05whw6r',
    *   edi_status: 'disabled',
    *   email: 'orders@acme.com',
    *   freight_policy: 'billed_freight',
@@ -145,7 +145,7 @@ export class Customers extends APIResource {
    *   note: 'Updated account notes',
    *   number: '100042',
    *   phone: '555-123-4567',
-   *   ship_to_address_id: 'ad_012c2e4aeeb20f56c1a3d06cc7',
+   *   ship_to_address_id: 'ad_npqa5y43q26z',
    *   status: 'normal',
    *   url: 'https://acme.com',
    * });
@@ -171,7 +171,7 @@ export class Customers extends APIResource {
    * @example
    * ```ts
    * const customer = await client.sales.customers.delete(
-   *   'ac_0170df1ac58e4d24c66fc89f5f',
+   *   'ac_opnlh43ymyee',
    * );
    * ```
    */
@@ -194,7 +194,11 @@ export interface Carrier {
   id: string;
 
   /**
-   * Your account number with this carrier, used to connect UPS and USPS accounts.
+   * Your account number with this carrier.
+   *
+   * UPS and USPS carrier accounts are connected to Shippo using this number; FedEx
+   * carriers authorize through OAuth instead, so their account number is not used to
+   * connect them.
    */
   account_number: string | null;
 
@@ -228,7 +232,8 @@ export interface Carrier {
   deleted_at: string | null;
 
   /**
-   * Human-readable name for the carrier, unique among your account's carriers.
+   * Human-readable name for the carrier, unique among the carriers visible to your
+   * account.
    */
   name: string;
 
@@ -243,7 +248,8 @@ export interface Carrier {
   owner: APIKeysAPI.Owner | null;
 
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   service_levels: ListServiceLevel | null;
 
@@ -258,8 +264,11 @@ export interface Carrier {
  */
 export interface CreateCustomerRequest {
   /**
-   * Address details used to create an address, either directly or inline on another
-   * resource.
+   * Address details supplied when creating an address, either on its own or inline
+   * on another resource.
+   *
+   * A few requests, such as shipping rate estimates, take these same fields for a
+   * one-off address that is never saved to the account.
    */
   bill_to_address: AddressesAPI.AddressInput;
 
@@ -270,17 +279,20 @@ export interface CreateCustomerRequest {
   customer_type_group_id: string;
 
   /**
-   * ID of the default carrier for this customer's shipments.
+   * ID of the carrier used on this customer's orders when the order does not specify
+   * one.
    */
   default_carrier_id: string;
 
   /**
-   * Default payment term ID.
+   * ID of the payment term used on this customer's orders when the order does not
+   * specify one.
    */
   default_payment_term_id: string;
 
   /**
-   * Default shipping term ID.
+   * ID of the shipping term used on this customer's orders when the order does not
+   * specify one.
    */
   default_shipping_term_id: string;
 
@@ -290,8 +302,11 @@ export interface CreateCustomerRequest {
   name: string;
 
   /**
-   * Address details used to create an address, either directly or inline on another
-   * resource.
+   * Address details supplied when creating an address, either on its own or inline
+   * on another resource.
+   *
+   * A few requests, such as shipping rate estimates, take these same fields for a
+   * one-off address that is never saved to the account.
    */
   ship_to_address: AddressesAPI.AddressInput;
 
@@ -319,7 +334,10 @@ export interface CreateCustomerRequest {
   commission_policy?: 'commission_applied' | 'commission_exempt';
 
   /**
-   * A value with an associated unit, used in create and update requests.
+   * An amount together with the unit it is expressed in.
+   *
+   * The unit may be a currency, so money amounts such as a credit limit are written
+   * the same way as physical amounts like weights or counts.
    */
   credit_limit?: ProductLinesAPI.QuantityInput;
 
@@ -330,17 +348,20 @@ export interface CreateCustomerRequest {
   customer_price_group_ids?: Array<string>;
 
   /**
-   * Priority applied to new orders for this customer.
+   * Priority used to pre-fill new orders for this customer.
    */
   default_priority?: 'low' | 'normal' | 'high';
 
   /**
-   * The ID of the account user to assign as the default sales rep.
+   * The ID of the account user to credit as the sales rep on this customer's orders.
+   *
+   * Must be an account user on your own account.
    */
   default_sales_rep_id?: string;
 
   /**
-   * ID of the default carrier service level.
+   * ID of the carrier service level used when an order takes its carrier from this
+   * customer's default.
    */
   default_service_level_id?: string;
 
@@ -359,8 +380,10 @@ export interface CreateCustomerRequest {
    * Whether this customer is billed for freight on their orders.
    *
    * - `free_freight`: the customer is not billed for freight.
-   * - `billed_freight`: freight is billed to the customer, unless overridden on the
-   *   order.
+   * - `billed_freight`: freight is billed to the customer.
+   *
+   * Freight is also waived when the customer's type group, one of its price groups,
+   * or a product line the ordered products belong to is `free_freight`.
    */
   freight_policy?: 'free_freight' | 'billed_freight';
 
@@ -384,12 +407,13 @@ export interface CreateCustomerRequest {
   phone?: string;
 
   /**
-   * Account status code, controlling whether the customer can transact.
+   * The customer's account standing.
    *
-   * - `normal`: standard active account with no restrictions.
-   * - `preferred`: active account flagged as preferred.
-   * - `hold_shipment`: orders can be placed, but shipments are held.
-   * - `hold_all`: all activity is on hold.
+   * - `normal`: standard account with no restrictions.
+   * - `preferred`: account flagged for prioritized handling.
+   * - `hold_shipment`: the customer's shipments should be held, typically over a
+   *   credit problem, while orders can still be placed.
+   * - `hold_all`: all activity for the customer should be held.
    */
   status?: 'normal' | 'preferred' | 'hold_shipment' | 'hold_all';
 
@@ -416,7 +440,8 @@ export interface Customer {
   bill_to_address: APIKeysAPI.Address | null;
 
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   child_accounts: ListCustomer | null;
 
@@ -426,6 +451,10 @@ export interface Customer {
    * - `commission_exempt`: this customer's orders are exempt from sales commission.
    * - `commission_applied`: sales commission is calculated on this customer's
    *   orders.
+   *
+   * The customer counts as exempt if this field, its `type` group, or any of its
+   * `price_groups` is `commission_exempt`. Exempt customers never have a sales rep
+   * assigned automatically when an order is created without one.
    */
   commission_policy: 'commission_applied' | 'commission_exempt';
 
@@ -440,12 +469,17 @@ export interface Customer {
   created_at: string;
 
   /**
-   * Value with an associated unit.
+   * A measured amount: a numeric value together with the unit it is expressed in.
+   *
+   * Quantities are shared building blocks rather than standalone records — other
+   * resources point at them to report stock levels, ordered and packed amounts,
+   * money, weights, and durations.
    */
   credit_limit: ItemsAPI.Quantity | null;
 
   /**
-   * Customer default configuration.
+   * Values used to fill in a new sales order for this customer when the order does
+   * not supply its own.
    */
   defaults: CustomerDefaults | null;
 
@@ -478,6 +512,8 @@ export interface Customer {
   /**
    * Human-readable customer number used to identify the account, distinct from the
    * `id`.
+   *
+   * Unique within your account.
    */
   number: string;
 
@@ -493,7 +529,8 @@ export interface Customer {
   parent_account: Customer | null;
 
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   price_groups: AccountGroupsAPI.ListAccountGroup | null;
 
@@ -513,18 +550,28 @@ export interface Customer {
   ship_to_address: APIKeysAPI.Address | null;
 
   /**
-   * Account status code, controlling whether the customer can transact.
+   * The customer's account standing.
    *
-   * - `normal`: standard active account with no restrictions.
-   * - `preferred`: active account flagged as preferred.
-   * - `hold_shipment`: orders can be placed, but shipments are held.
-   * - `hold_all`: all activity is on hold.
+   * - `normal`: standard account with no restrictions.
+   * - `preferred`: account flagged for prioritized handling.
+   * - `hold_shipment`: the customer's shipments should be held, typically over a
+   *   credit problem, while orders can still be placed.
+   * - `hold_all`: all activity for the customer should be held.
+   *
+   * The hold statuses are advisory: Augno flags the customer's orders as being on
+   * credit hold, but requests to create orders or shipments for the customer are not
+   * rejected.
    */
   status: 'normal' | 'preferred' | 'hold_shipment' | 'hold_all';
 
   /**
    * A named grouping of customer accounts, used for pricing rules or to categorize
    * accounts.
+   *
+   * A customer carries at most one group of type `type_group` as its customer type,
+   * plus any number of groups of type `pricing_group`. Membership of either kind can
+   * scope a volume discount to the customer and open up product lines for it to
+   * order from.
    */
   type: AccountGroupsAPI.AccountGroup | null;
 
@@ -560,7 +607,8 @@ export interface CustomerContactInfo {
 }
 
 /**
- * Customer default configuration.
+ * Values used to fill in a new sales order for this customer when the order does
+ * not supply its own.
  */
 export interface CustomerDefaults {
   /**
@@ -576,6 +624,10 @@ export interface CustomerDefaults {
 
   /**
    * Priority level used to order work on sales orders, purchase orders, and picks.
+   *
+   * The levels are platform-provided and the same for every account, so they cannot
+   * be created, renamed, or removed. A customer can carry a default priority that
+   * pre-fills new orders for them.
    */
   priority: PrioritiesAPI.Priority | null;
 
@@ -583,13 +635,18 @@ export interface CustomerDefaults {
    * A user's membership in an account, carrying the account-specific status, role,
    * and department.
    *
-   * Profile fields (name, email, username, image URL) live on the expandable `user`
+   * Profile fields (name, email, username, image URL) live on the `user`
    * sub-resource, which is shared across every account the user belongs to.
    */
   sales_rep: BlocksAPI.AccountUser | null;
 
   /**
-   * A shipping term defining how freight charges are calculated for an order.
+   * A named freight pricing rule that decides what a buyer pays for shipping.
+   *
+   * A customer's default shipping term is evaluated whenever freight is quoted for
+   * one of their orders. Freight exemptions on the customer, its type group, or any
+   * of its price groups are checked first and zero the freight charge before the
+   * shipping term is considered.
    */
   shipping_term: ShippingTerm | null;
 }
@@ -626,7 +683,10 @@ export interface CustomerFreightPreferences {
   object: 'customer_freight_preferences';
 
   /**
-   * Shipping service level for a carrier.
+   * A shipping speed or method offered by a carrier, such as ground or overnight.
+   *
+   * Carriers connected through Shippo have their service levels synced from the
+   * carrier itself; any carrier can also have service levels you create by hand.
    */
   service_level: ServiceLevel | null;
 
@@ -634,8 +694,12 @@ export interface CustomerFreightPreferences {
    * Freight policy applied to this customer's orders.
    *
    * - `free_freight`: the customer is not billed for freight.
-   * - `billed_freight`: freight is billed to the customer, unless overridden
-   *   elsewhere.
+   * - `billed_freight`: freight is billed to the customer.
+   *
+   * Freight is waived when this field, the customer's `type` group, any of its
+   * `price_groups`, or any product line the ordered products belong to is
+   * `free_freight`, so a shipment can come back freight-exempt even while this field
+   * is `billed_freight`.
    */
   status: 'free_freight' | 'billed_freight';
 }
@@ -645,7 +709,10 @@ export interface CustomerFreightPreferences {
  */
 export interface CustomerNotificationPreferences {
   /**
-   * Whether invoice emails are accepted.
+   * Whether anyone is set up to receive invoice emails for this customer.
+   *
+   * Derived from the customer's notification recipients: true when at least one of
+   * them is configured for invoice notifications.
    */
   accepts_invoice_emails: boolean;
 
@@ -656,7 +723,8 @@ export interface CustomerNotificationPreferences {
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListCustomer {
   /**
@@ -670,13 +738,20 @@ export interface ListCustomer {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListServiceLevel {
   /**
@@ -690,7 +765,13 @@ export interface ListServiceLevel {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
@@ -711,7 +792,8 @@ export interface PaymentTerm {
   created_at: string;
 
   /**
-   * Display name (e.g. `Net 30`).
+   * Display name (e.g. `Net 30`), unique among the payment terms visible to your
+   * account.
    */
   name: string;
 
@@ -726,7 +808,12 @@ export interface PaymentTerm {
   owner: APIKeysAPI.Owner | null;
 
   /**
-   * Lifecycle status of the payment term.
+   * Whether this payment term is still in active use.
+   *
+   * Payment terms created through the API are always `active`, and no endpoint
+   * changes a term's status. List Payment Terms returns inactive terms alongside
+   * active ones, so filter them out yourself if you only want the ones still on
+   * offer.
    */
   status: 'active' | 'inactive';
 
@@ -737,7 +824,10 @@ export interface PaymentTerm {
 }
 
 /**
- * Shipping service level for a carrier.
+ * A shipping speed or method offered by a carrier, such as ground or overnight.
+ *
+ * Carriers connected through Shippo have their service levels synced from the
+ * carrier itself; any carrier can also have service levels you create by hand.
  */
 export interface ServiceLevel {
   /**
@@ -761,7 +851,8 @@ export interface ServiceLevel {
    * carrier is chosen.
    *
    * Each carrier has at most one default; setting a new default clears the previous
-   * one.
+   * one. A default service level cannot be deleted until another service level takes
+   * its place or the flag is cleared.
    */
   is_default: boolean;
 
@@ -785,7 +876,9 @@ export interface ServiceLevel {
    * Carrier-specific code identifying this service level (e.g. `fedex_ground`,
    * `ups_next_day_air`).
    *
-   * Values are carrier-defined, so any non-empty string is accepted.
+   * For service levels synced from a connected carrier this is the carrier's own
+   * token, which is what rate shopping and label purchase are keyed on; for service
+   * levels you create yourself it is the `code` you supplied.
    */
   service_level_token: string;
 
@@ -796,7 +889,12 @@ export interface ServiceLevel {
 }
 
 /**
- * A shipping term defining how freight charges are calculated for an order.
+ * A named freight pricing rule that decides what a buyer pays for shipping.
+ *
+ * A customer's default shipping term is evaluated whenever freight is quoted for
+ * one of their orders. Freight exemptions on the customer, its type group, or any
+ * of its price groups are checked first and zero the freight charge before the
+ * shipping term is considered.
  */
 export interface ShippingTerm {
   /**
@@ -810,17 +908,26 @@ export interface ShippingTerm {
   created_at: string;
 
   /**
-   * Value with an associated unit.
+   * A measured amount: a numeric value together with the unit it is expressed in.
+   *
+   * Quantities are shared building blocks rather than standalone records — other
+   * resources point at them to report stock levels, ordered and packed amounts,
+   * money, weights, and durations.
    */
   flat_rate: ItemsAPI.Quantity | null;
 
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   free_shipping_service_levels: ListServiceLevel | null;
 
   /**
-   * Value with an associated unit.
+   * A measured amount: a numeric value together with the unit it is expressed in.
+   *
+   * Quantities are shared building blocks rather than standalone records — other
+   * resources point at them to report stock levels, ordered and packed amounts,
+   * money, weights, and durations.
    */
   minimum_order_value: ItemsAPI.Quantity | null;
 
@@ -843,11 +950,11 @@ export interface ShippingTerm {
   /**
    * Freight pricing model applied by this shipping term.
    *
-   * - `free_freight`: no shipping cost to the buyer.
-   * - `flat_rate_freight`: a fixed shipping cost regardless of order details (see
-   *   `flat_rate`).
-   * - `carrier_rate_freight`: shipping cost is determined by the carrier's quoted
-   *   rate.
+   * - `free_freight`: the buyer is never charged for shipping.
+   * - `flat_rate_freight`: the buyer is charged the fixed amount in `flat_rate`,
+   *   regardless of what the carrier would have charged.
+   * - `carrier_rate_freight`: the buyer is charged the rate the carrier quotes for
+   *   the order's carrier and service level.
    */
   type: 'free_freight' | 'flat_rate_freight' | 'carrier_rate_freight';
 
@@ -863,6 +970,8 @@ export interface ShippingTerm {
 export interface UpdateCustomerRequest {
   /**
    * ID of an existing address to use as the default billing address.
+   *
+   * The address is linked to the customer's account if it is not already.
    */
   bill_to_address_id?: string | null;
 
@@ -890,7 +999,10 @@ export interface UpdateCustomerRequest {
   commission_policy?: 'commission_applied' | 'commission_exempt';
 
   /**
-   * A value with an associated unit, used in create and update requests.
+   * An amount together with the unit it is expressed in.
+   *
+   * The unit may be a currency, so money amounts such as a credit limit are written
+   * the same way as physical amounts like weights or counts.
    */
   credit_limit?: ProductLinesAPI.QuantityInput | null;
 
@@ -909,32 +1021,38 @@ export interface UpdateCustomerRequest {
   customer_type_group_id?: string;
 
   /**
-   * ID of the default carrier for this customer's shipments.
+   * ID of the carrier used on this customer's orders when the order does not specify
+   * one.
    */
   default_carrier_id?: string;
 
   /**
-   * Default payment term ID.
+   * ID of the payment term used on this customer's orders when the order does not
+   * specify one.
    */
   default_payment_term_id?: string;
 
   /**
-   * Priority applied to new orders for this customer.
+   * Priority used to pre-fill new orders for this customer.
    */
   default_priority?: 'low' | 'normal' | 'high';
 
   /**
-   * The ID of the account user to assign as the default sales rep.
+   * The ID of the account user to credit as the sales rep on this customer's orders.
+   *
+   * Must be an account user on your own account.
    */
   default_sales_rep_id?: string | null;
 
   /**
-   * ID of the default carrier service level.
+   * ID of the carrier service level used when an order takes its carrier from this
+   * customer's default.
    */
   default_service_level_id?: string | null;
 
   /**
-   * Default shipping term ID.
+   * ID of the shipping term used on this customer's orders when the order does not
+   * specify one.
    */
   default_shipping_term_id?: string;
 
@@ -953,8 +1071,10 @@ export interface UpdateCustomerRequest {
    * Whether this customer is billed for freight on their orders.
    *
    * - `free_freight`: the customer is not billed for freight.
-   * - `billed_freight`: freight is billed to the customer, unless overridden on the
-   *   order.
+   * - `billed_freight`: freight is billed to the customer.
+   *
+   * Freight is also waived when the customer's type group, one of its price groups,
+   * or a product line the ordered products belong to is `free_freight`.
    */
   freight_policy?: 'free_freight' | 'billed_freight';
 
@@ -983,16 +1103,19 @@ export interface UpdateCustomerRequest {
 
   /**
    * ID of an existing address to use as the default shipping address.
+   *
+   * The address is linked to the customer's account if it is not already.
    */
   ship_to_address_id?: string | null;
 
   /**
-   * Account status code, controlling whether the customer can transact.
+   * The customer's account standing.
    *
-   * - `normal`: standard active account with no restrictions.
-   * - `preferred`: active account flagged as preferred.
-   * - `hold_shipment`: orders can be placed, but shipments are held.
-   * - `hold_all`: all activity is on hold.
+   * - `normal`: standard account with no restrictions.
+   * - `preferred`: account flagged for prioritized handling.
+   * - `hold_shipment`: the customer's shipments should be held, typically over a
+   *   credit problem, while orders can still be placed.
+   * - `hold_all`: all activity for the customer should be held.
    */
   status?: 'normal' | 'preferred' | 'hold_shipment' | 'hold_all';
 
@@ -1019,7 +1142,10 @@ export interface CustomerListParams {
   city?: string;
 
   /**
-   * Filter by commission policy.
+   * Filter by the commission policy set on the customer itself.
+   *
+   * Policies inherited from the customer's type group or price groups are not
+   * considered here.
    */
   commission_status_codes?: Array<'commission_applied' | 'commission_exempt'>;
 
@@ -1044,7 +1170,10 @@ export interface CustomerListParams {
   end_date?: string;
 
   /**
-   * Filter by freight policy.
+   * Filter by the freight policy set on the customer itself.
+   *
+   * Policies inherited from the customer's type group or price groups are not
+   * considered here.
    */
   freight_status_codes?: Array<'free_freight' | 'billed_freight'>;
 
@@ -1108,7 +1237,7 @@ export interface CustomerListParams {
   q?: string;
 
   /**
-   * Filter by default sales rep IDs.
+   * Filter to customers whose default sales rep is one of these account users.
    */
   sales_rep_ids?: Array<string>;
 
@@ -1133,7 +1262,7 @@ export interface CustomerListParams {
   state?: string;
 
   /**
-   * Filter by account status codes.
+   * Filter by the customer's account standing.
    */
   status_codes?: Array<'normal' | 'preferred' | 'hold_shipment' | 'hold_all'>;
 }
@@ -1169,8 +1298,11 @@ export interface CustomerRetrieveParams {
 
 export interface CustomerCreateParams {
   /**
-   * Body param: Address details used to create an address, either directly or inline
-   * on another resource.
+   * Body param: Address details supplied when creating an address, either on its own
+   * or inline on another resource.
+   *
+   * A few requests, such as shipping rate estimates, take these same fields for a
+   * one-off address that is never saved to the account.
    */
   bill_to_address: AddressesAPI.AddressInput;
 
@@ -1181,17 +1313,20 @@ export interface CustomerCreateParams {
   customer_type_group_id: string;
 
   /**
-   * Body param: ID of the default carrier for this customer's shipments.
+   * Body param: ID of the carrier used on this customer's orders when the order does
+   * not specify one.
    */
   default_carrier_id: string;
 
   /**
-   * Body param: Default payment term ID.
+   * Body param: ID of the payment term used on this customer's orders when the order
+   * does not specify one.
    */
   default_payment_term_id: string;
 
   /**
-   * Body param: Default shipping term ID.
+   * Body param: ID of the shipping term used on this customer's orders when the
+   * order does not specify one.
    */
   default_shipping_term_id: string;
 
@@ -1202,8 +1337,11 @@ export interface CustomerCreateParams {
   name: string;
 
   /**
-   * Body param: Address details used to create an address, either directly or inline
-   * on another resource.
+   * Body param: Address details supplied when creating an address, either on its own
+   * or inline on another resource.
+   *
+   * A few requests, such as shipping rate estimates, take these same fields for a
+   * one-off address that is never saved to the account.
    */
   ship_to_address: AddressesAPI.AddressInput;
 
@@ -1258,7 +1396,10 @@ export interface CustomerCreateParams {
   commission_policy?: 'commission_applied' | 'commission_exempt';
 
   /**
-   * Body param: A value with an associated unit, used in create and update requests.
+   * Body param: An amount together with the unit it is expressed in.
+   *
+   * The unit may be a currency, so money amounts such as a credit limit are written
+   * the same way as physical amounts like weights or counts.
    */
   credit_limit?: ProductLinesAPI.QuantityInput;
 
@@ -1269,17 +1410,21 @@ export interface CustomerCreateParams {
   customer_price_group_ids?: Array<string>;
 
   /**
-   * Body param: Priority applied to new orders for this customer.
+   * Body param: Priority used to pre-fill new orders for this customer.
    */
   default_priority?: 'low' | 'normal' | 'high';
 
   /**
-   * Body param: The ID of the account user to assign as the default sales rep.
+   * Body param: The ID of the account user to credit as the sales rep on this
+   * customer's orders.
+   *
+   * Must be an account user on your own account.
    */
   default_sales_rep_id?: string;
 
   /**
-   * Body param: ID of the default carrier service level.
+   * Body param: ID of the carrier service level used when an order takes its carrier
+   * from this customer's default.
    */
   default_service_level_id?: string;
 
@@ -1298,8 +1443,10 @@ export interface CustomerCreateParams {
    * Body param: Whether this customer is billed for freight on their orders.
    *
    * - `free_freight`: the customer is not billed for freight.
-   * - `billed_freight`: freight is billed to the customer, unless overridden on the
-   *   order.
+   * - `billed_freight`: freight is billed to the customer.
+   *
+   * Freight is also waived when the customer's type group, one of its price groups,
+   * or a product line the ordered products belong to is `free_freight`.
    */
   freight_policy?: 'free_freight' | 'billed_freight';
 
@@ -1323,12 +1470,13 @@ export interface CustomerCreateParams {
   phone?: string;
 
   /**
-   * Body param: Account status code, controlling whether the customer can transact.
+   * Body param: The customer's account standing.
    *
-   * - `normal`: standard active account with no restrictions.
-   * - `preferred`: active account flagged as preferred.
-   * - `hold_shipment`: orders can be placed, but shipments are held.
-   * - `hold_all`: all activity is on hold.
+   * - `normal`: standard account with no restrictions.
+   * - `preferred`: account flagged for prioritized handling.
+   * - `hold_shipment`: the customer's shipments should be held, typically over a
+   *   credit problem, while orders can still be placed.
+   * - `hold_all`: all activity for the customer should be held.
    */
   status?: 'normal' | 'preferred' | 'hold_shipment' | 'hold_all';
 
@@ -1368,6 +1516,8 @@ export interface CustomerUpdateParams {
 
   /**
    * Body param: ID of an existing address to use as the default billing address.
+   *
+   * The address is linked to the customer's account if it is not already.
    */
   bill_to_address_id?: string | null;
 
@@ -1395,7 +1545,10 @@ export interface CustomerUpdateParams {
   commission_policy?: 'commission_applied' | 'commission_exempt';
 
   /**
-   * Body param: A value with an associated unit, used in create and update requests.
+   * Body param: An amount together with the unit it is expressed in.
+   *
+   * The unit may be a currency, so money amounts such as a credit limit are written
+   * the same way as physical amounts like weights or counts.
    */
   credit_limit?: ProductLinesAPI.QuantityInput | null;
 
@@ -1414,32 +1567,39 @@ export interface CustomerUpdateParams {
   customer_type_group_id?: string;
 
   /**
-   * Body param: ID of the default carrier for this customer's shipments.
+   * Body param: ID of the carrier used on this customer's orders when the order does
+   * not specify one.
    */
   default_carrier_id?: string;
 
   /**
-   * Body param: Default payment term ID.
+   * Body param: ID of the payment term used on this customer's orders when the order
+   * does not specify one.
    */
   default_payment_term_id?: string;
 
   /**
-   * Body param: Priority applied to new orders for this customer.
+   * Body param: Priority used to pre-fill new orders for this customer.
    */
   default_priority?: 'low' | 'normal' | 'high';
 
   /**
-   * Body param: The ID of the account user to assign as the default sales rep.
+   * Body param: The ID of the account user to credit as the sales rep on this
+   * customer's orders.
+   *
+   * Must be an account user on your own account.
    */
   default_sales_rep_id?: string | null;
 
   /**
-   * Body param: ID of the default carrier service level.
+   * Body param: ID of the carrier service level used when an order takes its carrier
+   * from this customer's default.
    */
   default_service_level_id?: string | null;
 
   /**
-   * Body param: Default shipping term ID.
+   * Body param: ID of the shipping term used on this customer's orders when the
+   * order does not specify one.
    */
   default_shipping_term_id?: string;
 
@@ -1458,8 +1618,10 @@ export interface CustomerUpdateParams {
    * Body param: Whether this customer is billed for freight on their orders.
    *
    * - `free_freight`: the customer is not billed for freight.
-   * - `billed_freight`: freight is billed to the customer, unless overridden on the
-   *   order.
+   * - `billed_freight`: freight is billed to the customer.
+   *
+   * Freight is also waived when the customer's type group, one of its price groups,
+   * or a product line the ordered products belong to is `free_freight`.
    */
   freight_policy?: 'free_freight' | 'billed_freight';
 
@@ -1489,16 +1651,19 @@ export interface CustomerUpdateParams {
 
   /**
    * Body param: ID of an existing address to use as the default shipping address.
+   *
+   * The address is linked to the customer's account if it is not already.
    */
   ship_to_address_id?: string | null;
 
   /**
-   * Body param: Account status code, controlling whether the customer can transact.
+   * Body param: The customer's account standing.
    *
-   * - `normal`: standard active account with no restrictions.
-   * - `preferred`: active account flagged as preferred.
-   * - `hold_shipment`: orders can be placed, but shipments are held.
-   * - `hold_all`: all activity is on hold.
+   * - `normal`: standard account with no restrictions.
+   * - `preferred`: account flagged for prioritized handling.
+   * - `hold_shipment`: the customer's shipments should be held, typically over a
+   *   credit problem, while orders can still be placed.
+   * - `hold_all`: all activity for the customer should be held.
    */
   status?: 'normal' | 'preferred' | 'hold_shipment' | 'hold_all';
 

@@ -13,6 +13,8 @@ export class ScanningStations extends APIResource {
   /**
    * Returns a paginated list of scanning stations in your account.
    *
+   * The `q` search term matches the station name.
+   *
    * This endpoint requires the permission: `scanners:read`.
    *
    * @example
@@ -37,7 +39,7 @@ export class ScanningStations extends APIResource {
    * ```ts
    * const scanningStation =
    *   await client.operations.scanningStations.retrieve(
-   *     'scst_0129335dd6286056a97024fcc1',
+   *     'scst_t71bn7lq5yov',
    *   );
    * ```
    */
@@ -52,8 +54,11 @@ export class ScanningStations extends APIResource {
   /**
    * Creates a scanning station and assigns it to a department.
    *
+   * The new station has no production steps connected to it; use Connect Production
+   * Steps to Scanning Station to attach them.
+   *
    * Returns a conflict error if a scanning station with the same name already
-   * exists.
+   * exists, and a not-found error if the department does not exist in your account.
    *
    * This endpoint requires the permission: `scanners:create`.
    *
@@ -61,7 +66,7 @@ export class ScanningStations extends APIResource {
    * ```ts
    * const scanningStation =
    *   await client.operations.scanningStations.create({
-   *     department_id: 'dp_01791c25ab59da4704cba61874',
+   *     department_id: 'dp_m0jayebxnkos',
    *     name: 'Packaging Line 1',
    *     operator_requirement: 'none',
    *     type: 'init_batch',
@@ -91,7 +96,7 @@ export class ScanningStations extends APIResource {
    * ```ts
    * const scanningStation =
    *   await client.operations.scanningStations.update(
-   *     'scst_0129335dd6286056a97024fcc1',
+   *     'scst_t71bn7lq5yov',
    *     {
    *       label_size: '1x1',
    *       label_type: 'tag',
@@ -118,13 +123,18 @@ export class ScanningStations extends APIResource {
   /**
    * Deletes a scanning station.
    *
+   * Production steps connected to the station are not deleted, but they are left
+   * without a station to scan at until you connect them to another one. Deleting a
+   * station that was already deleted returns an already-deleted error rather than a
+   * not-found error.
+   *
    * This endpoint requires the permission: `scanners:delete`.
    *
    * @example
    * ```ts
    * const scanningStation =
    *   await client.operations.scanningStations.delete(
-   *     'scst_0129335dd6286056a97024fcc1',
+   *     'scst_t71bn7lq5yov',
    *   );
    * ```
    */
@@ -139,6 +149,8 @@ export class ScanningStations extends APIResource {
 export interface CreateScanningStationRequest {
   /**
    * ID of the department this station belongs to.
+   *
+   * Must be a department in your account, and cannot be changed after creation.
    */
   department_id: string;
 
@@ -158,12 +170,14 @@ export interface CreateScanningStationRequest {
   operator_requirement: 'none' | 'material_check';
 
   /**
-   * Scanning station type, determining which batch operation the station performs.
+   * Scanning station type, determining which batch operation an operator performs
+   * when they scan here.
    *
-   * - `init_batch`: initializes a new batch.
-   * - `merge_batch`: merges multiple batches into one.
-   * - `move_batch`: moves a batch to another location or step.
-   * - `split_batch`: splits a batch into multiple batches.
+   * - `init_batch`: starts a new batch at the beginning of a production flow.
+   * - `merge_batch`: combines several scanned batches into one.
+   * - `move_batch`: advances a batch through a production step connected to this
+   *   station.
+   * - `split_batch`: divides a batch into several batches.
    *
    * The type cannot be changed after creation.
    */
@@ -192,6 +206,9 @@ export interface CreateScanningStationRequest {
 
 /**
  * Request to partially update a scanning station.
+ *
+ * The station's type and department are set at creation and cannot be changed
+ * here.
  */
 export interface UpdateScanningStationRequest {
   /**
@@ -274,6 +291,8 @@ export interface ScanningStationRetrieveParams {
 export interface ScanningStationCreateParams {
   /**
    * Body param: ID of the department this station belongs to.
+   *
+   * Must be a department in your account, and cannot be changed after creation.
    */
   department_id: string;
 
@@ -293,13 +312,14 @@ export interface ScanningStationCreateParams {
   operator_requirement: 'none' | 'material_check';
 
   /**
-   * Body param: Scanning station type, determining which batch operation the station
-   * performs.
+   * Body param: Scanning station type, determining which batch operation an operator
+   * performs when they scan here.
    *
-   * - `init_batch`: initializes a new batch.
-   * - `merge_batch`: merges multiple batches into one.
-   * - `move_batch`: moves a batch to another location or step.
-   * - `split_batch`: splits a batch into multiple batches.
+   * - `init_batch`: starts a new batch at the beginning of a production flow.
+   * - `merge_batch`: combines several scanned batches into one.
+   * - `move_batch`: advances a batch through a production step connected to this
+   *   station.
+   * - `split_batch`: divides a batch into several batches.
    *
    * The type cannot be changed after creation.
    */

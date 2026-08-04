@@ -12,7 +12,14 @@ export {
   type AccountUserUpdateParams,
 } from './account-users/index';
 export { Accounts, type AccountUpdateFaviconResponse } from './accounts';
-export { Identity } from './identity';
+export {
+  Identity,
+  type ListPermission,
+  type ListPermissionGroup,
+  type Permission,
+  type PermissionGroup,
+  type IdentityRetrievePermissionGroupsParams,
+} from './identity';
 export {
   Roles,
   type CreateRoleRequest,

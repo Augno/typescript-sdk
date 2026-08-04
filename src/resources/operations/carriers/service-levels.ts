@@ -11,7 +11,10 @@ import { path } from '../../../internal/utils/path';
  */
 export class ServiceLevels extends APIResource {
   /**
-   * Returns a paginated list of service levels for a carrier.
+   * Returns a paginated list of the service levels a carrier offers.
+   *
+   * Use this rather than the `service_levels` field on the carrier itself when a
+   * carrier has more than a handful of services, since that inline list is capped.
    *
    * This endpoint requires the permissions: `carriers:read`, `customers:read`,
    * `suppliers:read`.
@@ -20,7 +23,7 @@ export class ServiceLevels extends APIResource {
    * ```ts
    * const listServiceLevel =
    *   await client.operations.carriers.serviceLevels.list(
-   *     'cr_01784fd54c9ba197bb4e42f0e6',
+   *     'cr_tv5vfjtgu1n3',
    *   );
    * ```
    */
@@ -42,8 +45,8 @@ export class ServiceLevels extends APIResource {
    * ```ts
    * const serviceLevel =
    *   await client.operations.carriers.serviceLevels.retrieve(
-   *     'crop_01cfaf03f104e90ef9680e2a30',
-   *     { carrier_id: 'cr_01784fd54c9ba197bb4e42f0e6' },
+   *     'crop_4ilk9p6gccrx',
+   *     { carrier_id: 'cr_tv5vfjtgu1n3' },
    *   );
    * ```
    */
@@ -60,7 +63,11 @@ export class ServiceLevels extends APIResource {
   }
 
   /**
-   * Creates a service level for a carrier.
+   * Adds a shipping service level to a carrier.
+   *
+   * Use this for self-managed carriers, or to add a service a connected carrier does
+   * not publish. Service levels created here are never removed by a later sync of
+   * the carrier's services.
    *
    * This endpoint requires the permission: `carriers:create`.
    *
@@ -68,7 +75,7 @@ export class ServiceLevels extends APIResource {
    * ```ts
    * const serviceLevel =
    *   await client.operations.carriers.serviceLevels.create(
-   *     'cr_01784fd54c9ba197bb4e42f0e6',
+   *     'cr_tv5vfjtgu1n3',
    *     {
    *       code: 'ground',
    *       is_default: false,
@@ -92,9 +99,11 @@ export class ServiceLevels extends APIResource {
   }
 
   /**
-   * Partially updates a service level.
+   * Updates a service level's name, code, customer portal visibility, or default
+   * status.
    *
-   * System-owned service levels cannot be updated.
+   * Only the fields you send are changed. System-owned service levels cannot be
+   * updated.
    *
    * This endpoint requires the permission: `carriers:update`.
    *
@@ -102,9 +111,9 @@ export class ServiceLevels extends APIResource {
    * ```ts
    * const serviceLevel =
    *   await client.operations.carriers.serviceLevels.update(
-   *     'crop_01cfaf03f104e90ef9680e2a30',
+   *     'crop_4ilk9p6gccrx',
    *     {
-   *       carrier_id: 'cr_01784fd54c9ba197bb4e42f0e6',
+   *       carrier_id: 'cr_tv5vfjtgu1n3',
    *       code: 'express',
    *       customer_portal_visibility: 'visible',
    *       name: 'Express Shipping',
@@ -126,10 +135,12 @@ export class ServiceLevels extends APIResource {
   }
 
   /**
-   * Permanently deletes a service level.
+   * Permanently deletes a service level so it can no longer be selected on
+   * shipments.
    *
    * System-owned service levels and the carrier's default service level cannot be
-   * deleted; unset `is_default` first to delete a default.
+   * deleted; to remove a default, first clear its `is_default` flag or promote
+   * another service level in its place.
    *
    * This endpoint requires the permission: `carriers:delete`.
    *
@@ -137,8 +148,8 @@ export class ServiceLevels extends APIResource {
    * ```ts
    * const serviceLevel =
    *   await client.operations.carriers.serviceLevels.delete(
-   *     'crop_01cfaf03f104e90ef9680e2a30',
-   *     { carrier_id: 'cr_01784fd54c9ba197bb4e42f0e6' },
+   *     'crop_4ilk9p6gccrx',
+   *     { carrier_id: 'cr_tv5vfjtgu1n3' },
    *   );
    * ```
    */
@@ -159,7 +170,8 @@ export interface CreateServiceLevelRequest {
   /**
    * Carrier-specific code identifying this service level (e.g. `fedex_ground`).
    *
-   * Must be unique among the carrier's service levels.
+   * Must be unique among the carrier's service levels, and is returned as the
+   * service level's `service_level_token`.
    */
   code: string;
 
@@ -179,11 +191,8 @@ export interface CreateServiceLevelRequest {
   name: string;
 
   /**
-   * Service level visibility in the customer portal.
-   *
-   * A `visible` service level can be selected by your customers at checkout; a
-   * `hidden` one is not offered there. New service levels are visible unless set to
-   * `hidden`.
+   * Whether customers can see and select this service level at checkout in the
+   * customer portal.
    */
   customer_portal_visibility?: 'visible' | 'hidden';
 }
@@ -195,12 +204,15 @@ export interface UpdateServiceLevelRequest {
   /**
    * Carrier-specific code identifying this service level (e.g. `fedex_ground`).
    *
-   * Must be unique among the carrier's service levels.
+   * Must be unique among the carrier's service levels. For a service level synced
+   * from a connected carrier the `service_level_token` used for rating is fixed by
+   * the carrier and a code change does not affect it; for one you created yourself,
+   * the token follows the code.
    */
   code?: string;
 
   /**
-   * Whether this service level will be available for customers to select in the
+   * Whether customers can see and select this service level at checkout in the
    * customer portal.
    */
   customer_portal_visibility?: 'visible' | 'hidden';
@@ -254,7 +266,7 @@ export interface ServiceLevelListParams {
 
 export interface ServiceLevelRetrieveParams {
   /**
-   * Path param: Carrier ID.
+   * Path param: The carrier that owns this service level.
    */
   carrier_id: string;
 
@@ -270,7 +282,8 @@ export interface ServiceLevelCreateParams {
    * Body param: Carrier-specific code identifying this service level (e.g.
    * `fedex_ground`).
    *
-   * Must be unique among the carrier's service levels.
+   * Must be unique among the carrier's service levels, and is returned as the
+   * service level's `service_level_token`.
    */
   code: string;
 
@@ -296,18 +309,15 @@ export interface ServiceLevelCreateParams {
   include?: Array<'owner' | 'owner.account'>;
 
   /**
-   * Body param: Service level visibility in the customer portal.
-   *
-   * A `visible` service level can be selected by your customers at checkout; a
-   * `hidden` one is not offered there. New service levels are visible unless set to
-   * `hidden`.
+   * Body param: Whether customers can see and select this service level at checkout
+   * in the customer portal.
    */
   customer_portal_visibility?: 'visible' | 'hidden';
 }
 
 export interface ServiceLevelUpdateParams {
   /**
-   * Path param: Carrier ID.
+   * Path param: The carrier that owns this service level.
    */
   carrier_id: string;
 
@@ -321,12 +331,15 @@ export interface ServiceLevelUpdateParams {
    * Body param: Carrier-specific code identifying this service level (e.g.
    * `fedex_ground`).
    *
-   * Must be unique among the carrier's service levels.
+   * Must be unique among the carrier's service levels. For a service level synced
+   * from a connected carrier the `service_level_token` used for rating is fixed by
+   * the carrier and a code change does not affect it; for one you created yourself,
+   * the token follows the code.
    */
   code?: string;
 
   /**
-   * Body param: Whether this service level will be available for customers to select
+   * Body param: Whether customers can see and select this service level at checkout
    * in the customer portal.
    */
   customer_portal_visibility?: 'visible' | 'hidden';
@@ -349,7 +362,7 @@ export interface ServiceLevelUpdateParams {
 
 export interface ServiceLevelDeleteParams {
   /**
-   * Carrier ID.
+   * The carrier that owns this service level.
    */
   carrier_id: string;
 }

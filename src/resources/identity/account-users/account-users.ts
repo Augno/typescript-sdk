@@ -16,7 +16,11 @@ export class AccountUsers extends APIResource {
   actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
 
   /**
-   * Returns a paginated list of account users for the current account.
+   * Returns a paginated list of the users who belong to the account you are acting
+   * in.
+   *
+   * When the account you are acting in is a customer or supplier account you manage,
+   * this lists that account's users rather than your own team.
    *
    * This endpoint requires the permissions: `team:read`, `customers:read`,
    * `suppliers:read`.
@@ -37,6 +41,9 @@ export class AccountUsers extends APIResource {
   /**
    * Returns an account user by ID.
    *
+   * The lookup is scoped to the account you are acting in, so an ID belonging to
+   * another account is reported as not found.
+   *
    * This endpoint requires the permissions: `team:read`, `customers:read`,
    * `suppliers:read`.
    *
@@ -44,7 +51,7 @@ export class AccountUsers extends APIResource {
    * ```ts
    * const accountUser =
    *   await client.identity.accountUsers.retrieve(
-   *     'acus_01ea9983ddb41dacc44ecf997c',
+   *     'acus_e5zu8bde0z3h',
    *   );
    * ```
    */
@@ -57,11 +64,19 @@ export class AccountUsers extends APIResource {
   }
 
   /**
-   * Adds a user to the target account.
+   * Adds a user to the account you are acting in.
    *
-   * If no user with the given email or username exists, a new user is created and
-   * sent a welcome email containing a generated password. If a matching user already
-   * exists, that user is added to the account instead.
+   * If no user with the given email or username exists, a new user is created; a
+   * user created with an email address is sent a welcome email containing a
+   * generated password, unless they are being added to a supplier account, since
+   * suppliers have no portal to sign in to. If a matching user already exists, that
+   * user is added to the account instead, and a user you previously removed is
+   * restored rather than duplicated. Adding a user to your own account consumes a
+   * seat and is rejected once your plan's seat limit is reached.
+   *
+   * When you add a user to a customer or supplier account that has its own Augno
+   * subscription, the membership is created disabled and has to be activated before
+   * that user can sign in.
    *
    * This endpoint requires the permissions: `team:create`, `customers:update`,
    * `suppliers:update`.
@@ -70,7 +85,7 @@ export class AccountUsers extends APIResource {
    * ```ts
    * const accountUser =
    *   await client.identity.accountUsers.create({
-   *     department_id: 'dp_01791c25ab59da4704cba61874',
+   *     department_id: 'dp_m0jayebxnkos',
    *     email: 'jdoe@augno.com',
    *     name: 'John Doe',
    *     password: 'QgS7Z8Hhj3&1',
@@ -80,7 +95,7 @@ export class AccountUsers extends APIResource {
    *         enabled: true,
    *       },
    *     ],
-   *     role_id: 'rl_01c16d2eb637c0d1f3a372937c',
+   *     role_id: 'rl_3xknmfqflhvb',
    *     username: 'jdoe',
    *   });
    * ```
@@ -98,7 +113,7 @@ export class AccountUsers extends APIResource {
    *
    * Omitted fields are left unchanged. Profile fields (`name`, `email`, `username`)
    * update the underlying user, which is shared across every account the user
-   * belongs to.
+   * belongs to, so the change is visible everywhere that person works.
    *
    * This endpoint requires the permissions: `team:update`, `customers:update`,
    * `suppliers:update`.
@@ -107,9 +122,9 @@ export class AccountUsers extends APIResource {
    * ```ts
    * const accountUser =
    *   await client.identity.accountUsers.update(
-   *     'acus_01ea9983ddb41dacc44ecf997c',
+   *     'acus_e5zu8bde0z3h',
    *     {
-   *       department_id: 'dp_01791c25ab59da4704cba61874',
+   *       department_id: 'dp_m0jayebxnkos',
    *       email: 'jdoe@augno.com',
    *       name: 'John Doe',
    *       preferences: [
@@ -118,7 +133,7 @@ export class AccountUsers extends APIResource {
    *           enabled: true,
    *         },
    *       ],
-   *       role_id: 'rl_01c16d2eb637c0d1f3a372937c',
+   *       role_id: 'rl_3xknmfqflhvb',
    *       username: 'jdoe',
    *     },
    *   );
@@ -144,6 +159,8 @@ export class AccountUsers extends APIResource {
 export interface CreateAccountUserRequest {
   /**
    * ID of the department to assign to the user.
+   *
+   * The department must already exist in the account you are acting in.
    */
   department_id?: string;
 
@@ -151,7 +168,9 @@ export interface CreateAccountUserRequest {
    * User email address.
    *
    * Either `email` or `username` must be provided. If a user with this email already
-   * exists, that user is added to the account instead of a new user being created.
+   * exists, that user is added to the account instead of a new user being created,
+   * and the request fails with a conflict if they are already an active member of
+   * it.
    */
   email?: string;
 
@@ -181,7 +200,11 @@ export interface CreateAccountUserRequest {
   /**
    * ID of the role to assign to the user.
    *
-   * Ignored for scanning station users, which are always assigned the scanner role.
+   * The role you supply can be overridden: users added to a customer account always
+   * receive the shared customer role so their portal capabilities stay
+   * permission-driven, and scanning station users in any other account receive the
+   * scanner role. Supplying a role whose type is `sales_rep` normalizes to the
+   * account's canonical sales-rep role.
    */
   role_id?: string;
 
@@ -196,7 +219,8 @@ export interface CreateAccountUserRequest {
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListAccountUser {
   /**
@@ -210,7 +234,13 @@ export interface ListAccountUser {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
@@ -237,7 +267,8 @@ export interface UpdateAccountUserRequest {
   /**
    * ID of the department to assign to the user.
    *
-   * Set to `null` to clear the department.
+   * Set to `null` to clear the department. The department must already exist in the
+   * account.
    */
   department_id?: string | null;
 
@@ -308,8 +339,8 @@ export interface AccountUserListParams {
   /**
    * Controls whether removed (soft-deleted) account users appear in the list.
    *
-   * - `excluded`: only active and disabled users (default).
-   * - `included`: removed users are listed as well.
+   * Removed users are left out unless you pass `included`, so a user removed with
+   * the remove action disappears from the default listing.
    */
   removed_scope?: 'excluded' | 'included';
 
@@ -342,6 +373,8 @@ export interface AccountUserCreateParams {
 
   /**
    * Body param: ID of the department to assign to the user.
+   *
+   * The department must already exist in the account you are acting in.
    */
   department_id?: string;
 
@@ -349,7 +382,9 @@ export interface AccountUserCreateParams {
    * Body param: User email address.
    *
    * Either `email` or `username` must be provided. If a user with this email already
-   * exists, that user is added to the account instead of a new user being created.
+   * exists, that user is added to the account instead of a new user being created,
+   * and the request fails with a conflict if they are already an active member of
+   * it.
    */
   email?: string;
 
@@ -379,7 +414,11 @@ export interface AccountUserCreateParams {
   /**
    * Body param: ID of the role to assign to the user.
    *
-   * Ignored for scanning station users, which are always assigned the scanner role.
+   * The role you supply can be overridden: users added to a customer account always
+   * receive the shared customer role so their portal capabilities stay
+   * permission-driven, and scanning station users in any other account receive the
+   * scanner role. Supplying a role whose type is `sales_rep` normalizes to the
+   * account's canonical sales-rep role.
    */
   role_id?: string;
 
@@ -403,7 +442,8 @@ export interface AccountUserUpdateParams {
   /**
    * Body param: ID of the department to assign to the user.
    *
-   * Set to `null` to clear the department.
+   * Set to `null` to clear the department. The department must already exist in the
+   * account.
    */
   department_id?: string | null;
 

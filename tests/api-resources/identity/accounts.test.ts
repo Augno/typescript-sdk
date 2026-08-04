@@ -9,7 +9,7 @@ const client = new Augno({
 
 describe('resource accounts', () => {
   test('updateFavicon', async () => {
-    const responsePromise = client.identity.accounts.updateFavicon('ac_01148680966698341a9c0976db');
+    const responsePromise = client.identity.accounts.updateFavicon('ac_ykxoradjoeb3');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

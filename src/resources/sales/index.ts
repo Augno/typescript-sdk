@@ -18,6 +18,7 @@ export {
   type AccountStatusListParams,
   type AccountStatusRetrieveParams,
 } from './account-statuses';
+export { AccountUsers } from './account-users/index';
 export {
   Addresses,
   type AddressInput,

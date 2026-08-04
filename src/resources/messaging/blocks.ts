@@ -12,17 +12,19 @@ import { path } from '../../internal/utils/path';
  */
 export class Blocks extends APIResource {
   /**
-   * Blocks an account user (prevents DMs in both directions).
+   * Blocks another user in your account from exchanging direct messages with you.
+   *
+   * While the block stands neither of you can start a direct message with the other
+   * or post in one you already share; group conversations and customer cases are
+   * unaffected. Blocking someone you have already blocked returns the original block
+   * instead of creating a second one.
    *
    * This endpoint requires the permission: `messaging:create`.
    *
    * @example
    * ```ts
    * const messagingBlock = await client.messaging.blocks.create(
-   *   {
-   *     blocked_account_user_id:
-   *       'acus_01ea9983ddb41dacc44ecf997c',
-   *   },
+   *   { blocked_account_user_id: 'acus_e5zu8bde0z3h' },
    * );
    * ```
    */
@@ -32,7 +34,12 @@ export class Blocks extends APIResource {
   }
 
   /**
-   * Removes a block.
+   * Lifts a block you placed on another user, letting the two of you message each
+   * other again.
+   *
+   * Only your own block is removed: if the other person has also blocked you, direct
+   * messages between you stay blocked. Unblocking someone you have not blocked
+   * succeeds and changes nothing.
    *
    * This endpoint requires the permission: `messaging:delete`.
    *
@@ -48,7 +55,9 @@ export class Blocks extends APIResource {
   }
 
   /**
-   * Lists the caller's messaging blocks.
+   * Lists the users you have blocked, most recently blocked first.
+   *
+   * Only blocks you created are returned — you are never told who has blocked you.
    *
    * This endpoint requires the permission: `messaging:read`.
    *
@@ -70,7 +79,7 @@ export class Blocks extends APIResource {
  * A user's membership in an account, carrying the account-specific status, role,
  * and department.
  *
- * Profile fields (name, email, username, image URL) live on the expandable `user`
+ * Profile fields (name, email, username, image URL) live on the `user`
  * sub-resource, which is shared across every account the user belongs to.
  */
 export interface AccountUser {
@@ -107,11 +116,14 @@ export interface AccountUser {
   role: APIKeysAPI.Role | null;
 
   /**
-   * Account user status.
+   * The current state of this user's membership in the account.
    *
-   * - `active`: the user can access the account.
-   * - `disabled`: the user is locked out of the account.
-   * - `removed`: the user has been removed (soft-deleted) from the account.
+   * - `active`: the user can sign in to the account and occupies one of the plan's
+   *   seats.
+   * - `disabled`: the user is locked out of the account and their sessions have been
+   *   revoked, but the membership is retained.
+   * - `removed`: the membership has been soft-deleted; it is hidden from listings by
+   *   default and can be restored with the activate action.
    */
   status: 'active' | 'disabled' | 'removed';
 
@@ -135,6 +147,8 @@ export interface AccountUser {
 export interface BlockRequest {
   /**
    * The account user to block.
+   *
+   * It must be someone else in your account; you cannot block yourself.
    */
   blocked_account_user_id: string;
 }
@@ -145,6 +159,11 @@ export interface BlockRequest {
  * Each consumption records one input item and how much of it the step uses.
  * Consumptions also determine the production flow: when another step produces the
  * consumed item, the two steps are linked upstream/downstream automatically.
+ *
+ * The quantities are stated against the step's own output, so a step producing 100
+ * pairs and consuming 5 kg of yarn needs 5 kg per 100 pairs. Material requirements
+ * for an order scale every consumption in the flow by how much of the finished
+ * item is wanted.
  */
 export interface Consumption {
   /**
@@ -153,7 +172,7 @@ export interface Consumption {
   id: string;
 
   /**
-   * Item is an inventory item (product, material, or part).
+   * An entry in your catalog: something you sell, consume, or build with.
    */
   consumed_item: ItemsAPI.Item | null;
 
@@ -173,7 +192,11 @@ export interface Consumption {
   object: 'consumption';
 
   /**
-   * Value with an associated unit.
+   * A measured amount: a numeric value together with the unit it is expressed in.
+   *
+   * Quantities are shared building blocks rather than standalone records — other
+   * resources point at them to report stock levels, ordered and packed amounts,
+   * money, weights, and durations.
    */
   quantity: ItemsAPI.Quantity | null;
 
@@ -183,7 +206,11 @@ export interface Consumption {
   updated_at: string;
 
   /**
-   * Value with an associated unit.
+   * A measured amount: a numeric value together with the unit it is expressed in.
+   *
+   * Quantities are shared building blocks rather than standalone records — other
+   * resources point at them to report stock levels, ordered and packed amounts,
+   * money, weights, and durations.
    */
   waste_quantity: ItemsAPI.Quantity | null;
 }
@@ -216,7 +243,8 @@ export interface Department {
   location: Location | null;
 
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   machines: ListMachine | null;
 
@@ -238,7 +266,8 @@ export interface Department {
   object: 'department';
 
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   scanning_stations: ListScanningStation | null;
 
@@ -249,7 +278,8 @@ export interface Department {
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListConsumption {
   /**
@@ -263,13 +293,20 @@ export interface ListConsumption {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListLocation {
   /**
@@ -283,13 +320,20 @@ export interface ListLocation {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListMachine {
   /**
@@ -303,13 +347,20 @@ export interface ListMachine {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListMessagingBlock {
   /**
@@ -323,13 +374,20 @@ export interface ListMessagingBlock {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListProductionStep {
   /**
@@ -343,13 +401,20 @@ export interface ListProductionStep {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListScanningStation {
   /**
@@ -363,7 +428,13 @@ export interface ListScanningStation {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
@@ -379,7 +450,8 @@ export interface Location {
   id: string;
 
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   children: ListLocation | null;
 
@@ -405,14 +477,11 @@ export interface Location {
   parent: Location | null;
 
   /**
-   * Location type code, identifying this location's level in the storage hierarchy.
+   * This location's level in the storage hierarchy.
    *
-   * - `building`: a building-level location.
-   * - `section`: a section within a building.
-   * - `aisle`: an aisle within a section.
-   * - `rack`: a rack within an aisle.
-   * - `shelf`: a shelf within a rack.
-   * - `bin`: a bin within a shelf.
+   * The levels run from largest to smallest: `building`, `section`, `aisle`, `rack`,
+   * `shelf`, `bin`. They are descriptive labels rather than a rule — a location's
+   * parent is not required to be the next level up.
    */
   type: LocationTypeCode;
 
@@ -474,8 +543,11 @@ export interface Machine {
 }
 
 /**
- * A 1:1 messaging block: the caller has blocked another account user from
- * messaging them.
+ * A block one account user has placed on another.
+ *
+ * While the block stands, neither of the two can start a direct message with the
+ * other or post in an existing one, whichever of them created it. Group
+ * conversations and customer cases are unaffected.
  */
 export interface MessagingBlock {
   /**
@@ -487,7 +559,7 @@ export interface MessagingBlock {
    * A user's membership in an account, carrying the account-specific status, role,
    * and department.
    *
-   * Profile fields (name, email, username, image URL) live on the expandable `user`
+   * Profile fields (name, email, username, image URL) live on the `user`
    * sub-resource, which is shared across every account the user belongs to.
    */
   blocked_user: AccountUser | null;
@@ -523,12 +595,16 @@ export interface ProductionOutput {
   object: 'production';
 
   /**
-   * Item is an inventory item (product, material, or part).
+   * An entry in your catalog: something you sell, consume, or build with.
    */
   produced_item: ItemsAPI.Item | null;
 
   /**
-   * Value with an associated unit.
+   * A measured amount: a numeric value together with the unit it is expressed in.
+   *
+   * Quantities are shared building blocks rather than standalone records — other
+   * resources point at them to report stock levels, ordered and packed amounts,
+   * money, weights, and durations.
    */
   quantity: ItemsAPI.Quantity | null;
 
@@ -558,7 +634,8 @@ export interface ProductionStep {
   allowances: string;
 
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   consumptions: ListConsumption | null;
 
@@ -574,7 +651,8 @@ export interface ProductionStep {
   department: Department | null;
 
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   in_steps: ListProductionStep | null;
 
@@ -600,7 +678,8 @@ export interface ProductionStep {
   leveling_factor: string;
 
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   machines: ListMachine | null;
 
@@ -620,7 +699,8 @@ export interface ProductionStep {
   object: 'production_step';
 
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   out_steps: ListProductionStep | null;
 
@@ -709,17 +789,22 @@ export interface ScanningStation {
   operator_requirement: 'none' | 'material_check';
 
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   production_steps: ListProductionStep | null;
 
   /**
-   * Scanning station type, determining which batch operation the station performs.
+   * Scanning station type, determining which batch operation an operator performs
+   * when they scan here.
    *
-   * - `init_batch`: initializes a new batch.
-   * - `merge_batch`: merges multiple batches into one.
-   * - `move_batch`: moves a batch to another location or step.
-   * - `split_batch`: splits a batch into multiple batches.
+   * - `init_batch`: starts a new batch at the beginning of a production flow.
+   * - `merge_batch`: combines several scanned batches into one.
+   * - `move_batch`: advances a batch through a production step connected to this
+   *   station.
+   * - `split_batch`: divides a batch into several batches.
+   *
+   * Fixed when the station is created.
    */
   type: 'init_batch' | 'merge_batch' | 'move_batch' | 'split_batch';
 
@@ -747,7 +832,7 @@ export interface User {
   created_at: string;
 
   /**
-   * Email address.
+   * Email address the user signs in with and receives platform email at.
    */
   email: string | null;
 
@@ -757,7 +842,11 @@ export interface User {
   email_verified_at: string | null;
 
   /**
-   * URL of the user's profile image.
+   * Location of the user's profile image.
+   *
+   * For photos uploaded through the API this holds an internal path rather than a
+   * fetchable image URL; call Get User Photo URL to obtain a temporary link to the
+   * image itself.
    */
   image_url: string | null;
 
@@ -777,7 +866,9 @@ export interface User {
   updated_at: string;
 
   /**
-   * Username.
+   * Username the user can sign in with instead of their email address.
+   *
+   * Usernames are unique across the whole platform, not just within your account.
    */
   username: string | null;
 }
@@ -787,6 +878,8 @@ export interface BlockDeleteResponse {}
 export interface BlockCreateParams {
   /**
    * Body param: The account user to block.
+   *
+   * It must be someone else in your account; you cannot block yourself.
    */
   blocked_account_user_id: string;
 

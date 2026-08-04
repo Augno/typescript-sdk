@@ -34,6 +34,8 @@ import {
 } from './addresses';
 import * as PrioritiesAPI from './priorities';
 import { ListPriority, Priorities, Priority, PriorityListParams, PriorityRetrieveParams } from './priorities';
+import * as AccountUsersAPI from './account-users/account-users';
+import { AccountUsers } from './account-users/account-users';
 import * as ContactsAPI from './contacts/contacts';
 import { Contacts } from './contacts/contacts';
 import * as CustomersAPI from './customers/customers';
@@ -102,6 +104,7 @@ export class Sales extends APIResource {
   accountGroups: AccountGroupsAPI.AccountGroups = new AccountGroupsAPI.AccountGroups(this._client);
   addresses: AddressesAPI.Addresses = new AddressesAPI.Addresses(this._client);
   accountStatuses: AccountStatusesAPI.AccountStatuses = new AccountStatusesAPI.AccountStatuses(this._client);
+  accountUsers: AccountUsersAPI.AccountUsers = new AccountUsersAPI.AccountUsers(this._client);
   priorities: PrioritiesAPI.Priorities = new PrioritiesAPI.Priorities(this._client);
   customers: CustomersAPI.Customers = new CustomersAPI.Customers(this._client);
   contacts: ContactsAPI.Contacts = new ContactsAPI.Contacts(this._client);
@@ -111,6 +114,7 @@ export class Sales extends APIResource {
 Sales.AccountGroups = AccountGroups;
 Sales.Addresses = Addresses;
 Sales.AccountStatuses = AccountStatuses;
+Sales.AccountUsers = AccountUsers;
 Sales.Priorities = Priorities;
 Sales.Customers = Customers;
 Sales.Contacts = Contacts;
@@ -147,6 +151,8 @@ export declare namespace Sales {
     type AccountStatusListParams as AccountStatusListParams,
     type AccountStatusRetrieveParams as AccountStatusRetrieveParams,
   };
+
+  export { AccountUsers as AccountUsers };
 
   export {
     Priorities as Priorities,

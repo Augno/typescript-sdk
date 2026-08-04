@@ -24,6 +24,18 @@ export {
   type DemandOverrideUpdateParams,
 } from './demand-overrides';
 export {
+  Departments,
+  type CreateDepartmentRequest,
+  type DepartmentRateInput,
+  type ListDepartment,
+  type UpdateDepartmentRequest,
+  type DepartmentDeleteResponse,
+  type DepartmentListParams,
+  type DepartmentRetrieveParams,
+  type DepartmentCreateParams,
+  type DepartmentUpdateParams,
+} from './departments';
+export {
   LocationTypes,
   type ListLocationType,
   type LocationType,
@@ -51,6 +63,16 @@ export {
   type MachineDowntimeEventCreateParams,
   type MachineDowntimeEventUpdateParams,
 } from './machine-downtime-events';
+export {
+  Machines,
+  type CreateMachineRequest,
+  type UpdateMachineRequest,
+  type MachineDeleteResponse,
+  type MachineListParams,
+  type MachineRetrieveParams,
+  type MachineCreateParams,
+  type MachineUpdateParams,
+} from './machines';
 export {
   Operations,
   type DemandOverrideType,
@@ -109,6 +131,7 @@ export {
   type ScanningStationCreateParams,
   type ScanningStationUpdateParams,
 } from './scanning-stations';
+export { Shipments } from './shipments/index';
 export {
   ShippingTerms,
   type CreateShippingTermRequest,

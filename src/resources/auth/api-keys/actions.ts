@@ -15,6 +15,11 @@ export class Actions extends APIResource {
    * existing key and issuing a replacement with the same name, role, and expiration
    * (unless overridden).
    *
+   * The replacement is a new key with its own ID; the rotated key keeps its ID and
+   * stays in the list, moving to a `revoked` status once its revocation takes
+   * effect. Use `revoke_at` to keep the old key working while you roll the new
+   * secret out.
+   *
    * The secret key is returned once and cannot be retrieved later, so you should
    * store it securely. We provide some
    * [recommendations](https://docs.augno.com/api/managing-api-keys) on how you can
@@ -26,7 +31,7 @@ export class Actions extends APIResource {
    * ```ts
    * const createdAPIKey =
    *   await client.auth.apiKeys.actions.rotate(
-   *     'apke_01fba3a7db3996e3b3b1a07e00',
+   *     'apke_eiylmwr6q7oz',
    *     {
    *       expires_at: '2026-12-31T23:59:59Z',
    *       revoke_at: '2026-06-16T00:00:00Z',
@@ -53,18 +58,18 @@ export class Actions extends APIResource {
  */
 export interface RotateAPIKeyRequest {
   /**
-   * Expiration timestamp override for the new key.
+   * When the replacement key should expire.
    *
-   * If omitted, the previous key's expiration is used.
+   * If omitted, the replacement inherits the expiration of the key being rotated.
    */
   expires_at?: string;
 
   /**
-   * When to revoke the old key.
+   * When the old key should stop authenticating requests.
    *
-   * If omitted, the old key is revoked immediately. A future timestamp schedules
-   * revocation (keeping the old key valid until then) up to a maximum of 30 days
-   * out.
+   * If omitted, the old key is revoked immediately. Set a future timestamp — up to
+   * 30 days out — to keep the old key working during a migration window; a timestamp
+   * in the past revokes it immediately.
    */
   revoke_at?: string;
 }
@@ -77,18 +82,18 @@ export interface ActionRotateParams {
   include?: Array<'role' | 'role.permissions'>;
 
   /**
-   * Body param: Expiration timestamp override for the new key.
+   * Body param: When the replacement key should expire.
    *
-   * If omitted, the previous key's expiration is used.
+   * If omitted, the replacement inherits the expiration of the key being rotated.
    */
   expires_at?: string;
 
   /**
-   * Body param: When to revoke the old key.
+   * Body param: When the old key should stop authenticating requests.
    *
-   * If omitted, the old key is revoked immediately. A future timestamp schedules
-   * revocation (keeping the old key valid until then) up to a maximum of 30 days
-   * out.
+   * If omitted, the old key is revoked immediately. Set a future timestamp — up to
+   * 30 days out — to keep the old key working during a migration window; a timestamp
+   * in the past revokes it immediately.
    */
   revoke_at?: string;
 }

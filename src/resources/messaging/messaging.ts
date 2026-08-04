@@ -59,13 +59,6 @@ import {
 } from './announcements/announcements';
 import * as ConversationsAPI from './conversations/conversations';
 import {
-  AgentAction,
-  AgentDefinition,
-  AgentDefinitionConfig,
-  AgentDefinitionTool,
-  AgentRun,
-  AgentRunStep,
-  AvailableTool,
   Conversation,
   ConversationCreateParams,
   ConversationListParams,
@@ -74,9 +67,6 @@ import {
   ConversationUpdateParams,
   Conversations,
   CreateConversationRequest,
-  ListAgentAction,
-  ListAgentDefinitionTool,
-  ListAgentRunStep,
   ListConversation,
   ListConversationParticipant,
   ListMessageAttachment,
@@ -86,7 +76,6 @@ import {
   MessagingGroup,
   MessagingGroupMember,
   ReadCursor,
-  TriggerConfig,
   UpdateConversationRequest,
 } from './conversations/conversations';
 import * as EmailDomainsAPI from './email-domains/email-domains';
@@ -144,7 +133,20 @@ export class Messaging extends APIResource {
   emailInboxes: EmailInboxesAPI.EmailInboxes = new EmailInboxesAPI.EmailInboxes(this._client);
 
   /**
-   * Lists the caller's messageable contacts.
+   * Lists the people the caller can start a conversation with.
+   *
+   * For a member of the account, this is everyone active in that account, including
+   * themselves — messaging yourself is allowed. A customer signed in to the portal
+   * instead gets one shared "Customer Service" contact rather than the individual
+   * staff of the account they are dealing with; messages to it are routed by the
+   * account's support routes.
+   *
+   * Blocking is not applied to the directory: someone you have blocked, or who has
+   * blocked you, is still listed even though a direct message with them cannot be
+   * opened.
+   *
+   * The directory is returned as a single unpaginated page capped at 100 names, so
+   * narrow it with `q` in an account with many people.
    *
    * This endpoint requires the permission: `messaging:read`.
    *
@@ -162,7 +164,8 @@ export class Messaging extends APIResource {
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListActor {
   /**
@@ -176,7 +179,13 @@ export interface ListActor {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
@@ -252,19 +261,9 @@ export declare namespace Messaging {
 
   export {
     Conversations as Conversations,
-    type AgentAction as AgentAction,
-    type AgentDefinition as AgentDefinition,
-    type AgentDefinitionConfig as AgentDefinitionConfig,
-    type AgentDefinitionTool as AgentDefinitionTool,
-    type AgentRun as AgentRun,
-    type AgentRunStep as AgentRunStep,
-    type AvailableTool as AvailableTool,
     type Conversation as Conversation,
     type ConversationParticipant as ConversationParticipant,
     type CreateConversationRequest as CreateConversationRequest,
-    type ListAgentAction as ListAgentAction,
-    type ListAgentDefinitionTool as ListAgentDefinitionTool,
-    type ListAgentRunStep as ListAgentRunStep,
     type ListConversation as ListConversation,
     type ListConversationParticipant as ListConversationParticipant,
     type ListMessageAttachment as ListMessageAttachment,
@@ -274,7 +273,6 @@ export declare namespace Messaging {
     type MessagingGroup as MessagingGroup,
     type MessagingGroupMember as MessagingGroupMember,
     type ReadCursor as ReadCursor,
-    type TriggerConfig as TriggerConfig,
     type UpdateConversationRequest as UpdateConversationRequest,
     type ConversationCreateParams as ConversationCreateParams,
     type ConversationListParams as ConversationListParams,

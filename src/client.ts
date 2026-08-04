@@ -16,6 +16,15 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
+import {
+  AI,
+  AIRetrieveToolGroupsParams,
+  AIRetrieveToolsParams,
+  AvailableTool,
+  ListAvailableTool,
+  ListToolGroup,
+  ToolGroup,
+} from './resources/ai/ai';
 import { Auth } from './resources/auth/auth';
 import { Catalog } from './resources/catalog/catalog';
 import { Core, CoreRetrieveSearchParams, Entity, ListEntity } from './resources/core/core';
@@ -31,7 +40,14 @@ import {
   TransactionMethod,
   TransactionType,
 } from './resources/finance/finance';
-import { Identity } from './resources/identity/identity';
+import {
+  Identity,
+  IdentityRetrievePermissionGroupsParams,
+  ListPermission,
+  ListPermissionGroup,
+  Permission,
+  PermissionGroup,
+} from './resources/identity/identity';
 import { ListActor, Messaging, MessagingRetrieveContactsParams } from './resources/messaging/messaging';
 import {
   DemandOverrideType,
@@ -797,6 +813,10 @@ export class Augno {
   core: API.Core = new API.Core(this);
   catalog: API.Catalog = new API.Catalog(this);
   /**
+   * List available platform tools for agent configuration.
+   */
+  ai: API.AI = new API.AI(this);
+  /**
    * List messageable contacts (the messaging directory).
    */
   messaging: API.Messaging = new API.Messaging(this);
@@ -806,6 +826,9 @@ export class Augno {
    */
   finance: API.Finance = new API.Finance(this);
   operations: API.Operations = new API.Operations(this);
+  /**
+   * List permission groups and their permissions.
+   */
   identity: API.Identity = new API.Identity(this);
   settings: API.Settings = new API.Settings(this);
 }
@@ -813,6 +836,7 @@ export class Augno {
 Augno.Auth = Auth;
 Augno.Core = Core;
 Augno.Catalog = Catalog;
+Augno.AI = AI;
 Augno.Messaging = Messaging;
 Augno.Sales = Sales;
 Augno.Finance = Finance;
@@ -833,6 +857,16 @@ export declare namespace Augno {
   };
 
   export { Catalog as Catalog };
+
+  export {
+    AI as AI,
+    type AvailableTool as AvailableTool,
+    type ListAvailableTool as ListAvailableTool,
+    type ListToolGroup as ListToolGroup,
+    type ToolGroup as ToolGroup,
+    type AIRetrieveToolsParams as AIRetrieveToolsParams,
+    type AIRetrieveToolGroupsParams as AIRetrieveToolGroupsParams,
+  };
 
   export {
     Messaging as Messaging,
@@ -871,7 +905,14 @@ export declare namespace Augno {
     type OperationRetrieveMachineStatusParams as OperationRetrieveMachineStatusParams,
   };
 
-  export { Identity as Identity };
+  export {
+    Identity as Identity,
+    type ListPermission as ListPermission,
+    type ListPermissionGroup as ListPermissionGroup,
+    type Permission as Permission,
+    type PermissionGroup as PermissionGroup,
+    type IdentityRetrievePermissionGroupsParams as IdentityRetrievePermissionGroupsParams,
+  };
 
   export { Settings as Settings };
 }

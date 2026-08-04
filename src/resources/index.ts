@@ -1,5 +1,14 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+export {
+  AI,
+  type AvailableTool,
+  type ListAvailableTool,
+  type ListToolGroup,
+  type ToolGroup,
+  type AIRetrieveToolsParams,
+  type AIRetrieveToolGroupsParams,
+} from './ai/ai';
 export { Auth } from './auth/auth';
 export { Catalog } from './catalog/catalog';
 export { Core, type Entity, type ListEntity, type CoreRetrieveSearchParams } from './core/core';
@@ -15,7 +24,14 @@ export {
   type FinanceRetrieveTransactionMethodsParams,
   type FinanceRetrieveAdjustmentTypesParams,
 } from './finance/finance';
-export { Identity } from './identity/identity';
+export {
+  Identity,
+  type ListPermission,
+  type ListPermissionGroup,
+  type Permission,
+  type PermissionGroup,
+  type IdentityRetrievePermissionGroupsParams,
+} from './identity/identity';
 export { Messaging, type ListActor, type MessagingRetrieveContactsParams } from './messaging/messaging';
 export {
   Operations,

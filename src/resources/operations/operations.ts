@@ -15,6 +15,19 @@ import {
   ListDemandOverride,
   UpdateDemandOverrideRequest,
 } from './demand-overrides';
+import * as DepartmentsAPI from './departments';
+import {
+  CreateDepartmentRequest,
+  DepartmentCreateParams,
+  DepartmentDeleteResponse,
+  DepartmentListParams,
+  DepartmentRateInput,
+  DepartmentRetrieveParams,
+  DepartmentUpdateParams,
+  Departments,
+  ListDepartment,
+  UpdateDepartmentRequest,
+} from './departments';
 import * as LocationTypesAPI from './location-types';
 import { ListLocationType, LocationType, LocationTypeListParams, LocationTypes } from './location-types';
 import * as LocationsAPI from './locations';
@@ -41,6 +54,17 @@ import {
   MachineDowntimeEvents,
   UpdateMachineDowntimeEventRequest,
 } from './machine-downtime-events';
+import * as MachinesAPI from './machines';
+import {
+  CreateMachineRequest,
+  MachineCreateParams,
+  MachineDeleteResponse,
+  MachineListParams,
+  MachineRetrieveParams,
+  MachineUpdateParams,
+  Machines,
+  UpdateMachineRequest,
+} from './machines';
 import * as ScanningStationsAPI from './scanning-stations';
 import {
   CreateScanningStationRequest,
@@ -112,12 +136,16 @@ import {
   ScheduleAppliedOverride,
   ScheduleDiagnostics,
 } from './production-schedules/production-schedules';
+import * as ShipmentsAPI from './shipments/shipments';
+import { Shipments } from './shipments/shipments';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
 export class Operations extends APIResource {
   shippingTerms: ShippingTermsAPI.ShippingTerms = new ShippingTermsAPI.ShippingTerms(this._client);
   carriers: CarriersAPI.Carriers = new CarriersAPI.Carriers(this._client);
+  departments: DepartmentsAPI.Departments = new DepartmentsAPI.Departments(this._client);
+  machines: MachinesAPI.Machines = new MachinesAPI.Machines(this._client);
   machineDowntimeEvents: MachineDowntimeEventsAPI.MachineDowntimeEvents =
     new MachineDowntimeEventsAPI.MachineDowntimeEvents(this._client);
   demandOverrides: DemandOverridesAPI.DemandOverrides = new DemandOverridesAPI.DemandOverrides(this._client);
@@ -127,6 +155,7 @@ export class Operations extends APIResource {
     new ProductionScheduleSettingsAPI.ProductionScheduleSettings(this._client);
   locations: LocationsAPI.Locations = new LocationsAPI.Locations(this._client);
   locationTypes: LocationTypesAPI.LocationTypes = new LocationTypesAPI.LocationTypes(this._client);
+  shipments: ShipmentsAPI.Shipments = new ShipmentsAPI.Shipments(this._client);
   scanningStations: ScanningStationsAPI.ScanningStations = new ScanningStationsAPI.ScanningStations(
     this._client,
   );
@@ -134,7 +163,10 @@ export class Operations extends APIResource {
   /**
    * Returns the downtime reasons available when logging a stoppage.
    *
-   * The list is the same for every account and is ordered for display.
+   * The list is the same for every account and is ordered for display, so it can be
+   * rendered straight into a reason picker. Each reason carries the OEE term its
+   * stoppages charge, which is what makes the choice of reason matter beyond
+   * labeling.
    *
    * This endpoint requires the permission: `machine_downtime:read`.
    *
@@ -151,6 +183,9 @@ export class Operations extends APIResource {
   /**
    * Returns what every machine is running right now, how much is left on it, and
    * what is queued behind that.
+   *
+   * The whole floor comes back in one response rather than a page at a time, so a
+   * wall display can render it in a single call.
    *
    * Assembled from the published schedule, the batches the floor has scanned against
    * each campaign, and any open downtime. A campaign is `current` once its week is
@@ -186,6 +221,9 @@ export class Operations extends APIResource {
    * Returns the demand override types, which describe how an override's value
    * adjusts the forecast.
    *
+   * The taxonomy is platform-provided and identical for every account; each type's
+   * `code` is a value accepted as an override's `adjustment`.
+   *
    * This endpoint requires the permission: `demand_overrides:read`.
    *
    * @example
@@ -217,9 +255,9 @@ export class Operations extends APIResource {
 /**
  * A way of adjusting planned demand.
  *
- * `absolute` replaces the forecast for the period, `delta_units` adds to it, and
- * `delta_percent` scales it. When several overrides land on the same month they
- * are applied in that order.
+ * `absolute` replaces the forecast for each month an override covers,
+ * `delta_units` adds to it, and `delta_percent` scales it. When several overrides
+ * land on the same month they are applied in that order.
  */
 export interface DemandOverrideType {
   /**
@@ -228,7 +266,7 @@ export interface DemandOverrideType {
   id: string;
 
   /**
-   * Stable code used when creating an override.
+   * The value to send as an override's `adjustment`.
    */
   code: 'absolute' | 'delta_units' | 'delta_percent';
 
@@ -254,7 +292,8 @@ export interface DemandOverrideType {
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListDemandOverrideType {
   /**
@@ -268,13 +307,20 @@ export interface ListDemandOverrideType {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListMachineDowntimeReason {
   /**
@@ -288,13 +334,20 @@ export interface ListMachineDowntimeReason {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListMachineStatus {
   /**
@@ -308,13 +361,20 @@ export interface ListMachineStatus {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListScheduleDeviationType {
   /**
@@ -328,13 +388,23 @@ export interface ListScheduleDeviationType {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
 
 /**
  * One campaign on a machine, with how far through it the floor is.
+ *
+ * A campaign is one item scheduled to run on one machine for one week. Progress is
+ * taken from the batches the floor has scanned against it rather than reported by
+ * hand, so it advances on its own as a shift runs.
  */
 export interface MachineCampaign {
   /**
@@ -348,7 +418,7 @@ export interface MachineCampaign {
   planned_quantity: number;
 
   /**
-   * Constraint hours the campaign consumes.
+   * Machine hours the plan allocates to the campaign.
    */
   planned_run_hours: number;
 
@@ -392,6 +462,13 @@ export interface MachineCampaign {
 
   /**
    * Where the campaign is in its lifecycle.
+   *
+   * - `planned`: scheduled, but not yet released to the floor.
+   * - `released`: issued to the floor as a production run, so batches can be scanned
+   *   against it.
+   * - `in_progress`: being run.
+   * - `complete`: finished.
+   * - `cancelled`: will not be run.
    */
   status: 'planned' | 'released' | 'in_progress' | 'complete' | 'cancelled';
 
@@ -427,6 +504,9 @@ export interface MachineDowntimeReason {
 
   /**
    * Stable code used when logging downtime.
+   *
+   * This is the value to send as `reason` when creating or updating a downtime
+   * event.
    */
   code:
     | 'breakdown'
@@ -549,6 +629,10 @@ export interface MachineDowntimeSummary {
 export interface MachineStatus {
   /**
    * One campaign on a machine, with how far through it the floor is.
+   *
+   * A campaign is one item scheduled to run on one machine for one week. Progress is
+   * taken from the batches the floor has scanned against it rather than reported by
+   * hand, so it advances on its own as a shift runs.
    */
   current: MachineCampaign | null;
 
@@ -569,6 +653,10 @@ export interface MachineStatus {
 
   /**
    * One campaign on a machine, with how far through it the floor is.
+   *
+   * A campaign is one item scheduled to run on one machine for one week. Progress is
+   * taken from the batches the floor has scanned against it rather than reported by
+   * hand, so it advances on its own as a shift runs.
    */
   next: MachineCampaign | null;
 
@@ -592,17 +680,20 @@ export interface MachineStatus {
   unit: string | null;
 
   /**
-   * Planned for this machine this week.
+   * Quantity planned on this machine for the current week.
+   *
+   * Summed across every campaign scheduled on the machine that week, not just the
+   * current one.
    */
   week_planned_quantity: number;
 
   /**
-   * Constraint hours planned on this machine this week.
+   * Machine hours the plan allocates on this machine for the current week.
    */
   week_planned_run_hours: number;
 
   /**
-   * Scanned on this machine this week.
+   * Quantity scanned on this machine so far in the current week.
    */
   week_scanned_quantity: number;
 }
@@ -644,7 +735,11 @@ export interface ScheduleDeviationType {
 
 export interface OperationRetrieveMachineStatusParams {
   /**
-   * The moment to read the floor at. Defaults to now.
+   * The moment to read the floor at.
+   *
+   * Chooses the week the campaigns are read for, and the published schedule whose
+   * horizon covers that moment; open downtime and scan progress are always read as
+   * they stand now. Omit it to read the floor as it is at this instant.
    */
   as_of?: string;
 
@@ -656,11 +751,14 @@ export interface OperationRetrieveMachineStatusParams {
 
 Operations.ShippingTerms = ShippingTerms;
 Operations.Carriers = Carriers;
+Operations.Departments = Departments;
+Operations.Machines = Machines;
 Operations.MachineDowntimeEvents = MachineDowntimeEvents;
 Operations.DemandOverrides = DemandOverrides;
 Operations.ProductionSchedules = ProductionSchedules;
 Operations.Locations = Locations;
 Operations.LocationTypes = LocationTypes;
+Operations.Shipments = Shipments;
 Operations.ScanningStations = ScanningStations;
 
 export declare namespace Operations {
@@ -701,6 +799,30 @@ export declare namespace Operations {
     type CarrierRetrieveParams as CarrierRetrieveParams,
     type CarrierCreateParams as CarrierCreateParams,
     type CarrierUpdateParams as CarrierUpdateParams,
+  };
+
+  export {
+    Departments as Departments,
+    type CreateDepartmentRequest as CreateDepartmentRequest,
+    type DepartmentRateInput as DepartmentRateInput,
+    type ListDepartment as ListDepartment,
+    type UpdateDepartmentRequest as UpdateDepartmentRequest,
+    type DepartmentDeleteResponse as DepartmentDeleteResponse,
+    type DepartmentListParams as DepartmentListParams,
+    type DepartmentRetrieveParams as DepartmentRetrieveParams,
+    type DepartmentCreateParams as DepartmentCreateParams,
+    type DepartmentUpdateParams as DepartmentUpdateParams,
+  };
+
+  export {
+    Machines as Machines,
+    type CreateMachineRequest as CreateMachineRequest,
+    type UpdateMachineRequest as UpdateMachineRequest,
+    type MachineDeleteResponse as MachineDeleteResponse,
+    type MachineListParams as MachineListParams,
+    type MachineRetrieveParams as MachineRetrieveParams,
+    type MachineCreateParams as MachineCreateParams,
+    type MachineUpdateParams as MachineUpdateParams,
   };
 
   export {
@@ -781,6 +903,8 @@ export declare namespace Operations {
     type LocationType as LocationType,
     type LocationTypeListParams as LocationTypeListParams,
   };
+
+  export { Shipments as Shipments };
 
   export {
     ScanningStations as ScanningStations,

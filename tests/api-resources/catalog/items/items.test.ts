@@ -44,7 +44,7 @@ describe('resource items', () => {
   });
 
   test('retrieve', async () => {
-    const responsePromise = client.catalog.items.retrieve('it_0131e386ac683e8c29a71f6f1f');
+    const responsePromise = client.catalog.items.retrieve('it_pej07ckhvu62');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -58,7 +58,7 @@ describe('resource items', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.catalog.items.retrieve(
-        'it_0131e386ac683e8c29a71f6f1f',
+        'it_pej07ckhvu62',
         { include: ['category'] },
         { path: '/_stainless_unknown_path' },
       ),
@@ -66,7 +66,7 @@ describe('resource items', () => {
   });
 
   test('retrieveInventory', async () => {
-    const responsePromise = client.catalog.items.retrieveInventory('it_0131e386ac683e8c29a71f6f1f');
+    const responsePromise = client.catalog.items.retrieveInventory('it_pej07ckhvu62');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -80,7 +80,7 @@ describe('resource items', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.catalog.items.retrieveInventory(
-        'it_0131e386ac683e8c29a71f6f1f',
+        'it_pej07ckhvu62',
         { include: ['on_hand'] },
         { path: '/_stainless_unknown_path' },
       ),
@@ -88,7 +88,7 @@ describe('resource items', () => {
   });
 
   test('retrieveLotDefault', async () => {
-    const responsePromise = client.catalog.items.retrieveLotDefault('it_0131e386ac683e8c29a71f6f1f');
+    const responsePromise = client.catalog.items.retrieveLotDefault('it_pej07ckhvu62');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -102,7 +102,7 @@ describe('resource items', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.catalog.items.retrieveLotDefault(
-        'it_0131e386ac683e8c29a71f6f1f',
+        'it_pej07ckhvu62',
         { include: ['unit'] },
         { path: '/_stainless_unknown_path' },
       ),
@@ -110,9 +110,7 @@ describe('resource items', () => {
   });
 
   test('changeCategory: only required params', async () => {
-    const responsePromise = client.catalog.items.changeCategory('ic_01ae7bd7bfd21ca0ab81e1357e', {
-      id: 'it_0131e386ac683e8c29a71f6f1f',
-    });
+    const responsePromise = client.catalog.items.changeCategory('ic_d06g9c6yc9ck', { id: 'it_pej07ckhvu62' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -123,8 +121,8 @@ describe('resource items', () => {
   });
 
   test('changeCategory: required and optional params', async () => {
-    const response = await client.catalog.items.changeCategory('ic_01ae7bd7bfd21ca0ab81e1357e', {
-      id: 'it_0131e386ac683e8c29a71f6f1f',
+    const response = await client.catalog.items.changeCategory('ic_d06g9c6yc9ck', {
+      id: 'it_pej07ckhvu62',
       include: ['category'],
     });
   });

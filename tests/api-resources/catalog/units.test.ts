@@ -37,7 +37,7 @@ describe('resource units', () => {
   });
 
   test('retrieve', async () => {
-    const responsePromise = client.catalog.units.retrieve('un_01966263f74a5a0cae356000a1');
+    const responsePromise = client.catalog.units.retrieve('un_82bd37dae5po');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -51,7 +51,7 @@ describe('resource units', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.catalog.units.retrieve(
-        'un_01966263f74a5a0cae356000a1',
+        'un_82bd37dae5po',
         { include: ['owner'] },
         { path: '/_stainless_unknown_path' },
       ),
@@ -91,7 +91,7 @@ describe('resource units', () => {
   });
 
   test('update', async () => {
-    const responsePromise = client.catalog.units.update('un_01966263f74a5a0cae356000a1');
+    const responsePromise = client.catalog.units.update('un_82bd37dae5po');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -105,7 +105,7 @@ describe('resource units', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.catalog.units.update(
-        'un_01966263f74a5a0cae356000a1',
+        'un_82bd37dae5po',
         {
           include: ['owner'],
           abbreviation: 'kg',
@@ -121,7 +121,7 @@ describe('resource units', () => {
   });
 
   test('delete', async () => {
-    const responsePromise = client.catalog.units.delete('un_01966263f74a5a0cae356000a1');
+    const responsePromise = client.catalog.units.delete('un_82bd37dae5po');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

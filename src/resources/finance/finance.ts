@@ -24,7 +24,12 @@ export class Finance extends APIResource {
   paymentTerms: PaymentTermsAPI.PaymentTerms = new PaymentTermsAPI.PaymentTerms(this._client);
 
   /**
-   * Returns a paginated list of transaction types.
+   * Returns the transaction types that can be recorded against a customer: payments,
+   * credit memos, adjustments, and rebates.
+   *
+   * The set is fixed by the platform and identical for every account, so the results
+   * come back in one page; supplying a pagination cursor returns a validation error.
+   * Free-text search matches the display name.
    *
    * @example
    * ```ts
@@ -40,7 +45,12 @@ export class Finance extends APIResource {
   }
 
   /**
-   * Returns a paginated list of transaction methods.
+   * Returns the payment methods that can be recorded on a transaction, such as cash,
+   * check, and ACH.
+   *
+   * The set is fixed by the platform and identical for every account, so the results
+   * come back in one page; supplying a pagination cursor returns a validation error.
+   * Free-text search matches the display name.
    *
    * @example
    * ```ts
@@ -56,7 +66,11 @@ export class Finance extends APIResource {
   }
 
   /**
-   * Returns a paginated list of adjustment types.
+   * Returns a paginated list of the adjustment categories that can be recorded on an
+   * adjustment transaction, such as discounts, fees, and write-offs.
+   *
+   * Adjustment types are platform-provided and identical for every account.
+   * Free-text search matches the display name.
    *
    * @example
    * ```ts
@@ -75,8 +89,8 @@ export class Finance extends APIResource {
 /**
  * A category of financial adjustment, such as a discount, fee, or write-off.
  *
- * Adjustment types classify adjustment transactions recorded against customer
- * invoices.
+ * Adjustment types classify the `adjustment` transactions recorded against a
+ * customer.
  */
 export interface AdjustmentType {
   /**
@@ -124,7 +138,8 @@ export interface AdjustmentType {
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListAdjustmentType {
   /**
@@ -138,13 +153,20 @@ export interface ListAdjustmentType {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListTransactionMethod {
   /**
@@ -158,13 +180,20 @@ export interface ListTransactionMethod {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListTransactionType {
   /**
@@ -178,7 +207,13 @@ export interface ListTransactionType {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }

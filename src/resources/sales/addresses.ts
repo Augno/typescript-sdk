@@ -13,6 +13,10 @@ export class Addresses extends APIResource {
   /**
    * Returns a paginated list of addresses.
    *
+   * Addresses belonging to the account you are acting in are returned newest first.
+   * The `q` search term matches the address name, street lines, city, state, postal
+   * code, and country.
+   *
    * This endpoint requires the permissions: `addresses:read`, `customers:read`,
    * `suppliers:read`.
    *
@@ -34,7 +38,7 @@ export class Addresses extends APIResource {
    * @example
    * ```ts
    * const address = await client.sales.addresses.retrieve(
-   *   'ad_012100950cfaa34aa0e0ad7258',
+   *   'ad_j8cz0b79pwdb',
    * );
    * ```
    */
@@ -44,6 +48,10 @@ export class Addresses extends APIResource {
 
   /**
    * Creates an address.
+   *
+   * The address is saved to the account you are acting in, which may be your own
+   * account or a customer or supplier account you manage, and can then be used as a
+   * billing or shipping address on sales orders, invoices, and shipments.
    *
    * This endpoint requires the permissions: `addresses:create`, `customers:update`,
    * `suppliers:update`.
@@ -80,7 +88,7 @@ export class Addresses extends APIResource {
    * @example
    * ```ts
    * const address = await client.sales.addresses.update(
-   *   'ad_012100950cfaa34aa0e0ad7258',
+   *   'ad_j8cz0b79pwdb',
    *   {
    *     country: 'US',
    *     email: 'warehouse@acme.com',
@@ -116,7 +124,7 @@ export class Addresses extends APIResource {
    * @example
    * ```ts
    * const address = await client.sales.addresses.delete(
-   *   'ad_012100950cfaa34aa0e0ad7258',
+   *   'ad_j8cz0b79pwdb',
    * );
    * ```
    */
@@ -126,12 +134,15 @@ export class Addresses extends APIResource {
 }
 
 /**
- * Address details used to create an address, either directly or inline on another
- * resource.
+ * Address details supplied when creating an address, either on its own or inline
+ * on another resource.
+ *
+ * A few requests, such as shipping rate estimates, take these same fields for a
+ * one-off address that is never saved to the account.
  */
 export interface AddressInput {
   /**
-   * Two-letter country code.
+   * Two-letter ISO 3166-1 country code, such as `US`.
    */
   country: string;
 
@@ -186,7 +197,8 @@ export interface AddressInput {
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListAddress {
   /**
@@ -200,7 +212,13 @@ export interface ListAddress {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
@@ -297,14 +315,14 @@ export interface AddressListParams {
   q?: string;
 
   /**
-   * Filter results to a single address type.
+   * Filters results to addresses of the given type.
    */
   type?: 'standard' | 'drop_ship';
 }
 
 export interface AddressCreateParams {
   /**
-   * Two-letter country code.
+   * Two-letter ISO 3166-1 country code, such as `US`.
    */
   country: string;
 

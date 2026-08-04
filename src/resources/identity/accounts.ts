@@ -24,7 +24,7 @@ export class Accounts extends APIResource {
    * ```ts
    * const response =
    *   await client.identity.accounts.updateFavicon(
-   *     'ac_01148680966698341a9c0976db',
+   *     'ac_ykxoradjoeb3',
    *   );
    * ```
    */

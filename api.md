@@ -373,6 +373,95 @@ Methods:
 - <code title="delete /v1/catalog/products/{id}">client.catalog.products.<a href="./src/resources/catalog/products.ts">delete</a>(id, { ...params }) -> Product</code>
 - <code title="put /v1/catalog/products/{id}/product-line/{product_line_id}">client.catalog.products.<a href="./src/resources/catalog/products.ts">changeProductLine</a>(productLineID, { ...params }) -> Product</code>
 
+# AI
+
+Types:
+
+- <code><a href="./src/resources/ai/ai.ts">AvailableTool</a></code>
+- <code><a href="./src/resources/ai/ai.ts">ListAvailableTool</a></code>
+- <code><a href="./src/resources/ai/ai.ts">ListToolGroup</a></code>
+- <code><a href="./src/resources/ai/ai.ts">ToolGroup</a></code>
+
+Methods:
+
+- <code title="get /v1/ai/tools">client.ai.<a href="./src/resources/ai/ai.ts">retrieveTools</a>({ ...params }) -> ListAvailableTool</code>
+- <code title="get /v1/ai/tool-groups">client.ai.<a href="./src/resources/ai/ai.ts">retrieveToolGroups</a>({ ...params }) -> ListToolGroup</code>
+
+## Agents
+
+Types:
+
+- <code><a href="./src/resources/ai/agents.ts">AgentDefinition</a></code>
+- <code><a href="./src/resources/ai/agents.ts">AgentDefinitionConfig</a></code>
+- <code><a href="./src/resources/ai/agents.ts">AgentDefinitionTool</a></code>
+- <code><a href="./src/resources/ai/agents.ts">ConfigInput</a></code>
+- <code><a href="./src/resources/ai/agents.ts">CreateAgentRequest</a></code>
+- <code><a href="./src/resources/ai/agents.ts">ListAgentDefinition</a></code>
+- <code><a href="./src/resources/ai/agents.ts">ListAgentDefinitionTool</a></code>
+- <code><a href="./src/resources/ai/agents.ts">ToolInput</a></code>
+- <code><a href="./src/resources/ai/agents.ts">TriggerConfig</a></code>
+- <code><a href="./src/resources/ai/agents.ts">TriggerConfigInput</a></code>
+- <code><a href="./src/resources/ai/agents.ts">UpdateAgentRequest</a></code>
+- <code><a href="./src/resources/ai/agents.ts">UpdateAgentStatusRequest</a></code>
+- <code><a href="./src/resources/ai/agents.ts">AgentDeleteResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/ai/agents">client.ai.agents.<a href="./src/resources/ai/agents.ts">create</a>({ ...params }) -> AgentDefinition</code>
+- <code title="get /v1/ai/agents">client.ai.agents.<a href="./src/resources/ai/agents.ts">list</a>({ ...params }) -> ListAgentDefinition</code>
+- <code title="get /v1/ai/agents/{id}">client.ai.agents.<a href="./src/resources/ai/agents.ts">retrieve</a>(id, { ...params }) -> AgentDefinition</code>
+- <code title="patch /v1/ai/agents/{id}">client.ai.agents.<a href="./src/resources/ai/agents.ts">update</a>(id, { ...params }) -> AgentDefinition</code>
+- <code title="delete /v1/ai/agents/{id}">client.ai.agents.<a href="./src/resources/ai/agents.ts">delete</a>(id) -> AgentDeleteResponse</code>
+- <code title="put /v1/ai/agents/{id}/status">client.ai.agents.<a href="./src/resources/ai/agents.ts">updateStatus</a>(id, { ...params }) -> AgentDefinition</code>
+
+## Runs
+
+Types:
+
+- <code><a href="./src/resources/ai/runs/runs.ts">AgentAction</a></code>
+- <code><a href="./src/resources/ai/runs/runs.ts">AgentRun</a></code>
+- <code><a href="./src/resources/ai/runs/runs.ts">AgentRunStep</a></code>
+- <code><a href="./src/resources/ai/runs/runs.ts">ListAgentAction</a></code>
+- <code><a href="./src/resources/ai/runs/runs.ts">ListAgentRun</a></code>
+- <code><a href="./src/resources/ai/runs/runs.ts">ListAgentRunStep</a></code>
+- <code><a href="./src/resources/ai/runs/runs.ts">TriggerRunRequest</a></code>
+
+Methods:
+
+- <code title="get /v1/ai/runs">client.ai.runs.<a href="./src/resources/ai/runs/runs.ts">list</a>({ ...params }) -> ListAgentRun</code>
+- <code title="get /v1/ai/runs/{id}">client.ai.runs.<a href="./src/resources/ai/runs/runs.ts">retrieve</a>(id, { ...params }) -> AgentRun</code>
+- <code title="post /v1/ai/runs">client.ai.runs.<a href="./src/resources/ai/runs/runs.ts">create</a>({ ...params }) -> AgentRun</code>
+
+### Actions
+
+Types:
+
+- <code><a href="./src/resources/ai/runs/actions.ts">ContinueRunRequest</a></code>
+
+Methods:
+
+- <code title="post /v1/ai/runs/{id}/actions/cancel">client.ai.runs.actions.<a href="./src/resources/ai/runs/actions.ts">cancel</a>(id, { ...params }) -> AgentRun</code>
+- <code title="post /v1/ai/runs/{id}/actions/continue">client.ai.runs.actions.<a href="./src/resources/ai/runs/actions.ts">continue</a>(id, { ...params }) -> AgentRun</code>
+- <code title="post /v1/ai/runs/{id}/actions/retry">client.ai.runs.actions.<a href="./src/resources/ai/runs/actions.ts">retry</a>(id, { ...params }) -> AgentRun</code>
+
+## Memories
+
+Types:
+
+- <code><a href="./src/resources/ai/memories.ts">AgentMemory</a></code>
+- <code><a href="./src/resources/ai/memories.ts">CreateMemoryRequest</a></code>
+- <code><a href="./src/resources/ai/memories.ts">ListAgentMemory</a></code>
+- <code><a href="./src/resources/ai/memories.ts">UpdateMemoryRequest</a></code>
+- <code><a href="./src/resources/ai/memories.ts">MemoryDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/ai/memories">client.ai.memories.<a href="./src/resources/ai/memories.ts">list</a>({ ...params }) -> ListAgentMemory</code>
+- <code title="get /v1/ai/memories/{id}">client.ai.memories.<a href="./src/resources/ai/memories.ts">retrieve</a>(id) -> AgentMemory</code>
+- <code title="post /v1/ai/memories">client.ai.memories.<a href="./src/resources/ai/memories.ts">create</a>({ ...params }) -> AgentMemory</code>
+- <code title="patch /v1/ai/memories/{id}">client.ai.memories.<a href="./src/resources/ai/memories.ts">update</a>(id, { ...params }) -> AgentMemory</code>
+- <code title="delete /v1/ai/memories/{id}">client.ai.memories.<a href="./src/resources/ai/memories.ts">delete</a>(id) -> MemoryDeleteResponse</code>
+
 # Messaging
 
 Types:
@@ -442,19 +531,9 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/messaging/conversations/conversations.ts">AgentAction</a></code>
-- <code><a href="./src/resources/messaging/conversations/conversations.ts">AgentDefinition</a></code>
-- <code><a href="./src/resources/messaging/conversations/conversations.ts">AgentDefinitionConfig</a></code>
-- <code><a href="./src/resources/messaging/conversations/conversations.ts">AgentDefinitionTool</a></code>
-- <code><a href="./src/resources/messaging/conversations/conversations.ts">AgentRun</a></code>
-- <code><a href="./src/resources/messaging/conversations/conversations.ts">AgentRunStep</a></code>
-- <code><a href="./src/resources/messaging/conversations/conversations.ts">AvailableTool</a></code>
 - <code><a href="./src/resources/messaging/conversations/conversations.ts">Conversation</a></code>
 - <code><a href="./src/resources/messaging/conversations/conversations.ts">ConversationParticipant</a></code>
 - <code><a href="./src/resources/messaging/conversations/conversations.ts">CreateConversationRequest</a></code>
-- <code><a href="./src/resources/messaging/conversations/conversations.ts">ListAgentAction</a></code>
-- <code><a href="./src/resources/messaging/conversations/conversations.ts">ListAgentDefinitionTool</a></code>
-- <code><a href="./src/resources/messaging/conversations/conversations.ts">ListAgentRunStep</a></code>
 - <code><a href="./src/resources/messaging/conversations/conversations.ts">ListConversation</a></code>
 - <code><a href="./src/resources/messaging/conversations/conversations.ts">ListConversationParticipant</a></code>
 - <code><a href="./src/resources/messaging/conversations/conversations.ts">ListMessageAttachment</a></code>
@@ -464,7 +543,6 @@ Types:
 - <code><a href="./src/resources/messaging/conversations/conversations.ts">MessagingGroup</a></code>
 - <code><a href="./src/resources/messaging/conversations/conversations.ts">MessagingGroupMember</a></code>
 - <code><a href="./src/resources/messaging/conversations/conversations.ts">ReadCursor</a></code>
-- <code><a href="./src/resources/messaging/conversations/conversations.ts">TriggerConfig</a></code>
 - <code><a href="./src/resources/messaging/conversations/conversations.ts">UpdateConversationRequest</a></code>
 
 Methods:
@@ -746,6 +824,23 @@ Methods:
 - <code title="get /v1/sales/account-statuses">client.sales.accountStatuses.<a href="./src/resources/sales/account-statuses.ts">list</a>({ ...params }) -> ListAccountStatus</code>
 - <code title="get /v1/sales/account-statuses/{id}">client.sales.accountStatuses.<a href="./src/resources/sales/account-statuses.ts">retrieve</a>(id, { ...params }) -> AccountStatus</code>
 
+## AccountUsers
+
+### SalesTargets
+
+Types:
+
+- <code><a href="./src/resources/sales/account-users/sales-targets.ts">CreateSalesTargetRequest</a></code>
+- <code><a href="./src/resources/sales/account-users/sales-targets.ts">ListSalesTarget</a></code>
+- <code><a href="./src/resources/sales/account-users/sales-targets.ts">SalesTarget</a></code>
+- <code><a href="./src/resources/sales/account-users/sales-targets.ts">UpsertSalesTargetRequest</a></code>
+
+Methods:
+
+- <code title="get /v1/sales/account-users/{id}/sales-targets">client.sales.accountUsers.salesTargets.<a href="./src/resources/sales/account-users/sales-targets.ts">list</a>(id, { ...params }) -> ListSalesTarget</code>
+- <code title="post /v1/sales/account-users/{id}/sales-targets">client.sales.accountUsers.salesTargets.<a href="./src/resources/sales/account-users/sales-targets.ts">create</a>(id, { ...params }) -> SalesTarget</code>
+- <code title="put /v1/sales/account-users/{id}/sales-targets/{target_id}">client.sales.accountUsers.salesTargets.<a href="./src/resources/sales/account-users/sales-targets.ts">update</a>(targetID, { ...params }) -> SalesTarget</code>
+
 ## Priorities
 
 Types:
@@ -1005,6 +1100,40 @@ Methods:
 - <code title="patch /v1/operations/carriers/{carrier_id}/service-levels/{id}">client.operations.carriers.serviceLevels.<a href="./src/resources/operations/carriers/service-levels.ts">update</a>(id, { ...params }) -> ServiceLevel</code>
 - <code title="delete /v1/operations/carriers/{carrier_id}/service-levels/{id}">client.operations.carriers.serviceLevels.<a href="./src/resources/operations/carriers/service-levels.ts">delete</a>(id, { ...params }) -> ServiceLevelDeleteResponse</code>
 
+## Departments
+
+Types:
+
+- <code><a href="./src/resources/operations/departments.ts">CreateDepartmentRequest</a></code>
+- <code><a href="./src/resources/operations/departments.ts">DepartmentRateInput</a></code>
+- <code><a href="./src/resources/operations/departments.ts">ListDepartment</a></code>
+- <code><a href="./src/resources/operations/departments.ts">UpdateDepartmentRequest</a></code>
+- <code><a href="./src/resources/operations/departments.ts">DepartmentDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/operations/departments">client.operations.departments.<a href="./src/resources/operations/departments.ts">list</a>({ ...params }) -> ListDepartment</code>
+- <code title="get /v1/operations/departments/{id}">client.operations.departments.<a href="./src/resources/operations/departments.ts">retrieve</a>(id, { ...params }) -> Department</code>
+- <code title="post /v1/operations/departments">client.operations.departments.<a href="./src/resources/operations/departments.ts">create</a>({ ...params }) -> Department</code>
+- <code title="patch /v1/operations/departments/{id}">client.operations.departments.<a href="./src/resources/operations/departments.ts">update</a>(id, { ...params }) -> Department</code>
+- <code title="delete /v1/operations/departments/{id}">client.operations.departments.<a href="./src/resources/operations/departments.ts">delete</a>(id) -> DepartmentDeleteResponse</code>
+
+## Machines
+
+Types:
+
+- <code><a href="./src/resources/operations/machines.ts">CreateMachineRequest</a></code>
+- <code><a href="./src/resources/operations/machines.ts">UpdateMachineRequest</a></code>
+- <code><a href="./src/resources/operations/machines.ts">MachineDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/operations/machines">client.operations.machines.<a href="./src/resources/operations/machines.ts">list</a>({ ...params }) -> ListMachine</code>
+- <code title="get /v1/operations/machines/{id}">client.operations.machines.<a href="./src/resources/operations/machines.ts">retrieve</a>(id, { ...params }) -> Machine</code>
+- <code title="post /v1/operations/machines">client.operations.machines.<a href="./src/resources/operations/machines.ts">create</a>({ ...params }) -> Machine</code>
+- <code title="patch /v1/operations/machines/{id}">client.operations.machines.<a href="./src/resources/operations/machines.ts">update</a>(id, { ...params }) -> Machine</code>
+- <code title="delete /v1/operations/machines/{id}">client.operations.machines.<a href="./src/resources/operations/machines.ts">delete</a>(id) -> MachineDeleteResponse</code>
+
 ## MachineDowntimeEvents
 
 Types:
@@ -1180,6 +1309,22 @@ Methods:
 - <code title="get /v1/operations/location-types">client.operations.locationTypes.<a href="./src/resources/operations/location-types.ts">list</a>({ ...params }) -> ListLocationType</code>
 - <code title="get /v1/operations/location-types/{id}">client.operations.locationTypes.<a href="./src/resources/operations/location-types.ts">retrieve</a>(id) -> LocationType</code>
 
+## Shipments
+
+### Actions
+
+Types:
+
+- <code><a href="./src/resources/operations/shipments/actions.ts">ListRateShopOption</a></code>
+- <code><a href="./src/resources/operations/shipments/actions.ts">ParcelInput</a></code>
+- <code><a href="./src/resources/operations/shipments/actions.ts">RateShopOption</a></code>
+- <code><a href="./src/resources/operations/shipments/actions.ts">RateShopRequest</a></code>
+- <code><a href="./src/resources/operations/shipments/actions.ts">RateShopResult</a></code>
+
+Methods:
+
+- <code title="post /v1/operations/shipments/actions/rate-shop">client.operations.shipments.actions.<a href="./src/resources/operations/shipments/actions.ts">rateShop</a>({ ...params }) -> RateShopResult</code>
+
 ## ScanningStations
 
 Types:
@@ -1197,6 +1342,17 @@ Methods:
 - <code title="delete /v1/operations/scanning-stations/{id}">client.operations.scanningStations.<a href="./src/resources/operations/scanning-stations.ts">delete</a>(id) -> ScanningStationDeleteResponse</code>
 
 # Identity
+
+Types:
+
+- <code><a href="./src/resources/identity/identity.ts">ListPermission</a></code>
+- <code><a href="./src/resources/identity/identity.ts">ListPermissionGroup</a></code>
+- <code><a href="./src/resources/identity/identity.ts">Permission</a></code>
+- <code><a href="./src/resources/identity/identity.ts">PermissionGroup</a></code>
+
+Methods:
+
+- <code title="get /v1/identity/permission-groups">client.identity.<a href="./src/resources/identity/identity.ts">retrievePermissionGroups</a>({ ...params }) -> ListPermissionGroup</code>
 
 ## AccountUsers
 

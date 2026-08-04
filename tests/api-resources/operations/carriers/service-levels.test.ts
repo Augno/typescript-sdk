@@ -9,7 +9,7 @@ const client = new Augno({
 
 describe('resource serviceLevels', () => {
   test('list', async () => {
-    const responsePromise = client.operations.carriers.serviceLevels.list('cr_01784fd54c9ba197bb4e42f0e6');
+    const responsePromise = client.operations.carriers.serviceLevels.list('cr_tv5vfjtgu1n3');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -23,7 +23,7 @@ describe('resource serviceLevels', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.operations.carriers.serviceLevels.list(
-        'cr_01784fd54c9ba197bb4e42f0e6',
+        'cr_tv5vfjtgu1n3',
         {
           cursor: 'cursor',
           include: ['owner'],
@@ -36,10 +36,9 @@ describe('resource serviceLevels', () => {
   });
 
   test('retrieve: only required params', async () => {
-    const responsePromise = client.operations.carriers.serviceLevels.retrieve(
-      'crop_01cfaf03f104e90ef9680e2a30',
-      { carrier_id: 'cr_01784fd54c9ba197bb4e42f0e6' },
-    );
+    const responsePromise = client.operations.carriers.serviceLevels.retrieve('crop_4ilk9p6gccrx', {
+      carrier_id: 'cr_tv5vfjtgu1n3',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -50,14 +49,14 @@ describe('resource serviceLevels', () => {
   });
 
   test('retrieve: required and optional params', async () => {
-    const response = await client.operations.carriers.serviceLevels.retrieve(
-      'crop_01cfaf03f104e90ef9680e2a30',
-      { carrier_id: 'cr_01784fd54c9ba197bb4e42f0e6', include: ['owner'] },
-    );
+    const response = await client.operations.carriers.serviceLevels.retrieve('crop_4ilk9p6gccrx', {
+      carrier_id: 'cr_tv5vfjtgu1n3',
+      include: ['owner'],
+    });
   });
 
   test('create: only required params', async () => {
-    const responsePromise = client.operations.carriers.serviceLevels.create('cr_01784fd54c9ba197bb4e42f0e6', {
+    const responsePromise = client.operations.carriers.serviceLevels.create('cr_tv5vfjtgu1n3', {
       code: 'ground',
       is_default: false,
       name: 'Ground Shipping',
@@ -72,7 +71,7 @@ describe('resource serviceLevels', () => {
   });
 
   test('create: required and optional params', async () => {
-    const response = await client.operations.carriers.serviceLevels.create('cr_01784fd54c9ba197bb4e42f0e6', {
+    const response = await client.operations.carriers.serviceLevels.create('cr_tv5vfjtgu1n3', {
       code: 'ground',
       is_default: false,
       name: 'Ground Shipping',
@@ -82,10 +81,9 @@ describe('resource serviceLevels', () => {
   });
 
   test('update: only required params', async () => {
-    const responsePromise = client.operations.carriers.serviceLevels.update(
-      'crop_01cfaf03f104e90ef9680e2a30',
-      { carrier_id: 'cr_01784fd54c9ba197bb4e42f0e6' },
-    );
+    const responsePromise = client.operations.carriers.serviceLevels.update('crop_4ilk9p6gccrx', {
+      carrier_id: 'cr_tv5vfjtgu1n3',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -96,24 +94,20 @@ describe('resource serviceLevels', () => {
   });
 
   test('update: required and optional params', async () => {
-    const response = await client.operations.carriers.serviceLevels.update(
-      'crop_01cfaf03f104e90ef9680e2a30',
-      {
-        carrier_id: 'cr_01784fd54c9ba197bb4e42f0e6',
-        include: ['owner'],
-        code: 'express',
-        customer_portal_visibility: 'visible',
-        is_default: false,
-        name: 'Express Shipping',
-      },
-    );
+    const response = await client.operations.carriers.serviceLevels.update('crop_4ilk9p6gccrx', {
+      carrier_id: 'cr_tv5vfjtgu1n3',
+      include: ['owner'],
+      code: 'express',
+      customer_portal_visibility: 'visible',
+      is_default: false,
+      name: 'Express Shipping',
+    });
   });
 
   test('delete: only required params', async () => {
-    const responsePromise = client.operations.carriers.serviceLevels.delete(
-      'crop_01cfaf03f104e90ef9680e2a30',
-      { carrier_id: 'cr_01784fd54c9ba197bb4e42f0e6' },
-    );
+    const responsePromise = client.operations.carriers.serviceLevels.delete('crop_4ilk9p6gccrx', {
+      carrier_id: 'cr_tv5vfjtgu1n3',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -124,9 +118,8 @@ describe('resource serviceLevels', () => {
   });
 
   test('delete: required and optional params', async () => {
-    const response = await client.operations.carriers.serviceLevels.delete(
-      'crop_01cfaf03f104e90ef9680e2a30',
-      { carrier_id: 'cr_01784fd54c9ba197bb4e42f0e6' },
-    );
+    const response = await client.operations.carriers.serviceLevels.delete('crop_4ilk9p6gccrx', {
+      carrier_id: 'cr_tv5vfjtgu1n3',
+    });
   });
 });

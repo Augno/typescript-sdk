@@ -19,7 +19,12 @@ export class Items extends APIResource {
   attributes: AttributesAPI.Attributes = new AttributesAPI.Attributes(this._client);
 
   /**
-   * Returns a paginated list of items.
+   * Returns a paginated list of items, newest first.
+   *
+   * Items backed by a non-sale product — the service, shipping, tax, credit, and
+   * return products that carry charges on orders — are left out, so this reflects
+   * the catalog you sell and stock rather than every item row. `q` matches against
+   * SKU and description, with closer SKU matches ranked first.
    *
    * This endpoint requires the permission: `items:read`.
    *
@@ -33,14 +38,14 @@ export class Items extends APIResource {
   }
 
   /**
-   * Returns an item by ID.
+   * Returns a single item by ID.
    *
    * This endpoint requires the permission: `items:read`.
    *
    * @example
    * ```ts
    * const item = await client.catalog.items.retrieve(
-   *   'it_0131e386ac683e8c29a71f6f1f',
+   *   'it_pej07ckhvu62',
    * );
    * ```
    */
@@ -53,8 +58,12 @@ export class Items extends APIResource {
   }
 
   /**
-   * Returns inventory quantities for an item, including on-hand, reserved,
-   * available-to-promise, and short amounts.
+   * Returns the stock position for an item: what is on hand, what is reserved
+   * against existing orders, what is free to promise, and what is short.
+   *
+   * Stock your account either owns or holds counts toward the on-hand figure, so
+   * customer-supplied material sitting in your facility is included. All four
+   * quantities are reported in the base unit of the item's category.
    *
    * This endpoint requires the permission: `items:read`.
    *
@@ -62,7 +71,7 @@ export class Items extends APIResource {
    * ```ts
    * const itemInventory =
    *   await client.catalog.items.retrieveInventory(
-   *     'it_0131e386ac683e8c29a71f6f1f',
+   *     'it_pej07ckhvu62',
    *   );
    * ```
    */
@@ -96,7 +105,7 @@ export class Items extends APIResource {
    * ```ts
    * const itemLotDefault =
    *   await client.catalog.items.retrieveLotDefault(
-   *     'it_0131e386ac683e8c29a71f6f1f',
+   *     'it_pej07ckhvu62',
    *   );
    * ```
    */
@@ -109,19 +118,23 @@ export class Items extends APIResource {
   }
 
   /**
-   * Moves an item to a different category.
+   * Moves an item to a different category and returns the updated item.
    *
    * The item's rate units (unit value, unit cost, burn rate) and any related
-   * order-point, consumption, and production quantity units are updated to the new
-   * category's base unit. Re-assigning the item's current category is a no-op.
+   * order-point, consumption, and production quantity units are switched to the new
+   * category's base unit. Only the units change — the numbers attached to them are
+   * carried over as they were, so review any figure whose meaning depends on the
+   * unit after moving between categories that count differently.
+   *
+   * Re-assigning the item's current category succeeds and changes nothing.
    *
    * This endpoint requires the permission: `items:update`.
    *
    * @example
    * ```ts
    * const item = await client.catalog.items.changeCategory(
-   *   'ic_01ae7bd7bfd21ca0ab81e1357e',
-   *   { id: 'it_0131e386ac683e8c29a71f6f1f' },
+   *   'ic_d06g9c6yc9ck',
+   *   { id: 'it_pej07ckhvu62' },
    * );
    * ```
    */
@@ -139,7 +152,7 @@ export class Items extends APIResource {
 }
 
 /**
- * Item is an inventory item (product, material, or part).
+ * An entry in your catalog: something you sell, consume, or build with.
  */
 export interface Item {
   /**
@@ -148,7 +161,8 @@ export interface Item {
   id: string;
 
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   attributes: PropertiesAPI.ListAttribute | null;
 
@@ -252,25 +266,31 @@ export interface ItemCategory {
   owner: APIKeysAPI.Owner | null;
 
   /**
-   * List represents a paginated list of resources.
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
    */
   properties: PropertiesAPI.ListProperty | null;
 
   /**
    * What kind of items this category groups.
    *
-   * An item can only be assigned to a category whose type matches the item's `type`.
-   *
    * - `material_category`: groups raw materials and components (items of type
    *   `material`).
    * - `product_category`: groups finished products and parts (items of type
    *   `product` or `part`).
+   *
+   * An item can only be assigned to a category whose type matches the item's `type`,
+   * and the category's type is fixed at creation.
    */
   type: 'material_category' | 'product_category';
 
   /**
-   * Named collection of units sharing one dimension, defining which units products
-   * can be ordered in along with per-unit discounts and customer portal visibility.
+   * A named collection of units that share one dimension, defining which units a
+   * product can be ordered in.
+   *
+   * Each associated unit carries its own discount and customer portal visibility,
+   * applied when an order line is priced in that unit. A product takes its unit
+   * group from its product line, falling back to its item category.
    */
   unit_group: UnitGroupsAPI.UnitGroup | null;
 
@@ -281,11 +301,19 @@ export interface ItemCategory {
 }
 
 /**
- * ItemInventory contains inventory quantities for an item.
+ * The stock position for an item: what is in stock, what is already committed, and
+ * what is still free to sell.
+ *
+ * All four quantities are reported in the same unit — the base unit of the item's
+ * category.
  */
 export interface ItemInventory {
   /**
-   * Value with an associated unit.
+   * A measured amount: a numeric value together with the unit it is expressed in.
+   *
+   * Quantities are shared building blocks rather than standalone records — other
+   * resources point at them to report stock levels, ordered and packed amounts,
+   * money, weights, and durations.
    */
   available_to_promise: Quantity | null;
 
@@ -295,17 +323,29 @@ export interface ItemInventory {
   object: 'item_inventory';
 
   /**
-   * Value with an associated unit.
+   * A measured amount: a numeric value together with the unit it is expressed in.
+   *
+   * Quantities are shared building blocks rather than standalone records — other
+   * resources point at them to report stock levels, ordered and packed amounts,
+   * money, weights, and durations.
    */
   on_hand: Quantity | null;
 
   /**
-   * Value with an associated unit.
+   * A measured amount: a numeric value together with the unit it is expressed in.
+   *
+   * Quantities are shared building blocks rather than standalone records — other
+   * resources point at them to report stock levels, ordered and packed amounts,
+   * money, weights, and durations.
    */
   reserved: Quantity | null;
 
   /**
-   * Value with an associated unit.
+   * A measured amount: a numeric value together with the unit it is expressed in.
+   *
+   * Quantities are shared building blocks rather than standalone records — other
+   * resources point at them to report stock levels, ordered and packed amounts,
+   * money, weights, and durations.
    */
   short: Quantity | null;
 }
@@ -348,6 +388,9 @@ export interface ItemLotDefault {
    * - `downstream_product_line`: inherited from the finished goods this item
    *   becomes, for intermediates that are not themselves sold.
    * - `account_default`: the account-wide fallback.
+   *
+   * Empty when no rule in the chain supplies a lot, which is the same case
+   * `quantity` reports as `0`.
    */
   source: 'item_override' | 'product_line' | 'downstream_product_line' | 'account_default' | '';
 
@@ -358,7 +401,8 @@ export interface ItemLotDefault {
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListItem {
   /**
@@ -372,13 +416,23 @@ export interface ListItem {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
 
 /**
- * Value with an associated unit.
+ * A measured amount: a numeric value together with the unit it is expressed in.
+ *
+ * Quantities are shared building blocks rather than standalone records — other
+ * resources point at them to report stock levels, ordered and packed amounts,
+ * money, weights, and durations.
  */
 export interface Quantity {
   /**
@@ -460,12 +514,12 @@ export interface Rate {
 
 export interface ItemListParams {
   /**
-   * Filter by attribute IDs.
+   * Filter to items carrying any of these attributes.
    */
   attribute_ids?: Array<string>;
 
   /**
-   * Filter by category IDs.
+   * Filter to items in any of these categories.
    */
   category_ids?: Array<string>;
 
@@ -479,13 +533,16 @@ export interface ItemListParams {
   cursor?: string;
 
   /**
-   * Filter by customer account IDs (only items whose product line is accessible to
-   * any of these customers).
+   * Filter to items any of these customers are allowed to order.
+   *
+   * A customer qualifies when its relationship, its account group, or its price
+   * group grants access to the product line the item's product sits in. Items with
+   * no product line, including materials and parts, never match.
    */
   customer_ids?: Array<string>;
 
   /**
-   * Filter items created on or before this date.
+   * Filter to items created on or before this date.
    */
   end_date?: string;
 
@@ -512,8 +569,7 @@ export interface ItemListParams {
   limit?: number;
 
   /**
-   * Filter by product line IDs (only items whose product belongs to one of these
-   * lines).
+   * Filter to items whose product belongs to any of these product lines.
    */
   product_line_ids?: Array<string>;
 
@@ -525,7 +581,7 @@ export interface ItemListParams {
   q?: string;
 
   /**
-   * Filter items created on or after this date.
+   * Filter to items created on or after this date.
    */
   start_date?: string;
 
@@ -539,7 +595,10 @@ export interface ItemListParams {
   subassembly_filter?: 'all' | 'initial_only';
 
   /**
-   * Filter by supplier ID.
+   * Filter to materials this supplier account supplies to you.
+   *
+   * Only materials can have suppliers, so combining this with a `types` filter that
+   * excludes `material` returns nothing.
    */
   supplier_id?: string;
 

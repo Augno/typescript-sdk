@@ -26,7 +26,7 @@ describe('resource analytics', () => {
     const response = await client.core.analytics.updateOee({
       end_date: '2026-05-10T00:23:00Z',
       start_date: '2026-05-10T00:00:00Z',
-      department_ids: ['dp_01791c25ab59da4704cba61874'],
+      department_ids: ['dp_m0jayebxnkos'],
       planned_time: [{ department_id: 'department_id', planned_hours: 0 }],
     });
   });

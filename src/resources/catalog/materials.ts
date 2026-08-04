@@ -12,7 +12,9 @@ import { path } from '../../internal/utils/path';
  */
 export class Materials extends APIResource {
   /**
-   * Returns a paginated list of materials.
+   * Returns a paginated list of materials, newest first.
+   *
+   * `q` matches against SKU and description, with closer SKU matches ranked first.
    *
    * This endpoint requires the permissions: `materials:read`, `customers:read`,
    * `suppliers:read`.
@@ -38,7 +40,7 @@ export class Materials extends APIResource {
    * @example
    * ```ts
    * const material = await client.catalog.materials.retrieve(
-   *   'ml_014613b8f7959a091d8cc0cef4',
+   *   'ml_ow202v78slbl',
    * );
    * ```
    */
@@ -51,10 +53,13 @@ export class Materials extends APIResource {
   }
 
   /**
-   * Creates a material with the specified SKU and category.
+   * Creates a material together with the catalog item that carries its SKU,
+   * description, category, pricing, and attributes.
    *
    * Inventory tracking for the new material starts at a zero on-hand quantity in the
-   * category's base unit.
+   * category's base unit. The item's consumption rate (`burn_rate`) also starts at
+   * zero and cannot be supplied here — it is derived from recorded consumption as
+   * production happens.
    *
    * This endpoint requires the permissions: `materials:create`, `customers:update`,
    * `suppliers:update`.
@@ -62,30 +67,27 @@ export class Materials extends APIResource {
    * @example
    * ```ts
    * const material = await client.catalog.materials.create({
-   *   category_id: 'ic_01ae7bd7bfd21ca0ab81e1357e',
+   *   category_id: 'ic_d06g9c6yc9ck',
    *   sku: 'MAT-001',
-   *   attribute_ids: ['at_01c9493ec0c46bb0ed12708ae4'],
+   *   attribute_ids: ['at_rf1w295jt5ia'],
    *   description:
    *     'Cold-rolled 304 stainless steel sheet, 1.5mm',
-   *   lead_time: {
-   *     value: '7.00',
-   *     unit_id: 'un_01966263f74a5a0cae356000a1',
-   *   },
+   *   lead_time: { value: '7.00', unit_id: 'un_82bd37dae5po' },
    *   notes:
    *     'Store flat in a dry area to avoid surface oxidation.',
    *   order_point: {
    *     value: '100.00',
-   *     unit_id: 'un_01966263f74a5a0cae356000a1',
+   *     unit_id: 'un_82bd37dae5po',
    *   },
    *   unit_cost: {
    *     value: '8.25',
-   *     numerator_unit_id: 'un_01966263f74a5a0cae356000a1',
-   *     denominator_unit_id: 'un_01966263f74a5a0cae356000a1',
+   *     numerator_unit_id: 'un_82bd37dae5po',
+   *     denominator_unit_id: 'un_82bd37dae5po',
    *   },
    *   unit_price: {
    *     value: '12.50',
-   *     numerator_unit_id: 'un_01966263f74a5a0cae356000a1',
-   *     denominator_unit_id: 'un_01966263f74a5a0cae356000a1',
+   *     numerator_unit_id: 'un_82bd37dae5po',
+   *     denominator_unit_id: 'un_82bd37dae5po',
    *   },
    * });
    * ```
@@ -98,7 +100,10 @@ export class Materials extends APIResource {
   /**
    * Partially updates a material.
    *
-   * Fields not provided retain their current values.
+   * Fields not provided retain their current values. Only the cost side of pricing
+   * can be changed here; the selling price set at creation is not editable through
+   * this endpoint. Use the Change Item Category endpoint to move the material to a
+   * different category.
    *
    * This endpoint requires the permissions: `materials:update`, `customers:update`,
    * `suppliers:update`.
@@ -106,24 +111,24 @@ export class Materials extends APIResource {
    * @example
    * ```ts
    * const material = await client.catalog.materials.update(
-   *   'ml_014613b8f7959a091d8cc0cef4',
+   *   'ml_ow202v78slbl',
    *   {
    *     description:
    *       'Cold-rolled 304 stainless steel sheet, 2.0mm',
    *     lead_time: {
    *       value: '10.00',
-   *       unit_id: 'un_01966263f74a5a0cae356000a1',
+   *       unit_id: 'un_82bd37dae5po',
    *     },
    *     notes: 'Reorder point raised after Q2 demand spike.',
    *     order_point: {
    *       value: '150.00',
-   *       unit_id: 'un_01966263f74a5a0cae356000a1',
+   *       unit_id: 'un_82bd37dae5po',
    *     },
    *     sku: 'MAT-001-UPDATED',
    *     unit_cost: {
    *       value: '9.10',
-   *       numerator_unit_id: 'un_01966263f74a5a0cae356000a1',
-   *       denominator_unit_id: 'un_01966263f74a5a0cae356000a1',
+   *       numerator_unit_id: 'un_82bd37dae5po',
+   *       denominator_unit_id: 'un_82bd37dae5po',
    *     },
    *   },
    * );
@@ -141,9 +146,10 @@ export class Materials extends APIResource {
   /**
    * Deletes a material.
    *
-   * This is a soft delete: the material is marked deleted and no longer returned by
-   * other endpoints, but the record is retained. Deleting an already-deleted
-   * material returns an error.
+   * This is a soft delete: the material and the catalog item behind it stop being
+   * returned by other endpoints, but the records are retained. The response is the
+   * material as it stood immediately before deletion, and deleting an
+   * already-deleted material returns an error.
    *
    * This endpoint requires the permissions: `materials:delete`, `customers:update`,
    * `suppliers:update`.
@@ -151,7 +157,7 @@ export class Materials extends APIResource {
    * @example
    * ```ts
    * const material = await client.catalog.materials.delete(
-   *   'ml_014613b8f7959a091d8cc0cef4',
+   *   'ml_ow202v78slbl',
    * );
    * ```
    */
@@ -206,20 +212,27 @@ export interface CreateMaterialRequest {
   order_point?: QuantityInputRequest;
 
   /**
-   * A rate value with its numerator and denominator units, used in create and update
+   * A value expressed as a ratio of two units, supplied on create and update
    * requests.
+   *
+   * A unit price, for example, has a currency as its numerator unit and the unit the
+   * product is bought or sold by as its denominator.
    */
   unit_cost?: RateInput;
 
   /**
-   * A rate value with its numerator and denominator units, used in create and update
+   * A value expressed as a ratio of two units, supplied on create and update
    * requests.
+   *
+   * A unit price, for example, has a currency as its numerator unit and the unit the
+   * product is bought or sold by as its denominator.
    */
   unit_price?: RateInput;
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListMaterial {
   /**
@@ -233,7 +246,13 @@ export interface ListMaterial {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
@@ -258,12 +277,16 @@ export interface Material {
   created_at: string;
 
   /**
-   * Item is an inventory item (product, material, or part).
+   * An entry in your catalog: something you sell, consume, or build with.
    */
   item: ItemsAPI.Item | null;
 
   /**
-   * Value with an associated unit.
+   * A measured amount: a numeric value together with the unit it is expressed in.
+   *
+   * Quantities are shared building blocks rather than standalone records — other
+   * resources point at them to report stock levels, ordered and packed amounts,
+   * money, weights, and durations.
    */
   lead_time: ItemsAPI.Quantity | null;
 
@@ -273,7 +296,11 @@ export interface Material {
   object: 'material';
 
   /**
-   * Value with an associated unit.
+   * A measured amount: a numeric value together with the unit it is expressed in.
+   *
+   * Quantities are shared building blocks rather than standalone records — other
+   * resources point at them to report stock levels, ordered and packed amounts,
+   * money, weights, and durations.
    */
   order_point: ItemsAPI.Quantity | null;
 
@@ -299,8 +326,11 @@ export interface QuantityInputRequest {
 }
 
 /**
- * A rate value with its numerator and denominator units, used in create and update
+ * A value expressed as a ratio of two units, supplied on create and update
  * requests.
+ *
+ * A unit price, for example, has a currency as its numerator unit and the unit the
+ * product is bought or sold by as its denominator.
  */
 export interface RateInput {
   /**
@@ -353,20 +383,23 @@ export interface UpdateMaterialRequest {
   sku?: string;
 
   /**
-   * A rate value with its numerator and denominator units, used in create and update
+   * A value expressed as a ratio of two units, supplied on create and update
    * requests.
+   *
+   * A unit price, for example, has a currency as its numerator unit and the unit the
+   * product is bought or sold by as its denominator.
    */
   unit_cost?: RateInput;
 }
 
 export interface MaterialListParams {
   /**
-   * Filter by attribute IDs.
+   * Filter to materials carrying any of these attributes.
    */
   attribute_ids?: Array<string>;
 
   /**
-   * Filter by category IDs.
+   * Filter to materials in any of these categories.
    */
   category_ids?: Array<string>;
 
@@ -492,14 +525,20 @@ export interface MaterialCreateParams {
   order_point?: QuantityInputRequest;
 
   /**
-   * Body param: A rate value with its numerator and denominator units, used in
-   * create and update requests.
+   * Body param: A value expressed as a ratio of two units, supplied on create and
+   * update requests.
+   *
+   * A unit price, for example, has a currency as its numerator unit and the unit the
+   * product is bought or sold by as its denominator.
    */
   unit_cost?: RateInput;
 
   /**
-   * Body param: A rate value with its numerator and denominator units, used in
-   * create and update requests.
+   * Body param: A value expressed as a ratio of two units, supplied on create and
+   * update requests.
+   *
+   * A unit price, for example, has a currency as its numerator unit and the unit the
+   * product is bought or sold by as its denominator.
    */
   unit_price?: RateInput;
 }
@@ -549,8 +588,11 @@ export interface MaterialUpdateParams {
   sku?: string;
 
   /**
-   * Body param: A rate value with its numerator and denominator units, used in
-   * create and update requests.
+   * Body param: A value expressed as a ratio of two units, supplied on create and
+   * update requests.
+   *
+   * A unit price, for example, has a currency as its numerator unit and the unit the
+   * product is bought or sold by as its denominator.
    */
   unit_cost?: RateInput;
 }

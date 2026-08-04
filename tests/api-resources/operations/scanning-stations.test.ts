@@ -35,7 +35,7 @@ describe('resource scanningStations', () => {
   });
 
   test('retrieve', async () => {
-    const responsePromise = client.operations.scanningStations.retrieve('scst_0129335dd6286056a97024fcc1');
+    const responsePromise = client.operations.scanningStations.retrieve('scst_t71bn7lq5yov');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -49,7 +49,7 @@ describe('resource scanningStations', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.operations.scanningStations.retrieve(
-        'scst_0129335dd6286056a97024fcc1',
+        'scst_t71bn7lq5yov',
         { include: ['department'] },
         { path: '/_stainless_unknown_path' },
       ),
@@ -58,7 +58,7 @@ describe('resource scanningStations', () => {
 
   test('create: only required params', async () => {
     const responsePromise = client.operations.scanningStations.create({
-      department_id: 'dp_01791c25ab59da4704cba61874',
+      department_id: 'dp_m0jayebxnkos',
       name: 'Packaging Line 1',
       operator_requirement: 'none',
       type: 'init_batch',
@@ -74,7 +74,7 @@ describe('resource scanningStations', () => {
 
   test('create: required and optional params', async () => {
     const response = await client.operations.scanningStations.create({
-      department_id: 'dp_01791c25ab59da4704cba61874',
+      department_id: 'dp_m0jayebxnkos',
       name: 'Packaging Line 1',
       operator_requirement: 'none',
       type: 'init_batch',
@@ -86,7 +86,7 @@ describe('resource scanningStations', () => {
   });
 
   test('update', async () => {
-    const responsePromise = client.operations.scanningStations.update('scst_0129335dd6286056a97024fcc1');
+    const responsePromise = client.operations.scanningStations.update('scst_t71bn7lq5yov');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -100,7 +100,7 @@ describe('resource scanningStations', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.operations.scanningStations.update(
-        'scst_0129335dd6286056a97024fcc1',
+        'scst_t71bn7lq5yov',
         {
           include: ['department'],
           label_size: '1x1',
@@ -115,7 +115,7 @@ describe('resource scanningStations', () => {
   });
 
   test('delete', async () => {
-    const responsePromise = client.operations.scanningStations.delete('scst_0129335dd6286056a97024fcc1');
+    const responsePromise = client.operations.scanningStations.delete('scst_t71bn7lq5yov');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

@@ -33,7 +33,7 @@ export class Units extends APIResource {
    * @example
    * ```ts
    * const unit = await client.catalog.units.retrieve(
-   *   'un_01966263f74a5a0cae356000a1',
+   *   'un_82bd37dae5po',
    * );
    * ```
    */
@@ -46,7 +46,12 @@ export class Units extends APIResource {
   }
 
   /**
-   * Creates an account-owned unit.
+   * Creates a unit of measurement owned by your account, in addition to the system
+   * units the platform already provides.
+   *
+   * The name and abbreviation must each be unique within the account. A unit created
+   * here is never a base unit, so its conversion ratio is interpreted relative to
+   * the base unit of the chosen dimension.
    *
    * This endpoint requires the permission: `units:create`.
    *
@@ -69,14 +74,17 @@ export class Units extends APIResource {
   }
 
   /**
-   * Partially updates an account-owned unit; system units cannot be updated.
+   * Partially updates a unit owned by your account.
+   *
+   * System units cannot be modified, and a unit's dimension is fixed once it is
+   * created.
    *
    * This endpoint requires the permission: `units:update`.
    *
    * @example
    * ```ts
    * const unit = await client.catalog.units.update(
-   *   'un_01966263f74a5a0cae356000a1',
+   *   'un_82bd37dae5po',
    *   {
    *     abbreviation: 'kg',
    *     name: 'Kilogram',
@@ -98,17 +106,17 @@ export class Units extends APIResource {
   }
 
   /**
-   * Deletes an account-owned unit.
+   * Deletes a unit owned by your account.
    *
-   * Associated unit group memberships are also removed, and system units cannot be
-   * deleted.
+   * The unit is also removed from every unit group it belongs to. System units,
+   * which are shared across all accounts, cannot be deleted.
    *
    * This endpoint requires the permission: `units:delete`.
    *
    * @example
    * ```ts
    * const unit = await client.catalog.units.delete(
-   *   'un_01966263f74a5a0cae356000a1',
+   *   'un_82bd37dae5po',
    * );
    * ```
    */
@@ -136,39 +144,51 @@ export interface CreateUnitRequest {
   name: string;
 
   /**
-   * Conversion offset denominator.
+   * Denominator of the conversion offset.
    *
-   * Must not be zero.
+   * Must not be zero, so send `1` when the unit has no offset.
    */
   offset_denominator: string;
 
   /**
-   * Conversion offset numerator, used for temperature-like conversions.
+   * Numerator of the conversion offset, applied after the ratio for scales that do
+   * not share a zero point, such as temperature.
+   *
+   * Send `0` for units that convert by ratio alone.
    */
   offset_numerator: string;
 
   /**
-   * Conversion ratio denominator relative to the base unit.
+   * Denominator of the ratio that converts a quantity in this unit into the
+   * dimension's base unit.
    *
    * Must not be zero.
    */
   ratio_denominator: string;
 
   /**
-   * Conversion ratio numerator relative to the base unit.
+   * Numerator of the ratio that converts a quantity in this unit into the
+   * dimension's base unit.
+   *
+   * A quantity is converted with
+   * `value × (ratio_numerator / ratio_denominator) + (offset_numerator / offset_denominator)`,
+   * so a kilogram in a gram-based dimension has a numerator of `1000` and a
+   * denominator of `1`.
    */
   ratio_numerator: string;
 
   /**
-   * Unit dimension.
+   * The dimension this unit measures, such as mass, volume, or currency.
    *
-   * Units can only be converted to other units of the same dimension.
+   * Units can only be converted to other units of the same dimension, and the
+   * dimension cannot be changed after the unit is created.
    */
   type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area';
 }
 
 /**
- * List represents a paginated list of resources.
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
  */
 export interface ListUnit {
   /**
@@ -182,7 +202,13 @@ export interface ListUnit {
   object: 'list';
 
   /**
-   * PageInfo contains URL-based pagination metadata.
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
 }
@@ -209,8 +235,8 @@ export interface Unit {
   /**
    * Whether this is the base unit for its dimension.
    *
-   * Conversion ratios are relative to this unit. Base units are platform-defined;
-   * account-created units always have this set to `false`.
+   * Every other unit's conversion ratio is expressed relative to the base unit. Base
+   * units are platform-defined; units created through the API are never base units.
    */
   is_base_unit: boolean;
 
@@ -225,16 +251,18 @@ export interface Unit {
   object: 'unit';
 
   /**
-   * Conversion offset denominator.
+   * Denominator of the conversion offset applied after the ratio.
    *
-   * Typically 1. Cannot be zero.
+   * Never zero; a unit with no offset carries a numerator of `0` over a denominator
+   * of `1`.
    */
   offset_denominator: string;
 
   /**
-   * Conversion offset numerator, used for temperature-like conversions.
+   * Numerator of the conversion offset, applied after the ratio for scales that do
+   * not share a zero point, such as temperature.
    *
-   * Zero for most unit types.
+   * Zero for units that convert by ratio alone.
    */
   offset_numerator: string;
 
@@ -244,19 +272,26 @@ export interface Unit {
   owner: APIKeysAPI.Owner | null;
 
   /**
-   * Conversion ratio denominator relative to the base unit in the same dimension.
+   * Denominator of the ratio that converts a quantity in this unit into the
+   * dimension's base unit.
    *
    * Cannot be zero.
    */
   ratio_denominator: string;
 
   /**
-   * Conversion ratio numerator relative to the base unit in the same dimension.
+   * Numerator of the ratio that converts a quantity in this unit into the
+   * dimension's base unit.
+   *
+   * A quantity is converted with
+   * `value × (ratio_numerator / ratio_denominator) + (offset_numerator / offset_denominator)`,
+   * so a kilogram in a gram-based dimension has a numerator of `1000` and a
+   * denominator of `1`.
    */
   ratio_numerator: string;
 
   /**
-   * Physical dimension the unit measures, such as mass, volume, or currency.
+   * The dimension this unit measures, such as mass, volume, or currency.
    *
    * A unit can only be converted to another unit of the same dimension. The
    * `quantity` dimension is for discrete countable items rather than a physical
@@ -289,26 +324,32 @@ export interface UpdateUnitRequest {
   name?: string;
 
   /**
-   * Conversion offset denominator.
+   * Denominator of the conversion offset.
    *
    * Must not be zero.
    */
   offset_denominator?: string;
 
   /**
-   * Conversion offset numerator, used for temperature-like conversions.
+   * Numerator of the conversion offset, applied after the ratio for scales that do
+   * not share a zero point, such as temperature.
    */
   offset_numerator?: string;
 
   /**
-   * Conversion ratio denominator relative to the base unit.
+   * Denominator of the ratio that converts a quantity in this unit into the
+   * dimension's base unit.
    *
    * Must not be zero.
    */
   ratio_denominator?: string;
 
   /**
-   * Conversion ratio numerator relative to the base unit.
+   * Numerator of the ratio that converts a quantity in this unit into the
+   * dimension's base unit.
+   *
+   * A quantity is converted with
+   * `value × (ratio_numerator / ratio_denominator) + (offset_numerator / offset_denominator)`.
    */
   ratio_numerator?: string;
 }
@@ -378,33 +419,44 @@ export interface UnitCreateParams {
   name: string;
 
   /**
-   * Body param: Conversion offset denominator.
+   * Body param: Denominator of the conversion offset.
    *
-   * Must not be zero.
+   * Must not be zero, so send `1` when the unit has no offset.
    */
   offset_denominator: string;
 
   /**
-   * Body param: Conversion offset numerator, used for temperature-like conversions.
+   * Body param: Numerator of the conversion offset, applied after the ratio for
+   * scales that do not share a zero point, such as temperature.
+   *
+   * Send `0` for units that convert by ratio alone.
    */
   offset_numerator: string;
 
   /**
-   * Body param: Conversion ratio denominator relative to the base unit.
+   * Body param: Denominator of the ratio that converts a quantity in this unit into
+   * the dimension's base unit.
    *
    * Must not be zero.
    */
   ratio_denominator: string;
 
   /**
-   * Body param: Conversion ratio numerator relative to the base unit.
+   * Body param: Numerator of the ratio that converts a quantity in this unit into
+   * the dimension's base unit.
+   *
+   * A quantity is converted with
+   * `value × (ratio_numerator / ratio_denominator) + (offset_numerator / offset_denominator)`,
+   * so a kilogram in a gram-based dimension has a numerator of `1000` and a
+   * denominator of `1`.
    */
   ratio_numerator: string;
 
   /**
-   * Body param: Unit dimension.
+   * Body param: The dimension this unit measures, such as mass, volume, or currency.
    *
-   * Units can only be converted to other units of the same dimension.
+   * Units can only be converted to other units of the same dimension, and the
+   * dimension cannot be changed after the unit is created.
    */
   type: 'currency' | 'quantity' | 'time' | 'mass' | 'volume' | 'length' | 'temperature' | 'area';
 
@@ -437,26 +489,32 @@ export interface UnitUpdateParams {
   name?: string;
 
   /**
-   * Body param: Conversion offset denominator.
+   * Body param: Denominator of the conversion offset.
    *
    * Must not be zero.
    */
   offset_denominator?: string;
 
   /**
-   * Body param: Conversion offset numerator, used for temperature-like conversions.
+   * Body param: Numerator of the conversion offset, applied after the ratio for
+   * scales that do not share a zero point, such as temperature.
    */
   offset_numerator?: string;
 
   /**
-   * Body param: Conversion ratio denominator relative to the base unit.
+   * Body param: Denominator of the ratio that converts a quantity in this unit into
+   * the dimension's base unit.
    *
    * Must not be zero.
    */
   ratio_denominator?: string;
 
   /**
-   * Body param: Conversion ratio numerator relative to the base unit.
+   * Body param: Numerator of the ratio that converts a quantity in this unit into
+   * the dimension's base unit.
+   *
+   * A quantity is converted with
+   * `value × (ratio_numerator / ratio_denominator) + (offset_numerator / offset_denominator)`.
    */
   ratio_numerator?: string;
 }
