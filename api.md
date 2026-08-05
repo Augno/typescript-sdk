@@ -132,6 +132,8 @@ Types:
 
 - <code><a href="./src/resources/core/analytics.ts">AnalyzeOeeRequest</a></code>
 - <code><a href="./src/resources/core/analytics.ts">AnalyzeOeeResponse</a></code>
+- <code><a href="./src/resources/core/analytics.ts">AnalyzeOeeTrendRequest</a></code>
+- <code><a href="./src/resources/core/analytics.ts">AnalyzeOeeTrendResponse</a></code>
 - <code><a href="./src/resources/core/analytics.ts">AnalyzeScheduleAttainmentRequest</a></code>
 - <code><a href="./src/resources/core/analytics.ts">AnalyzeScheduleAttainmentResponse</a></code>
 - <code><a href="./src/resources/core/analytics.ts">AttainmentBucket</a></code>
@@ -140,13 +142,16 @@ Types:
 - <code><a href="./src/resources/core/analytics.ts">ListFrozenAdherence</a></code>
 - <code><a href="./src/resources/core/analytics.ts">ListOeeDepartment</a></code>
 - <code><a href="./src/resources/core/analytics.ts">ListOeeDowntimeReason</a></code>
+- <code><a href="./src/resources/core/analytics.ts">ListOeeTrendPeriod</a></code>
 - <code><a href="./src/resources/core/analytics.ts">OeeDepartment</a></code>
 - <code><a href="./src/resources/core/analytics.ts">OeeDepartmentPlannedTime</a></code>
 - <code><a href="./src/resources/core/analytics.ts">OeeDowntimeReason</a></code>
+- <code><a href="./src/resources/core/analytics.ts">OeeTrendPeriod</a></code>
 
 Methods:
 
 - <code title="put /v1/core/analytics/oee">client.core.analytics.<a href="./src/resources/core/analytics.ts">updateOee</a>({ ...params }) -> AnalyzeOeeResponse</code>
+- <code title="put /v1/core/analytics/oee-trend">client.core.analytics.<a href="./src/resources/core/analytics.ts">updateOeeTrend</a>({ ...params }) -> AnalyzeOeeTrendResponse</code>
 - <code title="put /v1/core/analytics/schedule-attainment">client.core.analytics.<a href="./src/resources/core/analytics.ts">updateScheduleAttainment</a>({ ...params }) -> AnalyzeScheduleAttainmentResponse</code>
 
 # Catalog

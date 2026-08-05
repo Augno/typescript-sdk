@@ -458,7 +458,7 @@ export interface MachineDowntimeEventListParams {
    * Only return events that started on or before this timestamp, formatted as
    * RFC3339.
    */
-  end_date?: string;
+  ends_at?: string;
 
   /**
    * Sub-objects to expand in the response. When omitted, sub-objects are returned as
@@ -509,7 +509,7 @@ export interface MachineDowntimeEventListParams {
    * Only return events that started on or after this timestamp, formatted as
    * RFC3339.
    */
-  start_date?: string;
+  starts_at?: string;
 }
 
 export interface MachineDowntimeEventRetrieveParams {

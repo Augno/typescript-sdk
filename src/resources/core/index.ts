@@ -10,6 +10,8 @@ export {
   Analytics,
   type AnalyzeOeeRequest,
   type AnalyzeOeeResponse,
+  type AnalyzeOeeTrendRequest,
+  type AnalyzeOeeTrendResponse,
   type AnalyzeScheduleAttainmentRequest,
   type AnalyzeScheduleAttainmentResponse,
   type AttainmentBucket,
@@ -18,10 +20,13 @@ export {
   type ListFrozenAdherence,
   type ListOeeDepartment,
   type ListOeeDowntimeReason,
+  type ListOeeTrendPeriod,
   type OeeDepartment,
   type OeeDepartmentPlannedTime,
   type OeeDowntimeReason,
+  type OeeTrendPeriod,
   type AnalyticsUpdateOeeParams,
+  type AnalyticsUpdateOeeTrendParams,
   type AnalyticsUpdateScheduleAttainmentParams,
 } from './analytics';
 export {

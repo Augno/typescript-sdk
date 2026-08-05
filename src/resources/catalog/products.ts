@@ -468,7 +468,7 @@ export interface ProductListParams {
   /**
    * End of creation date range.
    */
-  end_date?: string;
+  ends_at?: string;
 
   /**
    * Sub-objects to expand in the response. When omitted, sub-objects are returned as
@@ -520,7 +520,7 @@ export interface ProductListParams {
   /**
    * Start of creation date range.
    */
-  start_date?: string;
+  starts_at?: string;
 }
 
 export interface ProductRetrieveParams {

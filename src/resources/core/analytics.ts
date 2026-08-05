@@ -24,14 +24,46 @@ export class Analytics extends APIResource {
    * ```ts
    * const analyzeOeeResponse =
    *   await client.core.analytics.updateOee({
-   *     end_date: '2026-05-10T00:23:00Z',
-   *     start_date: '2026-05-10T00:00:00Z',
+   *     ends_at: '2026-05-10T00:23:00Z',
+   *     starts_at: '2026-05-10T00:00:00Z',
    *     department_ids: ['dp_m0jayebxnkos'],
    *   });
    * ```
    */
   updateOee(body: AnalyticsUpdateOeeParams, options?: RequestOptions): APIPromise<AnalyzeOeeResponse> {
     return this._client.put('/v1/core/analytics/oee', { body, ...options });
+  }
+
+  /**
+   * Returns Overall Equipment Effectiveness (OEE) by production week.
+   *
+   * Each period carries the same four terms `/v1/core/analytics/oee` reports for a
+   * single window, rolled up across departments and weighted by seconds rather than
+   * averaged, so a department that ran for an hour does not weigh as heavily as one
+   * that ran all week. Weeks start on Monday, and the first and last period of a
+   * window are clipped to the window itself.
+   *
+   * Only departments with scheduled time take part: a department with no machines
+   * has no availability, so counting its output in quality would leave the three
+   * terms describing different plants. Compare two windows by calling this twice.
+   *
+   * This endpoint requires the permission: `machine_downtime:read`.
+   *
+   * @example
+   * ```ts
+   * const analyzeOeeTrendResponse =
+   *   await client.core.analytics.updateOeeTrend({
+   *     ends_at: '2026-05-10T00:23:00Z',
+   *     starts_at: '2026-05-10T00:00:00Z',
+   *     department_ids: ['dp_m0jayebxnkos'],
+   *   });
+   * ```
+   */
+  updateOeeTrend(
+    body: AnalyticsUpdateOeeTrendParams,
+    options?: RequestOptions,
+  ): APIPromise<AnalyzeOeeTrendResponse> {
+    return this._client.put('/v1/core/analytics/oee-trend', { body, ...options });
   }
 
   /**
@@ -57,8 +89,8 @@ export class Analytics extends APIResource {
    * ```ts
    * const analyzeScheduleAttainmentResponse =
    *   await client.core.analytics.updateScheduleAttainment({
-   *     end_date: '2026-05-10T00:23:00Z',
-   *     start_date: '2026-05-10T00:00:00Z',
+   *     ends_at: '2026-05-10T00:23:00Z',
+   *     starts_at: '2026-05-10T00:00:00Z',
    *     group_by: 'week',
    *   });
    * ```
@@ -79,12 +111,12 @@ export interface AnalyzeOeeRequest {
   /**
    * The end date for the analysis period.
    */
-  end_date: string;
+  ends_at: string;
 
   /**
    * The start date for the analysis period.
    */
-  start_date: string;
+  starts_at: string;
 
   /**
    * Optional department IDs to filter by.
@@ -115,6 +147,43 @@ export interface AnalyzeOeeResponse {
 }
 
 /**
+ * AnalyzeOeeTrendRequest is the request to analyze Overall Equipment Effectiveness
+ * (OEE) over time.
+ */
+export interface AnalyzeOeeTrendRequest {
+  /**
+   * The end date for the analysis period.
+   */
+  ends_at: string;
+
+  /**
+   * The start date for the analysis period.
+   */
+  starts_at: string;
+
+  /**
+   * Restrict the analysis to these departments.
+   */
+  department_ids?: Array<string>;
+}
+
+/**
+ * AnalyzeOeeTrendResponse represents the response from the OEE trend endpoint.
+ */
+export interface AnalyzeOeeTrendResponse {
+  /**
+   * Resource type identifier.
+   */
+  object: 'analyze_oee_trend_response';
+
+  /**
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
+   */
+  periods: ListOeeTrendPeriod | null;
+}
+
+/**
  * AnalyzeScheduleAttainmentRequest is the request to measure production against
  * plan.
  */
@@ -122,12 +191,12 @@ export interface AnalyzeScheduleAttainmentRequest {
   /**
    * The end date for the analysis period.
    */
-  end_date: string;
+  ends_at: string;
 
   /**
    * The start date for the analysis period.
    */
-  start_date: string;
+  starts_at: string;
 
   /**
    * Only measure production in these departments.
@@ -449,6 +518,33 @@ export interface ListOeeDowntimeReason {
 }
 
 /**
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
+ */
+export interface ListOeeTrendPeriod {
+  /**
+   * Resources in this page.
+   */
+  data: Array<OeeTrendPeriod>;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'list';
+
+  /**
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
+   */
+  page_info: APIKeysAPI.PageInfo;
+}
+
+/**
  * OeeDepartment represents OEE metrics for a single department.
  */
 export interface OeeDepartment {
@@ -616,16 +712,108 @@ export interface OeeDowntimeReason {
     | 'no_schedule';
 }
 
+/**
+ * OeeTrendPeriod represents one production week of OEE, rolled up across the
+ * departments that had scheduled time in it. Departments with no scheduled time
+ * have no OEE and take no part in the roll-up, so their output is not counted here
+ * either.
+ */
+export interface OeeTrendPeriod {
+  /**
+   * Logged downtime charged against availability, in seconds.
+   */
+  availability_loss_seconds: number;
+
+  /**
+   * Run time divided by scheduled time.
+   */
+  availability_pct: number | null;
+
+  /**
+   * Number of downtime events overlapping this period.
+   */
+  downtime_event_count: number;
+
+  /**
+   * The instant this period ends, exclusive.
+   */
+  ends_at: string;
+
+  /**
+   * The number of good units produced.
+   */
+  good_units: number;
+
+  /**
+   * Whether availability was measured from logged downtime or estimated from
+   * runtime.
+   */
+  measurement_status: 'measured' | 'estimated';
+
+  /**
+   * Time nobody planned to run, removed from the denominator rather than counted as
+   * a loss.
+   */
+  not_scheduled_seconds: number;
+
+  /**
+   * Availability multiplied by performance multiplied by quality.
+   */
+  oee_pct: number | null;
+
+  /**
+   * Standard seconds earned divided by run time.
+   */
+  performance_pct: number | null;
+
+  /**
+   * Good units divided by total units produced.
+   */
+  quality_pct: number | null;
+
+  /**
+   * Scheduled time net of availability losses, in seconds.
+   */
+  run_time_seconds: number;
+
+  /**
+   * Planned time net of not-scheduled downtime, in seconds.
+   */
+  scheduled_seconds: number;
+
+  /**
+   * The number of seconds units.
+   */
+  seconds_units: number;
+
+  /**
+   * The time this output should have taken at each production step's own labor rate:
+   * ideal cycle time multiplied by the units produced.
+   */
+  standard_seconds_earned: number;
+
+  /**
+   * The first instant this period covers. Weeks start on Monday; the first and last
+   * periods of a window are clipped to the window itself.
+   */
+  starts_at: string;
+
+  /**
+   * The number of waste units.
+   */
+  waste_units: number;
+}
+
 export interface AnalyticsUpdateOeeParams {
   /**
    * The end date for the analysis period.
    */
-  end_date: string;
+  ends_at: string;
 
   /**
    * The start date for the analysis period.
    */
-  start_date: string;
+  starts_at: string;
 
   /**
    * Optional department IDs to filter by.
@@ -639,16 +827,33 @@ export interface AnalyticsUpdateOeeParams {
   planned_time?: Array<OeeDepartmentPlannedTime>;
 }
 
-export interface AnalyticsUpdateScheduleAttainmentParams {
+export interface AnalyticsUpdateOeeTrendParams {
   /**
    * The end date for the analysis period.
    */
-  end_date: string;
+  ends_at: string;
 
   /**
    * The start date for the analysis period.
    */
-  start_date: string;
+  starts_at: string;
+
+  /**
+   * Restrict the analysis to these departments.
+   */
+  department_ids?: Array<string>;
+}
+
+export interface AnalyticsUpdateScheduleAttainmentParams {
+  /**
+   * The end date for the analysis period.
+   */
+  ends_at: string;
+
+  /**
+   * The start date for the analysis period.
+   */
+  starts_at: string;
 
   /**
    * Only measure production in these departments.
@@ -670,6 +875,8 @@ export declare namespace Analytics {
   export {
     type AnalyzeOeeRequest as AnalyzeOeeRequest,
     type AnalyzeOeeResponse as AnalyzeOeeResponse,
+    type AnalyzeOeeTrendRequest as AnalyzeOeeTrendRequest,
+    type AnalyzeOeeTrendResponse as AnalyzeOeeTrendResponse,
     type AnalyzeScheduleAttainmentRequest as AnalyzeScheduleAttainmentRequest,
     type AnalyzeScheduleAttainmentResponse as AnalyzeScheduleAttainmentResponse,
     type AttainmentBucket as AttainmentBucket,
@@ -678,10 +885,13 @@ export declare namespace Analytics {
     type ListFrozenAdherence as ListFrozenAdherence,
     type ListOeeDepartment as ListOeeDepartment,
     type ListOeeDowntimeReason as ListOeeDowntimeReason,
+    type ListOeeTrendPeriod as ListOeeTrendPeriod,
     type OeeDepartment as OeeDepartment,
     type OeeDepartmentPlannedTime as OeeDepartmentPlannedTime,
     type OeeDowntimeReason as OeeDowntimeReason,
+    type OeeTrendPeriod as OeeTrendPeriod,
     type AnalyticsUpdateOeeParams as AnalyticsUpdateOeeParams,
+    type AnalyticsUpdateOeeTrendParams as AnalyticsUpdateOeeTrendParams,
     type AnalyticsUpdateScheduleAttainmentParams as AnalyticsUpdateScheduleAttainmentParams,
   };
 }

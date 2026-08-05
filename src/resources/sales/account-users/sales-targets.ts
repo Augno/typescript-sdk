@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as BlocksAPI from '../../messaging/blocks';
+import * as CoreAPI from '../../core/core';
 import * as APIKeysAPI from '../../auth/api-keys/api-keys';
 import * as ItemsAPI from '../../catalog/items/items';
 import { APIPromise } from '../../../core/api-promise';
@@ -59,8 +59,8 @@ export class SalesTargets extends APIResource {
    *     {
    *       amount_unit_id: 'un_82bd37dae5po',
    *       amount_value: '50000.00',
-   *       end_date: '2026-03-31T00:00:00Z',
-   *       start_date: '2026-01-01T00:00:00Z',
+   *       ends_at: '2026-03-31T00:00:00Z',
+   *       starts_at: '2026-01-01T00:00:00Z',
    *     },
    *   );
    * ```
@@ -90,8 +90,8 @@ export class SalesTargets extends APIResource {
    *       id: 'acus_e5zu8bde0z3h',
    *       amount_unit_id: 'un_82bd37dae5po',
    *       amount_value: '75000.00',
-   *       end_date: '2026-06-30T00:00:00Z',
-   *       start_date: '2026-04-01T00:00:00Z',
+   *       ends_at: '2026-06-30T00:00:00Z',
+   *       starts_at: '2026-04-01T00:00:00Z',
    *     },
    *   );
    * ```
@@ -126,12 +126,12 @@ export interface CreateSalesTargetRequest {
   /**
    * End of the period the target applies to.
    */
-  end_date: string;
+  ends_at: string;
 
   /**
    * Start of the period the target applies to (inclusive).
    */
-  start_date: string;
+  starts_at: string;
 }
 
 /**
@@ -195,12 +195,9 @@ export interface SalesTarget {
   object: 'sales_target';
 
   /**
-   * A user's global profile, shared across every account they belong to.
-   *
-   * Account-specific settings (status, role, department) live on the account user
-   * resource that links the user to each account.
+   * Entity is a polymorphic reference to any resource in the system.
    */
-  sales_rep: BlocksAPI.User | null;
+  sales_rep: CoreAPI.Entity | null;
 
   /**
    * Start of the period this target applies to (inclusive).
@@ -239,7 +236,7 @@ export interface UpsertSalesTargetRequest {
    * Only applied when creating a new target; the dates on an existing target are not
    * changed.
    */
-  end_date: string;
+  ends_at: string;
 
   /**
    * Start of the period the target applies to (inclusive).
@@ -247,7 +244,7 @@ export interface UpsertSalesTargetRequest {
    * Only applied when creating a new target; the dates on an existing target are not
    * changed.
    */
-  start_date: string;
+  starts_at: string;
 }
 
 export interface SalesTargetListParams {
@@ -287,12 +284,12 @@ export interface SalesTargetCreateParams {
   /**
    * End of the period the target applies to.
    */
-  end_date: string;
+  ends_at: string;
 
   /**
    * Start of the period the target applies to (inclusive).
    */
-  start_date: string;
+  starts_at: string;
 }
 
 export interface SalesTargetUpdateParams {
@@ -327,7 +324,7 @@ export interface SalesTargetUpdateParams {
    * Only applied when creating a new target; the dates on an existing target are not
    * changed.
    */
-  end_date: string;
+  ends_at: string;
 
   /**
    * Body param: Start of the period the target applies to (inclusive).
@@ -335,7 +332,7 @@ export interface SalesTargetUpdateParams {
    * Only applied when creating a new target; the dates on an existing target are not
    * changed.
    */
-  start_date: string;
+  starts_at: string;
 }
 
 export declare namespace SalesTargets {

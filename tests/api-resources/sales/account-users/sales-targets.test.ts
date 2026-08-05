@@ -38,8 +38,8 @@ describe('resource salesTargets', () => {
     const responsePromise = client.sales.accountUsers.salesTargets.create('acus_e5zu8bde0z3h', {
       amount_unit_id: 'un_82bd37dae5po',
       amount_value: '50000.00',
-      end_date: '2026-03-31T00:00:00Z',
-      start_date: '2026-01-01T00:00:00Z',
+      ends_at: '2026-03-31T00:00:00Z',
+      starts_at: '2026-01-01T00:00:00Z',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -54,8 +54,8 @@ describe('resource salesTargets', () => {
     const response = await client.sales.accountUsers.salesTargets.create('acus_e5zu8bde0z3h', {
       amount_unit_id: 'un_82bd37dae5po',
       amount_value: '50000.00',
-      end_date: '2026-03-31T00:00:00Z',
-      start_date: '2026-01-01T00:00:00Z',
+      ends_at: '2026-03-31T00:00:00Z',
+      starts_at: '2026-01-01T00:00:00Z',
     });
   });
 
@@ -64,8 +64,8 @@ describe('resource salesTargets', () => {
       id: 'acus_e5zu8bde0z3h',
       amount_unit_id: 'un_82bd37dae5po',
       amount_value: '75000.00',
-      end_date: '2026-06-30T00:00:00Z',
-      start_date: '2026-04-01T00:00:00Z',
+      ends_at: '2026-06-30T00:00:00Z',
+      starts_at: '2026-04-01T00:00:00Z',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -81,8 +81,8 @@ describe('resource salesTargets', () => {
       id: 'acus_e5zu8bde0z3h',
       amount_unit_id: 'un_82bd37dae5po',
       amount_value: '75000.00',
-      end_date: '2026-06-30T00:00:00Z',
-      start_date: '2026-04-01T00:00:00Z',
+      ends_at: '2026-06-30T00:00:00Z',
+      starts_at: '2026-04-01T00:00:00Z',
     });
   });
 });

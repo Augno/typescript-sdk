@@ -128,6 +128,7 @@ const fuse = new Fuse(
     'client.core.emailLogs.list',
     'client.core.emailLogs.retrieve',
     'client.core.analytics.updateOee',
+    'client.core.analytics.updateOeeTrend',
     'client.core.analytics.updateScheduleAttainment',
     'client.catalog.units.create',
     'client.catalog.units.delete',

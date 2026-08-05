@@ -5,9 +5,12 @@ import * as AnalyticsAPI from './analytics';
 import {
   Analytics,
   AnalyticsUpdateOeeParams,
+  AnalyticsUpdateOeeTrendParams,
   AnalyticsUpdateScheduleAttainmentParams,
   AnalyzeOeeRequest,
   AnalyzeOeeResponse,
+  AnalyzeOeeTrendRequest,
+  AnalyzeOeeTrendResponse,
   AnalyzeScheduleAttainmentRequest,
   AnalyzeScheduleAttainmentResponse,
   AttainmentBucket,
@@ -16,9 +19,11 @@ import {
   ListFrozenAdherence,
   ListOeeDepartment,
   ListOeeDowntimeReason,
+  ListOeeTrendPeriod,
   OeeDepartment,
   OeeDepartmentPlannedTime,
   OeeDowntimeReason,
+  OeeTrendPeriod,
 } from './analytics';
 import * as AuditEventsAPI from './audit-events';
 import {
@@ -359,6 +364,7 @@ export interface Entity {
     | 'analyze_new_customers_response'
     | 'analyze_demand_forecast_response'
     | 'analyze_oee_response'
+    | 'analyze_oee_trend_response'
     | 'analyze_schedule_attainment_response'
     | 'catalog_product_line'
     | 'catalog_category'
@@ -707,6 +713,7 @@ export interface CoreRetrieveSearchParams {
     | 'analyze_new_customers_response'
     | 'analyze_demand_forecast_response'
     | 'analyze_oee_response'
+    | 'analyze_oee_trend_response'
     | 'analyze_schedule_attainment_response'
     | 'catalog_product_line'
     | 'catalog_category'
@@ -831,6 +838,8 @@ export declare namespace Core {
     Analytics as Analytics,
     type AnalyzeOeeRequest as AnalyzeOeeRequest,
     type AnalyzeOeeResponse as AnalyzeOeeResponse,
+    type AnalyzeOeeTrendRequest as AnalyzeOeeTrendRequest,
+    type AnalyzeOeeTrendResponse as AnalyzeOeeTrendResponse,
     type AnalyzeScheduleAttainmentRequest as AnalyzeScheduleAttainmentRequest,
     type AnalyzeScheduleAttainmentResponse as AnalyzeScheduleAttainmentResponse,
     type AttainmentBucket as AttainmentBucket,
@@ -839,10 +848,13 @@ export declare namespace Core {
     type ListFrozenAdherence as ListFrozenAdherence,
     type ListOeeDepartment as ListOeeDepartment,
     type ListOeeDowntimeReason as ListOeeDowntimeReason,
+    type ListOeeTrendPeriod as ListOeeTrendPeriod,
     type OeeDepartment as OeeDepartment,
     type OeeDepartmentPlannedTime as OeeDepartmentPlannedTime,
     type OeeDowntimeReason as OeeDowntimeReason,
+    type OeeTrendPeriod as OeeTrendPeriod,
     type AnalyticsUpdateOeeParams as AnalyticsUpdateOeeParams,
+    type AnalyticsUpdateOeeTrendParams as AnalyticsUpdateOeeTrendParams,
     type AnalyticsUpdateScheduleAttainmentParams as AnalyticsUpdateScheduleAttainmentParams,
   };
 }

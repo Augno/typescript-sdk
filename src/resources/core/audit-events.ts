@@ -398,6 +398,7 @@ export interface AuditEvent {
     | 'analyze_new_customers_response'
     | 'analyze_demand_forecast_response'
     | 'analyze_oee_response'
+    | 'analyze_oee_trend_response'
     | 'analyze_schedule_attainment_response'
     | 'catalog_product_line'
     | 'catalog_category'
@@ -780,6 +781,7 @@ export interface ListObjectType {
     | 'analyze_new_customers_response'
     | 'analyze_demand_forecast_response'
     | 'analyze_oee_response'
+    | 'analyze_oee_trend_response'
     | 'analyze_schedule_attainment_response'
     | 'catalog_product_line'
     | 'catalog_category'
@@ -900,7 +902,7 @@ export interface AuditEventListParams {
   /**
    * Restricts results to audit events on or before this timestamp.
    */
-  end_date?: string;
+  ends_at?: string;
 
   /**
    * Sub-objects to expand in the response. When omitted, sub-objects are returned as
@@ -1150,6 +1152,7 @@ export interface AuditEventListParams {
     | 'analyze_new_customers_response'
     | 'analyze_demand_forecast_response'
     | 'analyze_oee_response'
+    | 'analyze_oee_trend_response'
     | 'analyze_schedule_attainment_response'
     | 'catalog_product_line'
     | 'catalog_category'
@@ -1443,6 +1446,7 @@ export interface AuditEventListParams {
     | 'analyze_new_customers_response'
     | 'analyze_demand_forecast_response'
     | 'analyze_oee_response'
+    | 'analyze_oee_trend_response'
     | 'analyze_schedule_attainment_response'
     | 'catalog_product_line'
     | 'catalog_category'
@@ -1504,7 +1508,7 @@ export interface AuditEventListParams {
   /**
    * Restricts results to audit events on or after this timestamp.
    */
-  start_date?: string;
+  starts_at?: string;
 
   /**
    * Filter by the _target_ account the mutation was performed against (the event's

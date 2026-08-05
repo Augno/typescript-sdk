@@ -131,6 +131,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/core/analytics/oee',
   },
   {
+    clientCallName: 'client.core.analytics.updateOeeTrend',
+    fullyQualifiedName: 'core.analytics.updateOeeTrend',
+    httpMethod: 'put',
+    httpPath: '/v1/core/analytics/oee-trend',
+  },
+  {
     clientCallName: 'client.core.analytics.updateScheduleAttainment',
     fullyQualifiedName: 'core.analytics.updateScheduleAttainment',
     httpMethod: 'put',

@@ -347,7 +347,7 @@ export interface RequestLogListParams {
   /**
    * Restricts results to request logs on or before this timestamp.
    */
-  end_date?: string;
+  ends_at?: string;
 
   /**
    * Filter by API error code.
@@ -485,7 +485,7 @@ export interface RequestLogListParams {
   /**
    * Restricts results to request logs on or after this timestamp.
    */
-  start_date?: string;
+  starts_at?: string;
 
   /**
    * Filter by the HTTP status class, expressed as the leading digit: `1`–`5` for
