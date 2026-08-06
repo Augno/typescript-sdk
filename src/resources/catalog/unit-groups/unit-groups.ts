@@ -1,9 +1,17 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as UnitsAPI from '../units';
 import * as APIKeysAPI from '../../auth/api-keys/api-keys';
-import * as UnitGroupsUnitsAPI from './units';
+import * as ActionsAPI from './actions';
+import {
+  ActionBulkUpsertParams,
+  Actions,
+  BulkUpsertUnitGroupsRequest,
+  UnitIdentifier,
+  UpsertUnitGroupConversionInput,
+  UpsertUnitGroupInput,
+} from './actions';
+import * as UnitsAPI from './units';
 import {
   CreateUnitGroupUnitRequest,
   UnitCreateParams,
@@ -15,6 +23,7 @@ import {
   Units,
   UpdateUnitGroupUnitRequest,
 } from './units';
+import * as CatalogUnitsAPI from '../units/units';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
@@ -23,7 +32,8 @@ import { path } from '../../../internal/utils/path';
  * List and manage unit groups and their associated units.
  */
 export class UnitGroups extends APIResource {
-  units: UnitGroupsUnitsAPI.Units = new UnitGroupsUnitsAPI.Units(this._client);
+  units: UnitsAPI.Units = new UnitsAPI.Units(this._client);
+  actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
 
   /**
    * Returns a paginated list of unit groups, including system unit groups.
@@ -303,7 +313,7 @@ export interface UnitGroup {
   /**
    * Unit of measurement used for conversions and product quantities.
    */
-  base_unit: UnitsAPI.Unit | null;
+  base_unit: CatalogUnitsAPI.Unit | null;
 
   /**
    * Creation timestamp.
@@ -391,7 +401,7 @@ export interface UnitGroupUnit {
   /**
    * Unit of measurement used for conversions and product quantities.
    */
-  unit: UnitsAPI.Unit | null;
+  unit: CatalogUnitsAPI.Unit | null;
 
   /**
    * Last updated timestamp.
@@ -559,6 +569,7 @@ export interface UnitGroupUpdateParams {
 }
 
 UnitGroups.Units = Units;
+UnitGroups.Actions = Actions;
 
 export declare namespace UnitGroups {
   export {
@@ -586,5 +597,14 @@ export declare namespace UnitGroups {
     type UnitCreateParams as UnitCreateParams,
     type UnitUpdateParams as UnitUpdateParams,
     type UnitDeleteParams as UnitDeleteParams,
+  };
+
+  export {
+    Actions as Actions,
+    type BulkUpsertUnitGroupsRequest as BulkUpsertUnitGroupsRequest,
+    type UnitIdentifier as UnitIdentifier,
+    type UpsertUnitGroupConversionInput as UpsertUnitGroupConversionInput,
+    type UpsertUnitGroupInput as UpsertUnitGroupInput,
+    type ActionBulkUpsertParams as ActionBulkUpsertParams,
   };
 }

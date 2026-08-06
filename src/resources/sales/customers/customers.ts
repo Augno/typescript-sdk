@@ -1,13 +1,13 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as ProductLinesAPI from '../../catalog/product-lines';
 import * as BlocksAPI from '../../messaging/blocks';
 import * as AccountGroupsAPI from '../account-groups';
 import * as AddressesAPI from '../addresses';
 import * as PrioritiesAPI from '../priorities';
 import * as APIKeysAPI from '../../auth/api-keys/api-keys';
 import * as ItemsAPI from '../../catalog/items/items';
+import * as ProductLinesAPI from '../../catalog/product-lines/product-lines';
 import * as ActionsAPI from './actions';
 import { ActionMergeParams, Actions, MergeCustomersRequest } from './actions';
 import { APIPromise } from '../../../core/api-promise';

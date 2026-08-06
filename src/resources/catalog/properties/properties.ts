@@ -2,6 +2,14 @@
 
 import { APIResource } from '../../../core/resource';
 import * as APIKeysAPI from '../../auth/api-keys/api-keys';
+import * as ActionsAPI from './actions';
+import {
+  ActionBulkUpsertParams,
+  Actions,
+  BulkUpsertPropertiesRequest,
+  UpsertPropertyAttributeInput,
+  UpsertPropertyInput,
+} from './actions';
 import * as AttributesAPI from './attributes';
 import {
   AttributeCreateParams,
@@ -23,6 +31,7 @@ import { path } from '../../../internal/utils/path';
  */
 export class Properties extends APIResource {
   attributes: AttributesAPI.Attributes = new AttributesAPI.Attributes(this._client);
+  actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
 
   /**
    * Returns a paginated list of properties for the target account.
@@ -373,6 +382,7 @@ export interface PropertyUpdateParams {
 }
 
 Properties.Attributes = Attributes;
+Properties.Actions = Actions;
 
 export declare namespace Properties {
   export {
@@ -399,5 +409,13 @@ export declare namespace Properties {
     type AttributeCreateParams as AttributeCreateParams,
     type AttributeUpdateParams as AttributeUpdateParams,
     type AttributeDeleteParams as AttributeDeleteParams,
+  };
+
+  export {
+    Actions as Actions,
+    type BulkUpsertPropertiesRequest as BulkUpsertPropertiesRequest,
+    type UpsertPropertyAttributeInput as UpsertPropertyAttributeInput,
+    type UpsertPropertyInput as UpsertPropertyInput,
+    type ActionBulkUpsertParams as ActionBulkUpsertParams,
   };
 }

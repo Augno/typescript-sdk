@@ -48,6 +48,15 @@ export {
   type EmailLogRetrieveParams,
 } from './email-logs';
 export {
+  Jobs,
+  type Job,
+  type JobExport,
+  type JobResult,
+  type QuotaInfo,
+  type ResponseError,
+  type RowError,
+} from './jobs';
+export {
   RequestLogs,
   type Actor,
   type ListRequestLog,

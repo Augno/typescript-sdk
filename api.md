@@ -126,6 +126,22 @@ Methods:
 - <code title="get /v1/core/email-logs">client.core.emailLogs.<a href="./src/resources/core/email-logs.ts">list</a>({ ...params }) -> ListEmailLog</code>
 - <code title="get /v1/core/email-logs/{id}">client.core.emailLogs.<a href="./src/resources/core/email-logs.ts">retrieve</a>(id, { ...params }) -> EmailLog</code>
 
+## Jobs
+
+Types:
+
+- <code><a href="./src/resources/core/jobs.ts">Job</a></code>
+- <code><a href="./src/resources/core/jobs.ts">JobExport</a></code>
+- <code><a href="./src/resources/core/jobs.ts">JobResult</a></code>
+- <code><a href="./src/resources/core/jobs.ts">QuotaInfo</a></code>
+- <code><a href="./src/resources/core/jobs.ts">ResponseError</a></code>
+- <code><a href="./src/resources/core/jobs.ts">RowError</a></code>
+
+Methods:
+
+- <code title="get /v1/core/jobs/{id}">client.core.jobs.<a href="./src/resources/core/jobs.ts">retrieve</a>(id) -> Job</code>
+- <code title="post /v1/core/jobs/{id}/cancel">client.core.jobs.<a href="./src/resources/core/jobs.ts">cancel</a>(id) -> Job</code>
+
 ## Analytics
 
 Types:
@@ -160,19 +176,30 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/catalog/units.ts">CreateUnitRequest</a></code>
-- <code><a href="./src/resources/catalog/units.ts">ListUnit</a></code>
-- <code><a href="./src/resources/catalog/units.ts">Unit</a></code>
-- <code><a href="./src/resources/catalog/units.ts">UpdateUnitRequest</a></code>
-- <code><a href="./src/resources/catalog/units.ts">UnitDeleteResponse</a></code>
+- <code><a href="./src/resources/catalog/units/units.ts">CreateUnitRequest</a></code>
+- <code><a href="./src/resources/catalog/units/units.ts">ListUnit</a></code>
+- <code><a href="./src/resources/catalog/units/units.ts">Unit</a></code>
+- <code><a href="./src/resources/catalog/units/units.ts">UpdateUnitRequest</a></code>
+- <code><a href="./src/resources/catalog/units/units.ts">UnitDeleteResponse</a></code>
 
 Methods:
 
-- <code title="get /v1/catalog/units">client.catalog.units.<a href="./src/resources/catalog/units.ts">list</a>({ ...params }) -> ListUnit</code>
-- <code title="get /v1/catalog/units/{id}">client.catalog.units.<a href="./src/resources/catalog/units.ts">retrieve</a>(id, { ...params }) -> Unit</code>
-- <code title="post /v1/catalog/units">client.catalog.units.<a href="./src/resources/catalog/units.ts">create</a>({ ...params }) -> Unit</code>
-- <code title="patch /v1/catalog/units/{id}">client.catalog.units.<a href="./src/resources/catalog/units.ts">update</a>(id, { ...params }) -> Unit</code>
-- <code title="delete /v1/catalog/units/{id}">client.catalog.units.<a href="./src/resources/catalog/units.ts">delete</a>(id) -> UnitDeleteResponse</code>
+- <code title="get /v1/catalog/units">client.catalog.units.<a href="./src/resources/catalog/units/units.ts">list</a>({ ...params }) -> ListUnit</code>
+- <code title="get /v1/catalog/units/{id}">client.catalog.units.<a href="./src/resources/catalog/units/units.ts">retrieve</a>(id, { ...params }) -> Unit</code>
+- <code title="post /v1/catalog/units">client.catalog.units.<a href="./src/resources/catalog/units/units.ts">create</a>({ ...params }) -> Unit</code>
+- <code title="patch /v1/catalog/units/{id}">client.catalog.units.<a href="./src/resources/catalog/units/units.ts">update</a>(id, { ...params }) -> Unit</code>
+- <code title="delete /v1/catalog/units/{id}">client.catalog.units.<a href="./src/resources/catalog/units/units.ts">delete</a>(id) -> UnitDeleteResponse</code>
+
+### Actions
+
+Types:
+
+- <code><a href="./src/resources/catalog/units/actions.ts">BulkUpsertUnitsRequest</a></code>
+- <code><a href="./src/resources/catalog/units/actions.ts">UpsertUnitInput</a></code>
+
+Methods:
+
+- <code title="post /v1/catalog/units/actions/bulk-upsert">client.catalog.units.actions.<a href="./src/resources/catalog/units/actions.ts">bulkUpsert</a>({ ...params }) -> Job</code>
 
 ## UnitGroups
 
@@ -211,6 +238,19 @@ Methods:
 - <code title="patch /v1/catalog/unit-groups/{unit_group_id}/units/{id}">client.catalog.unitGroups.units.<a href="./src/resources/catalog/unit-groups/units.ts">update</a>(id, { ...params }) -> UnitGroupUnit</code>
 - <code title="delete /v1/catalog/unit-groups/{unit_group_id}/units/{id}">client.catalog.unitGroups.units.<a href="./src/resources/catalog/unit-groups/units.ts">delete</a>(id, { ...params }) -> UnitDeleteResponse</code>
 
+### Actions
+
+Types:
+
+- <code><a href="./src/resources/catalog/unit-groups/actions.ts">BulkUpsertUnitGroupsRequest</a></code>
+- <code><a href="./src/resources/catalog/unit-groups/actions.ts">UnitIdentifier</a></code>
+- <code><a href="./src/resources/catalog/unit-groups/actions.ts">UpsertUnitGroupConversionInput</a></code>
+- <code><a href="./src/resources/catalog/unit-groups/actions.ts">UpsertUnitGroupInput</a></code>
+
+Methods:
+
+- <code title="post /v1/catalog/unit-groups/actions/bulk-upsert">client.catalog.unitGroups.actions.<a href="./src/resources/catalog/unit-groups/actions.ts">bulkUpsert</a>({ ...params }) -> Job</code>
+
 ## Properties
 
 Types:
@@ -246,6 +286,18 @@ Methods:
 - <code title="post /v1/catalog/properties/{property_id}/attributes">client.catalog.properties.attributes.<a href="./src/resources/catalog/properties/attributes.ts">create</a>(propertyID, { ...params }) -> Attribute</code>
 - <code title="patch /v1/catalog/properties/{property_id}/attributes/{id}">client.catalog.properties.attributes.<a href="./src/resources/catalog/properties/attributes.ts">update</a>(id, { ...params }) -> Attribute</code>
 - <code title="delete /v1/catalog/properties/{property_id}/attributes/{id}">client.catalog.properties.attributes.<a href="./src/resources/catalog/properties/attributes.ts">delete</a>(id, { ...params }) -> AttributeDeleteResponse</code>
+
+### Actions
+
+Types:
+
+- <code><a href="./src/resources/catalog/properties/actions.ts">BulkUpsertPropertiesRequest</a></code>
+- <code><a href="./src/resources/catalog/properties/actions.ts">UpsertPropertyAttributeInput</a></code>
+- <code><a href="./src/resources/catalog/properties/actions.ts">UpsertPropertyInput</a></code>
+
+Methods:
+
+- <code title="post /v1/catalog/properties/actions/bulk-upsert">client.catalog.properties.actions.<a href="./src/resources/catalog/properties/actions.ts">bulkUpsert</a>({ ...params }) -> Job</code>
 
 ## Items
 
@@ -305,78 +357,137 @@ Methods:
 - <code title="put /v1/catalog/item-categories/{id}/properties/{property_id}">client.catalog.itemCategories.properties.<a href="./src/resources/catalog/item-categories/properties.ts">update</a>(propertyID, { ...params }) -> PropertyUpdateResponse</code>
 - <code title="delete /v1/catalog/item-categories/{id}/properties/{property_id}">client.catalog.itemCategories.properties.<a href="./src/resources/catalog/item-categories/properties.ts">delete</a>(propertyID, { ...params }) -> PropertyDeleteResponse</code>
 
+### Actions
+
+Types:
+
+- <code><a href="./src/resources/catalog/item-categories/actions.ts">BulkUpsertItemCategoriesRequest</a></code>
+- <code><a href="./src/resources/catalog/item-categories/actions.ts">ObjectIdentifier</a></code>
+- <code><a href="./src/resources/catalog/item-categories/actions.ts">UpsertItemCategoryInput</a></code>
+
+Methods:
+
+- <code title="post /v1/catalog/item-categories/actions/bulk-upsert">client.catalog.itemCategories.actions.<a href="./src/resources/catalog/item-categories/actions.ts">bulkUpsert</a>({ ...params }) -> Job</code>
+
 ## Materials
 
 Types:
 
-- <code><a href="./src/resources/catalog/materials.ts">CreateMaterialRequest</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">ListMaterial</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">Material</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">QuantityInputRequest</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">RateInput</a></code>
-- <code><a href="./src/resources/catalog/materials.ts">UpdateMaterialRequest</a></code>
+- <code><a href="./src/resources/catalog/materials/materials.ts">CreateMaterialRequest</a></code>
+- <code><a href="./src/resources/catalog/materials/materials.ts">ListMaterial</a></code>
+- <code><a href="./src/resources/catalog/materials/materials.ts">Material</a></code>
+- <code><a href="./src/resources/catalog/materials/materials.ts">QuantityInputRequest</a></code>
+- <code><a href="./src/resources/catalog/materials/materials.ts">RateInput</a></code>
+- <code><a href="./src/resources/catalog/materials/materials.ts">UpdateMaterialRequest</a></code>
 
 Methods:
 
-- <code title="get /v1/catalog/materials">client.catalog.materials.<a href="./src/resources/catalog/materials.ts">list</a>({ ...params }) -> ListMaterial</code>
-- <code title="get /v1/catalog/materials/{id}">client.catalog.materials.<a href="./src/resources/catalog/materials.ts">retrieve</a>(id, { ...params }) -> Material</code>
-- <code title="post /v1/catalog/materials">client.catalog.materials.<a href="./src/resources/catalog/materials.ts">create</a>({ ...params }) -> Material</code>
-- <code title="patch /v1/catalog/materials/{id}">client.catalog.materials.<a href="./src/resources/catalog/materials.ts">update</a>(id, { ...params }) -> Material</code>
-- <code title="delete /v1/catalog/materials/{id}">client.catalog.materials.<a href="./src/resources/catalog/materials.ts">delete</a>(id) -> Material</code>
+- <code title="get /v1/catalog/materials">client.catalog.materials.<a href="./src/resources/catalog/materials/materials.ts">list</a>({ ...params }) -> ListMaterial</code>
+- <code title="get /v1/catalog/materials/{id}">client.catalog.materials.<a href="./src/resources/catalog/materials/materials.ts">retrieve</a>(id, { ...params }) -> Material</code>
+- <code title="post /v1/catalog/materials">client.catalog.materials.<a href="./src/resources/catalog/materials/materials.ts">create</a>({ ...params }) -> Material</code>
+- <code title="patch /v1/catalog/materials/{id}">client.catalog.materials.<a href="./src/resources/catalog/materials/materials.ts">update</a>(id, { ...params }) -> Material</code>
+- <code title="delete /v1/catalog/materials/{id}">client.catalog.materials.<a href="./src/resources/catalog/materials/materials.ts">delete</a>(id) -> Material</code>
+
+### Actions
+
+Types:
+
+- <code><a href="./src/resources/catalog/materials/actions.ts">BulkUpsertMaterialsRequest</a></code>
+- <code><a href="./src/resources/catalog/materials/actions.ts">UpsertMaterialInput</a></code>
+- <code><a href="./src/resources/catalog/materials/actions.ts">UpsertMaterialProperty</a></code>
+
+Methods:
+
+- <code title="post /v1/catalog/materials/actions/bulk-upsert">client.catalog.materials.actions.<a href="./src/resources/catalog/materials/actions.ts">bulkUpsert</a>({ ...params }) -> Job</code>
 
 ## Parts
 
 Types:
 
-- <code><a href="./src/resources/catalog/parts.ts">CreatePartRequest</a></code>
-- <code><a href="./src/resources/catalog/parts.ts">ListPart</a></code>
-- <code><a href="./src/resources/catalog/parts.ts">Part</a></code>
-- <code><a href="./src/resources/catalog/parts.ts">UpdatePartRequest</a></code>
+- <code><a href="./src/resources/catalog/parts/parts.ts">CreatePartRequest</a></code>
+- <code><a href="./src/resources/catalog/parts/parts.ts">ListPart</a></code>
+- <code><a href="./src/resources/catalog/parts/parts.ts">Part</a></code>
+- <code><a href="./src/resources/catalog/parts/parts.ts">UpdatePartRequest</a></code>
 
 Methods:
 
-- <code title="get /v1/catalog/parts">client.catalog.parts.<a href="./src/resources/catalog/parts.ts">list</a>({ ...params }) -> ListPart</code>
-- <code title="get /v1/catalog/parts/{id}">client.catalog.parts.<a href="./src/resources/catalog/parts.ts">retrieve</a>(id, { ...params }) -> Part</code>
-- <code title="post /v1/catalog/parts">client.catalog.parts.<a href="./src/resources/catalog/parts.ts">create</a>({ ...params }) -> Part</code>
-- <code title="patch /v1/catalog/parts/{id}">client.catalog.parts.<a href="./src/resources/catalog/parts.ts">update</a>(id, { ...params }) -> Part</code>
-- <code title="delete /v1/catalog/parts/{id}">client.catalog.parts.<a href="./src/resources/catalog/parts.ts">delete</a>(id) -> Part</code>
+- <code title="get /v1/catalog/parts">client.catalog.parts.<a href="./src/resources/catalog/parts/parts.ts">list</a>({ ...params }) -> ListPart</code>
+- <code title="get /v1/catalog/parts/{id}">client.catalog.parts.<a href="./src/resources/catalog/parts/parts.ts">retrieve</a>(id, { ...params }) -> Part</code>
+- <code title="post /v1/catalog/parts">client.catalog.parts.<a href="./src/resources/catalog/parts/parts.ts">create</a>({ ...params }) -> Part</code>
+- <code title="patch /v1/catalog/parts/{id}">client.catalog.parts.<a href="./src/resources/catalog/parts/parts.ts">update</a>(id, { ...params }) -> Part</code>
+- <code title="delete /v1/catalog/parts/{id}">client.catalog.parts.<a href="./src/resources/catalog/parts/parts.ts">delete</a>(id) -> Part</code>
+
+### Actions
+
+Types:
+
+- <code><a href="./src/resources/catalog/parts/actions.ts">BulkUpsertPartsRequest</a></code>
+- <code><a href="./src/resources/catalog/parts/actions.ts">UpsertPartInput</a></code>
+- <code><a href="./src/resources/catalog/parts/actions.ts">UpsertPartProperty</a></code>
+
+Methods:
+
+- <code title="post /v1/catalog/parts/actions/bulk-upsert">client.catalog.parts.actions.<a href="./src/resources/catalog/parts/actions.ts">bulkUpsert</a>({ ...params }) -> Job</code>
 
 ## ProductLines
 
 Types:
 
-- <code><a href="./src/resources/catalog/product-lines.ts">CreateProductLineRequest</a></code>
-- <code><a href="./src/resources/catalog/product-lines.ts">ListProductLine</a></code>
-- <code><a href="./src/resources/catalog/product-lines.ts">ProductLine</a></code>
-- <code><a href="./src/resources/catalog/product-lines.ts">QuantityInput</a></code>
-- <code><a href="./src/resources/catalog/product-lines.ts">UpdateProductLineRequest</a></code>
-- <code><a href="./src/resources/catalog/product-lines.ts">ProductLineDeleteResponse</a></code>
+- <code><a href="./src/resources/catalog/product-lines/product-lines.ts">CreateProductLineRequest</a></code>
+- <code><a href="./src/resources/catalog/product-lines/product-lines.ts">ListProductLine</a></code>
+- <code><a href="./src/resources/catalog/product-lines/product-lines.ts">ProductLine</a></code>
+- <code><a href="./src/resources/catalog/product-lines/product-lines.ts">QuantityInput</a></code>
+- <code><a href="./src/resources/catalog/product-lines/product-lines.ts">UpdateProductLineRequest</a></code>
+- <code><a href="./src/resources/catalog/product-lines/product-lines.ts">ProductLineDeleteResponse</a></code>
 
 Methods:
 
-- <code title="get /v1/catalog/product-lines">client.catalog.productLines.<a href="./src/resources/catalog/product-lines.ts">list</a>({ ...params }) -> ListProductLine</code>
-- <code title="get /v1/catalog/product-lines/{id}">client.catalog.productLines.<a href="./src/resources/catalog/product-lines.ts">retrieve</a>(id, { ...params }) -> ProductLine</code>
-- <code title="post /v1/catalog/product-lines">client.catalog.productLines.<a href="./src/resources/catalog/product-lines.ts">create</a>({ ...params }) -> ProductLine</code>
-- <code title="patch /v1/catalog/product-lines/{id}">client.catalog.productLines.<a href="./src/resources/catalog/product-lines.ts">update</a>(id, { ...params }) -> ProductLine</code>
-- <code title="delete /v1/catalog/product-lines/{id}">client.catalog.productLines.<a href="./src/resources/catalog/product-lines.ts">delete</a>(id) -> ProductLineDeleteResponse</code>
+- <code title="get /v1/catalog/product-lines">client.catalog.productLines.<a href="./src/resources/catalog/product-lines/product-lines.ts">list</a>({ ...params }) -> ListProductLine</code>
+- <code title="get /v1/catalog/product-lines/{id}">client.catalog.productLines.<a href="./src/resources/catalog/product-lines/product-lines.ts">retrieve</a>(id, { ...params }) -> ProductLine</code>
+- <code title="post /v1/catalog/product-lines">client.catalog.productLines.<a href="./src/resources/catalog/product-lines/product-lines.ts">create</a>({ ...params }) -> ProductLine</code>
+- <code title="patch /v1/catalog/product-lines/{id}">client.catalog.productLines.<a href="./src/resources/catalog/product-lines/product-lines.ts">update</a>(id, { ...params }) -> ProductLine</code>
+- <code title="delete /v1/catalog/product-lines/{id}">client.catalog.productLines.<a href="./src/resources/catalog/product-lines/product-lines.ts">delete</a>(id) -> ProductLineDeleteResponse</code>
+
+### Actions
+
+Types:
+
+- <code><a href="./src/resources/catalog/product-lines/actions.ts">BulkUpsertProductLinesRequest</a></code>
+- <code><a href="./src/resources/catalog/product-lines/actions.ts">UpsertProductLineInput</a></code>
+
+Methods:
+
+- <code title="post /v1/catalog/product-lines/actions/bulk-upsert">client.catalog.productLines.actions.<a href="./src/resources/catalog/product-lines/actions.ts">bulkUpsert</a>({ ...params }) -> Job</code>
 
 ## Products
 
 Types:
 
-- <code><a href="./src/resources/catalog/products.ts">CreateProductRequest</a></code>
-- <code><a href="./src/resources/catalog/products.ts">ListProduct</a></code>
-- <code><a href="./src/resources/catalog/products.ts">Product</a></code>
-- <code><a href="./src/resources/catalog/products.ts">UpdateProductRequest</a></code>
+- <code><a href="./src/resources/catalog/products/products.ts">CreateProductRequest</a></code>
+- <code><a href="./src/resources/catalog/products/products.ts">ListProduct</a></code>
+- <code><a href="./src/resources/catalog/products/products.ts">Product</a></code>
+- <code><a href="./src/resources/catalog/products/products.ts">UpdateProductRequest</a></code>
 
 Methods:
 
-- <code title="get /v1/catalog/products">client.catalog.products.<a href="./src/resources/catalog/products.ts">list</a>({ ...params }) -> ListProduct</code>
-- <code title="get /v1/catalog/products/{id}">client.catalog.products.<a href="./src/resources/catalog/products.ts">retrieve</a>(id, { ...params }) -> Product</code>
-- <code title="post /v1/catalog/products">client.catalog.products.<a href="./src/resources/catalog/products.ts">create</a>({ ...params }) -> Product</code>
-- <code title="patch /v1/catalog/products/{id}">client.catalog.products.<a href="./src/resources/catalog/products.ts">update</a>(id, { ...params }) -> Product</code>
-- <code title="delete /v1/catalog/products/{id}">client.catalog.products.<a href="./src/resources/catalog/products.ts">delete</a>(id, { ...params }) -> Product</code>
-- <code title="put /v1/catalog/products/{id}/product-line/{product_line_id}">client.catalog.products.<a href="./src/resources/catalog/products.ts">changeProductLine</a>(productLineID, { ...params }) -> Product</code>
+- <code title="get /v1/catalog/products">client.catalog.products.<a href="./src/resources/catalog/products/products.ts">list</a>({ ...params }) -> ListProduct</code>
+- <code title="get /v1/catalog/products/{id}">client.catalog.products.<a href="./src/resources/catalog/products/products.ts">retrieve</a>(id, { ...params }) -> Product</code>
+- <code title="post /v1/catalog/products">client.catalog.products.<a href="./src/resources/catalog/products/products.ts">create</a>({ ...params }) -> Product</code>
+- <code title="patch /v1/catalog/products/{id}">client.catalog.products.<a href="./src/resources/catalog/products/products.ts">update</a>(id, { ...params }) -> Product</code>
+- <code title="delete /v1/catalog/products/{id}">client.catalog.products.<a href="./src/resources/catalog/products/products.ts">delete</a>(id, { ...params }) -> Product</code>
+- <code title="put /v1/catalog/products/{id}/product-line/{product_line_id}">client.catalog.products.<a href="./src/resources/catalog/products/products.ts">changeProductLine</a>(productLineID, { ...params }) -> Product</code>
+
+### Actions
+
+Types:
+
+- <code><a href="./src/resources/catalog/products/actions.ts">BulkUpsertProductsRequest</a></code>
+- <code><a href="./src/resources/catalog/products/actions.ts">UpsertProductInput</a></code>
+- <code><a href="./src/resources/catalog/products/actions.ts">UpsertProductProperty</a></code>
+
+Methods:
+
+- <code title="post /v1/catalog/products/actions/bulk-upsert">client.catalog.products.actions.<a href="./src/resources/catalog/products/actions.ts">bulkUpsert</a>({ ...params }) -> Job</code>
 
 # AI
 
@@ -1290,17 +1401,28 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/operations/locations.ts">CreateLocationRequest</a></code>
-- <code><a href="./src/resources/operations/locations.ts">UpdateLocationRequest</a></code>
-- <code><a href="./src/resources/operations/locations.ts">LocationDeleteResponse</a></code>
+- <code><a href="./src/resources/operations/locations/locations.ts">CreateLocationRequest</a></code>
+- <code><a href="./src/resources/operations/locations/locations.ts">UpdateLocationRequest</a></code>
+- <code><a href="./src/resources/operations/locations/locations.ts">LocationDeleteResponse</a></code>
 
 Methods:
 
-- <code title="get /v1/operations/locations">client.operations.locations.<a href="./src/resources/operations/locations.ts">list</a>({ ...params }) -> ListLocation</code>
-- <code title="get /v1/operations/locations/{id}">client.operations.locations.<a href="./src/resources/operations/locations.ts">retrieve</a>(id, { ...params }) -> Location</code>
-- <code title="post /v1/operations/locations">client.operations.locations.<a href="./src/resources/operations/locations.ts">create</a>({ ...params }) -> Location</code>
-- <code title="patch /v1/operations/locations/{id}">client.operations.locations.<a href="./src/resources/operations/locations.ts">update</a>(id, { ...params }) -> Location</code>
-- <code title="delete /v1/operations/locations/{id}">client.operations.locations.<a href="./src/resources/operations/locations.ts">delete</a>(id) -> LocationDeleteResponse</code>
+- <code title="get /v1/operations/locations">client.operations.locations.<a href="./src/resources/operations/locations/locations.ts">list</a>({ ...params }) -> ListLocation</code>
+- <code title="get /v1/operations/locations/{id}">client.operations.locations.<a href="./src/resources/operations/locations/locations.ts">retrieve</a>(id, { ...params }) -> Location</code>
+- <code title="post /v1/operations/locations">client.operations.locations.<a href="./src/resources/operations/locations/locations.ts">create</a>({ ...params }) -> Location</code>
+- <code title="patch /v1/operations/locations/{id}">client.operations.locations.<a href="./src/resources/operations/locations/locations.ts">update</a>(id, { ...params }) -> Location</code>
+- <code title="delete /v1/operations/locations/{id}">client.operations.locations.<a href="./src/resources/operations/locations/locations.ts">delete</a>(id) -> LocationDeleteResponse</code>
+
+### Actions
+
+Types:
+
+- <code><a href="./src/resources/operations/locations/actions.ts">BulkUpsertLocationsRequest</a></code>
+- <code><a href="./src/resources/operations/locations/actions.ts">UpsertLocationInput</a></code>
+
+Methods:
+
+- <code title="post /v1/operations/locations/actions/bulk-upsert">client.operations.locations.actions.<a href="./src/resources/operations/locations/actions.ts">bulkUpsert</a>({ ...params }) -> Job</code>
 
 ## LocationTypes
 

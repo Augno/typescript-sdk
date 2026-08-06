@@ -125,6 +125,18 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/core/email-logs/{id}',
   },
   {
+    clientCallName: 'client.core.jobs.retrieve',
+    fullyQualifiedName: 'core.jobs.retrieve',
+    httpMethod: 'get',
+    httpPath: '/v1/core/jobs/{id}',
+  },
+  {
+    clientCallName: 'client.core.jobs.cancel',
+    fullyQualifiedName: 'core.jobs.cancel',
+    httpMethod: 'post',
+    httpPath: '/v1/core/jobs/{id}/cancel',
+  },
+  {
     clientCallName: 'client.core.analytics.updateOee',
     fullyQualifiedName: 'core.analytics.updateOee',
     httpMethod: 'put',
@@ -171,6 +183,12 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'catalog.units.delete',
     httpMethod: 'delete',
     httpPath: '/v1/catalog/units/{id}',
+  },
+  {
+    clientCallName: 'client.catalog.units.actions.bulkUpsert',
+    fullyQualifiedName: 'catalog.units.actions.bulkUpsert',
+    httpMethod: 'post',
+    httpPath: '/v1/catalog/units/actions/bulk-upsert',
   },
   {
     clientCallName: 'client.catalog.unitGroups.list',
@@ -233,6 +251,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/catalog/unit-groups/{unit_group_id}/units/{id}',
   },
   {
+    clientCallName: 'client.catalog.unitGroups.actions.bulkUpsert',
+    fullyQualifiedName: 'catalog.unitGroups.actions.bulkUpsert',
+    httpMethod: 'post',
+    httpPath: '/v1/catalog/unit-groups/actions/bulk-upsert',
+  },
+  {
     clientCallName: 'client.catalog.properties.list',
     fullyQualifiedName: 'catalog.properties.list',
     httpMethod: 'get',
@@ -291,6 +315,12 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'catalog.properties.attributes.delete',
     httpMethod: 'delete',
     httpPath: '/v1/catalog/properties/{property_id}/attributes/{id}',
+  },
+  {
+    clientCallName: 'client.catalog.properties.actions.bulkUpsert',
+    fullyQualifiedName: 'catalog.properties.actions.bulkUpsert',
+    httpMethod: 'post',
+    httpPath: '/v1/catalog/properties/actions/bulk-upsert',
   },
   {
     clientCallName: 'client.catalog.items.list',
@@ -383,6 +413,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/catalog/item-categories/{id}/properties/{property_id}',
   },
   {
+    clientCallName: 'client.catalog.itemCategories.actions.bulkUpsert',
+    fullyQualifiedName: 'catalog.itemCategories.actions.bulkUpsert',
+    httpMethod: 'post',
+    httpPath: '/v1/catalog/item-categories/actions/bulk-upsert',
+  },
+  {
     clientCallName: 'client.catalog.materials.list',
     fullyQualifiedName: 'catalog.materials.list',
     httpMethod: 'get',
@@ -411,6 +447,12 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'catalog.materials.delete',
     httpMethod: 'delete',
     httpPath: '/v1/catalog/materials/{id}',
+  },
+  {
+    clientCallName: 'client.catalog.materials.actions.bulkUpsert',
+    fullyQualifiedName: 'catalog.materials.actions.bulkUpsert',
+    httpMethod: 'post',
+    httpPath: '/v1/catalog/materials/actions/bulk-upsert',
   },
   {
     clientCallName: 'client.catalog.parts.list',
@@ -443,6 +485,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/catalog/parts/{id}',
   },
   {
+    clientCallName: 'client.catalog.parts.actions.bulkUpsert',
+    fullyQualifiedName: 'catalog.parts.actions.bulkUpsert',
+    httpMethod: 'post',
+    httpPath: '/v1/catalog/parts/actions/bulk-upsert',
+  },
+  {
     clientCallName: 'client.catalog.productLines.list',
     fullyQualifiedName: 'catalog.productLines.list',
     httpMethod: 'get',
@@ -471,6 +519,12 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'catalog.productLines.delete',
     httpMethod: 'delete',
     httpPath: '/v1/catalog/product-lines/{id}',
+  },
+  {
+    clientCallName: 'client.catalog.productLines.actions.bulkUpsert',
+    fullyQualifiedName: 'catalog.productLines.actions.bulkUpsert',
+    httpMethod: 'post',
+    httpPath: '/v1/catalog/product-lines/actions/bulk-upsert',
   },
   {
     clientCallName: 'client.catalog.products.list',
@@ -507,6 +561,12 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'catalog.products.changeProductLine',
     httpMethod: 'put',
     httpPath: '/v1/catalog/products/{id}/product-line/{product_line_id}',
+  },
+  {
+    clientCallName: 'client.catalog.products.actions.bulkUpsert',
+    fullyQualifiedName: 'catalog.products.actions.bulkUpsert',
+    httpMethod: 'post',
+    httpPath: '/v1/catalog/products/actions/bulk-upsert',
   },
   {
     clientCallName: 'client.ai.retrieveTools',
@@ -1743,6 +1803,12 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'operations.locations.delete',
     httpMethod: 'delete',
     httpPath: '/v1/operations/locations/{id}',
+  },
+  {
+    clientCallName: 'client.operations.locations.actions.bulkUpsert',
+    fullyQualifiedName: 'operations.locations.actions.bulkUpsert',
+    httpMethod: 'post',
+    httpPath: '/v1/operations/locations/actions/bulk-upsert',
   },
   {
     clientCallName: 'client.operations.locationTypes.list',

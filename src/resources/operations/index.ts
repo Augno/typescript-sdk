@@ -50,7 +50,7 @@ export {
   type LocationRetrieveParams,
   type LocationCreateParams,
   type LocationUpdateParams,
-} from './locations';
+} from './locations/index';
 export {
   MachineDowntimeEvents,
   type CreateMachineDowntimeEventRequest,

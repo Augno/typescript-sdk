@@ -2,6 +2,14 @@
 
 import { APIResource } from '../../../core/resource';
 import * as APIKeysAPI from '../../auth/api-keys/api-keys';
+import * as ActionsAPI from './actions';
+import {
+  ActionBulkUpsertParams,
+  Actions,
+  BulkUpsertItemCategoriesRequest,
+  ObjectIdentifier,
+  UpsertItemCategoryInput,
+} from './actions';
 import * as PropertiesAPI from './properties';
 import {
   Properties,
@@ -20,6 +28,7 @@ import { path } from '../../../internal/utils/path';
  */
 export class ItemCategories extends APIResource {
   properties: PropertiesAPI.Properties = new PropertiesAPI.Properties(this._client);
+  actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
 
   /**
    * Returns a paginated list of the item categories available to the current
@@ -386,6 +395,7 @@ export interface ItemCategoryChangeUnitGroupParams {
 }
 
 ItemCategories.Properties = Properties;
+ItemCategories.Actions = Actions;
 
 export declare namespace ItemCategories {
   export {
@@ -407,5 +417,13 @@ export declare namespace ItemCategories {
     type PropertyDeleteResponse as PropertyDeleteResponse,
     type PropertyUpdateParams as PropertyUpdateParams,
     type PropertyDeleteParams as PropertyDeleteParams,
+  };
+
+  export {
+    Actions as Actions,
+    type BulkUpsertItemCategoriesRequest as BulkUpsertItemCategoriesRequest,
+    type ObjectIdentifier as ObjectIdentifier,
+    type UpsertItemCategoryInput as UpsertItemCategoryInput,
+    type ActionBulkUpsertParams as ActionBulkUpsertParams,
   };
 }

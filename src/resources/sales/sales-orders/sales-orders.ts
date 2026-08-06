@@ -1,13 +1,13 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as MaterialsAPI from '../../catalog/materials';
-import * as ProductLinesAPI from '../../catalog/product-lines';
-import * as ProductsAPI from '../../catalog/products';
-import * as UnitsAPI from '../../catalog/units';
 import * as RequestLogsAPI from '../../core/request-logs';
 import * as APIKeysAPI from '../../auth/api-keys/api-keys';
 import * as ItemsAPI from '../../catalog/items/items';
+import * as MaterialsAPI from '../../catalog/materials/materials';
+import * as ProductLinesAPI from '../../catalog/product-lines/product-lines';
+import * as ProductsAPI from '../../catalog/products/products';
+import * as UnitsAPI from '../../catalog/units/units';
 import * as CustomersAPI from '../customers/customers';
 import * as ActionsAPI from './actions';
 import {

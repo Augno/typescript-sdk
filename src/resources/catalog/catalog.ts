@@ -1,73 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as MaterialsAPI from './materials';
-import {
-  CreateMaterialRequest,
-  ListMaterial,
-  Material,
-  MaterialCreateParams,
-  MaterialListParams,
-  MaterialRetrieveParams,
-  MaterialUpdateParams,
-  Materials,
-  QuantityInputRequest,
-  RateInput,
-  UpdateMaterialRequest,
-} from './materials';
-import * as PartsAPI from './parts';
-import {
-  CreatePartRequest,
-  ListPart,
-  Part,
-  PartCreateParams,
-  PartListParams,
-  PartRetrieveParams,
-  PartUpdateParams,
-  Parts,
-  UpdatePartRequest,
-} from './parts';
-import * as ProductLinesAPI from './product-lines';
-import {
-  CreateProductLineRequest,
-  ListProductLine,
-  ProductLine,
-  ProductLineCreateParams,
-  ProductLineDeleteResponse,
-  ProductLineListParams,
-  ProductLineRetrieveParams,
-  ProductLineUpdateParams,
-  ProductLines,
-  QuantityInput,
-  UpdateProductLineRequest,
-} from './product-lines';
-import * as ProductsAPI from './products';
-import {
-  CreateProductRequest,
-  ListProduct,
-  Product,
-  ProductChangeProductLineParams,
-  ProductCreateParams,
-  ProductDeleteParams,
-  ProductListParams,
-  ProductRetrieveParams,
-  ProductUpdateParams,
-  Products,
-  UpdateProductRequest,
-} from './products';
-import * as UnitsAPI from './units';
-import {
-  CreateUnitRequest,
-  ListUnit,
-  Unit,
-  UnitCreateParams,
-  UnitDeleteResponse,
-  UnitListParams,
-  UnitRetrieveParams,
-  UnitUpdateParams,
-  Units,
-  UpdateUnitRequest,
-} from './units';
 import * as ItemCategoriesAPI from './item-categories/item-categories';
 import {
   CreateItemCategoryRequest,
@@ -98,6 +31,60 @@ import {
   Quantity,
   Rate,
 } from './items/items';
+import * as MaterialsAPI from './materials/materials';
+import {
+  CreateMaterialRequest,
+  ListMaterial,
+  Material,
+  MaterialCreateParams,
+  MaterialListParams,
+  MaterialRetrieveParams,
+  MaterialUpdateParams,
+  Materials,
+  QuantityInputRequest,
+  RateInput,
+  UpdateMaterialRequest,
+} from './materials/materials';
+import * as PartsAPI from './parts/parts';
+import {
+  CreatePartRequest,
+  ListPart,
+  Part,
+  PartCreateParams,
+  PartListParams,
+  PartRetrieveParams,
+  PartUpdateParams,
+  Parts,
+  UpdatePartRequest,
+} from './parts/parts';
+import * as ProductLinesAPI from './product-lines/product-lines';
+import {
+  CreateProductLineRequest,
+  ListProductLine,
+  ProductLine,
+  ProductLineCreateParams,
+  ProductLineDeleteResponse,
+  ProductLineListParams,
+  ProductLineRetrieveParams,
+  ProductLineUpdateParams,
+  ProductLines,
+  QuantityInput,
+  UpdateProductLineRequest,
+} from './product-lines/product-lines';
+import * as ProductsAPI from './products/products';
+import {
+  CreateProductRequest,
+  ListProduct,
+  Product,
+  ProductChangeProductLineParams,
+  ProductCreateParams,
+  ProductDeleteParams,
+  ProductListParams,
+  ProductRetrieveParams,
+  ProductUpdateParams,
+  Products,
+  UpdateProductRequest,
+} from './products/products';
 import * as PropertiesAPI from './properties/properties';
 import {
   Attribute,
@@ -129,6 +116,19 @@ import {
   UnitGroups,
   UpdateUnitGroupRequest,
 } from './unit-groups/unit-groups';
+import * as UnitsAPI from './units/units';
+import {
+  CreateUnitRequest,
+  ListUnit,
+  Unit,
+  UnitCreateParams,
+  UnitDeleteResponse,
+  UnitListParams,
+  UnitRetrieveParams,
+  UnitUpdateParams,
+  Units,
+  UpdateUnitRequest,
+} from './units/units';
 
 export class Catalog extends APIResource {
   units: UnitsAPI.Units = new UnitsAPI.Units(this._client);

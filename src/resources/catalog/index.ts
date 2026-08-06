@@ -41,7 +41,7 @@ export {
   type MaterialRetrieveParams,
   type MaterialCreateParams,
   type MaterialUpdateParams,
-} from './materials';
+} from './materials/index';
 export {
   Parts,
   type CreatePartRequest,
@@ -52,7 +52,7 @@ export {
   type PartRetrieveParams,
   type PartCreateParams,
   type PartUpdateParams,
-} from './parts';
+} from './parts/index';
 export {
   ProductLines,
   type CreateProductLineRequest,
@@ -65,7 +65,7 @@ export {
   type ProductLineRetrieveParams,
   type ProductLineCreateParams,
   type ProductLineUpdateParams,
-} from './product-lines';
+} from './product-lines/index';
 export {
   Products,
   type CreateProductRequest,
@@ -78,7 +78,7 @@ export {
   type ProductUpdateParams,
   type ProductDeleteParams,
   type ProductChangeProductLineParams,
-} from './products';
+} from './products/index';
 export {
   Properties,
   type Attribute,
@@ -119,4 +119,4 @@ export {
   type UnitRetrieveParams,
   type UnitCreateParams,
   type UnitUpdateParams,
-} from './units';
+} from './units/index';

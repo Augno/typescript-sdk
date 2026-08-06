@@ -30,17 +30,6 @@ import {
 } from './departments';
 import * as LocationTypesAPI from './location-types';
 import { ListLocationType, LocationType, LocationTypeListParams, LocationTypes } from './location-types';
-import * as LocationsAPI from './locations';
-import {
-  CreateLocationRequest,
-  LocationCreateParams,
-  LocationDeleteResponse,
-  LocationListParams,
-  LocationRetrieveParams,
-  LocationUpdateParams,
-  Locations,
-  UpdateLocationRequest,
-} from './locations';
 import * as MachineDowntimeEventsAPI from './machine-downtime-events';
 import {
   CreateMachineDowntimeEventRequest,
@@ -101,6 +90,17 @@ import {
   ListCarrier,
   UpdateCarrierRequest,
 } from './carriers/carriers';
+import * as LocationsAPI from './locations/locations';
+import {
+  CreateLocationRequest,
+  LocationCreateParams,
+  LocationDeleteResponse,
+  LocationListParams,
+  LocationRetrieveParams,
+  LocationUpdateParams,
+  Locations,
+  UpdateLocationRequest,
+} from './locations/locations';
 import * as ProductionScheduleSettingsAPI from './production-schedule-settings/production-schedule-settings';
 import {
   ProductionScheduleSettingUpdateParams,

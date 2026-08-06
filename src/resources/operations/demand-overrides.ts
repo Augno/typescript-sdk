@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as UnitsAPI from '../catalog/units';
 import * as CoreAPI from '../core/core';
 import * as RequestLogsAPI from '../core/request-logs';
 import * as APIKeysAPI from '../auth/api-keys/api-keys';
+import * as UnitsAPI from '../catalog/units/units';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';

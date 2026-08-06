@@ -214,8 +214,10 @@ export interface UpdateScanningStationRequest {
   /**
    * Size of the labels printed at this station, given as width-by-height (for
    * example, `1x1`).
+   *
+   * Send `null` or an empty string to clear.
    */
-  label_size?: '1x1' | '1x3' | '1x4' | '2x4';
+  label_size?: '1x1' | '1x3' | '1x4' | '2x4' | null;
 
   /**
    * Type of label printed at this station.
@@ -223,8 +225,10 @@ export interface UpdateScanningStationRequest {
    * - `tag`: a label attached to the physical product.
    * - `traveler`: a routing sheet that accompanies the batch through every
    *   production step.
+   *
+   * Send `null` or an empty string to clear.
    */
-  label_type?: 'tag' | 'traveler';
+  label_type?: 'tag' | 'traveler' | null;
 
   /**
    * Display name of the scanning station.
@@ -362,8 +366,10 @@ export interface ScanningStationUpdateParams {
   /**
    * Body param: Size of the labels printed at this station, given as width-by-height
    * (for example, `1x1`).
+   *
+   * Send `null` or an empty string to clear.
    */
-  label_size?: '1x1' | '1x3' | '1x4' | '2x4';
+  label_size?: '1x1' | '1x3' | '1x4' | '2x4' | null;
 
   /**
    * Body param: Type of label printed at this station.
@@ -371,8 +377,10 @@ export interface ScanningStationUpdateParams {
    * - `tag`: a label attached to the physical product.
    * - `traveler`: a routing sheet that accompanies the batch through every
    *   production step.
+   *
+   * Send `null` or an empty string to clear.
    */
-  label_type?: 'tag' | 'traveler';
+  label_type?: 'tag' | 'traveler' | null;
 
   /**
    * Body param: Display name of the scanning station.

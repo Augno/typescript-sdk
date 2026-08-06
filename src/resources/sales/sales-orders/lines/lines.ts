@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../../core/resource';
-import * as MaterialsAPI from '../../../catalog/materials';
-import * as ProductLinesAPI from '../../../catalog/product-lines';
+import * as MaterialsAPI from '../../../catalog/materials/materials';
+import * as ProductLinesAPI from '../../../catalog/product-lines/product-lines';
 import * as SalesOrdersAPI from '../sales-orders';
 import * as ActionsAPI from './actions';
 import {
