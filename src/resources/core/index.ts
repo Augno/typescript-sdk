@@ -8,6 +8,8 @@ export {
 } from './addresses/index';
 export {
   Analytics,
+  type AnalyzeDeliveryPerformanceRequest,
+  type AnalyzeDeliveryPerformanceResponse,
   type AnalyzeOeeRequest,
   type AnalyzeOeeResponse,
   type AnalyzeOeeTrendRequest,
@@ -15,8 +17,12 @@ export {
   type AnalyzeScheduleAttainmentRequest,
   type AnalyzeScheduleAttainmentResponse,
   type AttainmentBucket,
+  type DeliveryBacklogBucket,
+  type DeliveryPerformance,
   type FrozenAdherence,
   type ListAttainmentBucket,
+  type ListDeliveryBacklogBucket,
+  type ListDeliveryPerformance,
   type ListFrozenAdherence,
   type ListOeeDepartment,
   type ListOeeDowntimeReason,
@@ -28,6 +34,7 @@ export {
   type AnalyticsUpdateOeeParams,
   type AnalyticsUpdateOeeTrendParams,
   type AnalyticsUpdateScheduleAttainmentParams,
+  type AnalyticsUpdateDeliveryPerformanceParams,
 } from './analytics';
 export {
   AuditEvents,

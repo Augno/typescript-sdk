@@ -87,6 +87,27 @@ describe('resource actions', () => {
     ).rejects.toThrow(Augno.NotFoundError);
   });
 
+  test('quotePromiseDate: only required params', async () => {
+    const responsePromise = client.operations.productionSchedules.actions.quotePromiseDate({
+      item_id: 'it_pej07ckhvu62',
+      quantity: 1200,
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('quotePromiseDate: required and optional params', async () => {
+    const response = await client.operations.productionSchedules.actions.quotePromiseDate({
+      item_id: 'it_pej07ckhvu62',
+      quantity: 1200,
+    });
+  });
+
   test('publish', async () => {
     const responsePromise = client.operations.productionSchedules.actions.publish('pnsc_m4zt3z8g8src');
     const rawResponse = await responsePromise.asResponse();

@@ -36,6 +36,11 @@ export {
   type DepartmentUpdateParams,
 } from './departments';
 export {
+  FulfillmentRecommendations,
+  type FulfillmentRecommendation,
+  type ListFulfillmentRecommendation,
+} from './fulfillment-recommendations/index';
+export {
   LocationTypes,
   type ListLocationType,
   type LocationType,
@@ -104,6 +109,9 @@ export {
   type ListReleaseScheduleBatch,
   type ListReleasedScheduleLine,
   type ListScheduleAppliedOverride,
+  type ListScheduleAtRiskOrder,
+  type ListScheduleOrderCoverage,
+  type ListScheduleOrderCoverageLine,
   type ProductionSchedule,
   type ProductionScheduleDerivedLine,
   type ProductionScheduleDeviation,
@@ -113,7 +121,10 @@ export {
   type ReleaseScheduleWeekPreview,
   type ReleasedScheduleLine,
   type ScheduleAppliedOverride,
+  type ScheduleAtRiskOrder,
   type ScheduleDiagnostics,
+  type ScheduleOrderCoverage,
+  type ScheduleOrderCoverageLine,
   type ProductionScheduleDeleteResponse,
   type ProductionScheduleListParams,
   type ProductionScheduleCreateParams,

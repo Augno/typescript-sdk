@@ -101,6 +101,107 @@ export class Analytics extends APIResource {
   ): APIPromise<AnalyzeScheduleAttainmentResponse> {
     return this._client.put('/v1/core/analytics/schedule-attainment', { body, ...options });
   }
+
+  /**
+   * Returns how reliably promised delivery dates were met.
+   *
+   * Orders are counted in the period their promise came due, not the period they
+   * shipped — an order promised in March and shipped in May is March's miss. On time
+   * means the first shipment left on or before the promised date, because the
+   * promise is that the order starts moving by then; judging on the last shipment
+   * would fail an order the customer received on time in two boxes. On time in full
+   * adds that the whole ordered quantity was packed.
+   *
+   * The denominator is orders that were due, not orders that shipped, so an order
+   * past its date and still unshipped counts against the rate rather than being held
+   * back until it moves. Excluding open orders would let a plant with a growing late
+   * backlog report perfect delivery.
+   *
+   * Only orders carrying a ship-by commitment participate. An order with no
+   * commitment cannot be late, and counting it as on time would inflate the rate
+   * with orders nobody promised anything about — `uncommitted_order_count` says how
+   * many were excluded, so the gap is visible rather than silent.
+   *
+   * Every rate is null rather than zero when nothing was due, and average lateness
+   * is measured over late orders only.
+   *
+   * This endpoint requires the permission: `sales_orders:read`.
+   *
+   * @example
+   * ```ts
+   * const analyzeDeliveryPerformanceResponse =
+   *   await client.core.analytics.updateDeliveryPerformance({
+   *     ends_at: '2026-05-10T00:23:00Z',
+   *     starts_at: '2026-05-10T00:00:00Z',
+   *     granularity: 'week',
+   *   });
+   * ```
+   */
+  updateDeliveryPerformance(
+    body: AnalyticsUpdateDeliveryPerformanceParams,
+    options?: RequestOptions,
+  ): APIPromise<AnalyzeDeliveryPerformanceResponse> {
+    return this._client.put('/v1/core/analytics/delivery-performance', { body, ...options });
+  }
+}
+
+/**
+ * AnalyzeDeliveryPerformanceRequest is the request to measure promises against
+ * shipments.
+ */
+export interface AnalyzeDeliveryPerformanceRequest {
+  /**
+   * The end date for the analysis period.
+   */
+  ends_at: string;
+
+  /**
+   * The start date for the analysis period.
+   */
+  starts_at: string;
+
+  /**
+   * The period to break the results down by. Defaults to `week`.
+   */
+  granularity?: 'day' | 'week' | 'month';
+}
+
+/**
+ * How reliably promised delivery dates were met.
+ */
+export interface AnalyzeDeliveryPerformanceResponse {
+  /**
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
+   */
+  backlog: ListDeliveryBacklogBucket | null;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'analyze_delivery_performance_response';
+
+  /**
+   * Delivery reliability for one period, or for a whole window.
+   */
+  overall: DeliveryPerformance | null;
+
+  /**
+   * A single page of resources, together with the metadata needed to page through
+   * the rest of the result set.
+   */
+  periods: ListDeliveryPerformance | null;
+
+  /**
+   * Issued orders in the window carrying no ship-by date, excluded from every rate
+   * above.
+   *
+   * Reported so the exclusion is visible: a delivery score computed over half the
+   * order book, silently, is worse than one that says which half. A non-zero count
+   * here means orders placed before commitments were tracked still need a ship-by
+   * date.
+   */
+  uncommitted_order_count: number;
 }
 
 /**
@@ -355,6 +456,127 @@ export interface AttainmentBucket {
 }
 
 /**
+ * One age band of orders past their promise and still unshipped.
+ */
+export interface DeliveryBacklogBucket {
+  /**
+   * Name of the band.
+   */
+  label: string;
+
+  /**
+   * Upper bound in days late; `0` means unbounded.
+   */
+  max_days_late: number;
+
+  /**
+   * Lower bound of the band in days late.
+   */
+  min_days_late: number;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'delivery_backlog_bucket';
+
+  /**
+   * Orders in the band.
+   */
+  order_count: number;
+
+  /**
+   * Quantity still owed across them, which is what remains unpacked rather than what
+   * was ordered.
+   */
+  units: number;
+}
+
+/**
+ * Delivery reliability for one period, or for a whole window.
+ */
+export interface DeliveryPerformance {
+  /**
+   * Average lead time these orders were promised.
+   *
+   * The gap between this and `average_lead_time_days` is what a lead time is
+   * renegotiated on.
+   */
+  average_committed_lead_time_days: number | null;
+
+  /**
+   * Average days late, over late orders only.
+   *
+   * Averaging over every order would dilute a real problem into a number that looks
+   * fine.
+   */
+  average_days_late: number | null;
+
+  /**
+   * Average days from issue to first shipment, over orders that have shipped.
+   */
+  average_lead_time_days: number | null;
+
+  /**
+   * Orders whose promised ship date fell in this period.
+   *
+   * This is the denominator for both rates below — orders that were due, not orders
+   * that shipped. Measuring against shipments only would let unshipped late orders
+   * disappear from the score.
+   */
+  committed_order_count: number;
+
+  /**
+   * How many shipped late, plus those already past their date and still unshipped.
+   */
+  late_order_count: number;
+
+  /**
+   * How many due in this period have not shipped at all.
+   *
+   * These count against on-time: a promise not yet met is not a promise kept.
+   */
+  not_yet_shipped_count: number;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'delivery_performance';
+
+  /**
+   * How many shipped on time and complete.
+   */
+  on_time_in_full_count: number;
+
+  /**
+   * Share of due orders that shipped on time and complete, as a percentage.
+   */
+  on_time_in_full_pct: number | null;
+
+  /**
+   * How many shipped on or before the promised date.
+   */
+  on_time_order_count: number;
+
+  /**
+   * Share of due orders that shipped on time, as a percentage.
+   *
+   * Null rather than zero when nothing was due, so a quiet week does not render as
+   * total failure.
+   */
+  on_time_pct: number | null;
+
+  /**
+   * First day of the period; absent on the overall figure.
+   */
+  period_start: string | null;
+
+  /**
+   * How many of them have shipped at all.
+   */
+  shipped_order_count: number;
+}
+
+/**
  * How well a published commitment survived the week it covered.
  */
 export interface FrozenAdherence {
@@ -418,6 +640,60 @@ export interface ListAttainmentBucket {
    * Resources in this page.
    */
   data: Array<AttainmentBucket>;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'list';
+
+  /**
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
+   */
+  page_info: APIKeysAPI.PageInfo;
+}
+
+/**
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
+ */
+export interface ListDeliveryBacklogBucket {
+  /**
+   * Resources in this page.
+   */
+  data: Array<DeliveryBacklogBucket>;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'list';
+
+  /**
+   * PageInfo describes where the current page sits within a paginated result set and
+   * how to move to the adjacent pages.
+   *
+   * Page a list by following the URLs below rather than assembling cursors yourself.
+   * For a top-level list endpoint the URL repeats the original request's query
+   * string with only the cursor swapped, so following it preserves the same filters,
+   * search term, and page size.
+   */
+  page_info: APIKeysAPI.PageInfo;
+}
+
+/**
+ * A single page of resources, together with the metadata needed to page through
+ * the rest of the result set.
+ */
+export interface ListDeliveryPerformance {
+  /**
+   * Resources in this page.
+   */
+  data: Array<DeliveryPerformance>;
 
   /**
    * Resource type identifier.
@@ -871,8 +1147,27 @@ export interface AnalyticsUpdateScheduleAttainmentParams {
   machine_ids?: Array<string>;
 }
 
+export interface AnalyticsUpdateDeliveryPerformanceParams {
+  /**
+   * The end date for the analysis period.
+   */
+  ends_at: string;
+
+  /**
+   * The start date for the analysis period.
+   */
+  starts_at: string;
+
+  /**
+   * The period to break the results down by. Defaults to `week`.
+   */
+  granularity?: 'day' | 'week' | 'month';
+}
+
 export declare namespace Analytics {
   export {
+    type AnalyzeDeliveryPerformanceRequest as AnalyzeDeliveryPerformanceRequest,
+    type AnalyzeDeliveryPerformanceResponse as AnalyzeDeliveryPerformanceResponse,
     type AnalyzeOeeRequest as AnalyzeOeeRequest,
     type AnalyzeOeeResponse as AnalyzeOeeResponse,
     type AnalyzeOeeTrendRequest as AnalyzeOeeTrendRequest,
@@ -880,8 +1175,12 @@ export declare namespace Analytics {
     type AnalyzeScheduleAttainmentRequest as AnalyzeScheduleAttainmentRequest,
     type AnalyzeScheduleAttainmentResponse as AnalyzeScheduleAttainmentResponse,
     type AttainmentBucket as AttainmentBucket,
+    type DeliveryBacklogBucket as DeliveryBacklogBucket,
+    type DeliveryPerformance as DeliveryPerformance,
     type FrozenAdherence as FrozenAdherence,
     type ListAttainmentBucket as ListAttainmentBucket,
+    type ListDeliveryBacklogBucket as ListDeliveryBacklogBucket,
+    type ListDeliveryPerformance as ListDeliveryPerformance,
     type ListFrozenAdherence as ListFrozenAdherence,
     type ListOeeDepartment as ListOeeDepartment,
     type ListOeeDowntimeReason as ListOeeDowntimeReason,
@@ -893,5 +1192,6 @@ export declare namespace Analytics {
     type AnalyticsUpdateOeeParams as AnalyticsUpdateOeeParams,
     type AnalyticsUpdateOeeTrendParams as AnalyticsUpdateOeeTrendParams,
     type AnalyticsUpdateScheduleAttainmentParams as AnalyticsUpdateScheduleAttainmentParams,
+    type AnalyticsUpdateDeliveryPerformanceParams as AnalyticsUpdateDeliveryPerformanceParams,
   };
 }

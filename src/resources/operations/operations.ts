@@ -90,6 +90,12 @@ import {
   ListCarrier,
   UpdateCarrierRequest,
 } from './carriers/carriers';
+import * as FulfillmentRecommendationsAPI from './fulfillment-recommendations/fulfillment-recommendations';
+import {
+  FulfillmentRecommendation,
+  FulfillmentRecommendations,
+  ListFulfillmentRecommendation,
+} from './fulfillment-recommendations/fulfillment-recommendations';
 import * as LocationsAPI from './locations/locations';
 import {
   CreateLocationRequest,
@@ -118,6 +124,9 @@ import {
   ListReleaseScheduleBatch,
   ListReleasedScheduleLine,
   ListScheduleAppliedOverride,
+  ListScheduleAtRiskOrder,
+  ListScheduleOrderCoverage,
+  ListScheduleOrderCoverageLine,
   ProductionSchedule,
   ProductionScheduleCreateParams,
   ProductionScheduleDeleteResponse,
@@ -134,7 +143,10 @@ import {
   ReleaseScheduleWeekPreview,
   ReleasedScheduleLine,
   ScheduleAppliedOverride,
+  ScheduleAtRiskOrder,
   ScheduleDiagnostics,
+  ScheduleOrderCoverage,
+  ScheduleOrderCoverageLine,
 } from './production-schedules/production-schedules';
 import * as ShipmentsAPI from './shipments/shipments';
 import { Shipments } from './shipments/shipments';
@@ -153,6 +165,8 @@ export class Operations extends APIResource {
     new ProductionSchedulesAPI.ProductionSchedules(this._client);
   productionScheduleSettings: ProductionScheduleSettingsAPI.ProductionScheduleSettings =
     new ProductionScheduleSettingsAPI.ProductionScheduleSettings(this._client);
+  fulfillmentRecommendations: FulfillmentRecommendationsAPI.FulfillmentRecommendations =
+    new FulfillmentRecommendationsAPI.FulfillmentRecommendations(this._client);
   locations: LocationsAPI.Locations = new LocationsAPI.Locations(this._client);
   locationTypes: LocationTypesAPI.LocationTypes = new LocationTypesAPI.LocationTypes(this._client);
   shipments: ShipmentsAPI.Shipments = new ShipmentsAPI.Shipments(this._client);
@@ -756,6 +770,7 @@ Operations.Machines = Machines;
 Operations.MachineDowntimeEvents = MachineDowntimeEvents;
 Operations.DemandOverrides = DemandOverrides;
 Operations.ProductionSchedules = ProductionSchedules;
+Operations.FulfillmentRecommendations = FulfillmentRecommendations;
 Operations.Locations = Locations;
 Operations.LocationTypes = LocationTypes;
 Operations.Shipments = Shipments;
@@ -862,6 +877,9 @@ export declare namespace Operations {
     type ListReleaseScheduleBatch as ListReleaseScheduleBatch,
     type ListReleasedScheduleLine as ListReleasedScheduleLine,
     type ListScheduleAppliedOverride as ListScheduleAppliedOverride,
+    type ListScheduleAtRiskOrder as ListScheduleAtRiskOrder,
+    type ListScheduleOrderCoverage as ListScheduleOrderCoverage,
+    type ListScheduleOrderCoverageLine as ListScheduleOrderCoverageLine,
     type ProductionSchedule as ProductionSchedule,
     type ProductionScheduleDerivedLine as ProductionScheduleDerivedLine,
     type ProductionScheduleDeviation as ProductionScheduleDeviation,
@@ -871,7 +889,10 @@ export declare namespace Operations {
     type ReleaseScheduleWeekPreview as ReleaseScheduleWeekPreview,
     type ReleasedScheduleLine as ReleasedScheduleLine,
     type ScheduleAppliedOverride as ScheduleAppliedOverride,
+    type ScheduleAtRiskOrder as ScheduleAtRiskOrder,
     type ScheduleDiagnostics as ScheduleDiagnostics,
+    type ScheduleOrderCoverage as ScheduleOrderCoverage,
+    type ScheduleOrderCoverageLine as ScheduleOrderCoverageLine,
     type ProductionScheduleDeleteResponse as ProductionScheduleDeleteResponse,
     type ProductionScheduleListParams as ProductionScheduleListParams,
     type ProductionScheduleCreateParams as ProductionScheduleCreateParams,
@@ -884,6 +905,12 @@ export declare namespace Operations {
     type ProductionScheduleSettings as ProductionScheduleSettings,
     type UpdateProductionScheduleSettingsRequest as UpdateProductionScheduleSettingsRequest,
     type ProductionScheduleSettingUpdateParams as ProductionScheduleSettingUpdateParams,
+  };
+
+  export {
+    FulfillmentRecommendations as FulfillmentRecommendations,
+    type FulfillmentRecommendation as FulfillmentRecommendation,
+    type ListFulfillmentRecommendation as ListFulfillmentRecommendation,
   };
 
   export {

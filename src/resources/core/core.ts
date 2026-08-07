@@ -4,9 +4,12 @@ import { APIResource } from '../../core/resource';
 import * as AnalyticsAPI from './analytics';
 import {
   Analytics,
+  AnalyticsUpdateDeliveryPerformanceParams,
   AnalyticsUpdateOeeParams,
   AnalyticsUpdateOeeTrendParams,
   AnalyticsUpdateScheduleAttainmentParams,
+  AnalyzeDeliveryPerformanceRequest,
+  AnalyzeDeliveryPerformanceResponse,
   AnalyzeOeeRequest,
   AnalyzeOeeResponse,
   AnalyzeOeeTrendRequest,
@@ -14,8 +17,12 @@ import {
   AnalyzeScheduleAttainmentRequest,
   AnalyzeScheduleAttainmentResponse,
   AttainmentBucket,
+  DeliveryBacklogBucket,
+  DeliveryPerformance,
   FrozenAdherence,
   ListAttainmentBucket,
+  ListDeliveryBacklogBucket,
+  ListDeliveryPerformance,
   ListFrozenAdherence,
   ListOeeDepartment,
   ListOeeDowntimeReason,
@@ -258,7 +265,16 @@ export interface Entity {
     | 'production_schedule_derived_line'
     | 'production_schedule_settings'
     | 'production_schedule_resource_setting'
+    | 'production_schedule_item_setting'
+    | 'fulfillment_recommendation'
+    | 'analyze_delivery_performance_response'
+    | 'delivery_performance'
+    | 'delivery_backlog_bucket'
+    | 'schedule_order_coverage'
+    | 'schedule_order_coverage_line'
+    | 'promise_date_quote'
     | 'schedule_deviation_type'
+    | 'schedule_at_risk_order'
     | 'production_schedule_finished_policy'
     | 'production_schedule_week_release'
     | 'production_schedule_week_release_preview'
@@ -331,6 +347,7 @@ export interface Entity {
     | 'customer_contact_info'
     | 'customer_freight_preferences'
     | 'customer_defaults'
+    | 'customer_lead_time'
     | 'customer_notification_preferences'
     | 'order_notification_recipient'
     | 'order_discount'
@@ -608,7 +625,16 @@ export interface CoreRetrieveSearchParams {
     | 'production_schedule_derived_line'
     | 'production_schedule_settings'
     | 'production_schedule_resource_setting'
+    | 'production_schedule_item_setting'
+    | 'fulfillment_recommendation'
+    | 'analyze_delivery_performance_response'
+    | 'delivery_performance'
+    | 'delivery_backlog_bucket'
+    | 'schedule_order_coverage'
+    | 'schedule_order_coverage_line'
+    | 'promise_date_quote'
     | 'schedule_deviation_type'
+    | 'schedule_at_risk_order'
     | 'production_schedule_finished_policy'
     | 'production_schedule_week_release'
     | 'production_schedule_week_release_preview'
@@ -681,6 +707,7 @@ export interface CoreRetrieveSearchParams {
     | 'customer_contact_info'
     | 'customer_freight_preferences'
     | 'customer_defaults'
+    | 'customer_lead_time'
     | 'customer_notification_preferences'
     | 'order_notification_recipient'
     | 'order_discount'
@@ -852,6 +879,8 @@ export declare namespace Core {
 
   export {
     Analytics as Analytics,
+    type AnalyzeDeliveryPerformanceRequest as AnalyzeDeliveryPerformanceRequest,
+    type AnalyzeDeliveryPerformanceResponse as AnalyzeDeliveryPerformanceResponse,
     type AnalyzeOeeRequest as AnalyzeOeeRequest,
     type AnalyzeOeeResponse as AnalyzeOeeResponse,
     type AnalyzeOeeTrendRequest as AnalyzeOeeTrendRequest,
@@ -859,8 +888,12 @@ export declare namespace Core {
     type AnalyzeScheduleAttainmentRequest as AnalyzeScheduleAttainmentRequest,
     type AnalyzeScheduleAttainmentResponse as AnalyzeScheduleAttainmentResponse,
     type AttainmentBucket as AttainmentBucket,
+    type DeliveryBacklogBucket as DeliveryBacklogBucket,
+    type DeliveryPerformance as DeliveryPerformance,
     type FrozenAdherence as FrozenAdherence,
     type ListAttainmentBucket as ListAttainmentBucket,
+    type ListDeliveryBacklogBucket as ListDeliveryBacklogBucket,
+    type ListDeliveryPerformance as ListDeliveryPerformance,
     type ListFrozenAdherence as ListFrozenAdherence,
     type ListOeeDepartment as ListOeeDepartment,
     type ListOeeDowntimeReason as ListOeeDowntimeReason,
@@ -872,5 +905,6 @@ export declare namespace Core {
     type AnalyticsUpdateOeeParams as AnalyticsUpdateOeeParams,
     type AnalyticsUpdateOeeTrendParams as AnalyticsUpdateOeeTrendParams,
     type AnalyticsUpdateScheduleAttainmentParams as AnalyticsUpdateScheduleAttainmentParams,
+    type AnalyticsUpdateDeliveryPerformanceParams as AnalyticsUpdateDeliveryPerformanceParams,
   };
 }

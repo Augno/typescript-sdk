@@ -199,6 +199,16 @@ export interface CreateProductLineRequest {
    * the same way as physical amounts like weights or counts.
    */
   default_lot?: QuantityInput;
+
+  /**
+   * How products in this line are produced when they do not say for themselves.
+   *
+   * - `make_to_stock`: built to the forecast, holding a safety stock against its
+   *   variability.
+   * - `make_to_order`: built only against orders already on the book, holding no
+   *   buffer.
+   */
+  fulfillment_policy?: 'make_to_stock' | 'make_to_order';
 }
 
 /**
@@ -278,6 +288,18 @@ export interface ProductLine {
    *   elsewhere.
    */
   freight_policy: 'free_freight' | 'billed_freight';
+
+  /**
+   * How products in this line are produced when they do not say for themselves.
+   *
+   * - `make_to_stock`: built to the forecast, holding a safety stock against its
+   *   variability.
+   * - `make_to_order`: built only against orders already on the book, holding no
+   *   buffer.
+   *
+   * Null falls through to the account default.
+   */
+  fulfillment_policy: 'make_to_stock' | 'make_to_order' | null;
 
   /**
    * Display name of the product line.
@@ -365,6 +387,18 @@ export interface UpdateProductLineRequest {
    *   elsewhere.
    */
   freight_policy?: 'free_freight' | 'billed_freight';
+
+  /**
+   * How products in this line are produced when they do not say for themselves.
+   *
+   * - `make_to_stock`: built to the forecast, holding a safety stock against its
+   *   variability.
+   * - `make_to_order`: built only against orders already on the book, holding no
+   *   buffer.
+   *
+   * Clearing it returns the line's products to the account default.
+   */
+  fulfillment_policy?: 'make_to_stock' | 'make_to_order' | null;
 
   /**
    * Display name of the product line.
@@ -473,6 +507,17 @@ export interface ProductLineCreateParams {
    * the same way as physical amounts like weights or counts.
    */
   default_lot?: QuantityInput;
+
+  /**
+   * Body param: How products in this line are produced when they do not say for
+   * themselves.
+   *
+   * - `make_to_stock`: built to the forecast, holding a safety stock against its
+   *   variability.
+   * - `make_to_order`: built only against orders already on the book, holding no
+   *   buffer.
+   */
+  fulfillment_policy?: 'make_to_stock' | 'make_to_order';
 }
 
 export interface ProductLineUpdateParams {
@@ -507,6 +552,19 @@ export interface ProductLineUpdateParams {
    *   elsewhere.
    */
   freight_policy?: 'free_freight' | 'billed_freight';
+
+  /**
+   * Body param: How products in this line are produced when they do not say for
+   * themselves.
+   *
+   * - `make_to_stock`: built to the forecast, holding a safety stock against its
+   *   variability.
+   * - `make_to_order`: built only against orders already on the book, holding no
+   *   buffer.
+   *
+   * Clearing it returns the line's products to the account default.
+   */
+  fulfillment_policy?: 'make_to_stock' | 'make_to_order' | null;
 
   /**
    * Body param: Display name of the product line.

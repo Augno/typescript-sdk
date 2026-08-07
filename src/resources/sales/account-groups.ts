@@ -163,6 +163,12 @@ export interface AccountGroup {
   created_at: string;
 
   /**
+   * Calendar days between an order being issued and it being due to ship, inherited
+   * by every customer in this group that has not set its own.
+   */
+  default_lead_time_days: number | null;
+
+  /**
    * Free-form description of the account group.
    */
   description: string | null;
@@ -243,6 +249,12 @@ export interface CreateAccountGroupRequest {
   commission_policy?: 'commission_applied' | 'commission_exempt';
 
   /**
+   * Calendar days between an order being issued and it being due to ship, inherited
+   * by every customer in this group that has not set its own.
+   */
+  default_lead_time_days?: number;
+
+  /**
    * Free-form description of the account group.
    */
   description?: string;
@@ -297,6 +309,13 @@ export interface UpdateAccountGroupRequest {
    *   commission.
    */
   commission_policy?: 'commission_applied' | 'commission_exempt';
+
+  /**
+   * Calendar days between an order being issued and it being due to ship, inherited
+   * by every customer in this group that has not set its own. Clearing it returns
+   * the group's customers to the account default.
+   */
+  default_lead_time_days?: number | null;
 
   /**
    * Free-form description of the account group.
@@ -384,6 +403,12 @@ export interface AccountGroupCreateParams {
   commission_policy?: 'commission_applied' | 'commission_exempt';
 
   /**
+   * Calendar days between an order being issued and it being due to ship, inherited
+   * by every customer in this group that has not set its own.
+   */
+  default_lead_time_days?: number;
+
+  /**
    * Free-form description of the account group.
    */
   description?: string;
@@ -408,6 +433,13 @@ export interface AccountGroupUpdateParams {
    *   commission.
    */
   commission_policy?: 'commission_applied' | 'commission_exempt';
+
+  /**
+   * Calendar days between an order being issued and it being due to ship, inherited
+   * by every customer in this group that has not set its own. Clearing it returns
+   * the group's customers to the account default.
+   */
+  default_lead_time_days?: number | null;
 
   /**
    * Free-form description of the account group.

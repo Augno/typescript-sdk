@@ -155,6 +155,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/core/analytics/schedule-attainment',
   },
   {
+    clientCallName: 'client.core.analytics.updateDeliveryPerformance',
+    fullyQualifiedName: 'core.analytics.updateDeliveryPerformance',
+    httpMethod: 'put',
+    httpPath: '/v1/core/analytics/delivery-performance',
+  },
+  {
     clientCallName: 'client.catalog.units.list',
     fullyQualifiedName: 'catalog.units.list',
     httpMethod: 'get',
@@ -1217,6 +1223,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/sales/customers/{id}',
   },
   {
+    clientCallName: 'client.sales.customers.retrieveLeadTime',
+    fullyQualifiedName: 'sales.customers.retrieveLeadTime',
+    httpMethod: 'get',
+    httpPath: '/v1/sales/customers/{id}/lead-time',
+  },
+  {
     clientCallName: 'client.sales.customers.actions.merge',
     fullyQualifiedName: 'sales.customers.actions.merge',
     httpMethod: 'post',
@@ -1667,6 +1679,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/operations/production-schedules/{id}/derived-lines',
   },
   {
+    clientCallName: 'client.operations.productionSchedules.retrieveAtRiskOrders',
+    fullyQualifiedName: 'operations.productionSchedules.retrieveAtRiskOrders',
+    httpMethod: 'get',
+    httpPath: '/v1/operations/production-schedules/{id}/at-risk-orders',
+  },
+  {
     clientCallName: 'client.operations.productionSchedules.retrieveDeviations',
     fullyQualifiedName: 'operations.productionSchedules.retrieveDeviations',
     httpMethod: 'get',
@@ -1727,6 +1745,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/operations/production-schedules/{id}/actions/regenerate',
   },
   {
+    clientCallName: 'client.operations.productionSchedules.actions.quotePromiseDate',
+    fullyQualifiedName: 'operations.productionSchedules.actions.quotePromiseDate',
+    httpMethod: 'post',
+    httpPath: '/v1/operations/production-schedules/actions/quote-promise-date',
+  },
+  {
     clientCallName: 'client.operations.productionSchedules.actions.publish',
     fullyQualifiedName: 'operations.productionSchedules.actions.publish',
     httpMethod: 'put',
@@ -1773,6 +1797,42 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'operations.productionScheduleSettings.resources.delete',
     httpMethod: 'delete',
     httpPath: '/v1/operations/production-schedule-settings/resources/{id}',
+  },
+  {
+    clientCallName: 'client.operations.productionScheduleSettings.items.list',
+    fullyQualifiedName: 'operations.productionScheduleSettings.items.list',
+    httpMethod: 'get',
+    httpPath: '/v1/operations/production-schedule-settings/items',
+  },
+  {
+    clientCallName: 'client.operations.productionScheduleSettings.items.retrieve',
+    fullyQualifiedName: 'operations.productionScheduleSettings.items.retrieve',
+    httpMethod: 'get',
+    httpPath: '/v1/operations/production-schedule-settings/items/{item_id}',
+  },
+  {
+    clientCallName: 'client.operations.productionScheduleSettings.items.update',
+    fullyQualifiedName: 'operations.productionScheduleSettings.items.update',
+    httpMethod: 'put',
+    httpPath: '/v1/operations/production-schedule-settings/items/{item_id}',
+  },
+  {
+    clientCallName: 'client.operations.productionScheduleSettings.items.delete',
+    fullyQualifiedName: 'operations.productionScheduleSettings.items.delete',
+    httpMethod: 'delete',
+    httpPath: '/v1/operations/production-schedule-settings/items/{item_id}',
+  },
+  {
+    clientCallName: 'client.operations.fulfillmentRecommendations.list',
+    fullyQualifiedName: 'operations.fulfillmentRecommendations.list',
+    httpMethod: 'get',
+    httpPath: '/v1/operations/fulfillment-recommendations',
+  },
+  {
+    clientCallName: 'client.operations.fulfillmentRecommendations.actions.apply',
+    fullyQualifiedName: 'operations.fulfillmentRecommendations.actions.apply',
+    httpMethod: 'post',
+    httpPath: '/v1/operations/fulfillment-recommendations/actions/apply',
   },
   {
     clientCallName: 'client.operations.locations.list',

@@ -127,6 +127,17 @@ describe('resource productionSchedules', () => {
     ).rejects.toThrow(Augno.NotFoundError);
   });
 
+  test('retrieveAtRiskOrders', async () => {
+    const responsePromise = client.operations.productionSchedules.retrieveAtRiskOrders('pnsc_m4zt3z8g8src');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
   test('retrieveDeviations', async () => {
     const responsePromise = client.operations.productionSchedules.retrieveDeviations('pnsc_m4zt3z8g8src');
     const rawResponse = await responsePromise.asResponse();

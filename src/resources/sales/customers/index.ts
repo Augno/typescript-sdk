@@ -9,6 +9,7 @@ export {
   type CustomerContactInfo,
   type CustomerDefaults,
   type CustomerFreightPreferences,
+  type CustomerLeadTime,
   type CustomerNotificationPreferences,
   type ListCustomer,
   type ListServiceLevel,
