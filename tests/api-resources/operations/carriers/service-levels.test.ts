@@ -77,6 +77,7 @@ describe('resource serviceLevels', () => {
       name: 'Ground Shipping',
       include: ['owner'],
       customer_portal_visibility: 'visible',
+      default_transit_days: 3,
     });
   });
 
@@ -99,6 +100,7 @@ describe('resource serviceLevels', () => {
       include: ['owner'],
       code: 'express',
       customer_portal_visibility: 'visible',
+      default_transit_days: 0,
       is_default: false,
       name: 'Express Shipping',
     });
