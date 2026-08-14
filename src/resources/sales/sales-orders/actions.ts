@@ -282,12 +282,14 @@ export interface QuoteSalesOrderFreightResponse {
   object: 'sales_order_freight_quote';
 
   /**
-   * A per-unit rate on a sales-order quote.
+   * A rate calculated on demand rather than stored.
    *
-   * A lightweight, unpersisted variant of a rate: it carries no ID or timestamps
-   * because a quote is computed on demand and never stored.
+   * The same shape as a rate minus the fields only a persisted row can have: it
+   * carries no ID and no timestamps because nothing was written. Used where a figure
+   * is derived per request, such as an analysis comparing one customer's price
+   * against the median other customers pay.
    */
-  unit_price: SalesOrdersAPI.SalesOrderQuoteRate | null;
+  unit_price: SalesOrdersAPI.ComputedRate | null;
 }
 
 export interface ActionBulkDeleteResponse {}

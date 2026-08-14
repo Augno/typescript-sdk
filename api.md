@@ -1035,6 +1035,7 @@ Types:
 
 - <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">CheckoutSalesOrderRequest</a></code>
 - <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">CheckoutSalesOrderResponse</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">ComputedRate</a></code>
 - <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">CreateSalesOrderLineInput</a></code>
 - <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">CreateSalesOrderRequest</a></code>
 - <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">CreatedBy</a></code>
@@ -1054,7 +1055,6 @@ Types:
 - <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">SalesOrder</a></code>
 - <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">SalesOrderEmailContactInput</a></code>
 - <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">SalesOrderLine</a></code>
-- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">SalesOrderQuoteRate</a></code>
 - <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">SalesOrderRelated</a></code>
 - <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">SalesOrderStageTotal</a></code>
 - <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">SalesOrderStatus</a></code>

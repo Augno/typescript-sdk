@@ -294,6 +294,43 @@ export interface CheckoutSalesOrderResponse {
 }
 
 /**
+ * A rate calculated on demand rather than stored.
+ *
+ * The same shape as a rate minus the fields only a persisted row can have: it
+ * carries no ID and no timestamps because nothing was written. Used where a figure
+ * is derived per request, such as an analysis comparing one customer's price
+ * against the median other customers pay.
+ */
+export interface ComputedRate {
+  /**
+   * Unit of measurement used for conversions and product quantities.
+   */
+  denominator_unit: UnitsAPI.Unit | null;
+
+  /**
+   * Human-readable formatted value (e.g. "$25.50 / pr").
+   */
+  display_value: string;
+
+  /**
+   * Unit of measurement used for conversions and product quantities.
+   */
+  numerator_unit: UnitsAPI.Unit | null;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'computed_rate';
+
+  /**
+   * Decimal value of the rate, as a string to preserve precision.
+   *
+   * Expressed as the amount of the numerator unit per one denominator unit.
+   */
+  value: string;
+}
+
+/**
  * Line item input for a create sales order request.
  *
  * The item, unit cost, and (unless an internal user supplies a `unit_price`
@@ -850,12 +887,14 @@ export interface QuotedSalesOrderLine {
   product: ProductsAPI.Product | null;
 
   /**
-   * A per-unit rate on a sales-order quote.
+   * A rate calculated on demand rather than stored.
    *
-   * A lightweight, unpersisted variant of a rate: it carries no ID or timestamps
-   * because a quote is computed on demand and never stored.
+   * The same shape as a rate minus the fields only a persisted row can have: it
+   * carries no ID and no timestamps because nothing was written. Used where a figure
+   * is derived per request, such as an analysis comparing one customer's price
+   * against the median other customers pay.
    */
-  unit_price: SalesOrderQuoteRate | null;
+  unit_price: ComputedRate | null;
 }
 
 /**
@@ -1265,35 +1304,6 @@ export interface SalesOrderLine {
    * Last updated timestamp.
    */
   updated_at: string;
-}
-
-/**
- * A per-unit rate on a sales-order quote.
- *
- * A lightweight, unpersisted variant of a rate: it carries no ID or timestamps
- * because a quote is computed on demand and never stored.
- */
-export interface SalesOrderQuoteRate {
-  /**
-   * Unit of measurement used for conversions and product quantities.
-   */
-  denominator_unit: UnitsAPI.Unit | null;
-
-  /**
-   * Unit of measurement used for conversions and product quantities.
-   */
-  numerator_unit: UnitsAPI.Unit | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'sales_order_quote_rate';
-
-  /**
-   * Decimal value of the rate, expressed as the amount of the numerator unit per one
-   * denominator unit.
-   */
-  value: string;
 }
 
 /**
@@ -2130,6 +2140,7 @@ export declare namespace SalesOrders {
   export {
     type CheckoutSalesOrderRequest as CheckoutSalesOrderRequest,
     type CheckoutSalesOrderResponse as CheckoutSalesOrderResponse,
+    type ComputedRate as ComputedRate,
     type CreateSalesOrderLineInput as CreateSalesOrderLineInput,
     type CreateSalesOrderRequest as CreateSalesOrderRequest,
     type CreatedBy as CreatedBy,
@@ -2149,7 +2160,6 @@ export declare namespace SalesOrders {
     type SalesOrder as SalesOrder,
     type SalesOrderEmailContactInput as SalesOrderEmailContactInput,
     type SalesOrderLine as SalesOrderLine,
-    type SalesOrderQuoteRate as SalesOrderQuoteRate,
     type SalesOrderRelated as SalesOrderRelated,
     type SalesOrderStageTotal as SalesOrderStageTotal,
     type SalesOrderStatus as SalesOrderStatus,
