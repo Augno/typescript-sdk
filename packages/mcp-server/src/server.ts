@@ -29,7 +29,7 @@ export const newMcpServer = async ({
   new McpServer(
     {
       name: 'augno_api',
-      version: '0.16.1',
+      version: '0.17.0',
     },
     {
       instructions: await getInstructions({ stainlessApiKey, customInstructionsPath }),
