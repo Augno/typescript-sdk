@@ -24,6 +24,7 @@ describe('resource actions', () => {
   test('bulkUpsert: required and optional params', async () => {
     const response = await client.catalog.properties.actions.bulkUpsert({
       properties: [{ attributes: [{ value: 'Premium', color: 'red' }], name: 'Color' }],
+      include: ['created_by'],
     });
   });
 });

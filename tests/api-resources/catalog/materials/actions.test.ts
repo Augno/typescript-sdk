@@ -50,6 +50,7 @@ describe('resource actions', () => {
           },
         },
       ],
+      include: ['created_by'],
     });
   });
 });

@@ -38,6 +38,7 @@ describe('resource actions', () => {
           unit_group: { id: 'ug_andst6m79n41', name: 'name' },
         },
       ],
+      include: ['created_by'],
     });
   });
 });

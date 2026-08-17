@@ -175,6 +175,15 @@ export interface CreateAccountUserRequest {
   email?: string;
 
   /**
+   * Whether the user can be assigned as a sales representative on orders,
+   * territories, and targets.
+   *
+   * Defaults to false. Forced true for the `sales_rep` role type and rejected for
+   * scanner and agent roles.
+   */
+  is_commission_eligible?: boolean;
+
+  /**
    * User display name.
    */
   name?: string;
@@ -280,6 +289,15 @@ export interface UpdateAccountUserRequest {
   email?: string;
 
   /**
+   * Whether the user can be assigned as a sales representative on orders,
+   * territories, and targets.
+   *
+   * Forced true for the `sales_rep` role type and rejected for scanner and agent
+   * roles. Cannot be turned off while the user stays on a `sales_rep` role.
+   */
+  is_commission_eligible?: boolean;
+
+  /**
    * User display name.
    */
   name?: string;
@@ -323,6 +341,14 @@ export interface AccountUserListParams {
    * `null`.
    */
   include?: Array<'user' | 'role' | 'department'>;
+
+  /**
+   * Filter by commission eligibility.
+   *
+   * Exact match on the column. Pass `true` to list users who can be assigned as
+   * sales representatives, including dedicated `sales_rep` users.
+   */
+  is_commission_eligible?: boolean;
 
   /**
    * Maximum number of results to return in a single page.
@@ -389,6 +415,15 @@ export interface AccountUserCreateParams {
   email?: string;
 
   /**
+   * Body param: Whether the user can be assigned as a sales representative on
+   * orders, territories, and targets.
+   *
+   * Defaults to false. Forced true for the `sales_rep` role type and rejected for
+   * scanner and agent roles.
+   */
+  is_commission_eligible?: boolean;
+
+  /**
    * Body param: User display name.
    */
   name?: string;
@@ -453,6 +488,15 @@ export interface AccountUserUpdateParams {
    * Must not already be in use by another user.
    */
   email?: string;
+
+  /**
+   * Body param: Whether the user can be assigned as a sales representative on
+   * orders, territories, and targets.
+   *
+   * Forced true for the `sales_rep` role type and rejected for scanner and agent
+   * roles. Cannot be turned off while the user stays on a `sales_rep` role.
+   */
+  is_commission_eligible?: boolean;
 
   /**
    * Body param: User display name.

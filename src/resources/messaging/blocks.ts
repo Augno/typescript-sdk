@@ -100,6 +100,15 @@ export interface AccountUser {
   department: Department | null;
 
   /**
+   * Whether this user can be assigned as a sales representative on orders,
+   * territories, and targets.
+   *
+   * Independent of the `sales_rep` role type, which still scopes analytics and hides
+   * cost. Users with the `sales_rep` role are always eligible.
+   */
+  is_commission_eligible: boolean;
+
+  /**
    * When the user last accessed this account.
    */
   last_used_at: string | null;

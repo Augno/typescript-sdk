@@ -722,7 +722,7 @@ export class Augno {
       {
         Accept: 'application/json',
         'User-Agent': this.getUserAgent(),
-        'Augno-Version': '1.0.forge-preview.2',
+        'Augno-Version': '1.0.forge-preview.3',
         'Augno-Account': this.augnoAccountID,
       },
       await this.authHeaders(options),

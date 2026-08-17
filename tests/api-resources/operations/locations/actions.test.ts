@@ -31,6 +31,7 @@ describe('resource actions', () => {
           parent: { id: 'id', name: 'name' },
         },
       ],
+      include: ['created_by'],
     });
   });
 });

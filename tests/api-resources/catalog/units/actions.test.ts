@@ -46,6 +46,7 @@ describe('resource actions', () => {
           type: 'mass',
         },
       ],
+      include: ['created_by'],
     });
   });
 });

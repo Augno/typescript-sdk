@@ -46,7 +46,17 @@ import {
 import * as EmailLogsAPI from './email-logs';
 import { EmailLog, EmailLogListParams, EmailLogRetrieveParams, EmailLogs, ListEmailLog } from './email-logs';
 import * as JobsAPI from './jobs';
-import { Job, JobExport, JobResult, Jobs, QuotaInfo, ResponseError, RowError } from './jobs';
+import {
+  Job,
+  JobCancelParams,
+  JobExport,
+  JobResult,
+  JobRetrieveParams,
+  Jobs,
+  ListJobResult,
+  QuotaInfo,
+  ResponseError,
+} from './jobs';
 import * as RequestLogsAPI from './request-logs';
 import {
   Actor,
@@ -442,6 +452,8 @@ export interface Entity {
     | 'pack_list_back_order'
     | 'pack_list_case'
     | 'job'
+    | 'job_result'
+    | 'job_export'
     | 'analyze_customer_pricing_response'
     | 'customer_pricing_finding'
     | 'customer_pricing_summary'
@@ -809,6 +821,8 @@ export interface CoreRetrieveSearchParams {
     | 'pack_list_back_order'
     | 'pack_list_case'
     | 'job'
+    | 'job_result'
+    | 'job_export'
     | 'analyze_customer_pricing_response'
     | 'customer_pricing_finding'
     | 'customer_pricing_summary'
@@ -886,9 +900,11 @@ export declare namespace Core {
     type Job as Job,
     type JobExport as JobExport,
     type JobResult as JobResult,
+    type ListJobResult as ListJobResult,
     type QuotaInfo as QuotaInfo,
     type ResponseError as ResponseError,
-    type RowError as RowError,
+    type JobRetrieveParams as JobRetrieveParams,
+    type JobCancelParams as JobCancelParams,
   };
 
   export {

@@ -31,8 +31,13 @@ export class Actions extends APIResource {
    * });
    * ```
    */
-  bulkUpsert(body: ActionBulkUpsertParams, options?: RequestOptions): APIPromise<JobsAPI.Job> {
-    return this._client.post('/v1/catalog/units/actions/bulk-upsert', { body, ...options });
+  bulkUpsert(params: ActionBulkUpsertParams, options?: RequestOptions): APIPromise<JobsAPI.Job> {
+    const { include, ...body } = params;
+    return this._client.post('/v1/catalog/units/actions/bulk-upsert', {
+      query: { include },
+      body,
+      ...options,
+    });
   }
 }
 
@@ -96,9 +101,16 @@ export interface UpsertUnitInput {
 
 export interface ActionBulkUpsertParams {
   /**
-   * Units to create or update, matched by name or abbreviation within the account.
+   * Body param: Units to create or update, matched by name or abbreviation within
+   * the account.
    */
   units: Array<UpsertUnitInput>;
+
+  /**
+   * Query param: Sub-objects to expand in the response. When omitted, sub-objects
+   * are returned as `null`.
+   */
+  include?: Array<'created_by' | 'created_by.role'>;
 }
 
 export declare namespace Actions {
