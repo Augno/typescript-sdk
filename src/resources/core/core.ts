@@ -18,10 +18,14 @@ import {
   AnalyzeScheduleAttainmentResponse,
   AttainmentBucket,
   DeliveryBacklogBucket,
+  DeliveryBreakdown,
+  DeliveryLatenessBucket,
   DeliveryPerformance,
   FrozenAdherence,
   ListAttainmentBucket,
   ListDeliveryBacklogBucket,
+  ListDeliveryBreakdown,
+  ListDeliveryLatenessBucket,
   ListDeliveryPerformance,
   ListFrozenAdherence,
   ListOeeDepartment,
@@ -280,6 +284,8 @@ export interface Entity {
     | 'analyze_delivery_performance_response'
     | 'delivery_performance'
     | 'delivery_backlog_bucket'
+    | 'delivery_lateness_bucket'
+    | 'delivery_breakdown'
     | 'schedule_order_coverage'
     | 'schedule_order_coverage_line'
     | 'promise_date_quote'
@@ -649,6 +655,8 @@ export interface CoreRetrieveSearchParams {
     | 'analyze_delivery_performance_response'
     | 'delivery_performance'
     | 'delivery_backlog_bucket'
+    | 'delivery_lateness_bucket'
+    | 'delivery_breakdown'
     | 'schedule_order_coverage'
     | 'schedule_order_coverage_line'
     | 'promise_date_quote'
@@ -919,10 +927,14 @@ export declare namespace Core {
     type AnalyzeScheduleAttainmentResponse as AnalyzeScheduleAttainmentResponse,
     type AttainmentBucket as AttainmentBucket,
     type DeliveryBacklogBucket as DeliveryBacklogBucket,
+    type DeliveryBreakdown as DeliveryBreakdown,
+    type DeliveryLatenessBucket as DeliveryLatenessBucket,
     type DeliveryPerformance as DeliveryPerformance,
     type FrozenAdherence as FrozenAdherence,
     type ListAttainmentBucket as ListAttainmentBucket,
     type ListDeliveryBacklogBucket as ListDeliveryBacklogBucket,
+    type ListDeliveryBreakdown as ListDeliveryBreakdown,
+    type ListDeliveryLatenessBucket as ListDeliveryLatenessBucket,
     type ListDeliveryPerformance as ListDeliveryPerformance,
     type ListFrozenAdherence as ListFrozenAdherence,
     type ListOeeDepartment as ListOeeDepartment,

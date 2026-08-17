@@ -156,10 +156,14 @@ Types:
 - <code><a href="./src/resources/core/analytics.ts">AnalyzeScheduleAttainmentResponse</a></code>
 - <code><a href="./src/resources/core/analytics.ts">AttainmentBucket</a></code>
 - <code><a href="./src/resources/core/analytics.ts">DeliveryBacklogBucket</a></code>
+- <code><a href="./src/resources/core/analytics.ts">DeliveryBreakdown</a></code>
+- <code><a href="./src/resources/core/analytics.ts">DeliveryLatenessBucket</a></code>
 - <code><a href="./src/resources/core/analytics.ts">DeliveryPerformance</a></code>
 - <code><a href="./src/resources/core/analytics.ts">FrozenAdherence</a></code>
 - <code><a href="./src/resources/core/analytics.ts">ListAttainmentBucket</a></code>
 - <code><a href="./src/resources/core/analytics.ts">ListDeliveryBacklogBucket</a></code>
+- <code><a href="./src/resources/core/analytics.ts">ListDeliveryBreakdown</a></code>
+- <code><a href="./src/resources/core/analytics.ts">ListDeliveryLatenessBucket</a></code>
 - <code><a href="./src/resources/core/analytics.ts">ListDeliveryPerformance</a></code>
 - <code><a href="./src/resources/core/analytics.ts">ListFrozenAdherence</a></code>
 - <code><a href="./src/resources/core/analytics.ts">ListOeeDepartment</a></code>
