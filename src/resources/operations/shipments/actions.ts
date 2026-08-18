@@ -3,7 +3,7 @@
 import { APIResource } from '../../../core/resource';
 import * as AddressesAPI from '../../sales/addresses';
 import * as APIKeysAPI from '../../auth/api-keys/api-keys';
-import * as CustomersAPI from '../../sales/customers/customers';
+import * as AccountPricesAPI from '../../sales/account-prices/account-prices';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 
@@ -129,7 +129,7 @@ export interface RateShopOption {
    * through Shippo for live rating and label purchase; other carriers represent
    * self-managed shipping methods such as will call or local delivery.
    */
-  carrier: CustomersAPI.Carrier | null;
+  carrier: AccountPricesAPI.Carrier | null;
 
   /**
    * Estimated number of days until delivery, when the carrier provides an estimate.
@@ -157,7 +157,7 @@ export interface RateShopOption {
    * Carriers connected through Shippo have their service levels synced from the
    * carrier itself; any carrier can also have service levels you create by hand.
    */
-  service_level: CustomersAPI.ServiceLevel | null;
+  service_level: AccountPricesAPI.ServiceLevel | null;
 }
 
 /**

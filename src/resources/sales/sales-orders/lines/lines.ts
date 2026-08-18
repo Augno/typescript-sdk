@@ -169,7 +169,7 @@ export interface UpdateSalesOrderLineRequest {
   /**
    * Description recorded on the line.
    */
-  product_description?: string;
+  product_description?: string | null;
 
   /**
    * SKU recorded on the line.
@@ -260,7 +260,7 @@ export interface LineUpdateParams {
   /**
    * Body param: Description recorded on the line.
    */
-  product_description?: string;
+  product_description?: string | null;
 
   /**
    * Body param: SKU recorded on the line.

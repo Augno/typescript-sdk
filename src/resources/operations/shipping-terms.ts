@@ -3,7 +3,7 @@
 import { APIResource } from '../../core/resource';
 import * as APIKeysAPI from '../auth/api-keys/api-keys';
 import * as ProductLinesAPI from '../catalog/product-lines/product-lines';
-import * as CustomersAPI from '../sales/customers/customers';
+import * as AccountPricesAPI from '../sales/account-prices/account-prices';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -50,7 +50,7 @@ export class ShippingTerms extends APIResource {
     id: string,
     query: ShippingTermRetrieveParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.ShippingTerm> {
+  ): APIPromise<AccountPricesAPI.ShippingTerm> {
     return this._client.get(path`/v1/operations/shipping-terms/${id}`, { query, ...options });
   }
 
@@ -80,7 +80,10 @@ export class ShippingTerms extends APIResource {
    *   });
    * ```
    */
-  create(params: ShippingTermCreateParams, options?: RequestOptions): APIPromise<CustomersAPI.ShippingTerm> {
+  create(
+    params: ShippingTermCreateParams,
+    options?: RequestOptions,
+  ): APIPromise<AccountPricesAPI.ShippingTerm> {
     const { include, ...body } = params;
     return this._client.post('/v1/operations/shipping-terms', { query: { include }, body, ...options });
   }
@@ -121,7 +124,7 @@ export class ShippingTerms extends APIResource {
     id: string,
     params: ShippingTermUpdateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.ShippingTerm> {
+  ): APIPromise<AccountPricesAPI.ShippingTerm> {
     const { include, ...body } = params ?? {};
     return this._client.patch(path`/v1/operations/shipping-terms/${id}`, {
       query: { include },
@@ -208,7 +211,7 @@ export interface ListShippingTerm {
   /**
    * Resources in this page.
    */
-  data: Array<CustomersAPI.ShippingTerm>;
+  data: Array<AccountPricesAPI.ShippingTerm>;
 
   /**
    * Resource type identifier.

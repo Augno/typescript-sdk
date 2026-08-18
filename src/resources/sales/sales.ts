@@ -33,34 +33,76 @@ import {
   UpdateAddressRequest,
 } from './addresses';
 import * as PrioritiesAPI from './priorities';
-import { ListPriority, Priorities, Priority, PriorityListParams, PriorityRetrieveParams } from './priorities';
+import { ListPriority, Priorities, PriorityListParams, PriorityRetrieveParams } from './priorities';
+import * as VolumeDiscountsAPI from './volume-discounts';
+import {
+  CreateVolumeDiscountRequest,
+  CreateVolumeDiscountTierInput,
+  ListVolumeDiscount,
+  ListVolumeDiscountTier,
+  UpdateVolumeDiscountRequest,
+  UpdateVolumeDiscountTierInput,
+  VolumeDiscount,
+  VolumeDiscountCreateParams,
+  VolumeDiscountDeleteResponse,
+  VolumeDiscountListParams,
+  VolumeDiscountRetrieveParams,
+  VolumeDiscountTier,
+  VolumeDiscountUpdateParams,
+  VolumeDiscounts,
+} from './volume-discounts';
+import * as AccountPricesAPI from './account-prices/account-prices';
+import {
+  AccountPrice,
+  AccountPriceCreateParams,
+  AccountPriceDeleteResponse,
+  AccountPriceListParams,
+  AccountPriceRetrieveParams,
+  AccountPriceUpdateParams,
+  AccountPrices,
+  Carrier,
+  CreateAccountPriceRequest,
+  Customer,
+  CustomerContactInfo,
+  CustomerDefaults,
+  CustomerFreightPreferences,
+  CustomerNotificationPreferences,
+  ListAccountPrice,
+  ListCustomer,
+  ListServiceLevel,
+  PaymentTerm,
+  Priority,
+  ServiceLevel,
+  ShippingTerm,
+  UpdateAccountPriceRequest,
+} from './account-prices/account-prices';
 import * as AccountUsersAPI from './account-users/account-users';
 import { AccountUsers } from './account-users/account-users';
 import * as ContactsAPI from './contacts/contacts';
 import { Contacts } from './contacts/contacts';
 import * as CustomersAPI from './customers/customers';
 import {
-  Carrier,
   CreateCustomerRequest,
-  Customer,
-  CustomerContactInfo,
   CustomerCreateParams,
-  CustomerDefaults,
   CustomerDeleteResponse,
-  CustomerFreightPreferences,
   CustomerLeadTime,
   CustomerListParams,
-  CustomerNotificationPreferences,
   CustomerRetrieveParams,
   CustomerUpdateParams,
   Customers,
-  ListCustomer,
-  ListServiceLevel,
-  PaymentTerm,
-  ServiceLevel,
-  ShippingTerm,
   UpdateCustomerRequest,
 } from './customers/customers';
+import * as OrderDiscountsAPI from './order-discounts/order-discounts';
+import {
+  CreateOrderDiscountRequest,
+  ListOrderDiscount,
+  OrderDiscount,
+  OrderDiscountCreateParams,
+  OrderDiscountListParams,
+  OrderDiscountUpdateParams,
+  OrderDiscounts,
+  UpdateOrderDiscountRequest,
+} from './order-discounts/order-discounts';
 import * as SalesOrdersAPI from './sales-orders/sales-orders';
 import {
   CheckoutSalesOrderRequest,
@@ -76,7 +118,6 @@ import {
   ListSalesOrderLine,
   ListSalesOrderStatus,
   OrderContact,
-  OrderDiscount,
   QuoteSalesOrderLineInput,
   QuoteSalesOrderPricesRequest,
   QuoteSalesOrderPricesResponse,
@@ -103,23 +144,29 @@ import {
 
 export class Sales extends APIResource {
   accountGroups: AccountGroupsAPI.AccountGroups = new AccountGroupsAPI.AccountGroups(this._client);
+  accountPrices: AccountPricesAPI.AccountPrices = new AccountPricesAPI.AccountPrices(this._client);
   addresses: AddressesAPI.Addresses = new AddressesAPI.Addresses(this._client);
   accountStatuses: AccountStatusesAPI.AccountStatuses = new AccountStatusesAPI.AccountStatuses(this._client);
   accountUsers: AccountUsersAPI.AccountUsers = new AccountUsersAPI.AccountUsers(this._client);
   priorities: PrioritiesAPI.Priorities = new PrioritiesAPI.Priorities(this._client);
   customers: CustomersAPI.Customers = new CustomersAPI.Customers(this._client);
   contacts: ContactsAPI.Contacts = new ContactsAPI.Contacts(this._client);
+  orderDiscounts: OrderDiscountsAPI.OrderDiscounts = new OrderDiscountsAPI.OrderDiscounts(this._client);
   salesOrders: SalesOrdersAPI.SalesOrders = new SalesOrdersAPI.SalesOrders(this._client);
+  volumeDiscounts: VolumeDiscountsAPI.VolumeDiscounts = new VolumeDiscountsAPI.VolumeDiscounts(this._client);
 }
 
 Sales.AccountGroups = AccountGroups;
+Sales.AccountPrices = AccountPrices;
 Sales.Addresses = Addresses;
 Sales.AccountStatuses = AccountStatuses;
 Sales.AccountUsers = AccountUsers;
 Sales.Priorities = Priorities;
 Sales.Customers = Customers;
 Sales.Contacts = Contacts;
+Sales.OrderDiscounts = OrderDiscounts;
 Sales.SalesOrders = SalesOrders;
+Sales.VolumeDiscounts = VolumeDiscounts;
 
 export declare namespace Sales {
   export {
@@ -132,6 +179,31 @@ export declare namespace Sales {
     type AccountGroupListParams as AccountGroupListParams,
     type AccountGroupCreateParams as AccountGroupCreateParams,
     type AccountGroupUpdateParams as AccountGroupUpdateParams,
+  };
+
+  export {
+    AccountPrices as AccountPrices,
+    type AccountPrice as AccountPrice,
+    type Carrier as Carrier,
+    type CreateAccountPriceRequest as CreateAccountPriceRequest,
+    type Customer as Customer,
+    type CustomerContactInfo as CustomerContactInfo,
+    type CustomerDefaults as CustomerDefaults,
+    type CustomerFreightPreferences as CustomerFreightPreferences,
+    type CustomerNotificationPreferences as CustomerNotificationPreferences,
+    type ListAccountPrice as ListAccountPrice,
+    type ListCustomer as ListCustomer,
+    type ListServiceLevel as ListServiceLevel,
+    type PaymentTerm as PaymentTerm,
+    type Priority as Priority,
+    type ServiceLevel as ServiceLevel,
+    type ShippingTerm as ShippingTerm,
+    type UpdateAccountPriceRequest as UpdateAccountPriceRequest,
+    type AccountPriceDeleteResponse as AccountPriceDeleteResponse,
+    type AccountPriceListParams as AccountPriceListParams,
+    type AccountPriceRetrieveParams as AccountPriceRetrieveParams,
+    type AccountPriceCreateParams as AccountPriceCreateParams,
+    type AccountPriceUpdateParams as AccountPriceUpdateParams,
   };
 
   export {
@@ -158,26 +230,14 @@ export declare namespace Sales {
   export {
     Priorities as Priorities,
     type ListPriority as ListPriority,
-    type Priority as Priority,
     type PriorityListParams as PriorityListParams,
     type PriorityRetrieveParams as PriorityRetrieveParams,
   };
 
   export {
     Customers as Customers,
-    type Carrier as Carrier,
     type CreateCustomerRequest as CreateCustomerRequest,
-    type Customer as Customer,
-    type CustomerContactInfo as CustomerContactInfo,
-    type CustomerDefaults as CustomerDefaults,
-    type CustomerFreightPreferences as CustomerFreightPreferences,
     type CustomerLeadTime as CustomerLeadTime,
-    type CustomerNotificationPreferences as CustomerNotificationPreferences,
-    type ListCustomer as ListCustomer,
-    type ListServiceLevel as ListServiceLevel,
-    type PaymentTerm as PaymentTerm,
-    type ServiceLevel as ServiceLevel,
-    type ShippingTerm as ShippingTerm,
     type UpdateCustomerRequest as UpdateCustomerRequest,
     type CustomerDeleteResponse as CustomerDeleteResponse,
     type CustomerListParams as CustomerListParams,
@@ -187,6 +247,17 @@ export declare namespace Sales {
   };
 
   export { Contacts as Contacts };
+
+  export {
+    OrderDiscounts as OrderDiscounts,
+    type CreateOrderDiscountRequest as CreateOrderDiscountRequest,
+    type ListOrderDiscount as ListOrderDiscount,
+    type OrderDiscount as OrderDiscount,
+    type UpdateOrderDiscountRequest as UpdateOrderDiscountRequest,
+    type OrderDiscountListParams as OrderDiscountListParams,
+    type OrderDiscountCreateParams as OrderDiscountCreateParams,
+    type OrderDiscountUpdateParams as OrderDiscountUpdateParams,
+  };
 
   export {
     SalesOrders as SalesOrders,
@@ -203,7 +274,6 @@ export declare namespace Sales {
     type ListSalesOrderLine as ListSalesOrderLine,
     type ListSalesOrderStatus as ListSalesOrderStatus,
     type OrderContact as OrderContact,
-    type OrderDiscount as OrderDiscount,
     type QuoteSalesOrderLineInput as QuoteSalesOrderLineInput,
     type QuoteSalesOrderPricesRequest as QuoteSalesOrderPricesRequest,
     type QuoteSalesOrderPricesResponse as QuoteSalesOrderPricesResponse,
@@ -225,5 +295,22 @@ export declare namespace Sales {
     type SalesOrderUpdateParams as SalesOrderUpdateParams,
     type SalesOrderCheckoutParams as SalesOrderCheckoutParams,
     type SalesOrderPriceQuoteParams as SalesOrderPriceQuoteParams,
+  };
+
+  export {
+    VolumeDiscounts as VolumeDiscounts,
+    type CreateVolumeDiscountRequest as CreateVolumeDiscountRequest,
+    type CreateVolumeDiscountTierInput as CreateVolumeDiscountTierInput,
+    type ListVolumeDiscount as ListVolumeDiscount,
+    type ListVolumeDiscountTier as ListVolumeDiscountTier,
+    type UpdateVolumeDiscountRequest as UpdateVolumeDiscountRequest,
+    type UpdateVolumeDiscountTierInput as UpdateVolumeDiscountTierInput,
+    type VolumeDiscount as VolumeDiscount,
+    type VolumeDiscountTier as VolumeDiscountTier,
+    type VolumeDiscountDeleteResponse as VolumeDiscountDeleteResponse,
+    type VolumeDiscountListParams as VolumeDiscountListParams,
+    type VolumeDiscountRetrieveParams as VolumeDiscountRetrieveParams,
+    type VolumeDiscountCreateParams as VolumeDiscountCreateParams,
+    type VolumeDiscountUpdateParams as VolumeDiscountUpdateParams,
   };
 }

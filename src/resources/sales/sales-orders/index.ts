@@ -35,7 +35,6 @@ export {
   type ListSalesOrderLine,
   type ListSalesOrderStatus,
   type OrderContact,
-  type OrderDiscount,
   type QuoteSalesOrderLineInput,
   type QuoteSalesOrderPricesRequest,
   type QuoteSalesOrderPricesResponse,

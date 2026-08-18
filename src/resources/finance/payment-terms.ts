@@ -2,7 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as APIKeysAPI from '../auth/api-keys/api-keys';
-import * as CustomersAPI from '../sales/customers/customers';
+import * as AccountPricesAPI from '../sales/account-prices/account-prices';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -52,7 +52,7 @@ export class PaymentTerms extends APIResource {
     id: string,
     query: PaymentTermRetrieveParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.PaymentTerm> {
+  ): APIPromise<AccountPricesAPI.PaymentTerm> {
     return this._client.get(path`/v1/finance/payment-terms/${id}`, { query, ...options });
   }
 
@@ -71,7 +71,10 @@ export class PaymentTerms extends APIResource {
    *   });
    * ```
    */
-  create(params: PaymentTermCreateParams, options?: RequestOptions): APIPromise<CustomersAPI.PaymentTerm> {
+  create(
+    params: PaymentTermCreateParams,
+    options?: RequestOptions,
+  ): APIPromise<AccountPricesAPI.PaymentTerm> {
     const { include, ...body } = params;
     return this._client.post('/v1/finance/payment-terms', { query: { include }, body, ...options });
   }
@@ -97,7 +100,7 @@ export class PaymentTerms extends APIResource {
     id: string,
     params: PaymentTermUpdateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.PaymentTerm> {
+  ): APIPromise<AccountPricesAPI.PaymentTerm> {
     const { include, ...body } = params ?? {};
     return this._client.patch(path`/v1/finance/payment-terms/${id}`, {
       query: { include },
@@ -148,7 +151,7 @@ export interface ListPaymentTerm {
   /**
    * Resources in this page.
    */
-  data: Array<CustomersAPI.PaymentTerm>;
+  data: Array<AccountPricesAPI.PaymentTerm>;
 
   /**
    * Resource type identifier.

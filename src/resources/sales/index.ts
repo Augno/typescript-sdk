@@ -12,6 +12,30 @@ export {
   type AccountGroupUpdateParams,
 } from './account-groups';
 export {
+  AccountPrices,
+  type AccountPrice,
+  type Carrier,
+  type CreateAccountPriceRequest,
+  type Customer,
+  type CustomerContactInfo,
+  type CustomerDefaults,
+  type CustomerFreightPreferences,
+  type CustomerNotificationPreferences,
+  type ListAccountPrice,
+  type ListCustomer,
+  type ListServiceLevel,
+  type PaymentTerm,
+  type Priority,
+  type ServiceLevel,
+  type ShippingTerm,
+  type UpdateAccountPriceRequest,
+  type AccountPriceDeleteResponse,
+  type AccountPriceListParams,
+  type AccountPriceRetrieveParams,
+  type AccountPriceCreateParams,
+  type AccountPriceUpdateParams,
+} from './account-prices/index';
+export {
   AccountStatuses,
   type AccountStatus,
   type ListAccountStatus,
@@ -32,19 +56,8 @@ export {
 export { Contacts } from './contacts/index';
 export {
   Customers,
-  type Carrier,
   type CreateCustomerRequest,
-  type Customer,
-  type CustomerContactInfo,
-  type CustomerDefaults,
-  type CustomerFreightPreferences,
   type CustomerLeadTime,
-  type CustomerNotificationPreferences,
-  type ListCustomer,
-  type ListServiceLevel,
-  type PaymentTerm,
-  type ServiceLevel,
-  type ShippingTerm,
   type UpdateCustomerRequest,
   type CustomerDeleteResponse,
   type CustomerListParams,
@@ -53,9 +66,18 @@ export {
   type CustomerUpdateParams,
 } from './customers/index';
 export {
+  OrderDiscounts,
+  type CreateOrderDiscountRequest,
+  type ListOrderDiscount,
+  type OrderDiscount,
+  type UpdateOrderDiscountRequest,
+  type OrderDiscountListParams,
+  type OrderDiscountCreateParams,
+  type OrderDiscountUpdateParams,
+} from './order-discounts/index';
+export {
   Priorities,
   type ListPriority,
-  type Priority,
   type PriorityListParams,
   type PriorityRetrieveParams,
 } from './priorities';
@@ -75,7 +97,6 @@ export {
   type ListSalesOrderLine,
   type ListSalesOrderStatus,
   type OrderContact,
-  type OrderDiscount,
   type QuoteSalesOrderLineInput,
   type QuoteSalesOrderPricesRequest,
   type QuoteSalesOrderPricesResponse,
@@ -98,3 +119,19 @@ export {
   type SalesOrderCheckoutParams,
   type SalesOrderPriceQuoteParams,
 } from './sales-orders/index';
+export {
+  VolumeDiscounts,
+  type CreateVolumeDiscountRequest,
+  type CreateVolumeDiscountTierInput,
+  type ListVolumeDiscount,
+  type ListVolumeDiscountTier,
+  type UpdateVolumeDiscountRequest,
+  type UpdateVolumeDiscountTierInput,
+  type VolumeDiscount,
+  type VolumeDiscountTier,
+  type VolumeDiscountDeleteResponse,
+  type VolumeDiscountListParams,
+  type VolumeDiscountRetrieveParams,
+  type VolumeDiscountCreateParams,
+  type VolumeDiscountUpdateParams,
+} from './volume-discounts';

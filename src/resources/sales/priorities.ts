@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as APIKeysAPI from '../auth/api-keys/api-keys';
+import * as AccountPricesAPI from './account-prices/account-prices';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -50,7 +51,7 @@ export class Priorities extends APIResource {
     id: string,
     query: PriorityRetrieveParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<Priority> {
+  ): APIPromise<AccountPricesAPI.Priority> {
     return this._client.get(path`/v1/sales/priorities/${id}`, { query, ...options });
   }
 }
@@ -63,7 +64,7 @@ export interface ListPriority {
   /**
    * Resources in this page.
    */
-  data: Array<Priority>;
+  data: Array<AccountPricesAPI.Priority>;
 
   /**
    * Resource type identifier.
@@ -80,54 +81,6 @@ export interface ListPriority {
    * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
-}
-
-/**
- * Priority level used to order work on sales orders, purchase orders, and picks.
- *
- * The levels are platform-provided and the same for every account, so they cannot
- * be created, renamed, or removed. A customer can carry a default priority that
- * pre-fills new orders for them.
- */
-export interface Priority {
-  /**
-   * Priority ID.
-   */
-  id: string;
-
-  /**
-   * Machine-readable code identifying the priority level.
-   *
-   * Other resources refer to a priority by this code rather than by its ID, such as
-   * a sales order's `priority`, and it can be used in place of the ID when
-   * retrieving a priority.
-   */
-  code: 'low' | 'normal' | 'high';
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * Display name of the priority level.
-   */
-  name: string;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'priority';
-
-  /**
-   * Owner describes the provenance of a resource.
-   */
-  owner: APIKeysAPI.Owner | null;
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
 }
 
 export interface PriorityListParams {
@@ -170,7 +123,6 @@ export interface PriorityRetrieveParams {
 export declare namespace Priorities {
   export {
     type ListPriority as ListPriority,
-    type Priority as Priority,
     type PriorityListParams as PriorityListParams,
     type PriorityRetrieveParams as PriorityRetrieveParams,
   };

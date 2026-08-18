@@ -8,7 +8,8 @@ import * as MaterialsAPI from '../../catalog/materials/materials';
 import * as ProductLinesAPI from '../../catalog/product-lines/product-lines';
 import * as ProductsAPI from '../../catalog/products/products';
 import * as UnitsAPI from '../../catalog/units/units';
-import * as CustomersAPI from '../customers/customers';
+import * as AccountPricesAPI from '../account-prices/account-prices';
+import * as OrderDiscountsAPI from '../order-discounts/order-discounts';
 import * as ActionsAPI from './actions';
 import {
   ActionBulkDeleteParams,
@@ -564,7 +565,7 @@ export interface Freight {
    * through Shippo for live rating and label purchase; other carriers represent
    * self-managed shipping methods such as will call or local delivery.
    */
-  carrier: CustomersAPI.Carrier | null;
+  carrier: AccountPricesAPI.Carrier | null;
 
   /**
    * Resource type identifier.
@@ -590,7 +591,7 @@ export interface Freight {
    * Carriers connected through Shippo have their service levels synced from the
    * carrier itself; any carrier can also have service levels you create by hand.
    */
-  service_level: CustomersAPI.ServiceLevel | null;
+  service_level: AccountPricesAPI.ServiceLevel | null;
 }
 
 /**
@@ -746,76 +747,6 @@ export interface OrderContact {
    * Resource type identifier.
    */
   object: 'order_contact';
-}
-
-/**
- * A discount code that can be applied to a sales order.
- *
- * An order discount reduces the order total by either a percentage or a fixed
- * amount, depending on `discount_type`. The reduction is capped at the order total
- * and rounded to the nearest cent.
- */
-export interface OrderDiscount {
-  /**
-   * Order discount ID.
-   */
-  id: string;
-
-  /**
-   * The flat amount taken off the order total, as a decimal string.
-   *
-   * Only read when `discount_type` is `amount`.
-   */
-  amount: string;
-
-  /**
-   * The code a buyer enters to apply this discount to an order.
-   *
-   * Codes are unique within your account and are matched without regard to letter
-   * case.
-   */
-  code: string;
-
-  /**
-   * Creation timestamp.
-   */
-  created_at: string;
-
-  /**
-   * How the discount is calculated.
-   *
-   * - `percentage`: the order total is reduced by the fraction in `percentage`.
-   * - `amount`: the order total is reduced by the flat amount in `amount`.
-   */
-  discount_type: 'percentage' | 'amount';
-
-  /**
-   * Display name of the discount.
-   */
-  name: string;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'order_discount';
-
-  /**
-   * How many sales orders this discount has been applied to, across all buyers.
-   */
-  order_count: number;
-
-  /**
-   * The fraction of the order total taken off, as a decimal string.
-   *
-   * This is a multiplier, not a whole percent: `0.1` takes 10% off. Only read when
-   * `discount_type` is `percentage`.
-   */
-  percentage: string;
-
-  /**
-   * Last updated timestamp.
-   */
-  updated_at: string;
 }
 
 /**
@@ -1015,7 +946,7 @@ export interface SalesOrder {
    * A business you sell to, with its contact details, default fulfillment settings,
    * and order policies.
    */
-  customer: CustomersAPI.Customer | null;
+  customer: AccountPricesAPI.Customer | null;
 
   /**
    * The customer's own purchase order number, for cross-referencing.
@@ -1092,7 +1023,7 @@ export interface SalesOrder {
    * amount, depending on `discount_type`. The reduction is capped at the order total
    * and rounded to the nearest cent.
    */
-  order_discount: OrderDiscount | null;
+  order_discount: OrderDiscountsAPI.OrderDiscount | null;
 
   /**
    * Stripe payment intent IDs recorded against this order.
@@ -1109,7 +1040,7 @@ export interface SalesOrder {
    * A payment term describing when payment is due (e.g. `Net 30`), assignable to
    * customers, sales orders, purchase orders, and invoices.
    */
-  payment_term: CustomersAPI.PaymentTerm | null;
+  payment_term: AccountPricesAPI.PaymentTerm | null;
 
   /**
    * Fulfillment priority, used to rank orders on the shop floor.
@@ -1163,7 +1094,7 @@ export interface SalesOrder {
    * of its price groups are checked first and zero the freight charge before the
    * shipping term is considered.
    */
-  shipping_term: CustomersAPI.ShippingTerm | null;
+  shipping_term: AccountPricesAPI.ShippingTerm | null;
 
   /**
    * Order lifecycle status.
@@ -2151,7 +2082,6 @@ export declare namespace SalesOrders {
     type ListSalesOrderLine as ListSalesOrderLine,
     type ListSalesOrderStatus as ListSalesOrderStatus,
     type OrderContact as OrderContact,
-    type OrderDiscount as OrderDiscount,
     type QuoteSalesOrderLineInput as QuoteSalesOrderLineInput,
     type QuoteSalesOrderPricesRequest as QuoteSalesOrderPricesRequest,
     type QuoteSalesOrderPricesResponse as QuoteSalesOrderPricesResponse,

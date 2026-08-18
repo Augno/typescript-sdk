@@ -14,7 +14,7 @@ import {
   ServiceLevels,
   UpdateServiceLevelRequest,
 } from './service-levels';
-import * as CustomersAPI from '../../sales/customers/customers';
+import * as AccountPricesAPI from '../../sales/account-prices/account-prices';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
@@ -60,7 +60,7 @@ export class Carriers extends APIResource {
     id: string,
     query: CarrierRetrieveParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.Carrier> {
+  ): APIPromise<AccountPricesAPI.Carrier> {
     return this._client.get(path`/v1/operations/carriers/${id}`, { query, ...options });
   }
 
@@ -86,7 +86,7 @@ export class Carriers extends APIResource {
    * });
    * ```
    */
-  create(params: CarrierCreateParams, options?: RequestOptions): APIPromise<CustomersAPI.Carrier> {
+  create(params: CarrierCreateParams, options?: RequestOptions): APIPromise<AccountPricesAPI.Carrier> {
     const { include, ...body } = params;
     return this._client.post('/v1/operations/carriers', { query: { include }, body, ...options });
   }
@@ -114,7 +114,7 @@ export class Carriers extends APIResource {
     id: string,
     params: CarrierUpdateParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomersAPI.Carrier> {
+  ): APIPromise<AccountPricesAPI.Carrier> {
     const { include, ...body } = params ?? {};
     return this._client.patch(path`/v1/operations/carriers/${id}`, { query: { include }, body, ...options });
   }
@@ -186,7 +186,7 @@ export interface ListCarrier {
   /**
    * Resources in this page.
    */
-  data: Array<CustomersAPI.Carrier>;
+  data: Array<AccountPricesAPI.Carrier>;
 
   /**
    * Resource type identifier.

@@ -922,6 +922,46 @@ Methods:
 - <code title="patch /v1/sales/account-groups/{id}">client.sales.accountGroups.<a href="./src/resources/sales/account-groups.ts">update</a>(id, { ...params }) -> AccountGroup</code>
 - <code title="delete /v1/sales/account-groups/{id}">client.sales.accountGroups.<a href="./src/resources/sales/account-groups.ts">delete</a>(id) -> AccountGroupDeleteResponse</code>
 
+## AccountPrices
+
+Types:
+
+- <code><a href="./src/resources/sales/account-prices/account-prices.ts">AccountPrice</a></code>
+- <code><a href="./src/resources/sales/account-prices/account-prices.ts">Carrier</a></code>
+- <code><a href="./src/resources/sales/account-prices/account-prices.ts">CreateAccountPriceRequest</a></code>
+- <code><a href="./src/resources/sales/account-prices/account-prices.ts">Customer</a></code>
+- <code><a href="./src/resources/sales/account-prices/account-prices.ts">CustomerContactInfo</a></code>
+- <code><a href="./src/resources/sales/account-prices/account-prices.ts">CustomerDefaults</a></code>
+- <code><a href="./src/resources/sales/account-prices/account-prices.ts">CustomerFreightPreferences</a></code>
+- <code><a href="./src/resources/sales/account-prices/account-prices.ts">CustomerNotificationPreferences</a></code>
+- <code><a href="./src/resources/sales/account-prices/account-prices.ts">ListAccountPrice</a></code>
+- <code><a href="./src/resources/sales/account-prices/account-prices.ts">ListCustomer</a></code>
+- <code><a href="./src/resources/sales/account-prices/account-prices.ts">ListServiceLevel</a></code>
+- <code><a href="./src/resources/sales/account-prices/account-prices.ts">PaymentTerm</a></code>
+- <code><a href="./src/resources/sales/account-prices/account-prices.ts">Priority</a></code>
+- <code><a href="./src/resources/sales/account-prices/account-prices.ts">ServiceLevel</a></code>
+- <code><a href="./src/resources/sales/account-prices/account-prices.ts">ShippingTerm</a></code>
+- <code><a href="./src/resources/sales/account-prices/account-prices.ts">UpdateAccountPriceRequest</a></code>
+- <code><a href="./src/resources/sales/account-prices/account-prices.ts">AccountPriceDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/sales/account-prices">client.sales.accountPrices.<a href="./src/resources/sales/account-prices/account-prices.ts">list</a>({ ...params }) -> ListAccountPrice</code>
+- <code title="get /v1/sales/account-prices/{id}">client.sales.accountPrices.<a href="./src/resources/sales/account-prices/account-prices.ts">retrieve</a>(id, { ...params }) -> AccountPrice</code>
+- <code title="post /v1/sales/account-prices">client.sales.accountPrices.<a href="./src/resources/sales/account-prices/account-prices.ts">create</a>({ ...params }) -> AccountPrice</code>
+- <code title="patch /v1/sales/account-prices/{id}">client.sales.accountPrices.<a href="./src/resources/sales/account-prices/account-prices.ts">update</a>(id, { ...params }) -> AccountPrice</code>
+- <code title="delete /v1/sales/account-prices/{id}">client.sales.accountPrices.<a href="./src/resources/sales/account-prices/account-prices.ts">delete</a>(id) -> AccountPriceDeleteResponse</code>
+
+### Actions
+
+Types:
+
+- <code><a href="./src/resources/sales/account-prices/actions.ts">ExportPriceListRequest</a></code>
+
+Methods:
+
+- <code title="post /v1/sales/account-prices/actions/export-price-list">client.sales.accountPrices.actions.<a href="./src/resources/sales/account-prices/actions.ts">exportPriceList</a>({ ...params }) -> Job</code>
+
 ## Addresses
 
 Types:
@@ -973,7 +1013,6 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/sales/priorities.ts">ListPriority</a></code>
-- <code><a href="./src/resources/sales/priorities.ts">Priority</a></code>
 
 Methods:
 
@@ -984,19 +1023,8 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/sales/customers/customers.ts">Carrier</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">CreateCustomerRequest</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">Customer</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">CustomerContactInfo</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">CustomerDefaults</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">CustomerFreightPreferences</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">CustomerLeadTime</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">CustomerNotificationPreferences</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">ListCustomer</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">ListServiceLevel</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">PaymentTerm</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">ServiceLevel</a></code>
-- <code><a href="./src/resources/sales/customers/customers.ts">ShippingTerm</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">UpdateCustomerRequest</a></code>
 - <code><a href="./src/resources/sales/customers/customers.ts">CustomerDeleteResponse</a></code>
 
@@ -1033,6 +1061,33 @@ Methods:
 
 - <code title="post /v1/sales/contacts/actions/find-by-email">client.sales.contacts.actions.<a href="./src/resources/sales/contacts/actions.ts">findByEmail</a>({ ...params }) -> ListContactMatch</code>
 
+## OrderDiscounts
+
+Types:
+
+- <code><a href="./src/resources/sales/order-discounts/order-discounts.ts">CreateOrderDiscountRequest</a></code>
+- <code><a href="./src/resources/sales/order-discounts/order-discounts.ts">ListOrderDiscount</a></code>
+- <code><a href="./src/resources/sales/order-discounts/order-discounts.ts">OrderDiscount</a></code>
+- <code><a href="./src/resources/sales/order-discounts/order-discounts.ts">UpdateOrderDiscountRequest</a></code>
+
+Methods:
+
+- <code title="get /v1/sales/order-discounts">client.sales.orderDiscounts.<a href="./src/resources/sales/order-discounts/order-discounts.ts">list</a>({ ...params }) -> ListOrderDiscount</code>
+- <code title="get /v1/sales/order-discounts/{id}">client.sales.orderDiscounts.<a href="./src/resources/sales/order-discounts/order-discounts.ts">retrieve</a>(id) -> OrderDiscount</code>
+- <code title="post /v1/sales/order-discounts">client.sales.orderDiscounts.<a href="./src/resources/sales/order-discounts/order-discounts.ts">create</a>({ ...params }) -> OrderDiscount</code>
+- <code title="patch /v1/sales/order-discounts/{id}">client.sales.orderDiscounts.<a href="./src/resources/sales/order-discounts/order-discounts.ts">update</a>(id, { ...params }) -> OrderDiscount</code>
+- <code title="delete /v1/sales/order-discounts/{id}">client.sales.orderDiscounts.<a href="./src/resources/sales/order-discounts/order-discounts.ts">delete</a>(id) -> OrderDiscount</code>
+
+### Actions
+
+Types:
+
+- <code><a href="./src/resources/sales/order-discounts/actions.ts">FindOrderDiscountByCodeRequest</a></code>
+
+Methods:
+
+- <code title="post /v1/sales/order-discounts/actions/find-by-code">client.sales.orderDiscounts.actions.<a href="./src/resources/sales/order-discounts/actions.ts">findByCode</a>({ ...params }) -> OrderDiscount</code>
+
 ## SalesOrders
 
 Types:
@@ -1050,7 +1105,6 @@ Types:
 - <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">ListSalesOrderLine</a></code>
 - <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">ListSalesOrderStatus</a></code>
 - <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">OrderContact</a></code>
-- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">OrderDiscount</a></code>
 - <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">QuoteSalesOrderLineInput</a></code>
 - <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">QuoteSalesOrderPricesRequest</a></code>
 - <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">QuoteSalesOrderPricesResponse</a></code>
@@ -1121,6 +1175,28 @@ Types:
 Methods:
 
 - <code title="post /v1/sales/sales-orders/{id}/lines/actions/reorder">client.sales.salesOrders.lines.actions.<a href="./src/resources/sales/sales-orders/lines/actions.ts">reorder</a>(id, { ...params }) -> ActionReorderResponse</code>
+
+## VolumeDiscounts
+
+Types:
+
+- <code><a href="./src/resources/sales/volume-discounts.ts">CreateVolumeDiscountRequest</a></code>
+- <code><a href="./src/resources/sales/volume-discounts.ts">CreateVolumeDiscountTierInput</a></code>
+- <code><a href="./src/resources/sales/volume-discounts.ts">ListVolumeDiscount</a></code>
+- <code><a href="./src/resources/sales/volume-discounts.ts">ListVolumeDiscountTier</a></code>
+- <code><a href="./src/resources/sales/volume-discounts.ts">UpdateVolumeDiscountRequest</a></code>
+- <code><a href="./src/resources/sales/volume-discounts.ts">UpdateVolumeDiscountTierInput</a></code>
+- <code><a href="./src/resources/sales/volume-discounts.ts">VolumeDiscount</a></code>
+- <code><a href="./src/resources/sales/volume-discounts.ts">VolumeDiscountTier</a></code>
+- <code><a href="./src/resources/sales/volume-discounts.ts">VolumeDiscountDeleteResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/sales/volume-discounts">client.sales.volumeDiscounts.<a href="./src/resources/sales/volume-discounts.ts">list</a>({ ...params }) -> ListVolumeDiscount</code>
+- <code title="get /v1/sales/volume-discounts/{id}">client.sales.volumeDiscounts.<a href="./src/resources/sales/volume-discounts.ts">retrieve</a>(id, { ...params }) -> VolumeDiscount</code>
+- <code title="post /v1/sales/volume-discounts">client.sales.volumeDiscounts.<a href="./src/resources/sales/volume-discounts.ts">create</a>({ ...params }) -> VolumeDiscount</code>
+- <code title="patch /v1/sales/volume-discounts/{id}">client.sales.volumeDiscounts.<a href="./src/resources/sales/volume-discounts.ts">update</a>(id, { ...params }) -> VolumeDiscount</code>
+- <code title="delete /v1/sales/volume-discounts/{id}">client.sales.volumeDiscounts.<a href="./src/resources/sales/volume-discounts.ts">delete</a>(id) -> VolumeDiscountDeleteResponse</code>
 
 # Finance
 
