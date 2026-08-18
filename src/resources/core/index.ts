@@ -1,6 +1,12 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export {
+  Actions,
+  type EmailRecordRequest,
+  type ActionEmailRecordResponse,
+  type ActionEmailRecordParams,
+} from './actions';
+export {
   Addresses,
   type AddressSuggestion,
   type ListAddressSuggestion,

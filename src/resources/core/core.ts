@@ -1,6 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ActionsAPI from './actions';
+import { ActionEmailRecordParams, ActionEmailRecordResponse, Actions, EmailRecordRequest } from './actions';
 import * as AnalyticsAPI from './analytics';
 import {
   Analytics,
@@ -103,6 +105,7 @@ export class Core extends APIResource {
   emailLogs: EmailLogsAPI.EmailLogs = new EmailLogsAPI.EmailLogs(this._client);
   jobs: JobsAPI.Jobs = new JobsAPI.Jobs(this._client);
   analytics: AnalyticsAPI.Analytics = new AnalyticsAPI.Analytics(this._client);
+  actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
 
   /**
    * Searches across multiple resource types at once and returns lightweight `entity`
@@ -849,6 +852,7 @@ Core.Addresses = Addresses;
 Core.EmailLogs = EmailLogs;
 Core.Jobs = Jobs;
 Core.Analytics = Analytics;
+Core.Actions = Actions;
 
 export declare namespace Core {
   export {
@@ -948,5 +952,12 @@ export declare namespace Core {
     type AnalyticsUpdateOeeTrendParams as AnalyticsUpdateOeeTrendParams,
     type AnalyticsUpdateScheduleAttainmentParams as AnalyticsUpdateScheduleAttainmentParams,
     type AnalyticsUpdateDeliveryPerformanceParams as AnalyticsUpdateDeliveryPerformanceParams,
+  };
+
+  export {
+    Actions as Actions,
+    type EmailRecordRequest as EmailRecordRequest,
+    type ActionEmailRecordResponse as ActionEmailRecordResponse,
+    type ActionEmailRecordParams as ActionEmailRecordParams,
   };
 }

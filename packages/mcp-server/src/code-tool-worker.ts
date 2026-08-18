@@ -133,6 +133,7 @@ const fuse = new Fuse(
     'client.core.analytics.updateOee',
     'client.core.analytics.updateOeeTrend',
     'client.core.analytics.updateScheduleAttainment',
+    'client.core.actions.emailRecord',
     'client.catalog.units.create',
     'client.catalog.units.delete',
     'client.catalog.units.list',

@@ -24,7 +24,7 @@ describe('resource memories', () => {
     await expect(
       client.ai.memories.list(
         {
-          category: 'category',
+          category: 'preference',
           cursor: 'cursor',
           entity_type: 'entity_type',
           limit: 0,
@@ -89,7 +89,7 @@ describe('resource memories', () => {
       client.ai.memories.update(
         'agmm_o7tjkr16gfmh',
         {
-          category: 'category',
+          category: 'preference',
           content: 'Customer prefers next-day shipping on all orders.',
           entity_id: 'entity_id',
           entity_type: 'entity_type',

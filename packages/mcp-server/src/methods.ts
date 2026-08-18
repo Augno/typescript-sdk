@@ -161,6 +161,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/core/analytics/delivery-performance',
   },
   {
+    clientCallName: 'client.core.actions.emailRecord',
+    fullyQualifiedName: 'core.actions.emailRecord',
+    httpMethod: 'post',
+    httpPath: '/v1/core/actions/email-record',
+  },
+  {
     clientCallName: 'client.catalog.units.list',
     fullyQualifiedName: 'catalog.units.list',
     httpMethod: 'get',

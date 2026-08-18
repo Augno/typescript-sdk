@@ -181,6 +181,17 @@ Methods:
 - <code title="put /v1/core/analytics/schedule-attainment">client.core.analytics.<a href="./src/resources/core/analytics.ts">updateScheduleAttainment</a>({ ...params }) -> AnalyzeScheduleAttainmentResponse</code>
 - <code title="put /v1/core/analytics/delivery-performance">client.core.analytics.<a href="./src/resources/core/analytics.ts">updateDeliveryPerformance</a>({ ...params }) -> AnalyzeDeliveryPerformanceResponse</code>
 
+## Actions
+
+Types:
+
+- <code><a href="./src/resources/core/actions.ts">EmailRecordRequest</a></code>
+- <code><a href="./src/resources/core/actions.ts">ActionEmailRecordResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/core/actions/email-record">client.core.actions.<a href="./src/resources/core/actions.ts">emailRecord</a>({ ...params }) -> ActionEmailRecordResponse</code>
+
 # Catalog
 
 ## Units
