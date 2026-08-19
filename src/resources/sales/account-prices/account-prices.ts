@@ -562,6 +562,15 @@ export interface CustomerDefaults {
   priority: Priority | null;
 
   /**
+   * The operating calendar naming the days this customer's dock accepts freight.
+   *
+   * A promised delivery date is worked back from a day the customer can actually
+   * receive on. With none set here the customer inherits its account group's
+   * calendar, then the account default, then Monday to Friday.
+   */
+  receive_calendar_id: string | null;
+
+  /**
    * A user's membership in an account, carrying the account-specific status, role,
    * and department.
    *

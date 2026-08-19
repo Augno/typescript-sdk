@@ -1403,6 +1403,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/sales/sales-orders/{id}/actions/quote-freight',
   },
   {
+    clientCallName: 'client.sales.salesOrders.actions.quoteCommitment',
+    fullyQualifiedName: 'sales.salesOrders.actions.quoteCommitment',
+    httpMethod: 'post',
+    httpPath: '/v1/sales/sales-orders/actions/quote-commitment',
+  },
+  {
     clientCallName: 'client.sales.salesOrders.actions.createProductionRun',
     fullyQualifiedName: 'sales.salesOrders.actions.createProductionRun',
     httpMethod: 'post',
@@ -1941,6 +1947,54 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'operations.fulfillmentRecommendations.actions.apply',
     httpMethod: 'post',
     httpPath: '/v1/operations/fulfillment-recommendations/actions/apply',
+  },
+  {
+    clientCallName: 'client.operations.operatingCalendars.list',
+    fullyQualifiedName: 'operations.operatingCalendars.list',
+    httpMethod: 'get',
+    httpPath: '/v1/operations/operating-calendars',
+  },
+  {
+    clientCallName: 'client.operations.operatingCalendars.retrieve',
+    fullyQualifiedName: 'operations.operatingCalendars.retrieve',
+    httpMethod: 'get',
+    httpPath: '/v1/operations/operating-calendars/{id}',
+  },
+  {
+    clientCallName: 'client.operations.operatingCalendars.create',
+    fullyQualifiedName: 'operations.operatingCalendars.create',
+    httpMethod: 'post',
+    httpPath: '/v1/operations/operating-calendars',
+  },
+  {
+    clientCallName: 'client.operations.operatingCalendars.update',
+    fullyQualifiedName: 'operations.operatingCalendars.update',
+    httpMethod: 'patch',
+    httpPath: '/v1/operations/operating-calendars/{id}',
+  },
+  {
+    clientCallName: 'client.operations.operatingCalendars.delete',
+    fullyQualifiedName: 'operations.operatingCalendars.delete',
+    httpMethod: 'delete',
+    httpPath: '/v1/operations/operating-calendars/{id}',
+  },
+  {
+    clientCallName: 'client.operations.operatingCalendars.closures.list',
+    fullyQualifiedName: 'operations.operatingCalendars.closures.list',
+    httpMethod: 'get',
+    httpPath: '/v1/operations/operating-calendars/{id}/closures',
+  },
+  {
+    clientCallName: 'client.operations.operatingCalendars.closures.create',
+    fullyQualifiedName: 'operations.operatingCalendars.closures.create',
+    httpMethod: 'post',
+    httpPath: '/v1/operations/operating-calendars/{id}/closures',
+  },
+  {
+    clientCallName: 'client.operations.operatingCalendars.closures.delete',
+    fullyQualifiedName: 'operations.operatingCalendars.closures.delete',
+    httpMethod: 'delete',
+    httpPath: '/v1/operations/operating-calendars/{id}/closures/{closure_id}',
   },
   {
     clientCallName: 'client.operations.locations.list',

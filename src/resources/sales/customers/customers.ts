@@ -361,6 +361,15 @@ export interface CreateCustomerRequest {
   phone?: string;
 
   /**
+   * The operating calendar naming the days this customer's dock accepts freight.
+   *
+   * Sits in the same chain as lead_time_days: leaving it unset falls through to the
+   * customer's group, then the account default, then Monday to Friday. A promised
+   * delivery date is never worked back from a day nobody is there to receive on.
+   */
+  receive_calendar_id?: string;
+
+  /**
    * The customer's account standing.
    *
    * - `normal`: standard account with no restrictions.
@@ -414,7 +423,7 @@ export interface CustomerLeadTime {
    * on one specific order, which is a fact about that order rather than about the
    * customer.
    */
-  source: 'customer' | 'account_group' | 'account' | 'manual';
+  source: 'customer' | 'account_group' | 'account' | 'manual' | 'order_lead_time' | 'order_ship_by';
 }
 
 /**
@@ -561,6 +570,13 @@ export interface UpdateCustomerRequest {
    * Phone number.
    */
   phone?: string | null;
+
+  /**
+   * The operating calendar naming the days this customer's dock accepts freight.
+   * Clearing it returns the customer to their group's calendar, then the account
+   * default.
+   */
+  receive_calendar_id?: string | null;
 
   /**
    * ID of an existing address to use as the default shipping address.
@@ -940,6 +956,16 @@ export interface CustomerCreateParams {
   phone?: string;
 
   /**
+   * Body param: The operating calendar naming the days this customer's dock accepts
+   * freight.
+   *
+   * Sits in the same chain as lead_time_days: leaving it unset falls through to the
+   * customer's group, then the account default, then Monday to Friday. A promised
+   * delivery date is never worked back from a day nobody is there to receive on.
+   */
+  receive_calendar_id?: string;
+
+  /**
    * Body param: The customer's account standing.
    *
    * - `normal`: standard account with no restrictions.
@@ -1127,6 +1153,13 @@ export interface CustomerUpdateParams {
    * Body param: Phone number.
    */
   phone?: string | null;
+
+  /**
+   * Body param: The operating calendar naming the days this customer's dock accepts
+   * freight. Clearing it returns the customer to their group's calendar, then the
+   * account default.
+   */
+  receive_calendar_id?: string | null;
 
   /**
    * Body param: ID of an existing address to use as the default shipping address.

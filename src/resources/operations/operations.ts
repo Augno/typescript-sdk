@@ -107,6 +107,18 @@ import {
   Locations,
   UpdateLocationRequest,
 } from './locations/locations';
+import * as OperatingCalendarsAPI from './operating-calendars/operating-calendars';
+import {
+  CreateOperatingCalendarRequest,
+  ListOperatingCalendar,
+  OperatingCalendar,
+  OperatingCalendarCreateParams,
+  OperatingCalendarDeleteResponse,
+  OperatingCalendarListParams,
+  OperatingCalendarUpdateParams,
+  OperatingCalendars,
+  UpdateOperatingCalendarRequest,
+} from './operating-calendars/operating-calendars';
 import * as ProductionScheduleSettingsAPI from './production-schedule-settings/production-schedule-settings';
 import {
   ProductionScheduleSettingUpdateParams,
@@ -167,6 +179,9 @@ export class Operations extends APIResource {
     new ProductionScheduleSettingsAPI.ProductionScheduleSettings(this._client);
   fulfillmentRecommendations: FulfillmentRecommendationsAPI.FulfillmentRecommendations =
     new FulfillmentRecommendationsAPI.FulfillmentRecommendations(this._client);
+  operatingCalendars: OperatingCalendarsAPI.OperatingCalendars = new OperatingCalendarsAPI.OperatingCalendars(
+    this._client,
+  );
   locations: LocationsAPI.Locations = new LocationsAPI.Locations(this._client);
   locationTypes: LocationTypesAPI.LocationTypes = new LocationTypesAPI.LocationTypes(this._client);
   shipments: ShipmentsAPI.Shipments = new ShipmentsAPI.Shipments(this._client);
@@ -771,6 +786,7 @@ Operations.MachineDowntimeEvents = MachineDowntimeEvents;
 Operations.DemandOverrides = DemandOverrides;
 Operations.ProductionSchedules = ProductionSchedules;
 Operations.FulfillmentRecommendations = FulfillmentRecommendations;
+Operations.OperatingCalendars = OperatingCalendars;
 Operations.Locations = Locations;
 Operations.LocationTypes = LocationTypes;
 Operations.Shipments = Shipments;
@@ -911,6 +927,18 @@ export declare namespace Operations {
     FulfillmentRecommendations as FulfillmentRecommendations,
     type FulfillmentRecommendation as FulfillmentRecommendation,
     type ListFulfillmentRecommendation as ListFulfillmentRecommendation,
+  };
+
+  export {
+    OperatingCalendars as OperatingCalendars,
+    type CreateOperatingCalendarRequest as CreateOperatingCalendarRequest,
+    type ListOperatingCalendar as ListOperatingCalendar,
+    type OperatingCalendar as OperatingCalendar,
+    type UpdateOperatingCalendarRequest as UpdateOperatingCalendarRequest,
+    type OperatingCalendarDeleteResponse as OperatingCalendarDeleteResponse,
+    type OperatingCalendarListParams as OperatingCalendarListParams,
+    type OperatingCalendarCreateParams as OperatingCalendarCreateParams,
+    type OperatingCalendarUpdateParams as OperatingCalendarUpdateParams,
   };
 
   export {

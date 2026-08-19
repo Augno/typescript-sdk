@@ -172,6 +172,12 @@ export interface AddressInput {
   postal_code?: string;
 
   /**
+   * The operating calendar naming the days this dock accepts freight, overriding the
+   * customer's own.
+   */
+  receive_calendar_id?: string;
+
+  /**
    * State or administrative area.
    */
   state?: string;
@@ -264,6 +270,12 @@ export interface UpdateAddressRequest {
   postal_code?: string;
 
   /**
+   * The operating calendar naming the days this dock accepts freight, overriding the
+   * customer's own. Clearing it returns this address to the customer's own calendar.
+   */
+  receive_calendar_id?: string | null;
+
+  /**
    * State or administrative area.
    */
   state?: string;
@@ -352,6 +364,12 @@ export interface AddressCreateParams {
   postal_code?: string;
 
   /**
+   * The operating calendar naming the days this dock accepts freight, overriding the
+   * customer's own.
+   */
+  receive_calendar_id?: string;
+
+  /**
    * State or administrative area.
    */
   state?: string;
@@ -410,6 +428,12 @@ export interface AddressUpdateParams {
    * Postal or ZIP code.
    */
   postal_code?: string;
+
+  /**
+   * The operating calendar naming the days this dock accepts freight, overriding the
+   * customer's own. Clearing it returns this address to the customer's own calendar.
+   */
+  receive_calendar_id?: string | null;
 
   /**
    * State or administrative area.

@@ -79,6 +79,17 @@ export {
   type MachineUpdateParams,
 } from './machines';
 export {
+  OperatingCalendars,
+  type CreateOperatingCalendarRequest,
+  type ListOperatingCalendar,
+  type OperatingCalendar,
+  type UpdateOperatingCalendarRequest,
+  type OperatingCalendarDeleteResponse,
+  type OperatingCalendarListParams,
+  type OperatingCalendarCreateParams,
+  type OperatingCalendarUpdateParams,
+} from './operating-calendars/index';
+export {
   Operations,
   type DemandOverrideType,
   type ListDemandOverrideType,
