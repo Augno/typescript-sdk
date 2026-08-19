@@ -11,4 +11,5 @@ export {
   type CustomerRetrieveParams,
   type CustomerCreateParams,
   type CustomerUpdateParams,
+  type CustomerRetrieveLeadTimeParams,
 } from './customers';

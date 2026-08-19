@@ -407,6 +407,7 @@ const fuse = new Fuse(
     'client.operations.productionSchedules.retrieveDerivedLines',
     'client.operations.productionSchedules.retrieveDeviations',
     'client.operations.productionSchedules.retrieveFinishedPolicies',
+    'client.operations.productionSchedules.retrieveFinishingLines',
     'client.operations.productionSchedules.retrieveItemPolicies',
     'client.operations.productionSchedules.retrieveWeekReleasePreview',
     'client.operations.productionSchedules.lines.create',

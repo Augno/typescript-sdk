@@ -537,7 +537,8 @@ export interface CustomerDefaults {
    * Calendar days between an order being issued and it being due to ship.
    *
    * Sets each order's `ship_by_date` when it is issued. With none set here the
-   * customer inherits its account group's lead time, then the account default.
+   * customer inherits its parent account's lead time, then its account group's, then
+   * the account default.
    */
   lead_time_days: number | null;
 

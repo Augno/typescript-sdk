@@ -1787,6 +1787,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/operations/production-schedules/{id}/finished-policies',
   },
   {
+    clientCallName: 'client.operations.productionSchedules.retrieveFinishingLines',
+    fullyQualifiedName: 'operations.productionSchedules.retrieveFinishingLines',
+    httpMethod: 'get',
+    httpPath: '/v1/operations/production-schedules/{id}/finishing-lines',
+  },
+  {
     clientCallName: 'client.operations.productionSchedules.retrieveDerivedLines',
     fullyQualifiedName: 'operations.productionSchedules.retrieveDerivedLines',
     httpMethod: 'get',

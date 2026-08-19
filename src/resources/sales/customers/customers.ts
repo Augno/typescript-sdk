@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../../core/resource';
 import * as CoreAPI from '../../core/core';
+import * as AccountGroupsAPI from '../account-groups';
 import * as AddressesAPI from '../addresses';
 import * as ProductLinesAPI from '../../catalog/product-lines/product-lines';
 import * as AccountPricesAPI from '../account-prices/account-prices';
@@ -181,9 +182,14 @@ export class Customers extends APIResource {
    * to.
    *
    * Resolved through the same chain the issue path stamps onto an order, most
-   * specific first: a lead time set on the customer, then on the customer's account
-   * group, then the account-wide default. `source` names which rule applied, so a
-   * form can show where the number came from rather than leaving a rep to guess.
+   * specific first: a lead time set on the customer, then on its parent account,
+   * then on the customer's account group, then the account-wide default. `source`
+   * names which rule applied, so a form can show where the number came from rather
+   * than leaving a rep to guess.
+   *
+   * A lead time set on a parent account therefore governs every child account under
+   * it that has not set its own, which is how a head office's terms are given to its
+   * locations without repeating them on each one.
    *
    * This is a preview of a commitment, not the commitment itself. An order takes its
    * own `ship_by_date` when it is issued and keeps it afterwards, so changing a lead
@@ -200,8 +206,12 @@ export class Customers extends APIResource {
    *   );
    * ```
    */
-  retrieveLeadTime(id: string, options?: RequestOptions): APIPromise<CustomerLeadTime> {
-    return this._client.get(path`/v1/sales/customers/${id}/lead-time`, options);
+  retrieveLeadTime(
+    id: string,
+    query: CustomerRetrieveLeadTimeParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<CustomerLeadTime> {
+    return this._client.get(path`/v1/sales/customers/${id}/lead-time`, { query, ...options });
   }
 }
 
@@ -337,7 +347,8 @@ export interface CreateCustomerRequest {
    * Calendar days between an order being issued and it being due to ship.
    *
    * Sets each order's `ship_by_date` when it is issued. Leave unset to inherit the
-   * customer's account group lead time, then the account default.
+   * parent account's lead time, then the customer's account group lead time, then
+   * the account default.
    */
   lead_time_days?: number;
 
@@ -391,9 +402,15 @@ export interface CreateCustomerRequest {
  */
 export interface CustomerLeadTime {
   /**
-   * Entity is a polymorphic reference to any resource in the system.
+   * A named grouping of customer accounts, used for pricing rules or to categorize
+   * accounts.
+   *
+   * A customer carries at most one group of type `type_group` as its customer type,
+   * plus any number of groups of type `pricing_group`. Membership of either kind can
+   * scope a volume discount to the customer and open up product lines for it to
+   * order from.
    */
-  account_group: CoreAPI.Entity | null;
+  account_group: AccountGroupsAPI.AccountGroup | null;
 
   /**
    * Entity is a polymorphic reference to any resource in the system.
@@ -413,9 +430,16 @@ export interface CustomerLeadTime {
   object: 'customer_lead_time';
 
   /**
+   * A business you sell to, with its contact details, default fulfillment settings,
+   * and order policies.
+   */
+  parent_customer: AccountPricesAPI.Customer | null;
+
+  /**
    * Which rule in the chain produced this lead time.
    *
    * - `customer`: a lead time set on the customer itself.
+   * - `parent_customer`: inherited from the customer's parent account.
    * - `account_group`: inherited from the customer's account group.
    * - `account`: the account-wide fallback.
    *
@@ -423,7 +447,14 @@ export interface CustomerLeadTime {
    * on one specific order, which is a fact about that order rather than about the
    * customer.
    */
-  source: 'customer' | 'account_group' | 'account' | 'manual' | 'order_lead_time' | 'order_ship_by';
+  source:
+    | 'customer'
+    | 'parent_customer'
+    | 'account_group'
+    | 'account'
+    | 'manual'
+    | 'order_lead_time'
+    | 'order_ship_by';
 }
 
 /**
@@ -543,8 +574,9 @@ export interface UpdateCustomerRequest {
   /**
    * Calendar days between an order being issued and it being due to ship.
    *
-   * Sets each order's `ship_by_date` when it is issued. Leave unset to inherit the
-   * customer's account group lead time, then the account default.
+   * Sets each order's `ship_by_date` when it is issued. Clear it to inherit the
+   * parent account's lead time, then the customer's account group lead time, then
+   * the account default.
    */
   lead_time_days?: number | null;
 
@@ -932,7 +964,8 @@ export interface CustomerCreateParams {
    * ship.
    *
    * Sets each order's `ship_by_date` when it is issued. Leave unset to inherit the
-   * customer's account group lead time, then the account default.
+   * parent account's lead time, then the customer's account group lead time, then
+   * the account default.
    */
   lead_time_days?: number;
 
@@ -1125,8 +1158,9 @@ export interface CustomerUpdateParams {
    * Body param: Calendar days between an order being issued and it being due to
    * ship.
    *
-   * Sets each order's `ship_by_date` when it is issued. Leave unset to inherit the
-   * customer's account group lead time, then the account default.
+   * Sets each order's `ship_by_date` when it is issued. Clear it to inherit the
+   * parent account's lead time, then the customer's account group lead time, then
+   * the account default.
    */
   lead_time_days?: number | null;
 
@@ -1185,6 +1219,14 @@ export interface CustomerUpdateParams {
   url?: string | null;
 }
 
+export interface CustomerRetrieveLeadTimeParams {
+  /**
+   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
+   * `null`.
+   */
+  include?: Array<'account_group' | 'parent_customer'>;
+}
+
 Customers.Actions = Actions;
 
 export declare namespace Customers {
@@ -1197,6 +1239,7 @@ export declare namespace Customers {
     type CustomerRetrieveParams as CustomerRetrieveParams,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
+    type CustomerRetrieveLeadTimeParams as CustomerRetrieveLeadTimeParams,
   };
 
   export {

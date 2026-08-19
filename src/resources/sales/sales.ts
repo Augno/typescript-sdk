@@ -87,6 +87,7 @@ import {
   CustomerDeleteResponse,
   CustomerLeadTime,
   CustomerListParams,
+  CustomerRetrieveLeadTimeParams,
   CustomerRetrieveParams,
   CustomerUpdateParams,
   Customers,
@@ -244,6 +245,7 @@ export declare namespace Sales {
     type CustomerRetrieveParams as CustomerRetrieveParams,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
+    type CustomerRetrieveLeadTimeParams as CustomerRetrieveLeadTimeParams,
   };
 
   export { Contacts as Contacts };

@@ -164,7 +164,8 @@ export interface AccountGroup {
 
   /**
    * Calendar days between an order being issued and it being due to ship, inherited
-   * by every customer in this group that has not set its own.
+   * by every customer in this group that has neither set its own nor inherited one
+   * from a parent account.
    */
   default_lead_time_days: number | null;
 

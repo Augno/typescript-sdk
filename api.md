@@ -1046,7 +1046,7 @@ Methods:
 - <code title="post /v1/sales/customers">client.sales.customers.<a href="./src/resources/sales/customers/customers.ts">create</a>({ ...params }) -> Customer</code>
 - <code title="patch /v1/sales/customers/{id}">client.sales.customers.<a href="./src/resources/sales/customers/customers.ts">update</a>(id, { ...params }) -> Customer</code>
 - <code title="delete /v1/sales/customers/{id}">client.sales.customers.<a href="./src/resources/sales/customers/customers.ts">delete</a>(id) -> CustomerDeleteResponse</code>
-- <code title="get /v1/sales/customers/{id}/lead-time">client.sales.customers.<a href="./src/resources/sales/customers/customers.ts">retrieveLeadTime</a>(id) -> CustomerLeadTime</code>
+- <code title="get /v1/sales/customers/{id}/lead-time">client.sales.customers.<a href="./src/resources/sales/customers/customers.ts">retrieveLeadTime</a>(id, { ...params }) -> CustomerLeadTime</code>
 
 ### Actions
 
@@ -1399,6 +1399,7 @@ Types:
 - <code><a href="./src/resources/operations/production-schedules/production-schedules.ts">ListProductionScheduleDerivedLine</a></code>
 - <code><a href="./src/resources/operations/production-schedules/production-schedules.ts">ListProductionScheduleDeviation</a></code>
 - <code><a href="./src/resources/operations/production-schedules/production-schedules.ts">ListProductionScheduleFinishedPolicy</a></code>
+- <code><a href="./src/resources/operations/production-schedules/production-schedules.ts">ListProductionScheduleFinishingLine</a></code>
 - <code><a href="./src/resources/operations/production-schedules/production-schedules.ts">ListProductionScheduleItemPolicy</a></code>
 - <code><a href="./src/resources/operations/production-schedules/production-schedules.ts">ListReleaseScheduleBatch</a></code>
 - <code><a href="./src/resources/operations/production-schedules/production-schedules.ts">ListReleasedScheduleLine</a></code>
@@ -1410,6 +1411,7 @@ Types:
 - <code><a href="./src/resources/operations/production-schedules/production-schedules.ts">ProductionScheduleDerivedLine</a></code>
 - <code><a href="./src/resources/operations/production-schedules/production-schedules.ts">ProductionScheduleDeviation</a></code>
 - <code><a href="./src/resources/operations/production-schedules/production-schedules.ts">ProductionScheduleFinishedPolicy</a></code>
+- <code><a href="./src/resources/operations/production-schedules/production-schedules.ts">ProductionScheduleFinishingLine</a></code>
 - <code><a href="./src/resources/operations/production-schedules/production-schedules.ts">ProductionScheduleItemPolicy</a></code>
 - <code><a href="./src/resources/operations/production-schedules/production-schedules.ts">ReleaseScheduleBatch</a></code>
 - <code><a href="./src/resources/operations/production-schedules/production-schedules.ts">ReleaseScheduleWeekPreview</a></code>
@@ -1417,6 +1419,7 @@ Types:
 - <code><a href="./src/resources/operations/production-schedules/production-schedules.ts">ScheduleAppliedOverride</a></code>
 - <code><a href="./src/resources/operations/production-schedules/production-schedules.ts">ScheduleAtRiskOrder</a></code>
 - <code><a href="./src/resources/operations/production-schedules/production-schedules.ts">ScheduleDiagnostics</a></code>
+- <code><a href="./src/resources/operations/production-schedules/production-schedules.ts">ScheduleFinishingDiagnostics</a></code>
 - <code><a href="./src/resources/operations/production-schedules/production-schedules.ts">ScheduleOrderCoverage</a></code>
 - <code><a href="./src/resources/operations/production-schedules/production-schedules.ts">ScheduleOrderCoverageLine</a></code>
 - <code><a href="./src/resources/operations/production-schedules/production-schedules.ts">ProductionScheduleDeleteResponse</a></code>
@@ -1429,6 +1432,7 @@ Methods:
 - <code title="get /v1/operations/production-schedules/{id}">client.operations.productionSchedules.<a href="./src/resources/operations/production-schedules/production-schedules.ts">retrieve</a>(id) -> ProductionSchedule</code>
 - <code title="get /v1/operations/production-schedules/{id}/item-policies">client.operations.productionSchedules.<a href="./src/resources/operations/production-schedules/production-schedules.ts">retrieveItemPolicies</a>(id) -> ListProductionScheduleItemPolicy</code>
 - <code title="get /v1/operations/production-schedules/{id}/finished-policies">client.operations.productionSchedules.<a href="./src/resources/operations/production-schedules/production-schedules.ts">retrieveFinishedPolicies</a>(id) -> ListProductionScheduleFinishedPolicy</code>
+- <code title="get /v1/operations/production-schedules/{id}/finishing-lines">client.operations.productionSchedules.<a href="./src/resources/operations/production-schedules/production-schedules.ts">retrieveFinishingLines</a>(id, { ...params }) -> ListProductionScheduleFinishingLine</code>
 - <code title="get /v1/operations/production-schedules/{id}/derived-lines">client.operations.productionSchedules.<a href="./src/resources/operations/production-schedules/production-schedules.ts">retrieveDerivedLines</a>(id, { ...params }) -> ListProductionScheduleDerivedLine</code>
 - <code title="get /v1/operations/production-schedules/{id}/at-risk-orders">client.operations.productionSchedules.<a href="./src/resources/operations/production-schedules/production-schedules.ts">retrieveAtRiskOrders</a>(id) -> ListScheduleOrderCoverage</code>
 - <code title="get /v1/operations/production-schedules/{id}/deviations">client.operations.productionSchedules.<a href="./src/resources/operations/production-schedules/production-schedules.ts">retrieveDeviations</a>(id, { ...params }) -> ListProductionScheduleDeviation</code>
