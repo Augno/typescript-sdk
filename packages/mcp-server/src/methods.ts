@@ -347,12 +347,6 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/catalog/items/{id}',
   },
   {
-    clientCallName: 'client.catalog.items.retrieveInventory',
-    fullyQualifiedName: 'catalog.items.retrieveInventory',
-    httpMethod: 'get',
-    httpPath: '/v1/catalog/items/{id}/inventory',
-  },
-  {
     clientCallName: 'client.catalog.items.retrieveLotDefault',
     fullyQualifiedName: 'catalog.items.retrieveLotDefault',
     httpMethod: 'get',
@@ -365,6 +359,18 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/catalog/items/{id}/category/{category_id}',
   },
   {
+    clientCallName: 'client.catalog.items.inventory.list',
+    fullyQualifiedName: 'catalog.items.inventory.list',
+    httpMethod: 'get',
+    httpPath: '/v1/catalog/items/{id}/inventory',
+  },
+  {
+    clientCallName: 'client.catalog.items.inventory.update',
+    fullyQualifiedName: 'catalog.items.inventory.update',
+    httpMethod: 'patch',
+    httpPath: '/v1/catalog/items/{id}/inventory',
+  },
+  {
     clientCallName: 'client.catalog.items.attributes.update',
     fullyQualifiedName: 'catalog.items.attributes.update',
     httpMethod: 'put',
@@ -375,6 +381,12 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'catalog.items.attributes.delete',
     httpMethod: 'delete',
     httpPath: '/v1/catalog/items/{id}/attributes/{attribute_id}',
+  },
+  {
+    clientCallName: 'client.catalog.items.actions.bulkReconcile',
+    fullyQualifiedName: 'catalog.items.actions.bulkReconcile',
+    httpMethod: 'post',
+    httpPath: '/v1/catalog/items/actions/bulk-reconcile',
   },
   {
     clientCallName: 'client.catalog.itemCategories.list',

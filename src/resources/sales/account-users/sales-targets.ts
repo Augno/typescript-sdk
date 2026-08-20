@@ -3,7 +3,7 @@
 import { APIResource } from '../../../core/resource';
 import * as CoreAPI from '../../core/core';
 import * as APIKeysAPI from '../../auth/api-keys/api-keys';
-import * as ItemsAPI from '../../catalog/items/items';
+import * as MaterialsAPI from '../../catalog/materials/materials';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
@@ -177,7 +177,7 @@ export interface SalesTarget {
    * resources point at them to report stock levels, ordered and packed amounts,
    * money, weights, and durations.
    */
-  amount: ItemsAPI.Quantity | null;
+  amount: MaterialsAPI.Quantity | null;
 
   /**
    * Creation timestamp.

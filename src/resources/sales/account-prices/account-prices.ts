@@ -397,7 +397,7 @@ export interface Customer {
    * resources point at them to report stock levels, ordered and packed amounts,
    * money, weights, and durations.
    */
-  credit_limit: ItemsAPI.Quantity | null;
+  credit_limit: MaterialsAPI.Quantity | null;
 
   /**
    * Values used to fill in a new sales order for this customer when the order does
@@ -939,7 +939,7 @@ export interface ShippingTerm {
    * resources point at them to report stock levels, ordered and packed amounts,
    * money, weights, and durations.
    */
-  flat_rate: ItemsAPI.Quantity | null;
+  flat_rate: MaterialsAPI.Quantity | null;
 
   /**
    * A single page of resources, together with the metadata needed to page through
@@ -954,7 +954,7 @@ export interface ShippingTerm {
    * resources point at them to report stock levels, ordered and packed amounts,
    * money, weights, and durations.
    */
-  minimum_order_value: ItemsAPI.Quantity | null;
+  minimum_order_value: MaterialsAPI.Quantity | null;
 
   /**
    * Human-readable name for the shipping term, used to identify it when assigning

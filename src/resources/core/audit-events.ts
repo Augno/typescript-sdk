@@ -441,8 +441,6 @@ export interface AuditEvent {
     | 'batch_lot'
     | 'check_duplicate_result'
     | 'item_trend_point'
-    | 'pack_pick_response'
-    | 'pick_shipments_response'
     | 'tenancy_pending_registration'
     | 'invoice_allocation_entry'
     | 'allocation_customer'
@@ -481,7 +479,13 @@ export interface AuditEvent {
     | 'computed_quantity'
     | 'analyze_realized_margins_response'
     | 'realized_margin_finding'
-    | 'realized_margin_summary';
+    | 'realized_margin_summary'
+    | 'shipment_related'
+    | 'invoice_related'
+    | 'pick_related'
+    | 'pick_shipments_response'
+    | 'pick_totals'
+    | 'pick_stage_total';
 
   /**
    * Originating client IP address.
@@ -850,8 +854,6 @@ export interface ListObjectType {
     | 'batch_lot'
     | 'check_duplicate_result'
     | 'item_trend_point'
-    | 'pack_pick_response'
-    | 'pick_shipments_response'
     | 'tenancy_pending_registration'
     | 'invoice_allocation_entry'
     | 'allocation_customer'
@@ -891,6 +893,12 @@ export interface ListObjectType {
     | 'analyze_realized_margins_response'
     | 'realized_margin_finding'
     | 'realized_margin_summary'
+    | 'shipment_related'
+    | 'invoice_related'
+    | 'pick_related'
+    | 'pick_shipments_response'
+    | 'pick_totals'
+    | 'pick_stage_total'
   >;
 
   /**
@@ -1247,8 +1255,6 @@ export interface AuditEventListParams {
     | 'batch_lot'
     | 'check_duplicate_result'
     | 'item_trend_point'
-    | 'pack_pick_response'
-    | 'pick_shipments_response'
     | 'tenancy_pending_registration'
     | 'invoice_allocation_entry'
     | 'allocation_customer'
@@ -1288,6 +1294,12 @@ export interface AuditEventListParams {
     | 'analyze_realized_margins_response'
     | 'realized_margin_finding'
     | 'realized_margin_summary'
+    | 'shipment_related'
+    | 'invoice_related'
+    | 'pick_related'
+    | 'pick_shipments_response'
+    | 'pick_totals'
+    | 'pick_stage_total'
   >;
 
   /**
@@ -1567,8 +1579,6 @@ export interface AuditEventListParams {
     | 'batch_lot'
     | 'check_duplicate_result'
     | 'item_trend_point'
-    | 'pack_pick_response'
-    | 'pick_shipments_response'
     | 'tenancy_pending_registration'
     | 'invoice_allocation_entry'
     | 'allocation_customer'
@@ -1607,7 +1617,13 @@ export interface AuditEventListParams {
     | 'computed_quantity'
     | 'analyze_realized_margins_response'
     | 'realized_margin_finding'
-    | 'realized_margin_summary';
+    | 'realized_margin_summary'
+    | 'shipment_related'
+    | 'invoice_related'
+    | 'pick_related'
+    | 'pick_shipments_response'
+    | 'pick_totals'
+    | 'pick_stage_total';
 
   /**
    * Restricts results to audit events on or after this timestamp.

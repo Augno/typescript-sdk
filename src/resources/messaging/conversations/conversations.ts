@@ -726,8 +726,6 @@ export interface CreateConversationRequest {
     | 'batch_lot'
     | 'check_duplicate_result'
     | 'item_trend_point'
-    | 'pack_pick_response'
-    | 'pick_shipments_response'
     | 'tenancy_pending_registration'
     | 'invoice_allocation_entry'
     | 'allocation_customer'
@@ -766,7 +764,13 @@ export interface CreateConversationRequest {
     | 'computed_quantity'
     | 'analyze_realized_margins_response'
     | 'realized_margin_finding'
-    | 'realized_margin_summary';
+    | 'realized_margin_summary'
+    | 'shipment_related'
+    | 'invoice_related'
+    | 'pick_related'
+    | 'pick_shipments_response'
+    | 'pick_totals'
+    | 'pick_stage_total';
 }
 
 /**
@@ -1582,8 +1586,6 @@ export interface ConversationCreateParams {
     | 'batch_lot'
     | 'check_duplicate_result'
     | 'item_trend_point'
-    | 'pack_pick_response'
-    | 'pick_shipments_response'
     | 'tenancy_pending_registration'
     | 'invoice_allocation_entry'
     | 'allocation_customer'
@@ -1622,7 +1624,13 @@ export interface ConversationCreateParams {
     | 'computed_quantity'
     | 'analyze_realized_margins_response'
     | 'realized_margin_finding'
-    | 'realized_margin_summary';
+    | 'realized_margin_summary'
+    | 'shipment_related'
+    | 'invoice_related'
+    | 'pick_related'
+    | 'pick_shipments_response'
+    | 'pick_totals'
+    | 'pick_stage_total';
 }
 
 export interface ConversationListParams {
@@ -1967,8 +1975,6 @@ export interface ConversationListParams {
     | 'batch_lot'
     | 'check_duplicate_result'
     | 'item_trend_point'
-    | 'pack_pick_response'
-    | 'pick_shipments_response'
     | 'tenancy_pending_registration'
     | 'invoice_allocation_entry'
     | 'allocation_customer'
@@ -2007,7 +2013,13 @@ export interface ConversationListParams {
     | 'computed_quantity'
     | 'analyze_realized_margins_response'
     | 'realized_margin_finding'
-    | 'realized_margin_summary';
+    | 'realized_margin_summary'
+    | 'shipment_related'
+    | 'invoice_related'
+    | 'pick_related'
+    | 'pick_shipments_response'
+    | 'pick_totals'
+    | 'pick_stage_total';
 
   /**
    * Filter by conversation type.

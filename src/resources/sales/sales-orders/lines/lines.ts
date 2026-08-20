@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../../core/resource';
+import * as InventoryAPI from '../../../catalog/items/inventory';
 import * as MaterialsAPI from '../../../catalog/materials/materials';
-import * as ProductLinesAPI from '../../../catalog/product-lines/product-lines';
 import * as SalesOrdersAPI from '../sales-orders';
 import * as ActionsAPI from './actions';
 import {
@@ -145,7 +145,7 @@ export interface CreateSalesOrderLineRequest {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  quantity: ProductLinesAPI.QuantityInput;
+  quantity: InventoryAPI.QuantityInput;
 
   /**
    * The product description recorded on the line.
@@ -182,7 +182,7 @@ export interface UpdateSalesOrderLineRequest {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  quantity?: ProductLinesAPI.QuantityInput;
+  quantity?: InventoryAPI.QuantityInput;
 
   /**
    * A value expressed as a ratio of two units, supplied on create and update
@@ -222,7 +222,7 @@ export interface LineCreateParams {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  quantity: ProductLinesAPI.QuantityInput;
+  quantity: InventoryAPI.QuantityInput;
 
   /**
    * Query param: Sub-objects to expand in the response. When omitted, sub-objects
@@ -273,7 +273,7 @@ export interface LineUpdateParams {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  quantity?: ProductLinesAPI.QuantityInput;
+  quantity?: InventoryAPI.QuantityInput;
 
   /**
    * Body param: A value expressed as a ratio of two units, supplied on create and

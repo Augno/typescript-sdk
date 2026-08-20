@@ -4,7 +4,7 @@ import { APIResource } from '../../../core/resource';
 import * as CoreAPI from '../../core/core';
 import * as AccountGroupsAPI from '../account-groups';
 import * as AddressesAPI from '../addresses';
-import * as ProductLinesAPI from '../../catalog/product-lines/product-lines';
+import * as InventoryAPI from '../../catalog/items/inventory';
 import * as AccountPricesAPI from '../account-prices/account-prices';
 import * as ActionsAPI from './actions';
 import { ActionMergeParams, Actions, MergeCustomersRequest } from './actions';
@@ -295,7 +295,7 @@ export interface CreateCustomerRequest {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  credit_limit?: ProductLinesAPI.QuantityInput;
+  credit_limit?: InventoryAPI.QuantityInput;
 
   /**
    * IDs of the account groups of type `pricing_group` to assign to this customer,
@@ -497,7 +497,7 @@ export interface UpdateCustomerRequest {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  credit_limit?: ProductLinesAPI.QuantityInput | null;
+  credit_limit?: InventoryAPI.QuantityInput | null;
 
   /**
    * IDs of the account groups of type `pricing_group` to assign to this customer,
@@ -910,7 +910,7 @@ export interface CustomerCreateParams {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  credit_limit?: ProductLinesAPI.QuantityInput;
+  credit_limit?: InventoryAPI.QuantityInput;
 
   /**
    * Body param: IDs of the account groups of type `pricing_group` to assign to this
@@ -1079,7 +1079,7 @@ export interface CustomerUpdateParams {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  credit_limit?: ProductLinesAPI.QuantityInput | null;
+  credit_limit?: InventoryAPI.QuantityInput | null;
 
   /**
    * Body param: IDs of the account groups of type `pricing_group` to assign to this

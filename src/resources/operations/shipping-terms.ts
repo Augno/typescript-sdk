@@ -2,7 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as APIKeysAPI from '../auth/api-keys/api-keys';
-import * as ProductLinesAPI from '../catalog/product-lines/product-lines';
+import * as InventoryAPI from '../catalog/items/inventory';
 import * as AccountPricesAPI from '../sales/account-prices/account-prices';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
@@ -183,7 +183,7 @@ export interface CreateShippingTermRequest {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  flat_rate?: ProductLinesAPI.QuantityInput;
+  flat_rate?: InventoryAPI.QuantityInput;
 
   /**
    * IDs of the service levels that ship for free once an order exceeds
@@ -200,7 +200,7 @@ export interface CreateShippingTermRequest {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  minimum_order_value?: ProductLinesAPI.QuantityInput;
+  minimum_order_value?: InventoryAPI.QuantityInput;
 }
 
 /**
@@ -244,7 +244,7 @@ export interface UpdateShippingTermRequest {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  flat_rate?: ProductLinesAPI.QuantityInput | null;
+  flat_rate?: InventoryAPI.QuantityInput | null;
 
   /**
    * IDs of the service levels that ship for free once an order exceeds
@@ -262,7 +262,7 @@ export interface UpdateShippingTermRequest {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  minimum_order_value?: ProductLinesAPI.QuantityInput | null;
+  minimum_order_value?: InventoryAPI.QuantityInput | null;
 
   /**
    * Human-readable name for the shipping term, used to identify it when assigning
@@ -357,7 +357,7 @@ export interface ShippingTermCreateParams {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  flat_rate?: ProductLinesAPI.QuantityInput;
+  flat_rate?: InventoryAPI.QuantityInput;
 
   /**
    * Body param: IDs of the service levels that ship for free once an order exceeds
@@ -374,7 +374,7 @@ export interface ShippingTermCreateParams {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  minimum_order_value?: ProductLinesAPI.QuantityInput;
+  minimum_order_value?: InventoryAPI.QuantityInput;
 }
 
 export interface ShippingTermUpdateParams {
@@ -392,7 +392,7 @@ export interface ShippingTermUpdateParams {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  flat_rate?: ProductLinesAPI.QuantityInput | null;
+  flat_rate?: InventoryAPI.QuantityInput | null;
 
   /**
    * Body param: IDs of the service levels that ship for free once an order exceeds
@@ -410,7 +410,7 @@ export interface ShippingTermUpdateParams {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  minimum_order_value?: ProductLinesAPI.QuantityInput | null;
+  minimum_order_value?: InventoryAPI.QuantityInput | null;
 
   /**
    * Body param: Human-readable name for the shipping term, used to identify it when

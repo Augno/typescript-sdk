@@ -11,6 +11,7 @@ import {
   UpsertMaterialInput,
   UpsertMaterialProperty,
 } from './actions';
+import * as UnitsAPI from '../units/units';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
@@ -301,7 +302,7 @@ export interface Material {
    * resources point at them to report stock levels, ordered and packed amounts,
    * money, weights, and durations.
    */
-  lead_time: ItemsAPI.Quantity | null;
+  lead_time: Quantity | null;
 
   /**
    * Resource type identifier.
@@ -315,12 +316,49 @@ export interface Material {
    * resources point at them to report stock levels, ordered and packed amounts,
    * money, weights, and durations.
    */
-  order_point: ItemsAPI.Quantity | null;
+  order_point: Quantity | null;
 
   /**
    * Last updated timestamp.
    */
   updated_at: string;
+}
+
+/**
+ * A measured amount: a numeric value together with the unit it is expressed in.
+ *
+ * Quantities are shared building blocks rather than standalone records — other
+ * resources point at them to report stock levels, ordered and packed amounts,
+ * money, weights, and durations.
+ */
+export interface Quantity {
+  /**
+   * Quantity ID.
+   */
+  id: string;
+
+  /**
+   * Formatted value with unit abbreviation (e.g. "$1,234.56" or "100 kg").
+   */
+  display_value: string;
+
+  /**
+   * Resource type identifier.
+   */
+  object: 'quantity';
+
+  /**
+   * Unit of measurement used for conversions and product quantities.
+   */
+  unit: UnitsAPI.Unit | null;
+
+  /**
+   * Raw decimal value of the quantity, as a string to preserve precision.
+   *
+   * This is the unformatted machine value; see `display_value` for the
+   * human-readable rendering with unit and thousands separators.
+   */
+  value: string;
 }
 
 /**
@@ -620,6 +658,7 @@ export declare namespace Materials {
     type CreateMaterialRequest as CreateMaterialRequest,
     type ListMaterial as ListMaterial,
     type Material as Material,
+    type Quantity as Quantity,
     type QuantityInputRequest as QuantityInputRequest,
     type RateInput as RateInput,
     type UpdateMaterialRequest as UpdateMaterialRequest,

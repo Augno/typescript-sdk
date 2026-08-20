@@ -434,8 +434,6 @@ export interface Entity {
     | 'batch_lot'
     | 'check_duplicate_result'
     | 'item_trend_point'
-    | 'pack_pick_response'
-    | 'pick_shipments_response'
     | 'tenancy_pending_registration'
     | 'invoice_allocation_entry'
     | 'allocation_customer'
@@ -474,7 +472,13 @@ export interface Entity {
     | 'computed_quantity'
     | 'analyze_realized_margins_response'
     | 'realized_margin_finding'
-    | 'realized_margin_summary';
+    | 'realized_margin_summary'
+    | 'shipment_related'
+    | 'invoice_related'
+    | 'pick_related'
+    | 'pick_shipments_response'
+    | 'pick_totals'
+    | 'pick_stage_total';
 }
 
 /**
@@ -809,8 +813,6 @@ export interface CoreRetrieveSearchParams {
     | 'batch_lot'
     | 'check_duplicate_result'
     | 'item_trend_point'
-    | 'pack_pick_response'
-    | 'pick_shipments_response'
     | 'tenancy_pending_registration'
     | 'invoice_allocation_entry'
     | 'allocation_customer'
@@ -850,6 +852,12 @@ export interface CoreRetrieveSearchParams {
     | 'analyze_realized_margins_response'
     | 'realized_margin_finding'
     | 'realized_margin_summary'
+    | 'shipment_related'
+    | 'invoice_related'
+    | 'pick_related'
+    | 'pick_shipments_response'
+    | 'pick_totals'
+    | 'pick_stage_total'
   >;
 }
 

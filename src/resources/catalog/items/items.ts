@@ -3,8 +3,33 @@
 import { APIResource } from '../../../core/resource';
 import * as CoreAPI from '../../core/core';
 import * as APIKeysAPI from '../../auth/api-keys/api-keys';
+import * as ActionsAPI from './actions';
+import {
+  ActionBulkReconcileParams,
+  Actions,
+  BulkReconcileItemInput,
+  BulkReconcileItemsRequest,
+  BulkReconcileItemsResponse,
+  ListReconcileErrorResult,
+  ListReconciledItemResult,
+  ListSkippedItemResult,
+  ReconcileErrorResult,
+  ReconciledItemResult,
+  SkippedItemResult,
+} from './actions';
 import * as AttributesAPI from './attributes';
 import { AttributeDeleteParams, AttributeUpdateParams, Attributes } from './attributes';
+import * as InventoryAPI from './inventory';
+import {
+  ComputedQuantity,
+  Inventory,
+  InventoryListParams,
+  InventoryUpdateParams,
+  InventoryUpdateResponse,
+  ItemInventory,
+  QuantityInput,
+  UpdateItemInventoryRequest,
+} from './inventory';
 import * as PropertiesAPI from '../properties/properties';
 import * as UnitGroupsAPI from '../unit-groups/unit-groups';
 import * as UnitsAPI from '../units/units';
@@ -16,7 +41,9 @@ import { path } from '../../../internal/utils/path';
  * List and manage inventory items.
  */
 export class Items extends APIResource {
+  inventory: InventoryAPI.Inventory = new InventoryAPI.Inventory(this._client);
   attributes: AttributesAPI.Attributes = new AttributesAPI.Attributes(this._client);
+  actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
 
   /**
    * Returns a paginated list of items, newest first.
@@ -55,32 +82,6 @@ export class Items extends APIResource {
     options?: RequestOptions,
   ): APIPromise<Item> {
     return this._client.get(path`/v1/catalog/items/${id}`, { query, ...options });
-  }
-
-  /**
-   * Returns the stock position for an item: what is on hand, what is reserved
-   * against existing orders, what is free to promise, and what is short.
-   *
-   * Stock your account either owns or holds counts toward the on-hand figure, so
-   * customer-supplied material sitting in your facility is included. All four
-   * quantities are reported in the base unit of the item's category.
-   *
-   * This endpoint requires the permission: `items:read`.
-   *
-   * @example
-   * ```ts
-   * const itemInventory =
-   *   await client.catalog.items.retrieveInventory(
-   *     'it_pej07ckhvu62',
-   *   );
-   * ```
-   */
-  retrieveInventory(
-    id: string,
-    query: ItemRetrieveInventoryParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ItemInventory> {
-    return this._client.get(path`/v1/catalog/items/${id}/inventory`, { query, ...options });
   }
 
   /**
@@ -301,56 +302,6 @@ export interface ItemCategory {
 }
 
 /**
- * The stock position for an item: what is in stock, what is already committed, and
- * what is still free to sell.
- *
- * All four quantities are reported in the same unit — the base unit of the item's
- * category.
- */
-export interface ItemInventory {
-  /**
-   * A measured amount: a numeric value together with the unit it is expressed in.
-   *
-   * Quantities are shared building blocks rather than standalone records — other
-   * resources point at them to report stock levels, ordered and packed amounts,
-   * money, weights, and durations.
-   */
-  available_to_promise: Quantity | null;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'item_inventory';
-
-  /**
-   * A measured amount: a numeric value together with the unit it is expressed in.
-   *
-   * Quantities are shared building blocks rather than standalone records — other
-   * resources point at them to report stock levels, ordered and packed amounts,
-   * money, weights, and durations.
-   */
-  on_hand: Quantity | null;
-
-  /**
-   * A measured amount: a numeric value together with the unit it is expressed in.
-   *
-   * Quantities are shared building blocks rather than standalone records — other
-   * resources point at them to report stock levels, ordered and packed amounts,
-   * money, weights, and durations.
-   */
-  reserved: Quantity | null;
-
-  /**
-   * A measured amount: a numeric value together with the unit it is expressed in.
-   *
-   * Quantities are shared building blocks rather than standalone records — other
-   * resources point at them to report stock levels, ordered and packed amounts,
-   * money, weights, and durations.
-   */
-  short: Quantity | null;
-}
-
-/**
  * The lot an item is made in — how many, counted in what.
  *
  * A lot is the quantity production is issued in: a doff, a pallet, a batch. The
@@ -425,43 +376,6 @@ export interface ListItem {
    * search term, and page size.
    */
   page_info: APIKeysAPI.PageInfo;
-}
-
-/**
- * A measured amount: a numeric value together with the unit it is expressed in.
- *
- * Quantities are shared building blocks rather than standalone records — other
- * resources point at them to report stock levels, ordered and packed amounts,
- * money, weights, and durations.
- */
-export interface Quantity {
-  /**
-   * Quantity ID.
-   */
-  id: string;
-
-  /**
-   * Formatted value with unit abbreviation (e.g. "$1,234.56" or "100 kg").
-   */
-  display_value: string;
-
-  /**
-   * Resource type identifier.
-   */
-  object: 'quantity';
-
-  /**
-   * Unit of measurement used for conversions and product quantities.
-   */
-  unit: UnitsAPI.Unit | null;
-
-  /**
-   * Raw decimal value of the quantity, as a string to preserve precision.
-   *
-   * This is the unformatted machine value; see `display_value` for the
-   * human-readable rendering with unit and thousands separators.
-   */
-  value: string;
 }
 
 /**
@@ -627,14 +541,6 @@ export interface ItemRetrieveParams {
   >;
 }
 
-export interface ItemRetrieveInventoryParams {
-  /**
-   * Sub-objects to expand in the response. When omitted, sub-objects are returned as
-   * `null`.
-   */
-  include?: Array<'on_hand' | 'reserved' | 'available_to_promise' | 'short'>;
-}
-
 export interface ItemRetrieveLotDefaultParams {
   /**
    * Sub-objects to expand in the response. When omitted, sub-objects are returned as
@@ -667,27 +573,51 @@ export interface ItemChangeCategoryParams {
   >;
 }
 
+Items.Inventory = Inventory;
 Items.Attributes = Attributes;
+Items.Actions = Actions;
 
 export declare namespace Items {
   export {
     type Item as Item,
     type ItemCategory as ItemCategory,
-    type ItemInventory as ItemInventory,
     type ItemLotDefault as ItemLotDefault,
     type ListItem as ListItem,
-    type Quantity as Quantity,
     type Rate as Rate,
     type ItemListParams as ItemListParams,
     type ItemRetrieveParams as ItemRetrieveParams,
-    type ItemRetrieveInventoryParams as ItemRetrieveInventoryParams,
     type ItemRetrieveLotDefaultParams as ItemRetrieveLotDefaultParams,
     type ItemChangeCategoryParams as ItemChangeCategoryParams,
+  };
+
+  export {
+    Inventory as Inventory,
+    type ComputedQuantity as ComputedQuantity,
+    type ItemInventory as ItemInventory,
+    type QuantityInput as QuantityInput,
+    type UpdateItemInventoryRequest as UpdateItemInventoryRequest,
+    type InventoryUpdateResponse as InventoryUpdateResponse,
+    type InventoryListParams as InventoryListParams,
+    type InventoryUpdateParams as InventoryUpdateParams,
   };
 
   export {
     Attributes as Attributes,
     type AttributeUpdateParams as AttributeUpdateParams,
     type AttributeDeleteParams as AttributeDeleteParams,
+  };
+
+  export {
+    Actions as Actions,
+    type BulkReconcileItemInput as BulkReconcileItemInput,
+    type BulkReconcileItemsRequest as BulkReconcileItemsRequest,
+    type BulkReconcileItemsResponse as BulkReconcileItemsResponse,
+    type ListReconcileErrorResult as ListReconcileErrorResult,
+    type ListReconciledItemResult as ListReconciledItemResult,
+    type ListSkippedItemResult as ListSkippedItemResult,
+    type ReconcileErrorResult as ReconcileErrorResult,
+    type ReconciledItemResult as ReconciledItemResult,
+    type SkippedItemResult as SkippedItemResult,
+    type ActionBulkReconcileParams as ActionBulkReconcileParams,
   };
 }

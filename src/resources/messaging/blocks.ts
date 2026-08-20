@@ -3,6 +3,7 @@
 import { APIResource } from '../../core/resource';
 import * as APIKeysAPI from '../auth/api-keys/api-keys';
 import * as ItemsAPI from '../catalog/items/items';
+import * as MaterialsAPI from '../catalog/materials/materials';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -207,7 +208,7 @@ export interface Consumption {
    * resources point at them to report stock levels, ordered and packed amounts,
    * money, weights, and durations.
    */
-  quantity: ItemsAPI.Quantity | null;
+  quantity: MaterialsAPI.Quantity | null;
 
   /**
    * Last updated timestamp.
@@ -221,7 +222,7 @@ export interface Consumption {
    * resources point at them to report stock levels, ordered and packed amounts,
    * money, weights, and durations.
    */
-  waste_quantity: ItemsAPI.Quantity | null;
+  waste_quantity: MaterialsAPI.Quantity | null;
 }
 
 /**
@@ -615,7 +616,7 @@ export interface ProductionOutput {
    * resources point at them to report stock levels, ordered and packed amounts,
    * money, weights, and durations.
    */
-  quantity: ItemsAPI.Quantity | null;
+  quantity: MaterialsAPI.Quantity | null;
 
   /**
    * Last updated timestamp.

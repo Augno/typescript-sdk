@@ -3,9 +3,9 @@
 import { APIResource } from '../../../core/resource';
 import * as RequestLogsAPI from '../../core/request-logs';
 import * as APIKeysAPI from '../../auth/api-keys/api-keys';
+import * as InventoryAPI from '../../catalog/items/inventory';
 import * as ItemsAPI from '../../catalog/items/items';
 import * as MaterialsAPI from '../../catalog/materials/materials';
-import * as ProductLinesAPI from '../../catalog/product-lines/product-lines';
 import * as ProductsAPI from '../../catalog/products/products';
 import * as UnitsAPI from '../../catalog/units/units';
 import * as AccountPricesAPI from '../account-prices/account-prices';
@@ -354,7 +354,7 @@ export interface CreateSalesOrderLineInput {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  quantity: ProductLinesAPI.QuantityInput;
+  quantity: InventoryAPI.QuantityInput;
 
   /**
    * Description recorded on the line.
@@ -792,7 +792,7 @@ export interface QuoteSalesOrderLineInput {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  quantity: ProductLinesAPI.QuantityInput;
+  quantity: InventoryAPI.QuantityInput;
 }
 
 /**
@@ -1231,6 +1231,11 @@ export interface SalesOrderLine {
   created_at: string;
 
   /**
+   * An entry in your catalog: something you sell, consume, or build with.
+   */
+  item: ItemsAPI.Item | null;
+
+  /**
    * Position of the line on the order.
    *
    * Assigned automatically in sequence, starting at `1`. Product lines are numbered
@@ -1276,7 +1281,7 @@ export interface SalesOrderLine {
    * resources point at them to report stock levels, ordered and packed amounts,
    * money, weights, and durations.
    */
-  quantity_ordered: ItemsAPI.Quantity | null;
+  quantity_ordered: MaterialsAPI.Quantity | null;
 
   /**
    * Derived monetary totals for a sales order or one of its lines.

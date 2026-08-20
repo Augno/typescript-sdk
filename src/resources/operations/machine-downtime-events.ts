@@ -6,8 +6,8 @@ import * as RequestLogsAPI from '../core/request-logs';
 import * as BlocksAPI from '../messaging/blocks';
 import * as OperationsAPI from './operations';
 import * as APIKeysAPI from '../auth/api-keys/api-keys';
+import * as InventoryAPI from '../catalog/items/inventory';
 import * as ItemsAPI from '../catalog/items/items';
-import * as ProductLinesAPI from '../catalog/product-lines/product-lines';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -198,7 +198,7 @@ export interface CreateMachineDowntimeEventRequest {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  duration?: ProductLinesAPI.QuantityInput;
+  duration?: InventoryAPI.QuantityInput;
 
   /**
    * When the machine started running again.
@@ -401,7 +401,7 @@ export interface UpdateMachineDowntimeEventRequest {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  duration?: ProductLinesAPI.QuantityInput | null;
+  duration?: InventoryAPI.QuantityInput | null;
 
   /**
    * When the machine started running again.
@@ -599,7 +599,7 @@ export interface MachineDowntimeEventCreateParams {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  duration?: ProductLinesAPI.QuantityInput;
+  duration?: InventoryAPI.QuantityInput;
 
   /**
    * Body param: When the machine started running again.
@@ -657,7 +657,7 @@ export interface MachineDowntimeEventUpdateParams {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  duration?: ProductLinesAPI.QuantityInput | null;
+  duration?: InventoryAPI.QuantityInput | null;
 
   /**
    * Body param: When the machine started running again.

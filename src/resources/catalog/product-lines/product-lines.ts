@@ -2,7 +2,8 @@
 
 import { APIResource } from '../../../core/resource';
 import * as APIKeysAPI from '../../auth/api-keys/api-keys';
-import * as ItemsAPI from '../items/items';
+import * as InventoryAPI from '../items/inventory';
+import * as MaterialsAPI from '../materials/materials';
 import * as ActionsAPI from './actions';
 import {
   ActionBulkUpsertParams,
@@ -198,7 +199,7 @@ export interface CreateProductLineRequest {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  default_lot?: QuantityInput;
+  default_lot?: InventoryAPI.QuantityInput;
 
   /**
    * How products in this line are produced when they do not say for themselves.
@@ -273,7 +274,7 @@ export interface ProductLine {
    * resources point at them to report stock levels, ordered and packed amounts,
    * money, weights, and durations.
    */
-  default_lot: ItemsAPI.Quantity | null;
+  default_lot: MaterialsAPI.Quantity | null;
 
   /**
    * Free-form description of the product line.
@@ -341,24 +342,6 @@ export interface ProductLine {
 }
 
 /**
- * An amount together with the unit it is expressed in.
- *
- * The unit may be a currency, so money amounts such as a credit limit are written
- * the same way as physical amounts like weights or counts.
- */
-export interface QuantityInput {
-  /**
-   * ID of the unit of measure for the value.
-   */
-  unit_id: string;
-
-  /**
-   * Decimal value, as a string to preserve precision.
-   */
-  value: string;
-}
-
-/**
  * Request to partially update a product line.
  */
 export interface UpdateProductLineRequest {
@@ -377,7 +360,7 @@ export interface UpdateProductLineRequest {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  default_lot?: QuantityInput | null;
+  default_lot?: InventoryAPI.QuantityInput | null;
 
   /**
    * Default freight policy for products in this product line.
@@ -506,7 +489,7 @@ export interface ProductLineCreateParams {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  default_lot?: QuantityInput;
+  default_lot?: InventoryAPI.QuantityInput;
 
   /**
    * Body param: How products in this line are produced when they do not say for
@@ -542,7 +525,7 @@ export interface ProductLineUpdateParams {
    * The unit may be a currency, so money amounts such as a credit limit are written
    * the same way as physical amounts like weights or counts.
    */
-  default_lot?: QuantityInput | null;
+  default_lot?: InventoryAPI.QuantityInput | null;
 
   /**
    * Body param: Default freight policy for products in this product line.
@@ -592,7 +575,6 @@ export declare namespace ProductLines {
     type CreateProductLineRequest as CreateProductLineRequest,
     type ListProductLine as ListProductLine,
     type ProductLine as ProductLine,
-    type QuantityInput as QuantityInput,
     type UpdateProductLineRequest as UpdateProductLineRequest,
     type ProductLineDeleteResponse as ProductLineDeleteResponse,
     type ProductLineListParams as ProductLineListParams,

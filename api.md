@@ -327,19 +327,31 @@ Types:
 
 - <code><a href="./src/resources/catalog/items/items.ts">Item</a></code>
 - <code><a href="./src/resources/catalog/items/items.ts">ItemCategory</a></code>
-- <code><a href="./src/resources/catalog/items/items.ts">ItemInventory</a></code>
 - <code><a href="./src/resources/catalog/items/items.ts">ItemLotDefault</a></code>
 - <code><a href="./src/resources/catalog/items/items.ts">ListItem</a></code>
-- <code><a href="./src/resources/catalog/items/items.ts">Quantity</a></code>
 - <code><a href="./src/resources/catalog/items/items.ts">Rate</a></code>
 
 Methods:
 
 - <code title="get /v1/catalog/items">client.catalog.items.<a href="./src/resources/catalog/items/items.ts">list</a>({ ...params }) -> ListItem</code>
 - <code title="get /v1/catalog/items/{id}">client.catalog.items.<a href="./src/resources/catalog/items/items.ts">retrieve</a>(id, { ...params }) -> Item</code>
-- <code title="get /v1/catalog/items/{id}/inventory">client.catalog.items.<a href="./src/resources/catalog/items/items.ts">retrieveInventory</a>(id, { ...params }) -> ItemInventory</code>
 - <code title="get /v1/catalog/items/{id}/lot-default">client.catalog.items.<a href="./src/resources/catalog/items/items.ts">retrieveLotDefault</a>(id, { ...params }) -> ItemLotDefault</code>
 - <code title="put /v1/catalog/items/{id}/category/{category_id}">client.catalog.items.<a href="./src/resources/catalog/items/items.ts">changeCategory</a>(categoryID, { ...params }) -> Item</code>
+
+### Inventory
+
+Types:
+
+- <code><a href="./src/resources/catalog/items/inventory.ts">ComputedQuantity</a></code>
+- <code><a href="./src/resources/catalog/items/inventory.ts">ItemInventory</a></code>
+- <code><a href="./src/resources/catalog/items/inventory.ts">QuantityInput</a></code>
+- <code><a href="./src/resources/catalog/items/inventory.ts">UpdateItemInventoryRequest</a></code>
+- <code><a href="./src/resources/catalog/items/inventory.ts">InventoryUpdateResponse</a></code>
+
+Methods:
+
+- <code title="get /v1/catalog/items/{id}/inventory">client.catalog.items.inventory.<a href="./src/resources/catalog/items/inventory.ts">list</a>(id, { ...params }) -> ItemInventory</code>
+- <code title="patch /v1/catalog/items/{id}/inventory">client.catalog.items.inventory.<a href="./src/resources/catalog/items/inventory.ts">update</a>(id, { ...params }) -> InventoryUpdateResponse</code>
 
 ### Attributes
 
@@ -347,6 +359,24 @@ Methods:
 
 - <code title="put /v1/catalog/items/{id}/attributes/{attribute_id}">client.catalog.items.attributes.<a href="./src/resources/catalog/items/attributes.ts">update</a>(attributeID, { ...params }) -> Item</code>
 - <code title="delete /v1/catalog/items/{id}/attributes/{attribute_id}">client.catalog.items.attributes.<a href="./src/resources/catalog/items/attributes.ts">delete</a>(attributeID, { ...params }) -> Item</code>
+
+### Actions
+
+Types:
+
+- <code><a href="./src/resources/catalog/items/actions.ts">BulkReconcileItemInput</a></code>
+- <code><a href="./src/resources/catalog/items/actions.ts">BulkReconcileItemsRequest</a></code>
+- <code><a href="./src/resources/catalog/items/actions.ts">BulkReconcileItemsResponse</a></code>
+- <code><a href="./src/resources/catalog/items/actions.ts">ListReconcileErrorResult</a></code>
+- <code><a href="./src/resources/catalog/items/actions.ts">ListReconciledItemResult</a></code>
+- <code><a href="./src/resources/catalog/items/actions.ts">ListSkippedItemResult</a></code>
+- <code><a href="./src/resources/catalog/items/actions.ts">ReconcileErrorResult</a></code>
+- <code><a href="./src/resources/catalog/items/actions.ts">ReconciledItemResult</a></code>
+- <code><a href="./src/resources/catalog/items/actions.ts">SkippedItemResult</a></code>
+
+Methods:
+
+- <code title="post /v1/catalog/items/actions/bulk-reconcile">client.catalog.items.actions.<a href="./src/resources/catalog/items/actions.ts">bulkReconcile</a>({ ...params }) -> BulkReconcileItemsResponse</code>
 
 ## ItemCategories
 
@@ -398,6 +428,7 @@ Types:
 - <code><a href="./src/resources/catalog/materials/materials.ts">CreateMaterialRequest</a></code>
 - <code><a href="./src/resources/catalog/materials/materials.ts">ListMaterial</a></code>
 - <code><a href="./src/resources/catalog/materials/materials.ts">Material</a></code>
+- <code><a href="./src/resources/catalog/materials/materials.ts">Quantity</a></code>
 - <code><a href="./src/resources/catalog/materials/materials.ts">QuantityInputRequest</a></code>
 - <code><a href="./src/resources/catalog/materials/materials.ts">RateInput</a></code>
 - <code><a href="./src/resources/catalog/materials/materials.ts">UpdateMaterialRequest</a></code>
@@ -458,7 +489,6 @@ Types:
 - <code><a href="./src/resources/catalog/product-lines/product-lines.ts">CreateProductLineRequest</a></code>
 - <code><a href="./src/resources/catalog/product-lines/product-lines.ts">ListProductLine</a></code>
 - <code><a href="./src/resources/catalog/product-lines/product-lines.ts">ProductLine</a></code>
-- <code><a href="./src/resources/catalog/product-lines/product-lines.ts">QuantityInput</a></code>
 - <code><a href="./src/resources/catalog/product-lines/product-lines.ts">UpdateProductLineRequest</a></code>
 - <code><a href="./src/resources/catalog/product-lines/product-lines.ts">ProductLineDeleteResponse</a></code>
 
