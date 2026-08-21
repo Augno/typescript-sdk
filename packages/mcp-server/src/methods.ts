@@ -1877,12 +1877,6 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/operations/production-schedules/{id}/actions/regenerate',
   },
   {
-    clientCallName: 'client.operations.productionSchedules.actions.quotePromiseDate',
-    fullyQualifiedName: 'operations.productionSchedules.actions.quotePromiseDate',
-    httpMethod: 'post',
-    httpPath: '/v1/operations/production-schedules/actions/quote-promise-date',
-  },
-  {
     clientCallName: 'client.operations.productionSchedules.actions.publish',
     fullyQualifiedName: 'operations.productionSchedules.actions.publish',
     httpMethod: 'put',

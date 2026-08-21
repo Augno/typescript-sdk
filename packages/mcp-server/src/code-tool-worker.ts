@@ -420,7 +420,6 @@ const fuse = new Fuse(
     'client.operations.productionSchedules.actions.preview',
     'client.operations.productionSchedules.actions.previewRegenerate',
     'client.operations.productionSchedules.actions.publish',
-    'client.operations.productionSchedules.actions.quotePromiseDate',
     'client.operations.productionSchedules.actions.regenerate',
     'client.operations.productionSchedules.actions.releaseWeek',
     'client.operations.productionScheduleSettings.list',
