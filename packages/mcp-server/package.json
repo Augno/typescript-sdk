@@ -1,17 +1,17 @@
 {
-  "name": "@augno/sdk-mcp",
+  "name": "@openmrp/sdk-mcp",
   "version": "0.19.1",
-  "description": "The official MCP Server for the Augno API",
-  "author": "Augno <support@augno.com>",
+  "description": "The official MCP Server for the OpenMRP API",
+  "author": "OpenMRP <support@openmrp.ai>",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "type": "commonjs",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/augno/typescript-sdk.git",
+    "url": "git+https://github.com/open-mrp/typescript-sdk.git",
     "directory": "packages/mcp-server"
   },
-  "homepage": "https://github.com/augno/typescript-sdk/tree/main/packages/mcp-server#readme",
+  "homepage": "https://github.com/open-mrp/typescript-sdk/tree/main/packages/mcp-server#readme",
   "license": "Apache-2.0",
   "packageManager": "pnpm@10.30.1",
   "private": false,
@@ -29,7 +29,7 @@
     "fix": "eslint --fix ."
   },
   "dependencies": {
-    "@augno/sdk": "workspace:*",
+    "@openmrp/sdk": "workspace:*",
     "ajv": "^8.18.0",
     "@cloudflare/cabidela": "^0.2.4",
     "@hono/node-server": "^1.19.10",
@@ -77,8 +77,8 @@
     "tsconfig-paths": "^4.0.0"
   },
   "imports": {
-    "@augno/sdk-mcp": ".",
-    "@augno/sdk-mcp/*": "./src/*"
+    "@openmrp/sdk-mcp": ".",
+    "@openmrp/sdk-mcp/*": "./src/*"
   },
   "exports": {
     ".": {

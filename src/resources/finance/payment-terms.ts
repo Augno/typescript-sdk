@@ -14,7 +14,7 @@ export class PaymentTerms extends APIResource {
   /**
    * Returns a paginated list of payment terms.
    *
-   * The list includes both payment terms created by your account and Augno-provided
+   * The list includes both payment terms created by your account and OpenMRP-provided
    * system defaults.
    *
    * This endpoint requires the permission: `payment_terms:read`.
@@ -35,7 +35,7 @@ export class PaymentTerms extends APIResource {
   /**
    * Returns a payment term by ID.
    *
-   * Both payment terms created by your account and Augno-provided system defaults
+   * Both payment terms created by your account and OpenMRP-provided system defaults
    * can be retrieved.
    *
    * This endpoint requires the permission: `payment_terms:read`.

@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import Augno from '@augno/sdk';
+import OpenMRP from '@openmrp/sdk';
 
-const client = new Augno({
+const client = new OpenMRP({
   bearerToken: 'My Bearer Token',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
@@ -47,7 +47,7 @@ describe('resource customers', () => {
         },
         { path: '/_stainless_unknown_path' },
       ),
-    ).rejects.toThrow(Augno.NotFoundError);
+    ).rejects.toThrow(OpenMRP.NotFoundError);
   });
 
   test('retrieve', async () => {
@@ -69,7 +69,7 @@ describe('resource customers', () => {
         { include: ['bill_to_address'] },
         { path: '/_stainless_unknown_path' },
       ),
-    ).rejects.toThrow(Augno.NotFoundError);
+    ).rejects.toThrow(OpenMRP.NotFoundError);
   });
 
   test('create: only required params', async () => {
@@ -192,7 +192,7 @@ describe('resource customers', () => {
         },
         { path: '/_stainless_unknown_path' },
       ),
-    ).rejects.toThrow(Augno.NotFoundError);
+    ).rejects.toThrow(OpenMRP.NotFoundError);
   });
 
   test('delete', async () => {
@@ -225,6 +225,6 @@ describe('resource customers', () => {
         { include: ['account_group'] },
         { path: '/_stainless_unknown_path' },
       ),
-    ).rejects.toThrow(Augno.NotFoundError);
+    ).rejects.toThrow(OpenMRP.NotFoundError);
   });
 });

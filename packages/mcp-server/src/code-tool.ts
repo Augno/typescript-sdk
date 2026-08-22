@@ -6,9 +6,9 @@ import { WorkerOutput } from './code-tool-types';
 import { getLogger } from './logger';
 import { SdkMethod } from './methods';
 import { McpCodeExecutionMode } from './options';
-import { ClientOptions } from '@augno/sdk';
+import { ClientOptions } from '@openmrp/sdk';
 
-const prompt = `Runs JavaScript code to interact with the Augno API.
+const prompt = `Runs JavaScript code to interact with the OpenMRP API.
 
 You are a skilled TypeScript programmer writing code to interface with the service.
 Define an async function named "run" that takes a single parameter of an initialized SDK client and it will be run.
@@ -167,7 +167,7 @@ const localDenoHandler = async ({
 
   // Follow symlinks in node_modules to allow read access to workspace-linked packages
   try {
-    const sdkPkgName = '@augno/sdk';
+    const sdkPkgName = '@openmrp/sdk';
     const sdkDir = path.resolve(packageNodeModulesPath, sdkPkgName);
     const realSdkDir = fs.realpathSync(sdkDir);
     if (realSdkDir !== sdkDir) {
@@ -209,7 +209,7 @@ const localDenoHandler = async ({
       const opts = {
         ...(client.baseURL != null ? { baseURL: client.baseURL } : undefined),
         ...(client.bearerToken != null ? { bearerToken: client.bearerToken } : undefined),
-        ...(client.augnoAccountID != null ? { augnoAccountID: client.augnoAccountID } : undefined),
+        ...(client.openMRPAccountID != null ? { openMRPAccountID: client.openMRPAccountID } : undefined),
         defaultHeaders: {
           'X-Stainless-MCP': 'true',
         },

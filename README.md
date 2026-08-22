@@ -1,24 +1,24 @@
-# Augno TypeScript API Library
+# OpenMRP TypeScript API Library
 
-[![NPM version](<https://img.shields.io/npm/v/@augno/sdk.svg?label=npm%20(stable)>)](https://npmjs.org/package/@augno/sdk) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@augno/sdk)
+[![NPM version](<https://img.shields.io/npm/v/@openmrp/sdk.svg?label=npm%20(stable)>)](https://npmjs.org/package/@openmrp/sdk) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@openmrp/sdk)
 
-This library provides convenient access to the Augno REST API from server-side TypeScript or JavaScript.
+This library provides convenient access to the OpenMRP REST API from server-side TypeScript or JavaScript.
 
 The full API of this library can be found in [api.md](api.md).
 
 ## MCP Server
 
-Use the Augno MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.
+Use the OpenMRP MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.
 
-[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40augno%2Fsdk-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBhdWduby9zZGstbWNwIl0sImVudiI6eyJBVUdOT19BUElfS0VZIjoiTXkgQmVhcmVyIFRva2VuIiwiQVVHTk9fQVVHTk9fQUNDT1VOVF9JRCI6Ik15IEF1Z25vIEFjY291bnQgSUQifX0)
-[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40augno%2Fsdk-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40augno%2Fsdk-mcp%22%5D%2C%22env%22%3A%7B%22AUGNO_API_KEY%22%3A%22My%20Bearer%20Token%22%2C%22AUGNO_AUGNO_ACCOUNT_ID%22%3A%22My%20Augno%20Account%20ID%22%7D%7D)
+[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40openmrp%2Fsdk-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBhdWduby9zZGstbWNwIl0sImVudiI6eyJBVUdOT19BUElfS0VZIjoiTXkgQmVhcmVyIFRva2VuIiwiQVVHTk9fQVVHTk9fQUNDT1VOVF9JRCI6Ik15IEF1Z25vIEFjY291bnQgSUQifX0)
+[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40openmrp%2Fsdk-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40openmrp%2Fsdk-mcp%22%5D%2C%22env%22%3A%7B%22OPENMRP_API_KEY%22%3A%22My%20Bearer%20Token%22%2C%22OPENMRP_OPENMRP_ACCOUNT_ID%22%3A%22My%20OpenMRP%20Account%20ID%22%7D%7D)
 
 > Note: You may need to set environment variables in your MCP client.
 
 ## Installation
 
 ```sh
-npm install @augno/sdk
+npm install @openmrp/sdk
 ```
 
 ## Usage
@@ -27,10 +27,10 @@ The full API of this library can be found in [api.md](api.md).
 
 <!-- prettier-ignore -->
 ```js
-import Augno from '@augno/sdk';
+import OpenMRP from '@openmrp/sdk';
 
-const client = new Augno({
-  bearerToken: process.env['AUGNO_API_KEY'], // This is the default and can be omitted
+const client = new OpenMRP({
+  bearerToken: process.env['OPENMRP_API_KEY'], // This is the default and can be omitted
   environment: 'local', // defaults to 'production'
 });
 
@@ -45,14 +45,14 @@ This library includes TypeScript definitions for all request params and response
 
 <!-- prettier-ignore -->
 ```ts
-import Augno from '@augno/sdk';
+import OpenMRP from '@openmrp/sdk';
 
-const client = new Augno({
-  bearerToken: process.env['AUGNO_API_KEY'], // This is the default and can be omitted
+const client = new OpenMRP({
+  bearerToken: process.env['OPENMRP_API_KEY'], // This is the default and can be omitted
   environment: 'local', // defaults to 'production'
 });
 
-const listItem: Augno.Catalog.ListItem = await client.catalog.items.list();
+const listItem: OpenMRP.Catalog.ListItem = await client.catalog.items.list();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -66,7 +66,7 @@ a subclass of `APIError` will be thrown:
 <!-- prettier-ignore -->
 ```ts
 const listItem = await client.catalog.items.list().catch(async (err) => {
-  if (err instanceof Augno.APIError) {
+  if (err instanceof OpenMRP.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
     console.log(err.headers); // {server: 'nginx', ...}
@@ -100,7 +100,7 @@ You can use the `maxRetries` option to configure or disable this:
 <!-- prettier-ignore -->
 ```js
 // Configure the default for all requests:
-const client = new Augno({
+const client = new OpenMRP({
   maxRetries: 0, // default is 2
 });
 
@@ -117,7 +117,7 @@ Requests time out after 1 minute by default. You can configure this with a `time
 <!-- prettier-ignore -->
 ```ts
 // Configure the default for all requests:
-const client = new Augno({
+const client = new OpenMRP({
   timeout: 20 * 1000, // 20 seconds (default is 1 minute)
 });
 
@@ -133,19 +133,19 @@ Note that requests which time out will be [retried twice by default](#retries).
 
 ## Default Headers
 
-We automatically send the `Augno-Version` header set to `1.0.forge-preview.3`.
+We automatically send the `OpenMRP-Version` header set to `1.0.forge-preview.3`.
 
 If you need to, you can override it by setting default headers on a per-request basis.
 
 Be aware that doing so may result in incorrect types and other unexpected or undefined behavior in the SDK.
 
 ```ts
-import Augno from '@augno/sdk';
+import OpenMRP from '@openmrp/sdk';
 
-const client = new Augno();
+const client = new OpenMRP();
 
 const listItem = await client.catalog.items.list({
-  headers: { 'Augno-Version': 'My-Custom-Value' },
+  headers: { 'OpenMRP-Version': 'My-Custom-Value' },
 });
 ```
 
@@ -161,7 +161,7 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 
 <!-- prettier-ignore -->
 ```ts
-const client = new Augno();
+const client = new OpenMRP();
 
 const response = await client.catalog.items.list().asResponse();
 console.log(response.headers.get('X-My-Header'));
@@ -182,13 +182,13 @@ console.log(listItem.data);
 
 The log level can be configured in two ways:
 
-1. Via the `AUGNO_LOG` environment variable
+1. Via the `OPENMRP_LOG` environment variable
 2. Using the `logLevel` client option (overrides the environment variable if set)
 
 ```ts
-import Augno from '@augno/sdk';
+import OpenMRP from '@openmrp/sdk';
 
-const client = new Augno({
+const client = new OpenMRP({
   logLevel: 'debug', // Show all log messages
 });
 ```
@@ -214,13 +214,13 @@ When providing a custom logger, the `logLevel` option still controls which messa
 below the configured level will not be sent to your logger.
 
 ```ts
-import Augno from '@augno/sdk';
+import OpenMRP from '@openmrp/sdk';
 import pino from 'pino';
 
 const logger = pino();
 
-const client = new Augno({
-  logger: logger.child({ name: 'Augno' }),
+const client = new OpenMRP({
+  logger: logger.child({ name: 'OpenMRP' }),
   logLevel: 'debug', // Send all messages to pino, allowing it to filter
 });
 ```
@@ -283,10 +283,10 @@ globalThis.fetch = fetch;
 Or pass it to the client:
 
 ```ts
-import Augno from '@augno/sdk';
+import OpenMRP from '@openmrp/sdk';
 import fetch from 'my-fetch';
 
-const client = new Augno({ fetch });
+const client = new OpenMRP({ fetch });
 ```
 
 ### Fetch options
@@ -294,9 +294,9 @@ const client = new Augno({ fetch });
 If you want to set custom `fetch` options without overriding the `fetch` function, you can provide a `fetchOptions` object when instantiating the client or making a request. (Request-specific options override client options.)
 
 ```ts
-import Augno from '@augno/sdk';
+import OpenMRP from '@openmrp/sdk';
 
-const client = new Augno({
+const client = new OpenMRP({
   fetchOptions: {
     // `RequestInit` options
   },
@@ -311,11 +311,11 @@ options to requests:
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/node.svg" align="top" width="18" height="21"> **Node** <sup>[[docs](https://github.com/nodejs/undici/blob/main/docs/docs/api/ProxyAgent.md#example---proxyagent-with-fetch)]</sup>
 
 ```ts
-import Augno from '@augno/sdk';
+import OpenMRP from '@openmrp/sdk';
 import * as undici from 'undici';
 
 const proxyAgent = new undici.ProxyAgent('http://localhost:8888');
-const client = new Augno({
+const client = new OpenMRP({
   fetchOptions: {
     dispatcher: proxyAgent,
   },
@@ -325,9 +325,9 @@ const client = new Augno({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/bun.svg" align="top" width="18" height="21"> **Bun** <sup>[[docs](https://bun.sh/guides/http/proxy)]</sup>
 
 ```ts
-import Augno from '@augno/sdk';
+import OpenMRP from '@openmrp/sdk';
 
-const client = new Augno({
+const client = new OpenMRP({
   fetchOptions: {
     proxy: 'http://localhost:8888',
   },
@@ -337,10 +337,10 @@ const client = new Augno({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/deno.svg" align="top" width="18" height="21"> **Deno** <sup>[[docs](https://docs.deno.com/api/deno/~/Deno.createHttpClient)]</sup>
 
 ```ts
-import Augno from 'npm:@augno/sdk';
+import OpenMRP from 'npm:@openmrp/sdk';
 
 const httpClient = Deno.createHttpClient({ proxy: { url: 'http://localhost:8888' } });
-const client = new Augno({
+const client = new OpenMRP({
   fetchOptions: {
     client: httpClient,
   },
@@ -359,7 +359,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/augno/typescript-sdk/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/open-mrp/typescript-sdk/issues) with questions, bugs, or suggestions.
 
 ## Requirements
 

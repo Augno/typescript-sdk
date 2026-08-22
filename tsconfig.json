@@ -8,8 +8,8 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "paths": {
-      "@augno/sdk/*": ["./src/*"],
-      "@augno/sdk": ["./src/index.ts"]
+      "@openmrp/sdk/*": ["./src/*"],
+      "@openmrp/sdk": ["./src/index.ts"]
     },
     "noEmit": true,
 

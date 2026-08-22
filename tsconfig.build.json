@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "@augno/sdk/*": ["./dist/src/*"],
-      "@augno/sdk": ["./dist/src/index.ts"]
+      "@openmrp/sdk/*": ["./dist/src/*"],
+      "@openmrp/sdk": ["./dist/src/index.ts"]
     },
     "noEmit": false,
     "declaration": true,

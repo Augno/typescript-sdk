@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   release-please:
-    if: github.repository == 'augno/typescript-sdk'
+    if: github.repository == 'open-mrp/typescript-sdk'
     runs-on: ubuntu-latest
 
     steps:
@@ -53,12 +53,12 @@ jobs:
           pnpm tsn scripts/publish-packages.ts "{ \"paths_released\": \"$PATHS_RELEASED\" }"
         env:
           INPUT_PATH: ${{ github.event.inputs.path }}
-          NPM_TOKEN: ${{ secrets.AUGNO_NPM_TOKEN || secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.OPENMRP_NPM_TOKEN || secrets.NPM_TOKEN }}
 
       - name: Upload MCP Server DXT GitHub release asset
         if: ${{ steps.release.outputs.releases_created == 'true' }}
         run: |
           gh release upload ${{ steps.release.outputs.tag_name }} \
-            packages/mcp-server/augno_sdk_api.mcpb
+            packages/mcp-server/openmrp_sdk_api.mcpb
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

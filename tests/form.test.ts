@@ -1,5 +1,5 @@
-import { multipartFormRequestOptions, createForm } from '@augno/sdk/internal/uploads';
-import { toFile } from '@augno/sdk/core/uploads';
+import { multipartFormRequestOptions, createForm } from '@openmrp/sdk/internal/uploads';
+import { toFile } from '@openmrp/sdk/core/uploads';
 
 describe('form data validation', () => {
   test('valid values do not error', async () => {

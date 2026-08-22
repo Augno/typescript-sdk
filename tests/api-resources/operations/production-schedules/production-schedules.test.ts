@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import Augno from '@augno/sdk';
+import OpenMRP from '@openmrp/sdk';
 
-const client = new Augno({
+const client = new OpenMRP({
   bearerToken: 'My Bearer Token',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
@@ -31,7 +31,7 @@ describe('resource productionSchedules', () => {
         },
         { path: '/_stainless_unknown_path' },
       ),
-    ).rejects.toThrow(Augno.NotFoundError);
+    ).rejects.toThrow(OpenMRP.NotFoundError);
   });
 
   test('create', async () => {
@@ -57,7 +57,7 @@ describe('resource productionSchedules', () => {
         },
         { path: '/_stainless_unknown_path' },
       ),
-    ).rejects.toThrow(Augno.NotFoundError);
+    ).rejects.toThrow(OpenMRP.NotFoundError);
   });
 
   test('retrieveCurrent', async () => {
@@ -124,7 +124,7 @@ describe('resource productionSchedules', () => {
         { item_id: 'item_id', week_index: 0 },
         { path: '/_stainless_unknown_path' },
       ),
-    ).rejects.toThrow(Augno.NotFoundError);
+    ).rejects.toThrow(OpenMRP.NotFoundError);
   });
 
   test('retrieveDerivedLines', async () => {
@@ -146,7 +146,7 @@ describe('resource productionSchedules', () => {
         { department_ids: ['string'], week_index: 0 },
         { path: '/_stainless_unknown_path' },
       ),
-    ).rejects.toThrow(Augno.NotFoundError);
+    ).rejects.toThrow(OpenMRP.NotFoundError);
   });
 
   test('retrieveAtRiskOrders', async () => {
@@ -184,7 +184,7 @@ describe('resource productionSchedules', () => {
         },
         { path: '/_stainless_unknown_path' },
       ),
-    ).rejects.toThrow(Augno.NotFoundError);
+    ).rejects.toThrow(OpenMRP.NotFoundError);
   });
 
   test('retrieveWeekReleasePreview', async () => {
@@ -207,7 +207,7 @@ describe('resource productionSchedules', () => {
         { skip_carry_forward: true, week_index: 0 },
         { path: '/_stainless_unknown_path' },
       ),
-    ).rejects.toThrow(Augno.NotFoundError);
+    ).rejects.toThrow(OpenMRP.NotFoundError);
   });
 
   test('delete', async () => {

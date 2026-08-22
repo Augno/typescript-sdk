@@ -11,7 +11,7 @@ import { path } from '../../../internal/utils/path';
  */
 export class Actions extends APIResource {
   /**
-   * Rotates an [API key](https://docs.augno.com/api/api-keys) by revoking the
+   * Rotates an [API key](https://docs.openmrp.ai/api/api-keys) by revoking the
    * existing key and issuing a replacement with the same name, role, and expiration
    * (unless overridden).
    *
@@ -22,7 +22,7 @@ export class Actions extends APIResource {
    *
    * The secret key is returned once and cannot be retrieved later, so you should
    * store it securely. We provide some
-   * [recommendations](https://docs.augno.com/api/managing-api-keys) on how you can
+   * [recommendations](https://docs.openmrp.ai/api/managing-api-keys) on how you can
    * manage your API keys.
    *
    * This endpoint requires the `admin` role type.

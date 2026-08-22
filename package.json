@@ -1,12 +1,12 @@
 {
-  "name": "@augno/sdk",
+  "name": "@openmrp/sdk",
   "version": "0.19.1",
-  "description": "The official TypeScript library for the Augno API",
-  "author": "Augno <support@augno.com>",
+  "description": "The official TypeScript library for the OpenMRP API",
+  "author": "OpenMRP <support@openmrp.ai>",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "type": "commonjs",
-  "repository": "github:augno/typescript-sdk",
+  "repository": "github:open-mrp/typescript-sdk",
   "license": "Apache-2.0",
   "packageManager": "pnpm@10.30.1",
   "files": [

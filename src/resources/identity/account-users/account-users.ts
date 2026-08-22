@@ -74,7 +74,7 @@ export class AccountUsers extends APIResource {
    * restored rather than duplicated. Adding a user to your own account consumes a
    * seat and is rejected once your plan's seat limit is reached.
    *
-   * When you add a user to a customer or supplier account that has its own Augno
+   * When you add a user to a customer or supplier account that has its own OpenMRP
    * subscription, the membership is created disabled and has to be activated before
    * that user can sign in.
    *
@@ -86,7 +86,7 @@ export class AccountUsers extends APIResource {
    * const accountUser =
    *   await client.identity.accountUsers.create({
    *     department_id: 'dp_m0jayebxnkos',
-   *     email: 'jdoe@augno.com',
+   *     email: 'jdoe@openmrp.ai',
    *     name: 'John Doe',
    *     password: 'QgS7Z8Hhj3&1',
    *     preferences: [
@@ -125,7 +125,7 @@ export class AccountUsers extends APIResource {
    *     'acus_e5zu8bde0z3h',
    *     {
    *       department_id: 'dp_m0jayebxnkos',
-   *       email: 'jdoe@augno.com',
+   *       email: 'jdoe@openmrp.ai',
    *       name: 'John Doe',
    *       preferences: [
    *         {

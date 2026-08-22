@@ -1,17 +1,17 @@
 {
   "dxt_version": "0.2",
-  "name": "@augno/sdk-mcp",
+  "name": "@openmrp/sdk-mcp",
   "version": "0.19.1",
-  "description": "The official MCP Server for the Augno API",
+  "description": "The official MCP Server for the OpenMRP API",
   "author": {
-    "name": "Augno",
-    "email": "support@augno.com"
+    "name": "OpenMRP",
+    "email": "support@openmrp.ai"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/augno/typescript-sdk.git"
+    "url": "git+https://github.com/open-mrp/typescript-sdk.git"
   },
-  "homepage": "https://github.com/augno/typescript-sdk/tree/main/packages/mcp-server#readme",
+  "homepage": "https://github.com/open-mrp/typescript-sdk/tree/main/packages/mcp-server#readme",
   "server": {
     "type": "node",
     "entry_point": "index.js",
@@ -21,21 +21,21 @@
         "${__dirname}/index.js"
       ],
       "env": {
-        "AUGNO_API_KEY": "${user_config.AUGNO_API_KEY}",
-        "AUGNO_AUGNO_ACCOUNT_ID": "${user_config.AUGNO_AUGNO_ACCOUNT_ID}"
+        "OPENMRP_API_KEY": "${user_config.OPENMRP_API_KEY}",
+        "OPENMRP_OPENMRP_ACCOUNT_ID": "${user_config.OPENMRP_OPENMRP_ACCOUNT_ID}"
       }
     }
   },
   "user_config": {
-    "AUGNO_API_KEY": {
+    "OPENMRP_API_KEY": {
       "title": "bearer_token",
       "description": "API key sent as a Bearer token. Omit for cookie-based user sessions (dashboard).",
       "required": false,
       "type": "string"
     },
-    "AUGNO_AUGNO_ACCOUNT_ID": {
-      "title": "augno_account_id",
-      "description": "Current account UUID (Augno-Account). Update when switching accounts.",
+    "OPENMRP_OPENMRP_ACCOUNT_ID": {
+      "title": "openmrp_account_id",
+      "description": "Current account UUID (OpenMRP-Account). Update when switching accounts.",
       "required": false,
       "type": "string"
     }
