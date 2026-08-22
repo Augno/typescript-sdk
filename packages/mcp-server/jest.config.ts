@@ -7,8 +7,8 @@ const config: JestConfigWithTsJest = {
     '^.+\\.(t|j)sx?$': ['@swc/jest', { sourceMaps: 'inline' }],
   },
   moduleNameMapper: {
-    '^@augno/sdk-mcp$': '<rootDir>/src/index.ts',
-    '^@augno/sdk-mcp/(.*)$': '<rootDir>/src/$1',
+    '^@openmrp/sdk-mcp$': '<rootDir>/src/index.ts',
+    '^@openmrp/sdk-mcp/(.*)$': '<rootDir>/src/$1',
   },
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
   testPathIgnorePatterns: ['scripts'],

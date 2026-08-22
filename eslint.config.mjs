@@ -22,7 +22,7 @@ export default tseslint.config(
         {
           patterns: [
             {
-              regex: '^@augno/sdk(/.*)?',
+              regex: '^@openmrp/sdk(/.*)?',
               message: 'Use a relative import, not a package import.',
             },
           ],

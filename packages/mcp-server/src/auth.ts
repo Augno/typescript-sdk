@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { IncomingMessage } from 'node:http';
-import { ClientOptions } from '@augno/sdk';
+import { ClientOptions } from '@openmrp/sdk';
 import { McpOptions } from './options';
 
 export const parseClientAuthHeaders = (req: IncomingMessage, required?: boolean): Partial<ClientOptions> => {
@@ -21,9 +21,9 @@ export const parseClientAuthHeaders = (req: IncomingMessage, required?: boolean)
   }
 
   const bearerToken =
-    Array.isArray(req.headers['x-augno-api-key']) ?
-      req.headers['x-augno-api-key'][0]
-    : req.headers['x-augno-api-key'];
+    Array.isArray(req.headers['x-openmrp-api-key']) ?
+      req.headers['x-openmrp-api-key'][0]
+    : req.headers['x-openmrp-api-key'];
   return { bearerToken };
 };
 

@@ -7,8 +7,8 @@ import {
   ListToolsRequestSchema,
   SetLevelRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
-import { ClientOptions } from '@augno/sdk';
-import Augno from '@augno/sdk';
+import { ClientOptions } from '@openmrp/sdk';
+import OpenMRP from '@openmrp/sdk';
 import { codeTool } from './code-tool';
 import { getInstructions } from './instructions';
 import { McpOptions } from './options';
@@ -25,7 +25,7 @@ export const newMcpServer = async ({
 }) =>
   new McpServer(
     {
-      name: 'augno_sdk_api',
+      name: 'openmrp_sdk_api',
       version: '0.19.1',
     },
     {
@@ -64,18 +64,18 @@ export async function initMcpServer(params: {
     error: logAtLevel('error'),
   };
 
-  let _client: Augno | undefined;
+  let _client: OpenMRP | undefined;
   let _clientError: Error | undefined;
   let _logLevel: 'debug' | 'info' | 'warn' | 'error' | 'off' | undefined;
 
-  const getClient = (): Augno => {
+  const getClient = (): OpenMRP => {
     if (_clientError) throw _clientError;
     if (!_client) {
       try {
-        _client = new Augno({
+        _client = new OpenMRP({
           ...{
-            augnoAccountID: readEnv('AUGNO_AUGNO_ACCOUNT_ID'),
-            environment: (readEnv('AUGNO_ENVIRONMENT') || undefined) as any,
+            openMRPAccountID: readEnv('OPENMRP_OPENMRP_ACCOUNT_ID'),
+            environment: (readEnv('OPENMRP_ENVIRONMENT') || undefined) as any,
           },
           logger,
           ...params.clientOptions,
@@ -111,7 +111,7 @@ export async function initMcpServer(params: {
       throw new Error(`Unknown tool: ${name}`);
     }
 
-    let client: Augno;
+    let client: OpenMRP;
     try {
       client = getClient();
     } catch (error) {

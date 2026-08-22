@@ -7,8 +7,8 @@ const config: JestConfigWithTsJest = {
     '^.+\\.(t|j)sx?$': ['@swc/jest', { sourceMaps: 'inline' }],
   },
   moduleNameMapper: {
-    '^@augno/sdk$': '<rootDir>/src/index.ts',
-    '^@augno/sdk/(.*)$': '<rootDir>/src/$1',
+    '^@openmrp/sdk$': '<rootDir>/src/index.ts',
+    '^@openmrp/sdk/(.*)$': '<rootDir>/src/$1',
   },
   modulePathIgnorePatterns: [
     '<rootDir>/ecosystem-tests/',
