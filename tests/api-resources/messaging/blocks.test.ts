@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import OpenMRP from '@openmrp/sdk';
+import Openmrp from '@openmrp/sdk';
 
-const client = new OpenMRP({
+const client = new Openmrp({
   bearerToken: 'My Bearer Token',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
@@ -52,6 +52,6 @@ describe('resource blocks', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.messaging.blocks.list({ include: ['blocked_user'] }, { path: '/_stainless_unknown_path' }),
-    ).rejects.toThrow(OpenMRP.NotFoundError);
+    ).rejects.toThrow(Openmrp.NotFoundError);
   });
 });

@@ -1,4 +1,4 @@
-# OpenMRP TypeScript MCP Server
+# Openmrp TypeScript MCP Server
 
 ## Installation
 
@@ -8,7 +8,7 @@ You can run the MCP Server directly via `npx`:
 
 ```sh
 export OPENMRP_API_KEY="My Bearer Token"
-export OPENMRP_OPENMRP_ACCOUNT_ID="My OpenMRP Account ID"
+export OPENMRP_OPENMRP_ACCOUNT_ID="My Openmrp Account ID"
 export OPENMRP_ENVIRONMENT="production"
 npx -y @openmrp/sdk-mcp@latest
 ```
@@ -28,7 +28,7 @@ For clients with a configuration JSON, it might look something like this:
       "args": ["-y", "@openmrp/sdk-mcp"],
       "env": {
         "OPENMRP_API_KEY": "My Bearer Token",
-        "OPENMRP_OPENMRP_ACCOUNT_ID": "My OpenMRP Account ID",
+        "OPENMRP_OPENMRP_ACCOUNT_ID": "My Openmrp Account ID",
         "OPENMRP_ENVIRONMENT": "production"
       }
     }
@@ -41,14 +41,14 @@ For clients with a configuration JSON, it might look something like this:
 If you use Cursor, you can install the MCP server by using the button below. You will need to set your environment variables
 in Cursor's `mcp.json`, which can be found in Cursor Settings > Tools & MCP > New MCP Server.
 
-[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40openmrp%2Fsdk-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBhdWduby9zZGstbWNwIl0sImVudiI6eyJBVUdOT19BUElfS0VZIjoiTXkgQmVhcmVyIFRva2VuIiwiQVVHTk9fQVVHTk9fQUNDT1VOVF9JRCI6Ik15IEF1Z25vIEFjY291bnQgSUQifX0)
+[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40openmrp%2Fsdk-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBvcGVubXJwL3Nkay1tY3AiXSwiZW52Ijp7Ik9QRU5NUlBfQVBJX0tFWSI6Ik15IEJlYXJlciBUb2tlbiIsIk9QRU5NUlBfT1BFTk1SUF9BQ0NPVU5UX0lEIjoiTXkgT3Blbm1ycCBBY2NvdW50IElEIn19)
 
 ### VS Code
 
 If you use MCP, you can install the MCP server by clicking the link below. You will need to set your environment variables
 in VS Code's `mcp.json`, which can be found via Command Palette > MCP: Open User Configuration.
 
-[Open VS Code](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40openmrp%2Fsdk-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40openmrp%2Fsdk-mcp%22%5D%2C%22env%22%3A%7B%22OPENMRP_API_KEY%22%3A%22My%20Bearer%20Token%22%2C%22OPENMRP_OPENMRP_ACCOUNT_ID%22%3A%22My%20OpenMRP%20Account%20ID%22%7D%7D)
+[Open VS Code](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40openmrp%2Fsdk-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40openmrp%2Fsdk-mcp%22%5D%2C%22env%22%3A%7B%22OPENMRP_API_KEY%22%3A%22My%20Bearer%20Token%22%2C%22OPENMRP_OPENMRP_ACCOUNT_ID%22%3A%22My%20Openmrp%20Account%20ID%22%7D%7D)
 
 ### Claude Code
 
@@ -56,7 +56,7 @@ If you use Claude Code, you can install the MCP server by running the command be
 environment variables in Claude Code's `.claude.json`, which can be found in your home directory.
 
 ```
-claude mcp add openmrp_sdk_mcp_api --env OPENMRP_API_KEY="My Bearer Token" OPENMRP_OPENMRP_ACCOUNT_ID="My OpenMRP Account ID" -- npx -y @openmrp/sdk-mcp
+claude mcp add openmrp_sdk_mcp_api --env OPENMRP_API_KEY="My Bearer Token" OPENMRP_OPENMRP_ACCOUNT_ID="My Openmrp Account ID" -- npx -y @openmrp/sdk-mcp
 ```
 
 ## Code Mode
@@ -84,7 +84,7 @@ Authorization can be provided via the `Authorization` header using the Bearer sc
 
 Additionally, authorization can be provided via the following headers:
 | Header | Equivalent client option | Security scheme |
-| ----------------- | ------------------------ | --------------- |
+| ------------------- | ------------------------ | --------------- |
 | `x-openmrp-api-key` | `bearerToken` | BearerAuth |
 
 A configuration JSON for this server might look like this, assuming the server is hosted at `http://localhost:3000`:

@@ -2,9 +2,9 @@
   "dxt_version": "0.2",
   "name": "@openmrp/sdk-mcp",
   "version": "0.19.3",
-  "description": "The official MCP Server for the OpenMRP API",
+  "description": "The official MCP Server for the Openmrp API",
   "author": {
-    "name": "OpenMRP",
+    "name": "Openmrp",
     "email": "support@augno.com"
   },
   "repository": {

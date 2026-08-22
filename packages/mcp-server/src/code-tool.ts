@@ -8,7 +8,7 @@ import { SdkMethod } from './methods';
 import { McpCodeExecutionMode } from './options';
 import { ClientOptions } from '@openmrp/sdk';
 
-const prompt = `Runs JavaScript code to interact with the OpenMRP API.
+const prompt = `Runs JavaScript code to interact with the Openmrp API.
 
 You are a skilled TypeScript programmer writing code to interface with the service.
 Define an async function named "run" that takes a single parameter of an initialized SDK client and it will be run.
@@ -209,7 +209,7 @@ const localDenoHandler = async ({
       const opts = {
         ...(client.baseURL != null ? { baseURL: client.baseURL } : undefined),
         ...(client.bearerToken != null ? { bearerToken: client.bearerToken } : undefined),
-        ...(client.openMRPAccountID != null ? { openMRPAccountID: client.openMRPAccountID } : undefined),
+        ...(client.openmrpAccountID != null ? { openmrpAccountID: client.openmrpAccountID } : undefined),
         defaultHeaders: {
           'X-Stainless-MCP': 'true',
         },

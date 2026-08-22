@@ -86,7 +86,7 @@ export class AccountUsers extends APIResource {
    * const accountUser =
    *   await client.identity.accountUsers.create({
    *     department_id: 'dp_m0jayebxnkos',
-   *     email: 'jdoe@augno.com',
+   *     email: 'jdoe@openmrp.ai',
    *     name: 'John Doe',
    *     password: 'QgS7Z8Hhj3&1',
    *     preferences: [
@@ -125,7 +125,7 @@ export class AccountUsers extends APIResource {
    *     'acus_e5zu8bde0z3h',
    *     {
    *       department_id: 'dp_m0jayebxnkos',
-   *       email: 'jdoe@augno.com',
+   *       email: 'jdoe@openmrp.ai',
    *       name: 'John Doe',
    *       preferences: [
    *         {
