@@ -1,6 +1,6 @@
 {
   "name": "@openmrp/sdk",
-  "version": "0.19.3",
+  "version": "0.19.4",
   "description": "The official TypeScript library for the Openmrp API",
   "author": "Openmrp <support@augno.com>",
   "types": "dist/index.d.ts",
