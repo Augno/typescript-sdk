@@ -177,7 +177,7 @@ export interface ClientOptions {
 /**
  * API Client for interfacing with the Openmrp API.
  */
-export class Openmrp {
+export class OpenMRP {
   bearerToken: string | null;
   openmrpAccountID: string | null;
 
@@ -222,13 +222,13 @@ export class Openmrp {
     };
 
     if (baseURL && opts.environment) {
-      throw new Errors.OpenmrpError(
+      throw new Errors.OpenMRPError(
         'Ambiguous URL; The `baseURL` option (or OPENMRP_BASE_URL env var) and the `environment` option are given. If you want to use the environment you must pass baseURL: null',
       );
     }
 
     this.baseURL = options.baseURL || environments[options.environment || 'production'];
-    this.timeout = options.timeout ?? Openmrp.DEFAULT_TIMEOUT /* 1 minute */;
+    this.timeout = options.timeout ?? OpenMRP.DEFAULT_TIMEOUT /* 1 minute */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
@@ -787,10 +787,10 @@ export class Openmrp {
     }
   }
 
-  static Openmrp = this;
+  static OpenMRP = this;
   static DEFAULT_TIMEOUT = 60000; // 1 minute
 
-  static OpenmrpError = Errors.OpenmrpError;
+  static OpenMRPError = Errors.OpenMRPError;
   static APIError = Errors.APIError;
   static APIConnectionError = Errors.APIConnectionError;
   static APIConnectionTimeoutError = Errors.APIConnectionTimeoutError;
@@ -833,18 +833,18 @@ export class Openmrp {
   settings: API.Settings = new API.Settings(this);
 }
 
-Openmrp.Auth = Auth;
-Openmrp.Core = Core;
-Openmrp.Catalog = Catalog;
-Openmrp.AI = AI;
-Openmrp.Messaging = Messaging;
-Openmrp.Sales = Sales;
-Openmrp.Finance = Finance;
-Openmrp.Operations = Operations;
-Openmrp.Identity = Identity;
-Openmrp.Settings = Settings;
+OpenMRP.Auth = Auth;
+OpenMRP.Core = Core;
+OpenMRP.Catalog = Catalog;
+OpenMRP.AI = AI;
+OpenMRP.Messaging = Messaging;
+OpenMRP.Sales = Sales;
+OpenMRP.Finance = Finance;
+OpenMRP.Operations = Operations;
+OpenMRP.Identity = Identity;
+OpenMRP.Settings = Settings;
 
-export declare namespace Openmrp {
+export declare namespace OpenMRP {
   export type RequestOptions = Opts.RequestOptions;
 
   export { Auth as Auth };

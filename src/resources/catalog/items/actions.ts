@@ -94,7 +94,7 @@ export interface BulkReconcileItemsRequest {
    * - `addition`: adds the quantity to the item's current quantity.
    * - `force`: sets the item's current quantity to exactly the given quantity.
    */
-  reconcile_type: string;
+  reconcile_type: 'addition' | 'force';
 }
 
 /**
@@ -277,7 +277,7 @@ export interface ActionBulkReconcileParams {
    * - `addition`: adds the quantity to the item's current quantity.
    * - `force`: sets the item's current quantity to exactly the given quantity.
    */
-  reconcile_type: string;
+  reconcile_type: 'addition' | 'force';
 }
 
 export declare namespace Actions {

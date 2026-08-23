@@ -423,7 +423,7 @@ export interface AssignConversationRequest {
    * - `account_user`: an individual teammate takes the case.
    * - `account_group`: a team takes the case, so anyone on it can pick it up.
    */
-  assignee_resource_type?: string;
+  assignee_resource_type?: 'account_user' | 'account_group';
 }
 
 /**
@@ -776,7 +776,7 @@ export interface ActionAssignParams {
    * - `account_user`: an individual teammate takes the case.
    * - `account_group`: a team takes the case, so anyone on it can pick it up.
    */
-  assignee_resource_type?: string;
+  assignee_resource_type?: 'account_user' | 'account_group';
 }
 
 export interface ActionReportParams {

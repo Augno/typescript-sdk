@@ -8,7 +8,7 @@ import {
   SetLevelRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
 import { ClientOptions } from '@openmrp/sdk';
-import Openmrp from '@openmrp/sdk';
+import OpenMRP from '@openmrp/sdk';
 import { codeTool } from './code-tool';
 import { getInstructions } from './instructions';
 import { McpOptions } from './options';
@@ -26,7 +26,7 @@ export const newMcpServer = async ({
   new McpServer(
     {
       name: 'openmrp_sdk_api',
-      version: '0.19.4',
+      version: '0.19.5',
     },
     {
       instructions: await getInstructions({ stainlessApiKey, customInstructionsPath }),
@@ -64,15 +64,15 @@ export async function initMcpServer(params: {
     error: logAtLevel('error'),
   };
 
-  let _client: Openmrp | undefined;
+  let _client: OpenMRP | undefined;
   let _clientError: Error | undefined;
   let _logLevel: 'debug' | 'info' | 'warn' | 'error' | 'off' | undefined;
 
-  const getClient = (): Openmrp => {
+  const getClient = (): OpenMRP => {
     if (_clientError) throw _clientError;
     if (!_client) {
       try {
-        _client = new Openmrp({
+        _client = new OpenMRP({
           ...{
             openmrpAccountID: readEnv('OPENMRP_OPENMRP_ACCOUNT_ID'),
             environment: (readEnv('OPENMRP_ENVIRONMENT') || undefined) as any,
@@ -111,7 +111,7 @@ export async function initMcpServer(params: {
       throw new Error(`Unknown tool: ${name}`);
     }
 
-    let client: Openmrp;
+    let client: OpenMRP;
     try {
       client = getClient();
     } catch (error) {
