@@ -2,7 +2,7 @@
   "name": "@openmrp/sdk-mcp",
   "version": "0.19.4",
   "description": "The official MCP Server for the Openmrp API",
-  "author": "Openmrp <support@augno.com>",
+  "author": "Openmrp <support@openmrp.ai>",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "type": "commonjs",
