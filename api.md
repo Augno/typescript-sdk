@@ -1135,6 +1135,7 @@ Types:
 
 - <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">CheckoutSalesOrderRequest</a></code>
 - <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">CheckoutSalesOrderResponse</a></code>
+- <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">Commitment</a></code>
 - <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">ComputedRate</a></code>
 - <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">CreateSalesOrderLineInput</a></code>
 - <code><a href="./src/resources/sales/sales-orders/sales-orders.ts">CreateSalesOrderRequest</a></code>
@@ -1367,6 +1368,28 @@ Methods:
 - <code title="post /v1/operations/departments">client.operations.departments.<a href="./src/resources/operations/departments.ts">create</a>({ ...params }) -> Department</code>
 - <code title="patch /v1/operations/departments/{id}">client.operations.departments.<a href="./src/resources/operations/departments.ts">update</a>(id, { ...params }) -> Department</code>
 - <code title="delete /v1/operations/departments/{id}">client.operations.departments.<a href="./src/resources/operations/departments.ts">delete</a>(id) -> DepartmentDeleteResponse</code>
+
+## InventoryChangeLogs
+
+Types:
+
+- <code><a href="./src/resources/operations/inventory-change-logs/inventory-change-logs.ts">InventoryChangeLog</a></code>
+- <code><a href="./src/resources/operations/inventory-change-logs/inventory-change-logs.ts">ListInventoryChangeLog</a></code>
+
+Methods:
+
+- <code title="get /v1/operations/inventory-change-logs">client.operations.inventoryChangeLogs.<a href="./src/resources/operations/inventory-change-logs/inventory-change-logs.ts">list</a>({ ...params }) -> ListInventoryChangeLog</code>
+- <code title="get /v1/operations/inventory-change-logs/{id}">client.operations.inventoryChangeLogs.<a href="./src/resources/operations/inventory-change-logs/inventory-change-logs.ts">retrieve</a>(id, { ...params }) -> InventoryChangeLog</code>
+
+### Actions
+
+Types:
+
+- <code><a href="./src/resources/operations/inventory-change-logs/actions.ts">FileDownload</a></code>
+
+Methods:
+
+- <code title="get /v1/operations/inventory-change-logs/actions/export">client.operations.inventoryChangeLogs.actions.<a href="./src/resources/operations/inventory-change-logs/actions.ts">export</a>({ ...params }) -> FileDownload</code>
 
 ## Machines
 
@@ -1611,6 +1634,52 @@ Methods:
 - <code title="get /v1/operations/operating-calendars/{id}/closures">client.operations.operatingCalendars.closures.<a href="./src/resources/operations/operating-calendars/closures.ts">list</a>(id, { ...params }) -> ListOperatingCalendarClosure</code>
 - <code title="post /v1/operations/operating-calendars/{id}/closures">client.operations.operatingCalendars.closures.<a href="./src/resources/operations/operating-calendars/closures.ts">create</a>(id, { ...params }) -> OperatingCalendarClosure</code>
 - <code title="delete /v1/operations/operating-calendars/{id}/closures/{closure_id}">client.operations.operatingCalendars.closures.<a href="./src/resources/operations/operating-calendars/closures.ts">delete</a>(closureID, { ...params }) -> ClosureDeleteResponse</code>
+
+## Picks
+
+Types:
+
+- <code><a href="./src/resources/operations/picks/picks.ts">ListPick</a></code>
+- <code><a href="./src/resources/operations/picks/picks.ts">ListPickLine</a></code>
+- <code><a href="./src/resources/operations/picks/picks.ts">Pick</a></code>
+- <code><a href="./src/resources/operations/picks/picks.ts">PickLine</a></code>
+- <code><a href="./src/resources/operations/picks/picks.ts">PickRelated</a></code>
+- <code><a href="./src/resources/operations/picks/picks.ts">PickStageTotal</a></code>
+- <code><a href="./src/resources/operations/picks/picks.ts">PickTotals</a></code>
+
+Methods:
+
+- <code title="get /v1/operations/picks">client.operations.picks.<a href="./src/resources/operations/picks/picks.ts">list</a>({ ...params }) -> ListPick</code>
+- <code title="get /v1/operations/picks/{id}">client.operations.picks.<a href="./src/resources/operations/picks/picks.ts">retrieve</a>(id, { ...params }) -> Pick</code>
+
+### Actions
+
+Types:
+
+- <code><a href="./src/resources/operations/picks/actions.ts">PackPickRequest</a></code>
+
+Methods:
+
+- <code title="put /v1/operations/picks/{id}/actions/pick">client.operations.picks.actions.<a href="./src/resources/operations/picks/actions.ts">pick</a>(id) -> Pick</code>
+- <code title="put /v1/operations/picks/{id}/actions/void">client.operations.picks.actions.<a href="./src/resources/operations/picks/actions.ts">void</a>(id) -> Pick</code>
+- <code title="post /v1/operations/picks/{id}/actions/pack">client.operations.picks.actions.<a href="./src/resources/operations/picks/actions.ts">pack</a>(id, { ...params }) -> Job</code>
+
+### Lines
+
+Types:
+
+- <code><a href="./src/resources/operations/picks/lines/lines.ts">UpdatePickLineRequest</a></code>
+
+Methods:
+
+- <code title="patch /v1/operations/picks/{pick_id}/lines/{id}">client.operations.picks.lines.<a href="./src/resources/operations/picks/lines/lines.ts">update</a>(id, { ...params }) -> PickLine</code>
+
+#### Actions
+
+Methods:
+
+- <code title="put /v1/operations/picks/{pick_id}/lines/{id}/actions/pick">client.operations.picks.lines.actions.<a href="./src/resources/operations/picks/lines/actions.ts">pick</a>(id, { ...params }) -> PickLine</code>
+- <code title="put /v1/operations/picks/{pick_id}/lines/{id}/actions/void">client.operations.picks.lines.actions.<a href="./src/resources/operations/picks/lines/actions.ts">void</a>(id, { ...params }) -> PickLine</code>
 
 ## Locations
 

@@ -96,6 +96,14 @@ import {
   FulfillmentRecommendations,
   ListFulfillmentRecommendation,
 } from './fulfillment-recommendations/fulfillment-recommendations';
+import * as InventoryChangeLogsAPI from './inventory-change-logs/inventory-change-logs';
+import {
+  InventoryChangeLog,
+  InventoryChangeLogListParams,
+  InventoryChangeLogRetrieveParams,
+  InventoryChangeLogs,
+  ListInventoryChangeLog,
+} from './inventory-change-logs/inventory-change-logs';
 import * as LocationsAPI from './locations/locations';
 import {
   CreateLocationRequest,
@@ -119,6 +127,19 @@ import {
   OperatingCalendars,
   UpdateOperatingCalendarRequest,
 } from './operating-calendars/operating-calendars';
+import * as PicksAPI from './picks/picks';
+import {
+  ListPick,
+  ListPickLine,
+  Pick,
+  PickLine,
+  PickListParams,
+  PickRelated,
+  PickRetrieveParams,
+  PickStageTotal,
+  PickTotals,
+  Picks,
+} from './picks/picks';
 import * as ProductionScheduleSettingsAPI from './production-schedule-settings/production-schedule-settings';
 import {
   ProductionScheduleSettingUpdateParams,
@@ -173,6 +194,8 @@ export class Operations extends APIResource {
   shippingTerms: ShippingTermsAPI.ShippingTerms = new ShippingTermsAPI.ShippingTerms(this._client);
   carriers: CarriersAPI.Carriers = new CarriersAPI.Carriers(this._client);
   departments: DepartmentsAPI.Departments = new DepartmentsAPI.Departments(this._client);
+  inventoryChangeLogs: InventoryChangeLogsAPI.InventoryChangeLogs =
+    new InventoryChangeLogsAPI.InventoryChangeLogs(this._client);
   machines: MachinesAPI.Machines = new MachinesAPI.Machines(this._client);
   machineDowntimeEvents: MachineDowntimeEventsAPI.MachineDowntimeEvents =
     new MachineDowntimeEventsAPI.MachineDowntimeEvents(this._client);
@@ -186,6 +209,7 @@ export class Operations extends APIResource {
   operatingCalendars: OperatingCalendarsAPI.OperatingCalendars = new OperatingCalendarsAPI.OperatingCalendars(
     this._client,
   );
+  picks: PicksAPI.Picks = new PicksAPI.Picks(this._client);
   locations: LocationsAPI.Locations = new LocationsAPI.Locations(this._client);
   locationTypes: LocationTypesAPI.LocationTypes = new LocationTypesAPI.LocationTypes(this._client);
   shipments: ShipmentsAPI.Shipments = new ShipmentsAPI.Shipments(this._client);
@@ -785,12 +809,14 @@ export interface OperationRetrieveMachineStatusParams {
 Operations.ShippingTerms = ShippingTerms;
 Operations.Carriers = Carriers;
 Operations.Departments = Departments;
+Operations.InventoryChangeLogs = InventoryChangeLogs;
 Operations.Machines = Machines;
 Operations.MachineDowntimeEvents = MachineDowntimeEvents;
 Operations.DemandOverrides = DemandOverrides;
 Operations.ProductionSchedules = ProductionSchedules;
 Operations.FulfillmentRecommendations = FulfillmentRecommendations;
 Operations.OperatingCalendars = OperatingCalendars;
+Operations.Picks = Picks;
 Operations.Locations = Locations;
 Operations.LocationTypes = LocationTypes;
 Operations.Shipments = Shipments;
@@ -847,6 +873,14 @@ export declare namespace Operations {
     type DepartmentRetrieveParams as DepartmentRetrieveParams,
     type DepartmentCreateParams as DepartmentCreateParams,
     type DepartmentUpdateParams as DepartmentUpdateParams,
+  };
+
+  export {
+    InventoryChangeLogs as InventoryChangeLogs,
+    type InventoryChangeLog as InventoryChangeLog,
+    type ListInventoryChangeLog as ListInventoryChangeLog,
+    type InventoryChangeLogListParams as InventoryChangeLogListParams,
+    type InventoryChangeLogRetrieveParams as InventoryChangeLogRetrieveParams,
   };
 
   export {
@@ -947,6 +981,19 @@ export declare namespace Operations {
     type OperatingCalendarListParams as OperatingCalendarListParams,
     type OperatingCalendarCreateParams as OperatingCalendarCreateParams,
     type OperatingCalendarUpdateParams as OperatingCalendarUpdateParams,
+  };
+
+  export {
+    Picks as Picks,
+    type ListPick as ListPick,
+    type ListPickLine as ListPickLine,
+    type Pick as Pick,
+    type PickLine as PickLine,
+    type PickRelated as PickRelated,
+    type PickStageTotal as PickStageTotal,
+    type PickTotals as PickTotals,
+    type PickListParams as PickListParams,
+    type PickRetrieveParams as PickRetrieveParams,
   };
 
   export {

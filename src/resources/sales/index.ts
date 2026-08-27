@@ -87,6 +87,7 @@ export {
   SalesOrders,
   type CheckoutSalesOrderRequest,
   type CheckoutSalesOrderResponse,
+  type Commitment,
   type ComputedRate,
   type CreateSalesOrderLineInput,
   type CreateSalesOrderRequest,

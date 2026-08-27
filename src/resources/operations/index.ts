@@ -41,6 +41,13 @@ export {
   type ListFulfillmentRecommendation,
 } from './fulfillment-recommendations/index';
 export {
+  InventoryChangeLogs,
+  type InventoryChangeLog,
+  type ListInventoryChangeLog,
+  type InventoryChangeLogListParams,
+  type InventoryChangeLogRetrieveParams,
+} from './inventory-change-logs/index';
+export {
   LocationTypes,
   type ListLocationType,
   type LocationType,
@@ -104,6 +111,18 @@ export {
   type ScheduleDeviationType,
   type OperationRetrieveMachineStatusParams,
 } from './operations';
+export {
+  Picks,
+  type ListPick,
+  type ListPickLine,
+  type Pick,
+  type PickLine,
+  type PickRelated,
+  type PickStageTotal,
+  type PickTotals,
+  type PickListParams,
+  type PickRetrieveParams,
+} from './picks/index';
 export {
   ProductionScheduleSettings,
   type UpdateProductionScheduleSettingsRequest,

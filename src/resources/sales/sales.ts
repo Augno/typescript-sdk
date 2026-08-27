@@ -108,6 +108,7 @@ import * as SalesOrdersAPI from './sales-orders/sales-orders';
 import {
   CheckoutSalesOrderRequest,
   CheckoutSalesOrderResponse,
+  Commitment,
   ComputedRate,
   CreateSalesOrderLineInput,
   CreateSalesOrderRequest,
@@ -265,6 +266,7 @@ export declare namespace Sales {
     SalesOrders as SalesOrders,
     type CheckoutSalesOrderRequest as CheckoutSalesOrderRequest,
     type CheckoutSalesOrderResponse as CheckoutSalesOrderResponse,
+    type Commitment as Commitment,
     type ComputedRate as ComputedRate,
     type CreateSalesOrderLineInput as CreateSalesOrderLineInput,
     type CreateSalesOrderRequest as CreateSalesOrderRequest,
