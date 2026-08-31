@@ -40,6 +40,14 @@ import {
   ListEmailInbox,
   UpdateEmailInboxRequest,
 } from './email-inboxes';
+import * as EmailSenderAPI from './email-sender';
+import {
+  EmailSender,
+  EmailSenderDeleteResponse,
+  EmailSenderResource,
+  EmailSenderUpdateParams,
+  SetEmailSenderRequest,
+} from './email-sender';
 import * as PreferencesAPI from './preferences';
 import {
   ListNotificationPreference,
@@ -131,6 +139,7 @@ export class Messaging extends APIResource {
   preferences: PreferencesAPI.Preferences = new PreferencesAPI.Preferences(this._client);
   emailDomains: EmailDomainsAPI.EmailDomains = new EmailDomainsAPI.EmailDomains(this._client);
   emailInboxes: EmailInboxesAPI.EmailInboxes = new EmailInboxesAPI.EmailInboxes(this._client);
+  emailSender: EmailSenderAPI.EmailSenderResource = new EmailSenderAPI.EmailSenderResource(this._client);
 
   /**
    * Lists the people the caller can start a conversation with.
@@ -228,6 +237,7 @@ Messaging.Blocks = Blocks;
 Messaging.Preferences = Preferences;
 Messaging.EmailDomains = EmailDomains;
 Messaging.EmailInboxes = EmailInboxes;
+Messaging.EmailSenderResource = EmailSenderResource;
 
 export declare namespace Messaging {
   export {
@@ -349,5 +359,13 @@ export declare namespace Messaging {
     type EmailInboxListParams as EmailInboxListParams,
     type EmailInboxRetrieveParams as EmailInboxRetrieveParams,
     type EmailInboxUpdateParams as EmailInboxUpdateParams,
+  };
+
+  export {
+    EmailSenderResource as EmailSenderResource,
+    type EmailSender as EmailSender,
+    type SetEmailSenderRequest as SetEmailSenderRequest,
+    type EmailSenderDeleteResponse as EmailSenderDeleteResponse,
+    type EmailSenderUpdateParams as EmailSenderUpdateParams,
   };
 }

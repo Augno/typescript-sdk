@@ -72,6 +72,13 @@ export {
   type EmailInboxUpdateParams,
 } from './email-inboxes';
 export {
+  EmailSenderResource,
+  type EmailSender,
+  type SetEmailSenderRequest,
+  type EmailSenderDeleteResponse,
+  type EmailSenderUpdateParams,
+} from './email-sender';
+export {
   Groups,
   type CreateMessagingGroupRequest,
   type ListMessagingGroup,

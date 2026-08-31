@@ -1109,6 +1109,24 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/messaging/email-inboxes/{id}',
   },
   {
+    clientCallName: 'client.messaging.emailSender.list',
+    fullyQualifiedName: 'messaging.emailSender.list',
+    httpMethod: 'get',
+    httpPath: '/v1/messaging/email-sender',
+  },
+  {
+    clientCallName: 'client.messaging.emailSender.update',
+    fullyQualifiedName: 'messaging.emailSender.update',
+    httpMethod: 'put',
+    httpPath: '/v1/messaging/email-sender',
+  },
+  {
+    clientCallName: 'client.messaging.emailSender.delete',
+    fullyQualifiedName: 'messaging.emailSender.delete',
+    httpMethod: 'delete',
+    httpPath: '/v1/messaging/email-sender',
+  },
+  {
     clientCallName: 'client.sales.accountGroups.list',
     fullyQualifiedName: 'sales.accountGroups.list',
     httpMethod: 'get',
