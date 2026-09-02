@@ -13,10 +13,12 @@ export class Analytics extends APIResource {
   /**
    * Returns Overall Equipment Effectiveness (OEE) metrics by department.
    *
-   * Availability is measured from logged machine downtime rather than inferred, so
-   * it requires both `planned_time` for the department and downtime events in the
-   * period. Departments with `has_downtime_data` false have no availability
-   * measurement, and their ratios are returned as null rather than as 100%.
+   * Availability is the scheduled machine time the plant actually planned, net of
+   * logged machine downtime — the planned time comes from the published production
+   * schedule (or `planned_time` when supplied), and a department the schedule never
+   * covered has no availability rather than a fabricated one. Departments with
+   * `has_downtime_data` false have no downtime measured, and their ratios are
+   * returned as null rather than as 100%.
    *
    * This endpoint requires the permission: `machine_downtime:read`.
    *
@@ -287,8 +289,10 @@ export interface AnalyzeOeeRequest {
   department_ids?: Array<string>;
 
   /**
-   * Scheduled production time per department for the period. Availability,
-   * performance and OEE are only returned for departments this covers.
+   * Overrides the scheduled production time per department for the period. When
+   * omitted it is taken from the published production schedule, so this is only
+   * needed to measure a period the schedule does not cover. Availability,
+   * performance and OEE are only returned for departments the scheduled time covers.
    */
   planned_time?: Array<OeeDepartmentPlannedTime>;
 }
@@ -1303,8 +1307,10 @@ export interface AnalyticsUpdateOeeParams {
   department_ids?: Array<string>;
 
   /**
-   * Scheduled production time per department for the period. Availability,
-   * performance and OEE are only returned for departments this covers.
+   * Overrides the scheduled production time per department for the period. When
+   * omitted it is taken from the published production schedule, so this is only
+   * needed to measure a period the schedule does not cover. Availability,
+   * performance and OEE are only returned for departments the scheduled time covers.
    */
   planned_time?: Array<OeeDepartmentPlannedTime>;
 }
